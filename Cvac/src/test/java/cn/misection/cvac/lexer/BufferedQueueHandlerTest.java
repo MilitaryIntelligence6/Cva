@@ -91,12 +91,11 @@ try {
         File file = new File(path);
 
         BufferedQueueHandler handler = new BufferedQueueHandler(
-                new BufferedReader(
                         new FileReader(file)
-                )
         );
 
         System.out.printf("handler.getBuffer() = %s%n", handler.getBuffer());
+
 
         for (int i = 0; i < MAGIC_NUMBER; i++)
         {

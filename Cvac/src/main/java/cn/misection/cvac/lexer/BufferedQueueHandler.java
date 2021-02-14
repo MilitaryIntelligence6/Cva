@@ -9,6 +9,7 @@ import java.io.Reader;
  * @version 1.0.0
  * @ClassName BufferedHandler
  * @Description TODO
+ * @TODO 后面把int改回char;
  * @CreateTime 2021年02月14日 14:10:00
  */
 public class BufferedQueueHandler extends BufferedReader implements QueueHandleable
@@ -31,27 +32,28 @@ public class BufferedQueueHandler extends BufferedReader implements QueueHandlea
         String line = null;
         while ((line = this.readLine()) != null)
         {
-            buffer.append(line);
+            buffer.append(line).append(ConstantPool.NEW_LINE);
         }
         this.close();
     }
 
     @Override
-    public char peek()
+    public int peek()
     {
         return peek(0);
     }
 
     @Override
-    public char peek(int num)
+    public int peek(int num)
     {
-        return buffer.charAt(num);
+        // TODO 判空不要在这里, 影响效率, 放到后面;
+        return isEmpty() ? -1 : buffer.charAt(num);
     }
 
     @Override
-    public char poll()
+    public int poll()
     {
-        char c = peek();
+        int c = peek();
         buffer.delete(0, 1);
         return c;
     }
@@ -64,8 +66,20 @@ public class BufferedQueueHandler extends BufferedReader implements QueueHandlea
         return polled;
     }
 
+    @Override
+    public boolean isEmpty()
+    {
+        return buffer.length() == 0;
+    }
+
     public StringBuffer getBuffer()
     {
         return buffer;
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format("BufferedQueueHandler{buffer=%s}", buffer);
     }
 }

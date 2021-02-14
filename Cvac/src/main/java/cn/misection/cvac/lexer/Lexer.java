@@ -1,8 +1,8 @@
 package cn.misection.cvac.lexer;
 
-import java.io.BufferedReader;
+import cn.misection.cvac.config.Macro;
+
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Created by Mengxu on 2017/1/6.
@@ -12,40 +12,41 @@ public class Lexer
     /**
      * input stream of the file;
      */
-    private InputStream fStream;
+    private QueueHandleable queueStream;
 
     private int lineNum;
 
-    public Lexer(InputStream fStream)
+    public Lexer(QueueHandleable queueStream)
     {
-        this.fStream = fStream;
+        this.queueStream = queueStream;
         this.lineNum = 1;
     }
 
     public Token nextToken()
     {
         Token token = null;
-        try
-        {
-            token = nextTokenInternal();
-        }
-        catch (IOException e)
-        {
-            System.out.println("A IO exception!");
-            e.printStackTrace();
-        }
+        token = nextTokenInternal();
 
         return token;
     }
 
-    private Token nextTokenInternal() throws IOException
+    private Token nextTokenInternal()
     {
-        int c = this.fStream.read();
+        int c = this.queueStream.poll();
 
-        if (-1 == c)
+//        if (queueStream.isEmpty())
+//        {
+//            return new Token(Kind.EOF, lineNum);
+//        }
+        if (c == -1)
         {
+            if (Macro.DEBUG)
+            {
+                System.err.println("bug place");
+            }
             return new Token(Kind.EOF, lineNum);
         }
+
 
         // skip all kinds of blanks
         while (' ' == c || '\t' == c || '\r' == c || '\n' == c)
@@ -54,18 +55,18 @@ public class Lexer
             {
                 lineNum++;
             }
-            c = this.fStream.read();
+            c = this.queueStream.poll();
         }
 
         // deal with comments
         if ('/' == c)
         {
-            c = fStream.read();
+            c = queueStream.poll();
             if ('/' == c)
             {
                 while ('\n' != c)
                 {
-                    c = this.fStream.read();
+                    c = this.queueStream.poll();
                 }
                 lineNum++;
                 return nextTokenInternal(); // tail recursion
@@ -73,7 +74,7 @@ public class Lexer
             else
             {
                 System.out.println("Comment should begin with \"//\"");
-                System.out.println("Error is found at line " + lineNum);
+                System.out.printf("Error is found at line %d%n", lineNum);
                 System.exit(1);
             }
         }
@@ -83,14 +84,14 @@ public class Lexer
             case '+':
                 return new Token(Kind.ADD, lineNum);
             case '&':
-                c = this.fStream.read();
+                c = this.queueStream.poll();
                 if ('&' == c)
                 {
                     return new Token(Kind.AND, lineNum);
                 }
                 else
                 {
-                    System.out.println("Expect two &, but only got one at line " + lineNum);
+                    System.out.printf("Expect two &, but only got one at line %d%n", lineNum);
                     System.exit(1);
                 }
             case '=':
@@ -124,17 +125,18 @@ public class Lexer
                 sb.append((char) c);
                 while (true)
                 {
-                    this.fStream.mark(1);
-                    c = this.fStream.read();
+//                    this.queueStream.mark(1);
+                    c = queueStream.peek();
                     if (-1 != c && ' ' != c && '\t' != c
                             && '\n' != c && '\r' != c
                             && !isSpecialCharacter(c))
                     {
                         sb.append((char) c);
+                        this.queueStream.poll();
                     }
                     else
                     {
-                        this.fStream.reset();
+//                        this.queueStream.reset();
                         break;
                     }
                 }

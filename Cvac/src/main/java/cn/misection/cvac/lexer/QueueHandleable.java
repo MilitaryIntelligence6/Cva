@@ -13,20 +13,20 @@ public interface QueueHandleable
      * 查看;
      * @return 队头;
      */
-    char peek();
+    int peek();
 
     /**
      * 查看队伍中某一个, 0开始;
      * @param num 0开始的位置
      * @return 查看的元素;
      */
-    char peek(int num);
+    int peek(int num);
 
     /**
      * 头出队一个;
      * @return 头;
      */
-    char poll();
+    int poll();
 
     /**
      * 获取队头前 num 个;
@@ -34,4 +34,10 @@ public interface QueueHandleable
      * @return char构成的string;
      */
     String poll(int num);
+
+    /**
+     * 是否空;
+     * @return bool;
+     */
+    boolean isEmpty();
 }

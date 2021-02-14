@@ -1,11 +1,11 @@
 package cn.misection.cvac.parser;
 
 import cn.misection.cvac.ast.Ast;
-import cn.misection.cvac.lexer.Lexer;
-import cn.misection.cvac.lexer.Token;
 import cn.misection.cvac.lexer.Kind;
+import cn.misection.cvac.lexer.Lexer;
+import cn.misection.cvac.lexer.QueueHandleable;
+import cn.misection.cvac.lexer.Token;
 
-import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -22,9 +22,9 @@ public class Parser
     private boolean isMarking;
     private Queue<Token> markedTokens;
 
-    public Parser(InputStream fstream)
+    public Parser(QueueHandleable qStream)
     {
-        lexer = new Lexer(fstream);
+        lexer = new Lexer(qStream);
         current = lexer.nextToken();
         isMarking = false;
         markedTokens = new LinkedList<>();
@@ -37,9 +37,15 @@ public class Parser
         {
             current = lexer.nextToken();
             markedTokens.offer(current);
-        } else if (!markedTokens.isEmpty())
+        }
+        else if (!markedTokens.isEmpty())
+        {
             current = markedTokens.poll();
-        else current = lexer.nextToken();
+        }
+        else
+        {
+            current = lexer.nextToken();
+        }
     }
 
     // start recording the tokens
@@ -65,22 +71,24 @@ public class Parser
 
     private void eatToken(Kind kind)
     {
-        if (kind == current.kind)
+        // FIXME, 写成 遇到EOF就走, 尾巴上那个-1暂时还没解决;
+        if (kind == current.kind || kind == Kind.EOF)
+        {
             advance();
+        }
         else
         {
-            System.out.println("Line " + current.lineNum + " :" +
-                    "Expects: " + kind.toString() +
-                    ", but got: " + current.kind.toString());
+            System.err.printf("Line %d :Expects: %s, but got: %s%n",
+                    current.lineNum, kind.toString(),
+                    current.kind.toString());
             System.exit(1);
         }
     }
 
     private void error()
     {
-        System.out.println("Syntax error at line " +
-                (current != null ? current.lineNum + "" : "unknow")
-                + " compilation aborting...\n");
+        System.out.printf("Syntax error at line %s compilation aborting...\n%n",
+                current != null ? current.lineNum + "" : "unknow");
         System.exit(1);
     }
 
@@ -93,7 +101,9 @@ public class Parser
     {
         LinkedList<Ast.Exp.T> explist = new LinkedList<>();
         if (current.kind == Kind.CLOSE_PAREN)
+        {
             return explist;
+        }
         Ast.Exp.T tem = parseExp();
         tem.lineNum = current.lineNum;
         explist.addLast(tem);
@@ -268,7 +278,8 @@ public class Parser
             int lineNum = current.lineNum;
             stm = new Ast.Stm.Block(parseStatements(), lineNum);
             eatToken(Kind.CLOSE_BRACE);
-        } else if (current.kind == Kind.IF)
+        }
+        else if (current.kind == Kind.IF)
         {
             int lineNum = current.lineNum;
             eatToken(Kind.IF);
@@ -279,7 +290,8 @@ public class Parser
             eatToken(Kind.ELSE);
             Ast.Stm.T else_stm = parseStatement();
             stm = new Ast.Stm.If(condition, then_stm, else_stm, lineNum);
-        } else if (current.kind == Kind.WHILE)
+        }
+        else if (current.kind == Kind.WHILE)
         {
             int lineNum = current.lineNum;
             eatToken(Kind.WHILE);
@@ -288,7 +300,8 @@ public class Parser
             eatToken(Kind.CLOSE_PAREN);
             Ast.Stm.T body = parseStatement();
             stm = new Ast.Stm.While(condition, body, lineNum);
-        } else if (current.kind == Kind.WRITE)
+        }
+        else if (current.kind == Kind.WRITE)
         {
             int lineNum = current.lineNum;
             eatToken(Kind.WRITE);
@@ -297,7 +310,8 @@ public class Parser
             eatToken(Kind.CLOSE_PAREN);
             eatToken(Kind.SEMI);
             stm = new Ast.Stm.Print(exp, lineNum);
-        } else if (current.kind == Kind.ID)
+        }
+        else if (current.kind == Kind.ID)
         {
             String id = current.lexeme;
             int lineNum = current.lineNum;
@@ -306,8 +320,11 @@ public class Parser
             Ast.Exp.T exp = parseExp();
             eatToken(Kind.SEMI);
             stm = new Ast.Stm.Assign(id, exp, lineNum);
-        } else
+        }
+        else
+        {
             error();
+        }
 
         return stm;
     }
@@ -320,7 +337,9 @@ public class Parser
         while (current.kind == Kind.OPEN_CURLY_BRACE || current.kind == Kind.IF
                 || current.kind == Kind.WHILE || current.kind == Kind.ID
                 || current.kind == Kind.WRITE)
+        {
             stms.addLast(parseStatement());
+        }
 
         return stms;
     }
@@ -335,16 +354,21 @@ public class Parser
         {
             type = new Ast.Type.Boolean();
             advance();
-        } else if (current.kind == Kind.INT)
+        }
+        else if (current.kind == Kind.INT)
         {
             type = new Ast.Type.Int();
             advance();
-        } else if (current.kind == Kind.ID)
+        }
+        else if (current.kind == Kind.ID)
         {
             type = new Ast.Type.ClassType(current.lexeme);
             advance();
-        } else
+        }
+        else
+        {
             error();
+        }
         return type;
     }
 
@@ -358,7 +382,8 @@ public class Parser
             this.reset();
             isValDecl = false;
             return null;
-        } else if (current.kind == Kind.ID)
+        }
+        else if (current.kind == Kind.ID)
         {
             String id = current.lexeme;
             advance();
@@ -369,17 +394,20 @@ public class Parser
                 Ast.Dec.T dec = new Ast.Dec.DecSingle(type, id, current.lineNum);
                 eatToken(Kind.SEMI);
                 return dec;
-            } else if (current.kind == Kind.OPEN_PAREN) // maybe a method in class
+            }
+            else if (current.kind == Kind.OPEN_PAREN) // maybe a method in class
             {
                 isValDecl = false;
                 this.reset();
                 return null;
-            } else
+            }
+            else
             {
                 error();
                 return null;
             }
-        } else
+        }
+        else
         {
             error();
             return null;
@@ -396,8 +424,14 @@ public class Parser
                 || current.kind == Kind.ID)
         {
             Ast.Dec.T dec = parseVarDecl();
-            if (dec != null) decs.addLast(dec);
-            if (!isValDecl) break;
+            if (dec != null)
+            {
+                decs.addLast(dec);
+            }
+            if (!isValDecl)
+            {
+                break;
+            }
         }
         return decs;
     }
@@ -452,7 +486,9 @@ public class Parser
         while (current.kind == Kind.ID ||
                 current.kind == Kind.INT ||
                 current.kind == Kind.BOOLEAN)
+        {
             methods.addLast(parseMethod());
+        }
 
         return methods;
     }
@@ -484,7 +520,9 @@ public class Parser
     {
         LinkedList<Ast.Class.T> classes = new LinkedList<>();
         while (current.kind == Kind.CLASS)
+        {
             classes.addLast(parseClassDecl());
+        }
 
         return classes;
     }

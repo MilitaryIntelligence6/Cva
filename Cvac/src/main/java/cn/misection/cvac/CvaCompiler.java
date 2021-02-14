@@ -4,6 +4,8 @@ import cn.misection.cvac.ast.Ast;
 import cn.misection.cvac.codegen.ByteCodeGenerator;
 import cn.misection.cvac.codegen.TranslatorVisitor;
 import cn.misection.cvac.config.Macro;
+import cn.misection.cvac.lexer.BufferedQueueHandler;
+import cn.misection.cvac.lexer.QueueHandleable;
 import cn.misection.cvac.optimize.Optimizer;
 import cn.misection.cvac.parser.Parser;
 import cn.misection.cvac.semantic.SemanticVisitor;
@@ -60,12 +62,12 @@ public class CvaCompiler
         {
             fName = DEBUG_FILE;
         }
-        InputStream fStream = null;
+        QueueHandleable fStream = null;
         try
         {
-            fStream = new BufferedInputStream(new FileInputStream(fName));
+            fStream = new BufferedQueueHandler(new FileReader(fName));
         }
-        catch (FileNotFoundException e)
+        catch (IOException e)
         {
             System.out.printf("Cannot find the file: %s%n", fName);
             System.exit(ERROR_EXIT_STATUS);
@@ -73,7 +75,7 @@ public class CvaCompiler
         geneCode(fStream);
     }
 
-    private static void geneCode(InputStream fStream)
+    private static void geneCode(QueueHandleable fStream)
     {
         Parser parser = new Parser(fStream);
         Ast.Program.T prog = parser.parse();
