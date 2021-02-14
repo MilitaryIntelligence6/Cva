@@ -7,43 +7,184 @@ public class Token
 {
     public enum Kind
     {
-        Add, // +
-        And, // &&
-        Assign, // =
-        Boolean, // boolean
-        Class, // class
-        Colon, // :
-        Commer, // ,
-        Dot, // .
-        Else, // else
-        EOF, // End of file
-        False, // false
-        ID, // Identifier
-        If, // if
-        Int, // int
-        Lbrace, // {
-        Lparen, // (
-        LT, // <
-        Main, // main
-        New, // new
-        Not, // !
-        NUM, // Integer literal
-        Print, // print, we just treat it as a key word
-        Rbrace, // }
-        Return, // return
-        Rparen, // )
-        Semi, // ;
-        Sub, // -
-        This, // this
-        Times, // *
-        True, // true
-        Void, // void
-        While // while
+        /**
+         * +
+         */
+        ADD,
+
+        /**
+         * &&
+         */
+        AND,
+
+        /**
+         * =
+         */
+        ASSIGN,
+
+        /**
+         * boolean
+         */
+        BOOLEAN,
+
+        /**
+         * class
+         */
+        CLASS,
+
+        /**
+         * :
+         */
+        COLON,
+
+        /**
+         * ,
+         */
+        COMMA,
+
+        /**
+         * .
+         */
+        DOT,
+
+        /**
+         * true
+         */
+        TRUE,
+
+        /**
+         * false
+         */
+        FALSE,
+
+        /**
+         * Identifier
+         */
+        ID,
+
+        /**
+         * if
+         */
+        IF,
+
+        /**
+         * else
+         */
+        ELSE,
+
+        /**
+         * int
+         */
+        INT,
+
+        /**
+         * {
+         */
+        OPEN_CURLY_BRACE,
+
+        /**
+         * }
+         */
+        CLOSE_BRACE,
+
+        /**
+         * (
+         */
+        OPEN_PAREN,
+
+        /**
+         * )
+         */
+        CLOSE_PAREN,
+
+        /**
+         * <
+         */
+        LESS_THAN,
+
+        /**
+         * main
+         */
+        MAIN,
+
+        /**
+         * new
+         */
+        NEW,
+
+        /**
+         * !
+         */
+        NEGATE,
+
+        /**
+         * Integer literal
+         */
+        NUMBER,
+
+        /**
+         * print, we just treat it as a key word
+         */
+        WRITE,
+
+        /**
+         * return
+         */
+        RETURN,
+
+        /**
+         * ;
+         */
+        SEMI,
+
+        /**
+         * -
+         */
+        SUB,
+
+        /**
+         * this
+         */
+        THIS,
+
+        /**
+         * *
+         */
+        STAR,
+
+        /**
+         * void
+         */
+        VOID,
+
+        /**
+         * while
+         */
+        WHILE,
+
+        /**
+         * End of file
+         */
+        EOF,
+        ;
+
     }
 
-    public Kind kind; // the kind of the token
-    public String lexeme; // extra lexeme of the token
-    public int lineNum; // the line number of the token
+    /**
+     * the kind of the token
+     */
+    public Kind kind;
+
+    /**
+     * extra lexeme of the token
+     */
+    public String lexeme;
+
+    /**
+     * the line number of the token
+     */
+    public int lineNum;
+
 
     public Token(Kind kind, int lineNum)
     {

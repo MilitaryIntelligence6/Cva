@@ -92,12 +92,12 @@ public class Parser
     private LinkedList<Ast.Exp.T> parseExpList()
     {
         LinkedList<Ast.Exp.T> explist = new LinkedList<>();
-        if (current.kind == Kind.Rparen)
+        if (current.kind == Kind.CLOSE_PAREN)
             return explist;
         Ast.Exp.T tem = parseExp();
         tem.lineNum = current.lineNum;
         explist.addLast(tem);
-        while (current.kind == Kind.Commer)
+        while (current.kind == Kind.COMMA)
         {
             advance();
             tem = parseExp();
@@ -119,27 +119,27 @@ public class Parser
         Ast.Exp.T exp;
         switch (current.kind)
         {
-            case Lparen:
+            case OPEN_PAREN:
                 advance();
                 exp = parseExp();
                 exp.lineNum = current.lineNum;
                 //advance();
-                eatToken(Kind.Rparen);
+                eatToken(Kind.CLOSE_PAREN);
                 return exp;
-            case NUM:
+            case NUMBER:
                 exp = new Ast.Exp.Num(Integer.parseInt(current.lexeme),
                         current.lineNum);
                 advance();
                 return exp;
-            case True:
+            case TRUE:
                 exp = new Ast.Exp.True(current.lineNum);
                 advance();
                 return exp;
-            case False:
+            case FALSE:
                 exp = new Ast.Exp.False(current.lineNum);
                 advance();
                 return exp;
-            case This:
+            case THIS:
                 exp = new Ast.Exp.This(current.lineNum);
                 advance();
                 return exp;
@@ -147,12 +147,12 @@ public class Parser
                 exp = new Ast.Exp.Id(current.lexeme, current.lineNum);
                 advance();
                 return exp;
-            case New:
+            case NEW:
                 advance();
                 exp = new Ast.Exp.NewObject(current.lexeme, current.lineNum);
                 advance();
-                eatToken(Kind.Lparen);
-                eatToken(Kind.Rparen);
+                eatToken(Kind.OPEN_PAREN);
+                eatToken(Kind.CLOSE_PAREN);
                 return exp;
             default:
                 error();
@@ -165,14 +165,14 @@ public class Parser
     private Ast.Exp.T parseNotExp()
     {
         Ast.Exp.T exp = parseAtomExp();
-        while (current.kind == Kind.Dot)
+        while (current.kind == Kind.DOT)
         {
             advance();
             Token id = current;
             eatToken(Kind.ID);
-            eatToken(Kind.Lparen);
+            eatToken(Kind.OPEN_PAREN);
             exp = new Ast.Exp.Call(exp, id.lexeme, parseExpList(), id.lineNum);
-            eatToken(Kind.Rparen);
+            eatToken(Kind.CLOSE_PAREN);
         }
         return exp;
     }
@@ -182,7 +182,7 @@ public class Parser
     private Ast.Exp.T parseTimesExp()
     {
         int i = 0;
-        while (current.kind == Kind.Not)
+        while (current.kind == Kind.NEGATE)
         {
             advance();
             i++;
@@ -198,7 +198,7 @@ public class Parser
     {
         Ast.Exp.T tem = parseTimesExp();
         Ast.Exp.T exp = tem;
-        while (current.kind == Kind.Times)
+        while (current.kind == Kind.STAR)
         {
             advance();
             tem = parseTimesExp();
@@ -213,9 +213,9 @@ public class Parser
     private Ast.Exp.T parseLTExp()
     {
         Ast.Exp.T exp = parseAddSubExp();
-        while (current.kind == Kind.Add || current.kind == Kind.Sub)
+        while (current.kind == Kind.ADD || current.kind == Kind.SUB)
         {
-            boolean isAdd = current.kind == Kind.Add;
+            boolean isAdd = current.kind == Kind.ADD;
             advance();
             Ast.Exp.T tem = parseAddSubExp();
             exp = isAdd ? new Ast.Exp.Add(exp, tem, exp.lineNum)
@@ -231,7 +231,7 @@ public class Parser
     private Ast.Exp.T parseAndExp()
     {
         Ast.Exp.T exp = parseLTExp();
-        while (current.kind == Kind.LT)
+        while (current.kind == Kind.LESS_THAN)
         {
             advance();
             Ast.Exp.T tem = parseLTExp();
@@ -245,7 +245,7 @@ public class Parser
     private Ast.Exp.T parseExp()
     {
         Ast.Exp.T exp = parseAndExp();
-        while (current.kind == Kind.And)
+        while (current.kind == Kind.AND)
         {
             advance();
             Ast.Exp.T tem = parseAndExp();
@@ -262,49 +262,49 @@ public class Parser
     private Ast.Stm.T parseStatement()
     {
         Ast.Stm.T stm = null;
-        if (current.kind == Kind.Lbrace)
+        if (current.kind == Kind.OPEN_CURLY_BRACE)
         {
-            eatToken(Kind.Lbrace);
+            eatToken(Kind.OPEN_CURLY_BRACE);
             int lineNum = current.lineNum;
             stm = new Ast.Stm.Block(parseStatements(), lineNum);
-            eatToken(Kind.Rbrace);
-        } else if (current.kind == Kind.If)
+            eatToken(Kind.CLOSE_BRACE);
+        } else if (current.kind == Kind.IF)
         {
             int lineNum = current.lineNum;
-            eatToken(Kind.If);
-            eatToken(Kind.Lparen);
+            eatToken(Kind.IF);
+            eatToken(Kind.OPEN_PAREN);
             Ast.Exp.T condition = parseExp();
-            eatToken(Kind.Rparen);
+            eatToken(Kind.CLOSE_PAREN);
             Ast.Stm.T then_stm = parseStatement();
-            eatToken(Kind.Else);
+            eatToken(Kind.ELSE);
             Ast.Stm.T else_stm = parseStatement();
             stm = new Ast.Stm.If(condition, then_stm, else_stm, lineNum);
-        } else if (current.kind == Kind.While)
+        } else if (current.kind == Kind.WHILE)
         {
             int lineNum = current.lineNum;
-            eatToken(Kind.While);
-            eatToken(Kind.Lparen);
+            eatToken(Kind.WHILE);
+            eatToken(Kind.OPEN_PAREN);
             Ast.Exp.T condition = parseExp();
-            eatToken(Kind.Rparen);
+            eatToken(Kind.CLOSE_PAREN);
             Ast.Stm.T body = parseStatement();
             stm = new Ast.Stm.While(condition, body, lineNum);
-        } else if (current.kind == Kind.Print)
+        } else if (current.kind == Kind.WRITE)
         {
             int lineNum = current.lineNum;
-            eatToken(Kind.Print);
-            eatToken(Kind.Lparen);
+            eatToken(Kind.WRITE);
+            eatToken(Kind.OPEN_PAREN);
             Ast.Exp.T exp = parseExp();
-            eatToken(Kind.Rparen);
-            eatToken(Kind.Semi);
+            eatToken(Kind.CLOSE_PAREN);
+            eatToken(Kind.SEMI);
             stm = new Ast.Stm.Print(exp, lineNum);
         } else if (current.kind == Kind.ID)
         {
             String id = current.lexeme;
             int lineNum = current.lineNum;
             eatToken(Kind.ID);
-            eatToken(Kind.Assign);
+            eatToken(Kind.ASSIGN);
             Ast.Exp.T exp = parseExp();
-            eatToken(Kind.Semi);
+            eatToken(Kind.SEMI);
             stm = new Ast.Stm.Assign(id, exp, lineNum);
         } else
             error();
@@ -317,9 +317,9 @@ public class Parser
     private LinkedList<Ast.Stm.T> parseStatements()
     {
         LinkedList<Ast.Stm.T> stms = new LinkedList<>();
-        while (current.kind == Kind.Lbrace || current.kind == Kind.If
-                || current.kind == Kind.While || current.kind == Kind.ID
-                || current.kind == Kind.Print)
+        while (current.kind == Kind.OPEN_CURLY_BRACE || current.kind == Kind.IF
+                || current.kind == Kind.WHILE || current.kind == Kind.ID
+                || current.kind == Kind.WRITE)
             stms.addLast(parseStatement());
 
         return stms;
@@ -331,11 +331,11 @@ public class Parser
     private Ast.Type.T parseType()
     {
         Ast.Type.T type = null;
-        if (current.kind == Kind.Boolean)
+        if (current.kind == Kind.BOOLEAN)
         {
             type = new Ast.Type.Boolean();
             advance();
-        } else if (current.kind == Kind.Int)
+        } else if (current.kind == Kind.INT)
         {
             type = new Ast.Type.Int();
             advance();
@@ -353,7 +353,7 @@ public class Parser
     {
         this.mark();
         Ast.Type.T type = parseType();
-        if (current.kind == Kind.Assign)  // maybe a assign statement in method
+        if (current.kind == Kind.ASSIGN)  // maybe a assign statement in method
         {
             this.reset();
             isValDecl = false;
@@ -362,14 +362,14 @@ public class Parser
         {
             String id = current.lexeme;
             advance();
-            if (current.kind == Kind.Semi)
+            if (current.kind == Kind.SEMI)
             {
                 this.unMark();
                 isValDecl = true;
                 Ast.Dec.T dec = new Ast.Dec.DecSingle(type, id, current.lineNum);
-                eatToken(Kind.Semi);
+                eatToken(Kind.SEMI);
                 return dec;
-            } else if (current.kind == Kind.Lparen) // maybe a method in class
+            } else if (current.kind == Kind.OPEN_PAREN) // maybe a method in class
             {
                 isValDecl = false;
                 this.reset();
@@ -392,7 +392,7 @@ public class Parser
     {
         LinkedList<Ast.Dec.T> decs = new LinkedList<>();
         isValDecl = true;
-        while (current.kind == Kind.Int || current.kind == Kind.Boolean
+        while (current.kind == Kind.INT || current.kind == Kind.BOOLEAN
                 || current.kind == Kind.ID)
         {
             Ast.Dec.T dec = parseVarDecl();
@@ -408,12 +408,12 @@ public class Parser
     private LinkedList<Ast.Dec.T> parseFormalList()
     {
         LinkedList<Ast.Dec.T> decs = new LinkedList<>();
-        if (current.kind == Kind.Int || current.kind == Kind.Boolean
+        if (current.kind == Kind.INT || current.kind == Kind.BOOLEAN
                 || current.kind == Kind.ID)
         {
             decs.addLast(new Ast.Dec.DecSingle(parseType(), current.lexeme, current.lineNum));
             eatToken(Kind.ID);
-            while (current.kind == Kind.Commer)
+            while (current.kind == Kind.COMMA)
             {
                 advance();
                 decs.addLast(new Ast.Dec.DecSingle(parseType(), current.lexeme, current.lineNum));
@@ -430,16 +430,16 @@ public class Parser
         Ast.Type.T retType = parseType();
         String id = current.lexeme;
         eatToken(Kind.ID);
-        eatToken(Kind.Lparen);
+        eatToken(Kind.OPEN_PAREN);
         LinkedList<Ast.Dec.T> formalList = parseFormalList();
-        eatToken(Kind.Rparen);
-        eatToken(Kind.Lbrace);
+        eatToken(Kind.CLOSE_PAREN);
+        eatToken(Kind.OPEN_CURLY_BRACE);
         LinkedList<Ast.Dec.T> varDecs = parseVarDecls();
         LinkedList<Ast.Stm.T> stms = parseStatements();
-        eatToken(Kind.Return);
+        eatToken(Kind.RETURN);
         Ast.Exp.T retExp = parseExp();
-        eatToken(Kind.Semi);
-        eatToken(Kind.Rbrace);
+        eatToken(Kind.SEMI);
+        eatToken(Kind.CLOSE_BRACE);
 
         return new Ast.Method.MethodSingle(retType, id, formalList, varDecs, stms, retExp);
     }
@@ -450,8 +450,8 @@ public class Parser
     {
         LinkedList<Ast.Method.T> methods = new LinkedList<>();
         while (current.kind == Kind.ID ||
-                current.kind == Kind.Int ||
-                current.kind == Kind.Boolean)
+                current.kind == Kind.INT ||
+                current.kind == Kind.BOOLEAN)
             methods.addLast(parseMethod());
 
         return methods;
@@ -461,20 +461,20 @@ public class Parser
     //  -> class id : id { VarDecl* Method* }
     private Ast.Class.T parseClassDecl()
     {
-        eatToken(Kind.Class);
+        eatToken(Kind.CLASS);
         String id = current.lexeme;
         eatToken(Kind.ID);
         String superClass = null;
-        if (current.kind == Kind.Colon)
+        if (current.kind == Kind.COLON)
         {
             advance();
             superClass = current.lexeme;
             eatToken(Kind.ID);
         }
-        eatToken(Kind.Lbrace);
+        eatToken(Kind.OPEN_CURLY_BRACE);
         LinkedList<Ast.Dec.T> decs = parseVarDecls();
         LinkedList<Ast.Method.T> methods = parseMethodDecls();
-        eatToken(Kind.Rbrace);
+        eatToken(Kind.CLOSE_BRACE);
         return new Ast.Class.ClassSingle(id, superClass, decs, methods);
     }
 
@@ -483,7 +483,7 @@ public class Parser
     private LinkedList<Ast.Class.T> parseClassDecls()
     {
         LinkedList<Ast.Class.T> classes = new LinkedList<>();
-        while (current.kind == Kind.Class)
+        while (current.kind == Kind.CLASS)
             classes.addLast(parseClassDecl());
 
         return classes;
@@ -498,18 +498,18 @@ public class Parser
     //    }
     private Ast.MainClass.MainClassSingle parseMainClass()
     {
-        eatToken(Kind.Class);
+        eatToken(Kind.CLASS);
         String id = current.lexeme;
         eatToken(Kind.ID);
-        eatToken(Kind.Lbrace);
-        eatToken(Kind.Void);
-        eatToken(Kind.Main);
-        eatToken(Kind.Lparen);
-        eatToken(Kind.Rparen);
-        eatToken(Kind.Lbrace);
+        eatToken(Kind.OPEN_CURLY_BRACE);
+        eatToken(Kind.VOID);
+        eatToken(Kind.MAIN);
+        eatToken(Kind.OPEN_PAREN);
+        eatToken(Kind.CLOSE_PAREN);
+        eatToken(Kind.OPEN_CURLY_BRACE);
         Ast.Stm.T stm = parseStatement();
-        eatToken(Kind.Rbrace);
-        eatToken(Kind.Rbrace);
+        eatToken(Kind.CLOSE_BRACE);
+        eatToken(Kind.CLOSE_BRACE);
         return new Ast.MainClass.MainClassSingle(id, stm);
     }
 

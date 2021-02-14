@@ -78,12 +78,12 @@ public class Lexer
         switch (c)
         {
             case '+':
-                return new Token(Kind.Add, lineNum);
+                return new Token(Kind.ADD, lineNum);
             case '&':
                 c = this.fstream.read();
                 if ('&' == c)
                 {
-                    return new Token(Kind.And, lineNum);
+                    return new Token(Kind.AND, lineNum);
                 }
                 else
                 {
@@ -91,31 +91,31 @@ public class Lexer
                     System.exit(1);
                 }
             case '=':
-                return new Token(Kind.Assign, lineNum);
+                return new Token(Kind.ASSIGN, lineNum);
             case ':':
-                return new Token(Kind.Colon, lineNum);
+                return new Token(Kind.COLON, lineNum);
             case ',':
-                return new Token(Kind.Commer, lineNum);
+                return new Token(Kind.COMMA, lineNum);
             case '.':
-                return new Token(Kind.Dot, lineNum);
+                return new Token(Kind.DOT, lineNum);
             case '{':
-                return new Token(Kind.Lbrace, lineNum);
+                return new Token(Kind.OPEN_CURLY_BRACE, lineNum);
             case '(':
-                return new Token(Kind.Lparen, lineNum);
+                return new Token(Kind.OPEN_PAREN, lineNum);
             case '<':
-                return new Token(Kind.LT, lineNum);
+                return new Token(Kind.LESS_THAN, lineNum);
             case '!':
-                return new Token(Kind.Not, lineNum);
+                return new Token(Kind.NEGATE, lineNum);
             case '}':
-                return new Token(Kind.Rbrace, lineNum);
+                return new Token(Kind.CLOSE_BRACE, lineNum);
             case ')':
-                return new Token(Kind.Rparen, lineNum);
+                return new Token(Kind.CLOSE_PAREN, lineNum);
             case ';':
-                return new Token(Kind.Semi, lineNum);
+                return new Token(Kind.SEMI, lineNum);
             case '-':
-                return new Token(Kind.Sub, lineNum);
+                return new Token(Kind.SUB, lineNum);
             case '*':
-                return new Token(Kind.Times, lineNum);
+                return new Token(Kind.STAR, lineNum);
             default:
                 StringBuilder sb = new StringBuilder();
                 sb.append((char) c);
@@ -138,37 +138,37 @@ public class Lexer
                 switch (sb.toString())
                 {
                     case "boolean":
-                        return new Token(Kind.Boolean, lineNum);
+                        return new Token(Kind.BOOLEAN, lineNum);
                     case "class":
-                        return new Token(Kind.Class, lineNum);
+                        return new Token(Kind.CLASS, lineNum);
                     case "else":
-                        return new Token(Kind.Else, lineNum);
+                        return new Token(Kind.ELSE, lineNum);
                     case "false":
-                        return new Token(Kind.False, lineNum);
+                        return new Token(Kind.FALSE, lineNum);
                     case "if":
-                        return new Token(Kind.If, lineNum);
+                        return new Token(Kind.IF, lineNum);
                     case "int":
-                        return new Token(Kind.Int, lineNum);
+                        return new Token(Kind.INT, lineNum);
                     case "main":
-                        return new Token(Kind.Main, lineNum);
+                        return new Token(Kind.MAIN, lineNum);
                     case "new":
-                        return new Token(Kind.New, lineNum);
+                        return new Token(Kind.NEW, lineNum);
                     case "print":
-                        return new Token(Kind.Print, lineNum);
+                        return new Token(Kind.WRITE, lineNum);
                     case "return":
-                        return new Token(Kind.Return, lineNum);
+                        return new Token(Kind.RETURN, lineNum);
                     case "this":
-                        return new Token(Kind.This, lineNum);
+                        return new Token(Kind.THIS, lineNum);
                     case "true":
-                        return new Token(Kind.True, lineNum);
+                        return new Token(Kind.TRUE, lineNum);
                     case "void":
-                        return new Token(Kind.Void, lineNum);
+                        return new Token(Kind.VOID, lineNum);
                     case "while":
-                        return new Token(Kind.While, lineNum);
+                        return new Token(Kind.WHILE, lineNum);
                     default:
                         if (isNumber(sb.toString()))
                         {
-                            return new Token(Kind.NUM, lineNum, sb.toString());
+                            return new Token(Kind.NUMBER, lineNum, sb.toString());
                         }
                         else if (isIdentifier(sb.toString()))
                         {
