@@ -12,7 +12,7 @@ import java.io.Reader;
  * @TODO 后面把int改回char;
  * @CreateTime 2021年02月14日 14:10:00
  */
-public class BufferedQueueHandler extends BufferedReader implements QueueHandleable
+public class BufferedQueueHandler extends BufferedReader implements IBufferedQueue
 {
     private final StringBuffer buffer = new StringBuffer();
 
@@ -46,7 +46,7 @@ public class BufferedQueueHandler extends BufferedReader implements QueueHandlea
     @Override
     public int peek(int num)
     {
-        // TODO 判空不要在这里, 影响效率, 放到后面;
+        // TODO 判空不要在这里, 影响效率, 放到后面lexer中;
         return isEmpty() ? -1 : buffer.charAt(num);
     }
 

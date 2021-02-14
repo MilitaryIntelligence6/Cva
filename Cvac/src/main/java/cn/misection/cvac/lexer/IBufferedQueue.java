@@ -7,7 +7,7 @@ package cn.misection.cvac.lexer;
  * @Description TODO
  * @CreateTime 2021年02月14日 14:34:00
  */
-public interface QueueHandleable
+public interface IBufferedQueue
 {
     /**
      * 查看;

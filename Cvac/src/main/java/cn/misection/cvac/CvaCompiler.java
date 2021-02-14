@@ -5,14 +5,12 @@ import cn.misection.cvac.codegen.ByteCodeGenerator;
 import cn.misection.cvac.codegen.TranslatorVisitor;
 import cn.misection.cvac.config.Macro;
 import cn.misection.cvac.lexer.BufferedQueueHandler;
-import cn.misection.cvac.lexer.QueueHandleable;
+import cn.misection.cvac.lexer.IBufferedQueue;
 import cn.misection.cvac.optimize.Optimizer;
 import cn.misection.cvac.parser.Parser;
 import cn.misection.cvac.semantic.SemanticVisitor;
 
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * Created by Mengxu on 2017/1/4.
@@ -62,7 +60,7 @@ public class CvaCompiler
         {
             fName = DEBUG_FILE;
         }
-        QueueHandleable fStream = null;
+        IBufferedQueue fStream = null;
         try
         {
             fStream = new BufferedQueueHandler(new FileReader(fName));
@@ -75,7 +73,7 @@ public class CvaCompiler
         geneCode(fStream);
     }
 
-    private static void geneCode(QueueHandleable fStream)
+    private static void geneCode(IBufferedQueue fStream)
     {
         Parser parser = new Parser(fStream);
         Ast.Program.T prog = parser.parse();

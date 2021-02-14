@@ -3,7 +3,7 @@ package cn.misection.cvac.parser;
 import cn.misection.cvac.ast.Ast;
 import cn.misection.cvac.lexer.Kind;
 import cn.misection.cvac.lexer.Lexer;
-import cn.misection.cvac.lexer.QueueHandleable;
+import cn.misection.cvac.lexer.IBufferedQueue;
 import cn.misection.cvac.lexer.Token;
 
 import java.util.LinkedList;
@@ -15,72 +15,72 @@ import java.util.Queue;
 public class Parser
 {
     private Lexer lexer;
-    private Token current;
+    private Token curToken;
 
     // for vardecl cn.misection.cvac.parser
-    private boolean isValDecl;
-    private boolean isMarking;
+    private boolean valDeclFlag;
+    private boolean markingFlag;
     private Queue<Token> markedTokens;
 
-    public Parser(QueueHandleable qStream)
+    public Parser(IBufferedQueue queueStream)
     {
-        lexer = new Lexer(qStream);
-        current = lexer.nextToken();
-        isMarking = false;
+        lexer = new Lexer(queueStream);
+        curToken = lexer.nextToken();
+        markingFlag = false;
         markedTokens = new LinkedList<>();
     }
 
     // utility methods
     private void advance()
     {
-        if (isMarking)
+        if (markingFlag)
         {
-            current = lexer.nextToken();
-            markedTokens.offer(current);
+            curToken = lexer.nextToken();
+            markedTokens.offer(curToken);
         }
         else if (!markedTokens.isEmpty())
         {
-            current = markedTokens.poll();
+            curToken = markedTokens.poll();
         }
         else
         {
-            current = lexer.nextToken();
+            curToken = lexer.nextToken();
         }
     }
 
     // start recording the tokens
     private void mark()
     {
-        isMarking = true;
-        markedTokens.offer(current);
+        markingFlag = true;
+        markedTokens.offer(curToken);
     }
 
     // stop recording the tokens and clear recorded
     private void unMark()
     {
-        isMarking = false;
+        markingFlag = false;
         markedTokens.clear();
     }
 
     // reset current token and stop recording
     private void reset()
     {
-        isMarking = false;
+        markingFlag = false;
         advance();
     }
 
     private void eatToken(Kind kind)
     {
         // FIXME, 写成 遇到EOF就走, 尾巴上那个-1暂时还没解决;
-        if (kind == current.kind || kind == Kind.EOF)
+        if (kind == curToken.getKind() || kind == Kind.EOF)
         {
             advance();
         }
         else
         {
             System.err.printf("Line %d :Expects: %s, but got: %s%n",
-                    current.lineNum, kind.toString(),
-                    current.kind.toString());
+                    curToken.getLineNum(), kind.toString(),
+                    curToken.getKind().toString());
             System.exit(1);
         }
     }
@@ -88,7 +88,7 @@ public class Parser
     private void error()
     {
         System.out.printf("Syntax error at line %s compilation aborting...\n%n",
-                current != null ? current.lineNum + "" : "unknow");
+                curToken != null ? curToken.getLineNum() + "" : "unknow");
         System.exit(1);
     }
 
@@ -100,18 +100,18 @@ public class Parser
     private LinkedList<Ast.Exp.T> parseExpList()
     {
         LinkedList<Ast.Exp.T> explist = new LinkedList<>();
-        if (current.kind == Kind.CLOSE_PAREN)
+        if (curToken.getKind() == Kind.CLOSE_PAREN)
         {
             return explist;
         }
         Ast.Exp.T tem = parseExp();
-        tem.lineNum = current.lineNum;
+        tem.lineNum = curToken.getLineNum();
         explist.addLast(tem);
-        while (current.kind == Kind.COMMA)
+        while (curToken.getKind() == Kind.COMMA)
         {
             advance();
             tem = parseExp();
-            tem.lineNum = current.lineNum;
+            tem.lineNum = curToken.getLineNum();
             explist.add(tem);
         }
         return explist;
@@ -127,39 +127,39 @@ public class Parser
     private Ast.Exp.T parseAtomExp()
     {
         Ast.Exp.T exp;
-        switch (current.kind)
+        switch (curToken.getKind())
         {
             case OPEN_PAREN:
                 advance();
                 exp = parseExp();
-                exp.lineNum = current.lineNum;
+                exp.lineNum = curToken.getLineNum();
                 //advance();
                 eatToken(Kind.CLOSE_PAREN);
                 return exp;
             case NUMBER:
-                exp = new Ast.Exp.Num(Integer.parseInt(current.lexeme),
-                        current.lineNum);
+                exp = new Ast.Exp.Num(Integer.parseInt(curToken.getLexeme()),
+                        curToken.getLineNum());
                 advance();
                 return exp;
             case TRUE:
-                exp = new Ast.Exp.True(current.lineNum);
+                exp = new Ast.Exp.True(curToken.getLineNum());
                 advance();
                 return exp;
             case FALSE:
-                exp = new Ast.Exp.False(current.lineNum);
+                exp = new Ast.Exp.False(curToken.getLineNum());
                 advance();
                 return exp;
             case THIS:
-                exp = new Ast.Exp.This(current.lineNum);
+                exp = new Ast.Exp.This(curToken.getLineNum());
                 advance();
                 return exp;
             case ID:
-                exp = new Ast.Exp.Id(current.lexeme, current.lineNum);
+                exp = new Ast.Exp.Id(curToken.getLexeme(), curToken.getLineNum());
                 advance();
                 return exp;
             case NEW:
                 advance();
-                exp = new Ast.Exp.NewObject(current.lexeme, current.lineNum);
+                exp = new Ast.Exp.NewObject(curToken.getLexeme(), curToken.getLineNum());
                 advance();
                 eatToken(Kind.OPEN_PAREN);
                 eatToken(Kind.CLOSE_PAREN);
@@ -175,13 +175,13 @@ public class Parser
     private Ast.Exp.T parseNotExp()
     {
         Ast.Exp.T exp = parseAtomExp();
-        while (current.kind == Kind.DOT)
+        while (curToken.getKind() == Kind.DOT)
         {
             advance();
-            Token id = current;
+            Token id = curToken;
             eatToken(Kind.ID);
             eatToken(Kind.OPEN_PAREN);
-            exp = new Ast.Exp.Call(exp, id.lexeme, parseExpList(), id.lineNum);
+            exp = new Ast.Exp.Call(exp, id.getLexeme(), parseExpList(), id.getLineNum());
             eatToken(Kind.CLOSE_PAREN);
         }
         return exp;
@@ -192,7 +192,7 @@ public class Parser
     private Ast.Exp.T parseTimesExp()
     {
         int i = 0;
-        while (current.kind == Kind.NEGATE)
+        while (curToken.getKind() == Kind.NEGATE)
         {
             advance();
             i++;
@@ -208,7 +208,7 @@ public class Parser
     {
         Ast.Exp.T tem = parseTimesExp();
         Ast.Exp.T exp = tem;
-        while (current.kind == Kind.STAR)
+        while (curToken.getKind() == Kind.STAR)
         {
             advance();
             tem = parseTimesExp();
@@ -223,9 +223,9 @@ public class Parser
     private Ast.Exp.T parseLTExp()
     {
         Ast.Exp.T exp = parseAddSubExp();
-        while (current.kind == Kind.ADD || current.kind == Kind.SUB)
+        while (curToken.getKind() == Kind.ADD || curToken.getKind() == Kind.SUB)
         {
-            boolean isAdd = current.kind == Kind.ADD;
+            boolean isAdd = curToken.getKind() == Kind.ADD;
             advance();
             Ast.Exp.T tem = parseAddSubExp();
             exp = isAdd ? new Ast.Exp.Add(exp, tem, exp.lineNum)
@@ -241,7 +241,7 @@ public class Parser
     private Ast.Exp.T parseAndExp()
     {
         Ast.Exp.T exp = parseLTExp();
-        while (current.kind == Kind.LESS_THAN)
+        while (curToken.getKind() == Kind.LESS_THAN)
         {
             advance();
             Ast.Exp.T tem = parseLTExp();
@@ -255,7 +255,7 @@ public class Parser
     private Ast.Exp.T parseExp()
     {
         Ast.Exp.T exp = parseAndExp();
-        while (current.kind == Kind.AND)
+        while (curToken.getKind() == Kind.AND_AND)
         {
             advance();
             Ast.Exp.T tem = parseAndExp();
@@ -272,16 +272,16 @@ public class Parser
     private Ast.Stm.T parseStatement()
     {
         Ast.Stm.T stm = null;
-        if (current.kind == Kind.OPEN_CURLY_BRACE)
+        if (curToken.getKind() == Kind.OPEN_CURLY_BRACE)
         {
             eatToken(Kind.OPEN_CURLY_BRACE);
-            int lineNum = current.lineNum;
+            int lineNum = curToken.getLineNum();
             stm = new Ast.Stm.Block(parseStatements(), lineNum);
             eatToken(Kind.CLOSE_BRACE);
         }
-        else if (current.kind == Kind.IF)
+        else if (curToken.getKind() == Kind.IF)
         {
-            int lineNum = current.lineNum;
+            int lineNum = curToken.getLineNum();
             eatToken(Kind.IF);
             eatToken(Kind.OPEN_PAREN);
             Ast.Exp.T condition = parseExp();
@@ -291,9 +291,9 @@ public class Parser
             Ast.Stm.T else_stm = parseStatement();
             stm = new Ast.Stm.If(condition, then_stm, else_stm, lineNum);
         }
-        else if (current.kind == Kind.WHILE)
+        else if (curToken.getKind() == Kind.WHILE)
         {
-            int lineNum = current.lineNum;
+            int lineNum = curToken.getLineNum();
             eatToken(Kind.WHILE);
             eatToken(Kind.OPEN_PAREN);
             Ast.Exp.T condition = parseExp();
@@ -301,9 +301,9 @@ public class Parser
             Ast.Stm.T body = parseStatement();
             stm = new Ast.Stm.While(condition, body, lineNum);
         }
-        else if (current.kind == Kind.WRITE)
+        else if (curToken.getKind() == Kind.WRITE)
         {
-            int lineNum = current.lineNum;
+            int lineNum = curToken.getLineNum();
             eatToken(Kind.WRITE);
             eatToken(Kind.OPEN_PAREN);
             Ast.Exp.T exp = parseExp();
@@ -311,10 +311,10 @@ public class Parser
             eatToken(Kind.SEMI);
             stm = new Ast.Stm.Print(exp, lineNum);
         }
-        else if (current.kind == Kind.ID)
+        else if (curToken.getKind() == Kind.ID)
         {
-            String id = current.lexeme;
-            int lineNum = current.lineNum;
+            String id = curToken.getLexeme();
+            int lineNum = curToken.getLineNum();
             eatToken(Kind.ID);
             eatToken(Kind.ASSIGN);
             Ast.Exp.T exp = parseExp();
@@ -334,9 +334,9 @@ public class Parser
     private LinkedList<Ast.Stm.T> parseStatements()
     {
         LinkedList<Ast.Stm.T> stms = new LinkedList<>();
-        while (current.kind == Kind.OPEN_CURLY_BRACE || current.kind == Kind.IF
-                || current.kind == Kind.WHILE || current.kind == Kind.ID
-                || current.kind == Kind.WRITE)
+        while (curToken.getKind() == Kind.OPEN_CURLY_BRACE || curToken.getKind() == Kind.IF
+                || curToken.getKind() == Kind.WHILE || curToken.getKind() == Kind.ID
+                || curToken.getKind() == Kind.WRITE)
         {
             stms.addLast(parseStatement());
         }
@@ -350,19 +350,19 @@ public class Parser
     private Ast.Type.T parseType()
     {
         Ast.Type.T type = null;
-        if (current.kind == Kind.BOOLEAN)
+        if (curToken.getKind() == Kind.BOOLEAN)
         {
             type = new Ast.Type.Boolean();
             advance();
         }
-        else if (current.kind == Kind.INT)
+        else if (curToken.getKind() == Kind.INT)
         {
             type = new Ast.Type.Int();
             advance();
         }
-        else if (current.kind == Kind.ID)
+        else if (curToken.getKind() == Kind.ID)
         {
-            type = new Ast.Type.ClassType(current.lexeme);
+            type = new Ast.Type.ClassType(curToken.getLexeme());
             advance();
         }
         else
@@ -377,27 +377,27 @@ public class Parser
     {
         this.mark();
         Ast.Type.T type = parseType();
-        if (current.kind == Kind.ASSIGN)  // maybe a assign statement in method
+        if (curToken.getKind() == Kind.ASSIGN)  // maybe a assign statement in method
         {
             this.reset();
-            isValDecl = false;
+            valDeclFlag = false;
             return null;
         }
-        else if (current.kind == Kind.ID)
+        else if (curToken.getKind() == Kind.ID)
         {
-            String id = current.lexeme;
+            String id = curToken.getLexeme();
             advance();
-            if (current.kind == Kind.SEMI)
+            if (curToken.getKind() == Kind.SEMI)
             {
                 this.unMark();
-                isValDecl = true;
-                Ast.Dec.T dec = new Ast.Dec.DecSingle(type, id, current.lineNum);
+                valDeclFlag = true;
+                Ast.Dec.T dec = new Ast.Dec.DecSingle(type, id, curToken.getLineNum());
                 eatToken(Kind.SEMI);
                 return dec;
             }
-            else if (current.kind == Kind.OPEN_PAREN) // maybe a method in class
+            else if (curToken.getKind() == Kind.OPEN_PAREN) // maybe a method in class
             {
-                isValDecl = false;
+                valDeclFlag = false;
                 this.reset();
                 return null;
             }
@@ -419,16 +419,16 @@ public class Parser
     private LinkedList<Ast.Dec.T> parseVarDecls()
     {
         LinkedList<Ast.Dec.T> decs = new LinkedList<>();
-        isValDecl = true;
-        while (current.kind == Kind.INT || current.kind == Kind.BOOLEAN
-                || current.kind == Kind.ID)
+        valDeclFlag = true;
+        while (curToken.getKind() == Kind.INT || curToken.getKind() == Kind.BOOLEAN
+                || curToken.getKind() == Kind.ID)
         {
             Ast.Dec.T dec = parseVarDecl();
             if (dec != null)
             {
                 decs.addLast(dec);
             }
-            if (!isValDecl)
+            if (!valDeclFlag)
             {
                 break;
             }
@@ -442,15 +442,15 @@ public class Parser
     private LinkedList<Ast.Dec.T> parseFormalList()
     {
         LinkedList<Ast.Dec.T> decs = new LinkedList<>();
-        if (current.kind == Kind.INT || current.kind == Kind.BOOLEAN
-                || current.kind == Kind.ID)
+        if (curToken.getKind() == Kind.INT || curToken.getKind() == Kind.BOOLEAN
+                || curToken.getKind() == Kind.ID)
         {
-            decs.addLast(new Ast.Dec.DecSingle(parseType(), current.lexeme, current.lineNum));
+            decs.addLast(new Ast.Dec.DecSingle(parseType(), curToken.getLexeme(), curToken.getLineNum()));
             eatToken(Kind.ID);
-            while (current.kind == Kind.COMMA)
+            while (curToken.getKind() == Kind.COMMA)
             {
                 advance();
-                decs.addLast(new Ast.Dec.DecSingle(parseType(), current.lexeme, current.lineNum));
+                decs.addLast(new Ast.Dec.DecSingle(parseType(), curToken.getLexeme(), curToken.getLineNum()));
                 eatToken(Kind.ID);
             }
         }
@@ -462,7 +462,7 @@ public class Parser
     private Ast.Method.T parseMethod()
     {
         Ast.Type.T retType = parseType();
-        String id = current.lexeme;
+        String id = curToken.getLexeme();
         eatToken(Kind.ID);
         eatToken(Kind.OPEN_PAREN);
         LinkedList<Ast.Dec.T> formalList = parseFormalList();
@@ -483,9 +483,9 @@ public class Parser
     private LinkedList<Ast.Method.T> parseMethodDecls()
     {
         LinkedList<Ast.Method.T> methods = new LinkedList<>();
-        while (current.kind == Kind.ID ||
-                current.kind == Kind.INT ||
-                current.kind == Kind.BOOLEAN)
+        while (curToken.getKind() == Kind.ID ||
+                curToken.getKind() == Kind.INT ||
+                curToken.getKind() == Kind.BOOLEAN)
         {
             methods.addLast(parseMethod());
         }
@@ -498,13 +498,13 @@ public class Parser
     private Ast.Class.T parseClassDecl()
     {
         eatToken(Kind.CLASS);
-        String id = current.lexeme;
+        String id = curToken.getLexeme();
         eatToken(Kind.ID);
         String superClass = null;
-        if (current.kind == Kind.COLON)
+        if (curToken.getKind() == Kind.COLON)
         {
             advance();
-            superClass = current.lexeme;
+            superClass = curToken.getLexeme();
             eatToken(Kind.ID);
         }
         eatToken(Kind.OPEN_CURLY_BRACE);
@@ -519,7 +519,7 @@ public class Parser
     private LinkedList<Ast.Class.T> parseClassDecls()
     {
         LinkedList<Ast.Class.T> classes = new LinkedList<>();
-        while (current.kind == Kind.CLASS)
+        while (curToken.getKind() == Kind.CLASS)
         {
             classes.addLast(parseClassDecl());
         }
@@ -537,7 +537,7 @@ public class Parser
     private Ast.MainClass.MainClassSingle parseMainClass()
     {
         eatToken(Kind.CLASS);
-        String id = current.lexeme;
+        String id = curToken.getLexeme();
         eatToken(Kind.ID);
         eatToken(Kind.OPEN_CURLY_BRACE);
         eatToken(Kind.VOID);

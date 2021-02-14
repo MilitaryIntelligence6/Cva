@@ -8,17 +8,17 @@ public class Token
     /**
      * the kind of the token
      */
-    public Kind kind;
+    private Kind kind;
 
     /**
      * extra lexeme of the token
      */
-    public String lexeme;
+    private String lexeme;
 
     /**
      * the line number of the token
      */
-    public int lineNum;
+    private int lineNum;
 
 
     public Token(Kind kind, int lineNum)
@@ -41,5 +41,20 @@ public class Token
                 this.kind.toString(),
                 lexeme == null ? "" : this.lexeme,
                 this.lineNum);
+    }
+
+    public Kind getKind()
+    {
+        return kind;
+    }
+
+    public String getLexeme()
+    {
+        return lexeme;
+    }
+
+    public int getLineNum()
+    {
+        return lineNum;
     }
 }

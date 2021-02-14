@@ -2,8 +2,6 @@ package cn.misection.cvac.lexer;
 
 import cn.misection.cvac.config.Macro;
 
-import java.io.IOException;
-
 /**
  * Created by Mengxu on 2017/1/6.
  */
@@ -12,11 +10,11 @@ public class Lexer
     /**
      * input stream of the file;
      */
-    private QueueHandleable queueStream;
+    private IBufferedQueue queueStream;
 
     private int lineNum;
 
-    public Lexer(QueueHandleable queueStream)
+    public Lexer(IBufferedQueue queueStream)
     {
         this.queueStream = queueStream;
         this.lineNum = 1;
@@ -25,31 +23,17 @@ public class Lexer
     public Token nextToken()
     {
         Token token = null;
-        token = nextTokenInternal();
+        token = lex();
 
         return token;
     }
 
-    private Token nextTokenInternal()
+    private Token lex()
     {
         int c = this.queueStream.poll();
 
-//        if (queueStream.isEmpty())
-//        {
-//            return new Token(Kind.EOF, lineNum);
-//        }
-        if (c == -1)
-        {
-            if (Macro.DEBUG)
-            {
-                System.err.println("bug place");
-            }
-            return new Token(Kind.EOF, lineNum);
-        }
-
-
         // skip all kinds of blanks
-        while (' ' == c || '\t' == c || '\r' == c || '\n' == c)
+        while (c == ' ' || c == '\t' || c == '\r' || c == '\n')
         {
             if ('\n' == c)
             {
@@ -59,35 +43,57 @@ public class Lexer
         }
 
         // deal with comments
-        if ('/' == c)
+        if (c == '/')
         {
-            c = queueStream.poll();
-            if ('/' == c)
+            char nextCh = (char) queueStream.peek();
+            switch (nextCh)
             {
-                while ('\n' != c)
+                case '/':
                 {
-                    c = this.queueStream.poll();
+                    while (nextCh != ConstantPool.NEW_LINE)
+                    {
+                        nextCh = (char) this.queueStream.poll();
+                    }
+                    lineNum++;
+                    // tail recursion;
+                    return lex();
                 }
-                lineNum++;
-                return nextTokenInternal(); // tail recursion
-            }
-            else
-            {
-                System.out.println("Comment should begin with \"//\"");
-                System.out.printf("Error is found at line %d%n", lineNum);
-                System.exit(1);
+                case '*':
+                {
+                    // TODO Block comment;
+                    break;
+                }
+                default:
+//                System.out.println("Comment should begin with \"//\"");
+//                System.out.printf("Error is found at line %d%n", lineNum);
+//                System.exit(1);
+                {
+                    return new Token(Kind.DIV_OPERATOR, lineNum);
+                }
             }
         }
 
         switch (c)
         {
+            case -1:
+            {
+                if (Macro.DEBUG)
+                {
+                    System.err.println("bug place");
+                }
+                return new Token(Kind.EOF, lineNum);
+            }
             case '+':
                 return new Token(Kind.ADD, lineNum);
+            case '-':
+                return new Token(Kind.SUB, lineNum);
+            case '*':
+                return new Token(Kind.STAR, lineNum);
             case '&':
                 c = this.queueStream.poll();
                 if ('&' == c)
                 {
-                    return new Token(Kind.AND, lineNum);
+                    return new Token(Kind.AND_AND, lineNum);
                 }
                 else
                 {
@@ -116,19 +122,15 @@ public class Lexer
                 return new Token(Kind.CLOSE_PAREN, lineNum);
             case ';':
                 return new Token(Kind.SEMI, lineNum);
-            case '-':
-                return new Token(Kind.SUB, lineNum);
-            case '*':
-                return new Token(Kind.STAR, lineNum);
             default:
+            {
                 StringBuilder sb = new StringBuilder();
                 sb.append((char) c);
                 while (true)
                 {
-//                    this.queueStream.mark(1);
                     c = queueStream.peek();
-                    if (-1 != c && ' ' != c && '\t' != c
-                            && '\n' != c && '\r' != c
+                    if (c != -1 && c != ' ' && c != '\t'
+                            && c != '\n' && c != '\r'
                             && !isSpecialCharacter(c))
                     {
                         sb.append((char) c);
@@ -136,7 +138,6 @@ public class Lexer
                     }
                     else
                     {
-//                        this.queueStream.reset();
                         break;
                     }
                 }
@@ -158,7 +159,10 @@ public class Lexer
                         return new Token(Kind.MAIN, lineNum);
                     case "new":
                         return new Token(Kind.NEW, lineNum);
+                    // TODO 删掉对print的兼容;
                     case "print":
+                    case "printf":
+                    case "echo":
                         return new Token(Kind.WRITE, lineNum);
                     case "return":
                         return new Token(Kind.RETURN, lineNum);
@@ -171,6 +175,7 @@ public class Lexer
                     case "while":
                         return new Token(Kind.WHILE, lineNum);
                     default:
+                    {
                         if (isNumber(sb.toString()))
                         {
                             return new Token(Kind.NUMBER, lineNum, sb.toString());
@@ -185,7 +190,9 @@ public class Lexer
                             System.exit(1);
                             return null;
                         }
+                    }
                 }
+            }
         }
     }
 
