@@ -3,7 +3,7 @@ package cn.misection.cvac.ast;
 /**
  * Created by Mengxu on 2017/1/7.
  */
-public class Ast
+public class FrontAst
 {
     // Type
     public static class Type
@@ -22,11 +22,11 @@ public class Ast
             }
         }
 
-        public static class CvaClass extends T
+        public static class CvaClassType extends T
         {
             public String literal;
 
-            public CvaClass(String literal)
+            public CvaClassType(String literal)
             {
                 this.literal = literal;
             }
@@ -38,9 +38,9 @@ public class Ast
             }
         }
 
-        public static class Int extends T
+        public static class CvaInt extends T
         {
-            public Int() {}
+            public CvaInt() {}
 
             @Override
             public String toString()

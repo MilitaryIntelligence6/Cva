@@ -1,7 +1,16 @@
 package cn.misection.cvac.codegen;
 
-import cn.misection.cvac.ast.Ast;
-import cn.misection.cvac.codegen.ast.Ast.*;
+import cn.misection.cvac.ast.clas.*;
+import cn.misection.cvac.ast.decl.*;
+import cn.misection.cvac.ast.entry.*;
+import cn.misection.cvac.ast.expr.*;
+import cn.misection.cvac.ast.method.*;
+import cn.misection.cvac.ast.program.*;
+import cn.misection.cvac.ast.statement.*;
+import cn.misection.cvac.ast.type.*;
+
+import cn.misection.cvac.codegen.ast.CodeGenAst;
+import cn.misection.cvac.codegen.ast.CodeGenAst.*;
 import cn.misection.cvac.codegen.ast.Label;
 
 import java.util.Hashtable;
@@ -14,12 +23,13 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
 {
     private String classId;
     private int index;
+
     private Hashtable<String, Integer> indexTable;
     private Type.T type;
     private Dec.DecSingle dec;
     private LinkedList<Stm.T> stms;
     private Method.MethodSingle method;
-    private cn.misection.cvac.codegen.ast.Ast.Class.ClassSingle classs;
+    private CodeGenAst.Class.ClassSingle classs;
     private MainClass.MainClassSingle mainClass;
     public Program.ProgramSingle prog;
 
@@ -42,49 +52,52 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
         this.stms.add(s);
     }
 
-    public void visit(Ast.Type.CvaBoolean t)
+    @Override
+    public void visit(CvaBoolean t)
     {
         this.type = new Type.Int();
     }
 
     @Override
-    public void visit(Ast.Type.CvaClass t)
+    public void visit(CvaClassType t)
     {
-        this.type = new Type.ClassType(t.literal);
+        this.type = new Type.ClassType(t.getLiteral());
     }
 
     @Override
-    public void visit(Ast.Type.Int t)
+    public void visit(CvaInt t)
     {
         this.type = new Type.Int();
     }
 
     @Override
-    public void visit(Ast.Decl.CvaDeclaration d)
+    public void visit(CvaDeclaration d)
     {
-        this.visit(d.type);
-        this.dec = new Dec.DecSingle(this.type, d.literal);
+        this.visit(d.getType());
+        this.dec = new Dec.DecSingle(this.type, d.getLiteral());
         if (this.indexTable != null) // if it is field
-        this.indexTable.put(d.literal, index++);
+        {
+            this.indexTable.put(d.getLiteral(), index++);
+        }
     }
 
     @Override
-    public void visit(Ast.Expr.CvaAddExpr e)
+    public void visit(CvaAddExpr e)
     {
-        this.visit(e.left);
-        this.visit(e.right);
+        this.visit(e.getLeft());
+        this.visit(e.getRight());
         emit(new Stm.Iadd());
     }
 
     @Override
-    public void visit(Ast.Expr.CvaAndAndExpr e)
+    public void visit(CvaAndAndExpr e)
     {
         Label f = new Label();
         Label r = new Label();
-        this.visit(e.left);
+        this.visit(e.getLeft());
         emit(new Stm.Ldc(1));
         emit(new Stm.Ificmplt(f));
-        this.visit(e.right);
+        this.visit(e.getRight());
         emit(new Stm.Ldc(1));
         emit(new Stm.Ificmplt(f));
         emit(new Stm.Ldc(1));
@@ -95,54 +108,60 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Expr.CvaCallExpr e)
+    public void visit(CvaCallExpr e)
     {
-        this.visit(e.exp);
-        e.args.forEach(this::visit);
-        this.visit(e.rt);
+        this.visit(e.getExpr());
+        e.getArgs().forEach(this::visit);
+        this.visit(e.getRetType());
         Type.T rt = this.type;
         LinkedList<Type.T> at = new LinkedList<>();
-        e.at.forEach(a ->
+        e.getArgTypeList().forEach(a ->
         {
             this.visit(a);
             at.add(this.type);
         });
-        emit(new Stm.Invokevirtual(e.literal, e.type, at, rt));
+        emit(new Stm.Invokevirtual(e.getLiteral(), e.getType(), at, rt));
     }
 
     @Override
-    public void visit(Ast.Expr.CvaFalseExpr e)
+    public void visit(CvaFalseExpr e)
     {
         emit(new Stm.Ldc(0));
     }
 
     @Override
-    public void visit(Ast.Expr.CvaIdentifier e)
+    public void visit(CvaIdentifier e)
     {
-        if (e.isField)
+        if (e.isField())
         {
             emit(new Stm.Aload(0));
-            Ast.Type.T type = e.type;
-            emit(new Stm.Getfield(this.classId + '/' + e.literal,
-                    type instanceof Ast.Type.CvaClass ?
-                            ("L" + ((Ast.Type.CvaClass) type).literal + ";")
+            AbstractType type = e.getType();
+            emit(new Stm.Getfield(this.classId + '/' + e.getLiteral(),
+                    type instanceof CvaClassType ?
+                            ("L" + ((CvaClassType) type).getLiteral() + ";")
                             : "I"));
-        } else
+        }
+        else
         {
-            int index = this.indexTable.get(e.literal);
-            if (e.type instanceof Ast.Type.CvaClass)
+            int index = this.indexTable.get(e.getLiteral());
+            if (e.getType() instanceof CvaClassType)
+            {
                 emit(new Stm.Aload(index));
-            else emit(new Stm.Iload(index));
+            }
+            else
+            {
+                emit(new Stm.Iload(index));
+            }
         }
     }
 
     @Override
-    public void visit(Ast.Expr.CvaLTExpr e)
+    public void visit(CvaLTExpr e)
     {
         Label t = new Label();
         Label r = new Label();
-        this.visit(e.left);
-        this.visit(e.right);
+        this.visit(e.getLeft());
+        this.visit(e.getRight());
         emit(new Stm.Ificmplt(t));
         emit(new Stm.Ldc(0));
         emit(new Stm.Goto(r));
@@ -152,17 +171,17 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Expr.CvaNewExpr e)
+    public void visit(CvaNewExpr e)
     {
-        emit(new Stm.New(e.literal));
+        emit(new Stm.New(e.getLiteral()));
     }
 
     @Override
-    public void visit(Ast.Expr.CvaNegateExpr e)
+    public void visit(CvaNegateExpr e)
     {
         Label f = new Label();
         Label r = new Label();
-        this.visit(e.expr);
+        this.visit(e.getExpr());
         emit(new Stm.Ldc(1));
         emit(new Stm.Ificmplt(f));
         emit(new Stm.Ldc(1));
@@ -173,175 +192,186 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Expr.CvaNumberInt e)
+    public void visit(CvaNumberInt e)
     {
-        emit(new Stm.Ldc(e.value));
+        emit(new Stm.Ldc(e.getValue()));
     }
 
     @Override
-    public void visit(Ast.Expr.CvaSubExpr e)
+    public void visit(CvaSubExpr e)
     {
-        this.visit(e.left);
-        this.visit(e.right);
+        this.visit(e.getLeft());
+        this.visit(e.getRight());
         emit(new Stm.Isub());
     }
 
     @Override
-    public void visit(Ast.Expr.CvaThisExpr e)
+    public void visit(CvaThisExpr e)
     {
         emit(new Stm.Aload(0));
     }
 
     @Override
-    public void visit(Ast.Expr.CvaMuliExpr e)
+    public void visit(CvaMuliExpr e)
     {
-        this.visit(e.left);
-        this.visit(e.right);
+        this.visit(e.getLeft());
+        this.visit(e.getRight());
         emit(new Stm.Imul());
     }
 
     @Override
-    public void visit(Ast.Expr.CvaTrueExpr e)
+    public void visit(CvaTrueExpr e)
     {
         emit(new Stm.Ldc(1));
     }
 
     @Override
-    public void visit(Ast.Stm.CvaAssign s)
+    public void visit(CvaAssign s)
     {
         try
         {
-            int index = this.indexTable.get(s.id);
-            this.visit(s.exp);
-            if (s.type instanceof Ast.Type.CvaClass)
+            int index = this.indexTable.get(s.getLiteral());
+            this.visit(s.getExpr());
+            if (s.getType() instanceof CvaClassType)
+            {
                 emit(new Stm.Astore(index));
-            else emit(new Stm.Istore(index));
-        } catch (NullPointerException e)
+            }
+            else
+            {
+                emit(new Stm.Istore(index));
+            }
+        }
+        catch (NullPointerException e)
         {
             emit(new Stm.Aload(0));
-            this.visit(s.exp);
-            emit(new Stm.Putfield(this.classId + '/' + s.id,
-                    s.type instanceof Ast.Type.CvaClass ?
-                            ("L" + ((Ast.Type.CvaClass) s.type).literal + ";")
+            this.visit(s.getExpr());
+            emit(new Stm.Putfield(String.format("%s/%s", this.classId, s.getLiteral()),
+                    s.getType() instanceof CvaClassType ?
+                            (String.format("L%s;", ((CvaClassType) s.getType()).getLiteral()))
                             : "I"));
         }
     }
 
     @Override
-    public void visit(Ast.Stm.CvaBlock s)
+    public void visit(CvaBlock s)
     {
-        s.stms.forEach(this::visit);
+        s.getStatementList().forEach(this::visit);
     }
 
     @Override
-    public void visit(Ast.Stm.CvaIfStatement s)
+    public void visit(CvaIfStatement s)
     {
         Label l = new Label();
         Label r = new Label();
-        this.visit(s.condition);
+        this.visit(s.getCondition());
         emit(new Stm.Ldc(1));
         emit(new Stm.Ificmplt(l));
-        this.visit(s.thenStm);
+        this.visit(s.getThenStatement());
         emit(new Stm.Goto(r));
         emit(new Stm.LabelJ(l));
-        this.visit(s.elseStm);
+        this.visit(s.getElseStatement());
         emit(new Stm.LabelJ(r));
     }
 
     @Override
-    public void visit(Ast.Stm.CvaWriteOperation s)
+    public void visit(CvaWriteOperation s)
     {
-        this.visit(s.exp);
+        this.visit(s.getExpr());
         emit(new Stm.Write());
     }
 
     @Override
-    public void visit(Ast.Stm.CvaWhileStatement s)
+    public void visit(CvaWhileStatement s)
     {
         Label con = new Label();
         Label end = new Label();
         emit(new Stm.LabelJ(con));
-        this.visit(s.condition);
+        this.visit(s.getCondition());
         emit(new Stm.Ldc(1));
         emit(new Stm.Ificmplt(end));
-        this.visit(s.body);
+        this.visit(s.getBody());
         emit(new Stm.Goto(con));
         emit(new Stm.LabelJ(end));
     }
 
     @Override
-    public void visit(Ast.Method.CvaMethod m)
+    public void visit(CvaMethod method)
     {
         this.index = 1;
         this.indexTable = new Hashtable<>();
-        this.visit(m.retType);
-        Type.T _retType = this.type;
+        this.visit(method.getRetType());
+        Type.T theRetType = this.type;
 
-        LinkedList<Dec.DecSingle> _formals = new LinkedList<>();
-        m.formals.forEach(f ->
+        LinkedList<Dec.DecSingle> formalList = new LinkedList<>();
+        method.getFormalList().forEach(f ->
         {
             this.visit(f);
-            _formals.add(this.dec);
+            formalList.add(this.dec);
         });
 
-        LinkedList<Dec.DecSingle> _locals = new LinkedList<>();
-        m.locals.forEach(l ->
+        LinkedList<Dec.DecSingle> localList = new LinkedList<>();
+        method.getLocalList().forEach(l ->
         {
             this.visit(l);
-            _locals.add(this.dec);
+            localList.add(this.dec);
         });
         this.stms = new LinkedList<>();
-        m.stms.forEach(this::visit);
+        method.getStatementList().forEach(this::visit);
 
-        this.visit(m.retExp);
+        this.visit(method.getRetExpr());
 
-        if (m.retType instanceof Ast.Type.CvaClass)
+        if (method.getRetType() instanceof CvaClassType)
+        {
             emit(new Stm.Areturn());
-        else emit(new Stm.Ireturn());
+        }
+        else
+        {
+            emit(new Stm.Ireturn());
+        }
 
-        this.method = new Method.MethodSingle(_retType, m.literal, this.classId,
-                _formals, _locals, this.stms, 0, this.index);
+        this.method = new Method.MethodSingle(theRetType, method.getLiteral(), this.classId,
+                formalList, localList, this.stms, 0, this.index);
     }
 
     @Override
-    public void visit(Ast.Clas.CvaClass c)
+    public void visit(CvaClass cvaClass)
     {
-        this.classId = c.literal;
-        LinkedList<Dec.DecSingle> _fields = new LinkedList<>();
-        c.fields.forEach(f ->
+        this.classId = cvaClass.getLiteral();
+        LinkedList<Dec.DecSingle> fieldList = new LinkedList<>();
+        cvaClass.getFieldList().forEach(f ->
         {
             this.visit(f);
-            _fields.add(this.dec);
+            fieldList.add(this.dec);
         });
-        LinkedList<Method.MethodSingle> _methods = new LinkedList<>();
-        c.methods.forEach(m ->
+        LinkedList<Method.MethodSingle> methodList = new LinkedList<>();
+        cvaClass.getMethodList().forEach(m ->
         {
             this.visit(m);
-            _methods.add(this.method);
+            methodList.add(this.method);
         });
-        this.classs = new cn.misection.cvac.codegen.ast.Ast.Class.ClassSingle(
-                c.literal, c.parent, _fields, _methods);
+        this.classs = new CodeGenAst.Class.ClassSingle(
+                cvaClass.getLiteral(), cvaClass.getParent(), fieldList, methodList);
     }
 
     @Override
-    public void visit(Ast.MainClass.CvaEntry c)
+    public void visit(CvaEntry c)
     {
-        this.visit(c.stm);
-        this.mainClass = new MainClass.MainClassSingle(c.id, this.stms);
+        this.visit(c.getStatement());
+        this.mainClass = new MainClass.MainClassSingle(c.getLiteral(), this.stms);
         this.stms = new LinkedList<>();
     }
 
     @Override
-    public void visit(Ast.Program.CvaProgram p)
+    public void visit(CvaProgram p)
     {
-        this.visit(p.mainClass);
-        LinkedList<cn.misection.cvac.codegen.ast.Ast.Class.ClassSingle> _class =
+        this.visit(p.getEntry());
+        LinkedList<CodeGenAst.Class.ClassSingle> classList =
                 new LinkedList<>();
-        p.classes.forEach(c ->
+        p.getClassList().forEach(c ->
         {
             this.visit(c);
-            _class.add(this.classs);
+            classList.add(this.classs);
         });
-        this.prog = new Program.ProgramSingle(this.mainClass, _class);
+        this.prog = new Program.ProgramSingle(this.mainClass, classList);
     }
 }

@@ -20,4 +20,9 @@ public abstract class AbstractExpression implements IExpression
     {
         return lineNum;
     }
+
+    public void setLineNum(int lineNum)
+    {
+        this.lineNum = lineNum;
+    }
 }

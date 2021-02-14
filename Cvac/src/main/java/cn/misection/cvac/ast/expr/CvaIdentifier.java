@@ -48,4 +48,19 @@ public class CvaIdentifier extends AbstractExpression
     {
         return fieldFlag;
     }
+
+    public void setLiteral(String literal)
+    {
+        this.literal = literal;
+    }
+
+    public void setType(AbstractType type)
+    {
+        this.type = type;
+    }
+
+    public void setField(boolean fieldFlag)
+    {
+        this.fieldFlag = fieldFlag;
+    }
 }

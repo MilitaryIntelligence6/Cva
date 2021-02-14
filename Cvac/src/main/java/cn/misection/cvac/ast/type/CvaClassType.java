@@ -21,4 +21,9 @@ public class CvaClassType extends AbstractType
     {
         return String.format("@class:%s", literal);
     }
+
+    public String getLiteral()
+    {
+        return literal;
+    }
 }

@@ -11,19 +11,19 @@ import cn.misection.cvac.ast.statement.AbstractStatement;
  */
 public abstract class AbstractEntry implements IEntry
 {
-    protected String id;
+    protected String literal;
 
     protected AbstractStatement statement;
 
-    protected AbstractEntry(String id, AbstractStatement statement)
+    protected AbstractEntry(String literal, AbstractStatement statement)
     {
-        this.id = id;
+        this.literal = literal;
         this.statement = statement;
     }
 
-    public String getId()
+    public String getLiteral()
     {
-        return id;
+        return literal;
     }
 
     public AbstractStatement getStatement()

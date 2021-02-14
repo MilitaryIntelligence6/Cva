@@ -1,12 +1,14 @@
 package cn.misection.cvac;
 
-import cn.misection.cvac.ast.Ast;
+import cn.misection.cvac.ast.FrontAst;
+import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.codegen.ByteCodeGenerator;
 import cn.misection.cvac.codegen.TranslatorVisitor;
+import cn.misection.cvac.codegen.ast.CodeGenAst;
 import cn.misection.cvac.config.Macro;
 import cn.misection.cvac.lexer.BufferedQueueHandler;
 import cn.misection.cvac.lexer.IBufferedQueue;
-import cn.misection.cvac.optimize.Optimizer;
+//import cn.misection.cvac.optimize.Optimizer;
 import cn.misection.cvac.parser.Parser;
 import cn.misection.cvac.semantic.SemanticVisitor;
 
@@ -76,12 +78,12 @@ public class CvaCompiler
     private static void geneCode(IBufferedQueue fStream)
     {
         Parser parser = new Parser(fStream);
-        Ast.Program.T prog = parser.parse();
+        CvaProgram prog = parser.parse();
 
         doCheck(prog);
 
-        Optimizer optimizer = new Optimizer();
-        optimizer.optimize(prog);
+//        Optimizer optimizer = new Optimizer();
+//        optimizer.optimize(prog);
 
         TranslatorVisitor translator = new TranslatorVisitor();
         translator.visit(prog);
@@ -98,7 +100,7 @@ public class CvaCompiler
         // ascii instructions to binary file
         jasmin.Main.main(new String[] {ilPath});
 
-        for (cn.misection.cvac.codegen.ast.Ast.Class.ClassSingle cla : translator.prog.classes)
+        for (CodeGenAst.Class.ClassSingle cla : translator.prog.classes)
         {
             String filePath = String.format("%s.il", cla.getLiteral());
 //            String filePath = String.format("%s/%s.il", DEBUG_IL_DIR, cla.id);
@@ -107,7 +109,7 @@ public class CvaCompiler
         }
     }
 
-    private static void doCheck(Ast.Program.T prog)
+    private static void doCheck(CvaProgram prog)
     {
         SemanticVisitor checker = new SemanticVisitor();
         checker.visit(prog);

@@ -18,12 +18,17 @@ public class CvaAssign extends AbstractStatement
 
     private AbstractType type;
 
-    public CvaAssign(int lineNum, String literal, AbstractExpression expr, AbstractType type)
+    public CvaAssign(int lineNum, String literal, AbstractExpression expr)
     {
         super(lineNum);
         this.literal = literal;
         this.expr = expr;
-        this.type = type;
+        init();
+    }
+
+    private void init()
+    {
+        this.type = null;
     }
 
     public String getLiteral()
@@ -39,5 +44,20 @@ public class CvaAssign extends AbstractStatement
     public AbstractType getType()
     {
         return type;
+    }
+
+    public void setLiteral(String literal)
+    {
+        this.literal = literal;
+    }
+
+    public void setExpr(AbstractExpression expr)
+    {
+        this.expr = expr;
+    }
+
+    public void setType(AbstractType type)
+    {
+        this.type = type;
     }
 }

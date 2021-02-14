@@ -1,6 +1,8 @@
 package cn.misection.cvac.semantic;
 
-import cn.misection.cvac.ast.Ast;
+//import cn.misection.cvac.ast.FrontAst;
+
+import cn.misection.cvac.ast.type.AbstractType;
 
 import java.util.Hashtable;
 
@@ -22,10 +24,14 @@ public class ClassTable
         {
             System.out.println("duplicated class: " + c);
             System.exit(1);
-        } else this.table.put(c, cb);
+        }
+        else
+        {
+            this.table.put(c, cb);
+        }
     }
 
-    public void putFieldToClass(String c, String id, Ast.Type.T type)
+    public void putFieldToClass(String c, String id, AbstractType type)
     {
         this.table.get(c).putField(id, type);
     }
@@ -40,14 +46,16 @@ public class ClassTable
         return this.table.get(c);
     }
 
-    public Ast.Type.T getFieldType(String c, String id)
+    public AbstractType getFieldType(String c, String id)
     {
         ClassBinding cb = this.table.get(c);
-        Ast.Type.T type = cb.fields.get(id);
+        AbstractType type = cb.fields.get(id);
         while (type == null)
         {
             if (cb.base == null)
+            {
                 return type;
+            }
 
             cb = this.table.get(cb.base);
             type = cb.fields.get(id);
@@ -62,7 +70,9 @@ public class ClassTable
         while (type == null)
         {
             if (cb.base == null)
+            {
                 return type;
+            }
 
             cb = this.table.get(cb.base);
             type = cb.methods.get(id);

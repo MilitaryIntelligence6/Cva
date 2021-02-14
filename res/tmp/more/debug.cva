@@ -3,8 +3,7 @@ class TestMain
     // This is the entry point of the program
     void main()
     {
-        // printf(1);
-        echo(new Test().Compute(10));   // just a print statement
+        print(new Test().Compute(10));   // just a print statement
     }
 }
 

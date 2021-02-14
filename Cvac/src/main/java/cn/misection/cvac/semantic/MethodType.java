@@ -1,20 +1,43 @@
 package cn.misection.cvac.semantic;
 
-import cn.misection.cvac.ast.Ast;
+import cn.misection.cvac.ast.decl.AbstractDeclaration;
+import cn.misection.cvac.ast.type.AbstractType;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Mengxu on 2017/1/13.
  */
 public class MethodType
 {
-    public Ast.Type.T retType;
-    public LinkedList<Ast.Decl.T> argsType;
+    private AbstractType retType;
+    private List<AbstractDeclaration> argsType;
 
-    public MethodType(Ast.Type.T retType, LinkedList<Ast.Decl.T> decs)
+    public MethodType(AbstractType retType,
+                      List<AbstractDeclaration> argsType)
+    {
+        this.setRetType(retType);
+        this.setArgsType(argsType);
+    }
+
+    public AbstractType getRetType()
+    {
+        return retType;
+    }
+
+    public void setRetType(AbstractType retType)
     {
         this.retType = retType;
-        this.argsType = decs;
+    }
+
+    public List<AbstractDeclaration> getArgsType()
+    {
+        return argsType;
+    }
+
+    public void setArgsType(List<AbstractDeclaration> argsType)
+    {
+        this.argsType = argsType;
     }
 }

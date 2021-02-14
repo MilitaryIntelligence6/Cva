@@ -31,4 +31,14 @@ public class CvaWhileStatement extends AbstractStatement
     {
         return body;
     }
+
+    public void setCondition(AbstractExpression condition)
+    {
+        this.condition = condition;
+    }
+
+    public void setBody(AbstractStatement body)
+    {
+        this.body = body;
+    }
 }

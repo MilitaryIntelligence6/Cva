@@ -1,6 +1,14 @@
 package cn.misection.cvac.optimize;
 
-import cn.misection.cvac.ast.Ast;
+import cn.misection.cvac.ast.clas.*;
+import cn.misection.cvac.ast.decl.*;
+import cn.misection.cvac.ast.entry.*;
+import cn.misection.cvac.ast.expr.*;
+import cn.misection.cvac.ast.method.*;
+import cn.misection.cvac.ast.program.*;
+import cn.misection.cvac.ast.statement.*;
+import cn.misection.cvac.ast.type.*;
+
 
 import java.util.HashMap;
 
@@ -9,257 +17,314 @@ import java.util.HashMap;
  */
 public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor, Optimizable
 {
-    private HashMap<String, Ast.Expr.T> conorcopy; // constant or copy in current method
-    private Ast.Expr.T curExp;
+    private HashMap<String, AbstractExpression> conorcopy; // constant or copy in current method
+    private AbstractExpression curExpr;
     private boolean canChange;
     private boolean inWhile; // if in while body, the left of assign should be delete from conorcopy
     private boolean isOptimizing;
 
-    private boolean isEqual(Ast.Expr.T fir, Ast.Expr.T sec)
+    private boolean isEqual(AbstractExpression fir, AbstractExpression sec)
     {
-        return (fir instanceof Ast.Expr.CvaNumberInt
-                && sec instanceof Ast.Expr.CvaNumberInt
-                && ((Ast.Expr.CvaNumberInt) fir).value == ((Ast.Expr.CvaNumberInt) sec).value)
-                || (fir instanceof Ast.Expr.CvaIdentifier
-                && sec instanceof Ast.Expr.CvaIdentifier
-                && ((Ast.Expr.CvaIdentifier) fir).literal.equals(((Ast.Expr.CvaIdentifier) sec).literal));
+        return (fir instanceof CvaNumberInt
+                && sec instanceof CvaNumberInt
+                && ((CvaNumberInt) fir).getValue() == ((CvaNumberInt) sec).getValue())
+                || (fir instanceof CvaIdentifier
+                && sec instanceof CvaIdentifier
+                && ((CvaIdentifier) fir).getLiteral().equals(((CvaIdentifier) sec).getLiteral()));
 
     }
 
-    private HashMap<String, Ast.Expr.T> intersection(
-            HashMap<String, Ast.Expr.T> first,
-            HashMap<String, Ast.Expr.T> second)
+    private HashMap<String, AbstractExpression> intersection(
+            HashMap<String, AbstractExpression> first,
+            HashMap<String, AbstractExpression> second)
     {
-        HashMap<String, Ast.Expr.T> result = new HashMap<>();
+        HashMap<String, AbstractExpression> result = new HashMap<>();
         first.forEach((k, v) ->
         {
             if (second.containsKey(k) && isEqual(v, second.get(k)))
+            {
                 result.put(k, v);
+            }
         });
         return result;
     }
 
     @Override
-    public void visit(Ast.Type.CvaBoolean t) {}
-
-    @Override
-    public void visit(Ast.Type.CvaClass t) {}
-
-    @Override
-    public void visit(Ast.Type.Int t) {}
-
-    @Override
-    public void visit(Ast.Decl.CvaDeclaration d) {}
-
-    @Override
-    public void visit(Ast.Expr.CvaAddExpr e)
+    public void visit(CvaBoolean t)
     {
-        this.visit(e.left);
-        if (this.canChange)
-            e.left = this.curExp;
-        this.visit(e.right);
-        if (this.canChange)
-            e.right = this.curExp;
-        this.canChange = false;
     }
 
     @Override
-    public void visit(Ast.Expr.CvaAndAndExpr e)
+    public void visit(CvaClassType t)
     {
-        this.visit(e.left);
-        if (this.canChange)
-            e.left = this.curExp;
-        this.visit(e.right);
-        if (this.canChange)
-            e.right = this.curExp;
-        this.canChange = false;
     }
 
     @Override
-    public void visit(Ast.Expr.CvaCallExpr e)
+    public void visit(CvaInt t)
     {
-        this.visit(e.exp);
-        for (int i = 0; i < e.args.size(); i++)
+    }
+
+    @Override
+    public void visit(CvaDeclaration d)
+    {
+    }
+
+    @Override
+    public void visit(CvaAddExpr e)
+    {
+        this.visit(e.getLeft());
+        if (this.canChange)
         {
-            this.visit(e.args.get(i));
-            if (this.canChange)
-                e.args.set(i, this.curExp);
+            e.setLeft(this.curExpr);
+        }
+        this.visit(e.getRight());
+        if (this.canChange)
+        {
+            e.setRight(this.curExpr);
         }
         this.canChange = false;
     }
 
     @Override
-    public void visit(Ast.Expr.CvaFalseExpr e)
+    public void visit(CvaAndAndExpr e)
     {
-        this.curExp = e;
+        this.visit(e.getLeft());
+        if (this.canChange)
+        {
+            e.setLeft(this.curExpr);
+        }
+        this.visit(e.getRight());
+        if (this.canChange)
+        {
+            e.setRight(this.curExpr);
+        }
+        this.canChange = false;
+    }
+
+    @Override
+    public void visit(CvaCallExpr e)
+    {
+        this.visit(e.getExpr());
+        for (int i = 0; i < e.getArgs().size(); i++)
+        {
+            this.visit(e.getArgs().get(i));
+            if (this.canChange)
+            {
+                e.getArgs().set(i, this.curExpr);
+            }
+        }
+        this.canChange = false;
+    }
+
+    @Override
+    public void visit(CvaFalseExpr e)
+    {
+        this.curExpr = e;
         this.canChange = true;
     }
 
     @Override
-    public void visit(Ast.Expr.CvaIdentifier e)
+    public void visit(CvaIdentifier e)
     {
-        if (this.conorcopy.containsKey(e.literal))
+        if (this.conorcopy.containsKey(e.getLiteral()))
         {
             this.isOptimizing = true;
             this.canChange = true;
-            this.curExp = this.conorcopy.get(e.literal);
-        } else this.canChange = false;
+            this.curExpr = this.conorcopy.get(e.getLiteral());
+        }
+        else
+        {
+            this.canChange = false;
+        }
     }
 
     @Override
-    public void visit(Ast.Expr.CvaLTExpr e)
+    public void visit(CvaLTExpr e)
     {
-        this.visit(e.left);
+        this.visit(e.getLeft());
         if (this.canChange)
-            e.left = this.curExp;
-        this.visit(e.right);
+        {
+            e.setLeft(this.curExpr);
+        }
+        this.visit(e.getRight());
         if (this.canChange)
-            e.right = this.curExp;
+        {
+            e.setRight(this.curExpr);
+        }
         this.canChange = false;
     }
 
     @Override
-    public void visit(Ast.Expr.CvaNewExpr e)
+    public void visit(CvaNewExpr e)
     {
         this.canChange = false;
     }
 
     @Override
-    public void visit(Ast.Expr.CvaNegateExpr e)
+    public void visit(CvaNegateExpr e)
     {
-        this.visit(e.expr);
+        this.visit(e.getExpr());
         if (this.canChange)
-            e.expr = this.curExp;
+        {
+            e.setExpr(this.curExpr);
+        }
         this.canChange = false;
     }
 
     @Override
-    public void visit(Ast.Expr.CvaNumberInt e)
+    public void visit(CvaNumberInt e)
     {
-        this.curExp = e;
+        this.curExpr = e;
         this.canChange = true;
     }
 
     @Override
-    public void visit(Ast.Expr.CvaSubExpr e)
+    public void visit(CvaSubExpr e)
     {
-        this.visit(e.left);
+        this.visit(e.getLeft());
         if (this.canChange)
-            e.left = this.curExp;
-        this.visit(e.right);
+        {
+            e.setLeft(this.curExpr);
+        }
+        this.visit(e.getRight());
         if (this.canChange)
-            e.right = this.curExp;
+        {
+            e.setRight(this.curExpr);
+        }
         this.canChange = false;
     }
 
     @Override
-    public void visit(Ast.Expr.CvaThisExpr e)
+    public void visit(CvaThisExpr e)
     {
         this.canChange = false;
     }
 
     @Override
-    public void visit(Ast.Expr.CvaMuliExpr e)
+    public void visit(CvaMuliExpr e)
     {
-        this.visit(e.left);
+        this.visit(e.getLeft());
         if (this.canChange)
-            e.left = this.curExp;
-        this.visit(e.right);
+        {
+            e.setLeft(this.curExpr);
+        }
+        this.visit(e.getRight());
         if (this.canChange)
-            e.right = this.curExp;
+        {
+            e.setRight(this.curExpr);
+        }
         this.canChange = false;
     }
 
     @Override
-    public void visit(Ast.Expr.CvaTrueExpr e)
+    public void visit(CvaTrueExpr e)
     {
-        this.curExp = e;
+        this.curExpr = e;
         this.canChange = true;
     }
 
     @Override
-    public void visit(Ast.Stm.CvaAssign s)
+    public void visit(CvaAssign s)
     {
         if (this.inWhile)
         {
-            if (this.conorcopy.containsKey(s.id))
-                this.conorcopy.remove(s.id);
+            if (this.conorcopy.containsKey(s.getLiteral()))
+            {
+                this.conorcopy.remove(s.getLiteral());
+            }
             return;
         }
 
-        if (s.exp instanceof Ast.Expr.CvaIdentifier || s.exp instanceof Ast.Expr.CvaNumberInt)
-            this.conorcopy.put(s.id, s.exp);
+        if (s.getExpr() instanceof CvaIdentifier || s.getExpr() instanceof CvaNumberInt)
+        {
+            this.conorcopy.put(s.getLiteral(), s.getExpr());
+        }
         else
         {
-            this.visit(s.exp);
-            if (this.canChange) s.exp = this.curExp;
+            this.visit(s.getExpr());
+            if (this.canChange)
+            {
+                s.setExpr(this.curExpr);
+            }
         }
     }
 
     @Override
-    public void visit(Ast.Stm.CvaBlock s)
+    public void visit(CvaBlock s)
     {
-        s.stms.forEach(this::visit);
+        s.getStatementList().forEach(this::visit);
     }
 
     @Override
-    public void visit(Ast.Stm.CvaIfStatement s)
+    public void visit(CvaIfStatement s)
     {
-        if (this.inWhile) return;
+        if (this.inWhile)
+        {
+            return;
+        }
 
-        this.visit(s.condition);
+        this.visit(s.getCondition());
         if (this.canChange)
-            s.condition = this.curExp;
+        {
+            s.setCondition(this.curExpr);
+        }
 
-        HashMap<String, Ast.Expr.T> _original = new HashMap<>();
-        this.conorcopy.forEach(_original::put);
-        this.visit(s.thenStm);
+        HashMap<String, AbstractExpression> originalMap = new HashMap<>();
+        this.conorcopy.forEach(originalMap::put);
+        this.visit(s.getThenStatement());
 
-        HashMap<String, Ast.Expr.T> _left = this.conorcopy;
-        this.conorcopy = _original;
-        this.visit(s.elseStm);
+        HashMap<String, AbstractExpression> leftMap = this.conorcopy;
+        this.conorcopy = originalMap;
+        this.visit(s.getElseStatement());
 
-        this.conorcopy = intersection(_left, this.conorcopy);
+        this.conorcopy = intersection(leftMap, this.conorcopy);
     }
 
 
     @Override
-    public void visit(Ast.Stm.CvaWriteOperation s)
+    public void visit(CvaWriteOperation s)
     {
-        if (this.inWhile) return;
+        if (this.inWhile)
+        {
+            return;
+        }
 
-        this.visit(s.exp);
+        this.visit(s.getExpr());
         if (this.canChange)
-            s.exp = curExp;
+        {
+            s.setExpr(curExpr);
+        }
     }
 
     @Override
-    public void visit(Ast.Stm.CvaWhileStatement s)
+    public void visit(CvaWhileStatement s)
     {
         // TODO: it is wrong when in multi-layer-loop
         // delete the var which be changed
         this.inWhile = true;
-        this.visit(s.body);
+        this.visit(s.getBody());
         this.inWhile = false;
 
-        this.visit(s.condition);
-        this.visit(s.body);
+        this.visit(s.getCondition());
+        this.visit(s.getBody());
     }
 
     @Override
-    public void visit(Ast.Method.CvaMethod m)
+    public void visit(CvaMethod method)
     {
         this.conorcopy = new HashMap<>();
-        m.stms.forEach(this::visit);
-        this.visit(m.retExp);
+        method.getStatementList().forEach(this::visit);
+        this.visit(method.getRetExpr());
         if (this.canChange)
-            m.retExp = this.curExp;
+        {
+            method.setRetExpr(this.curExpr);
+        }
     }
 
     @Override
-    public void visit(Ast.Clas.CvaClass c)
+    public void visit(CvaClass cvaClass)
     {
-        c.methods.forEach(m ->
+        cvaClass.getMethodList().forEach(m ->
         {
             this.canChange = false;
             this.visit(m);
@@ -267,13 +332,15 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.MainClass.CvaEntry c) {}
+    public void visit(CvaEntry c)
+    {
+    }
 
     @Override
-    public void visit(Ast.Program.CvaProgram p)
+    public void visit(CvaProgram p)
     {
         this.isOptimizing = false;
-        p.classes.forEach(this::visit);
+        p.getClassList().forEach(this::visit);
     }
 
     @Override

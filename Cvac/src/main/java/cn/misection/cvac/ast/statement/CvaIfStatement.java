@@ -39,4 +39,19 @@ public class CvaIfStatement extends AbstractStatement
     {
         return elseStatement;
     }
+
+    public void setCondition(AbstractExpression condition)
+    {
+        this.condition = condition;
+    }
+
+    public void setThenStatement(AbstractStatement thenStatement)
+    {
+        this.thenStatement = thenStatement;
+    }
+
+    public void setElseStatement(AbstractStatement elseStatement)
+    {
+        this.elseStatement = elseStatement;
+    }
 }

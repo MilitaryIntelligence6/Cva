@@ -21,4 +21,9 @@ public class CvaNegateExpr extends AbstractExpression
     {
         return expr;
     }
+
+    public void setExpr(AbstractExpression expr)
+    {
+        this.expr = expr;
+    }
 }

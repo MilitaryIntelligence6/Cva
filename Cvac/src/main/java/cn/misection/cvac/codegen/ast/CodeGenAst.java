@@ -6,7 +6,7 @@ import java.util.LinkedList;
  * Created by Mengxu on 2017/1/17.
  * @TODO 改这里;
  */
-public class Ast
+public class CodeGenAst
 {
     public static class Type
     {

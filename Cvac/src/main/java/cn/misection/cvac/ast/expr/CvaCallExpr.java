@@ -3,7 +3,6 @@ package cn.misection.cvac.ast.expr;
 import cn.misection.cvac.ast.type.AbstractType;
 
 import java.util.List;
-import java.util.Queue;
 
 /**
  * @author Military Intelligence 6 root
@@ -14,7 +13,7 @@ import java.util.Queue;
  */
 public class CvaCallExpr extends AbstractExpression
 {
-    private String id;
+    private String literal;
 
     private AbstractExpression expr;
 
@@ -33,13 +32,17 @@ public class CvaCallExpr extends AbstractExpression
      */
     private List<AbstractType> argTypeList;
 
-    public CvaCallExpr(int lineNum, String id, AbstractExpression expr, List<AbstractExpression> args, List<AbstractType> argTypeList)
+    public AbstractType retType;
+
+    public CvaCallExpr(int lineNum,
+                       String literal,
+                       AbstractExpression expr,
+                       List<AbstractExpression> args)
     {
         super(lineNum);
-        this.id = id;
+        this.literal = literal;
         this.expr = expr;
         this.args = args;
-        this.argTypeList = argTypeList;
         init();
     }
 
@@ -48,9 +51,9 @@ public class CvaCallExpr extends AbstractExpression
         this.type = null;
     }
 
-    public String getId()
+    public String getLiteral()
     {
-        return id;
+        return literal;
     }
 
     public AbstractExpression getExpr()
@@ -71,5 +74,40 @@ public class CvaCallExpr extends AbstractExpression
     public List<AbstractType> getArgTypeList()
     {
         return argTypeList;
+    }
+
+    public AbstractType getRetType()
+    {
+        return retType;
+    }
+
+    public void setLiteral(String literal)
+    {
+        this.literal = literal;
+    }
+
+    public void setExpr(AbstractExpression expr)
+    {
+        this.expr = expr;
+    }
+
+    public void setArgs(List<AbstractExpression> args)
+    {
+        this.args = args;
+    }
+
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
+    public void setArgTypeList(List<AbstractType> argTypeList)
+    {
+        this.argTypeList = argTypeList;
+    }
+
+    public void setRetType(AbstractType retType)
+    {
+        this.retType = retType;
     }
 }

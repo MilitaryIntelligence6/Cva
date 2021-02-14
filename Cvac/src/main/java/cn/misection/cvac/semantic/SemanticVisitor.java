@@ -1,6 +1,13 @@
 package cn.misection.cvac.semantic;
 
-import cn.misection.cvac.ast.Ast;
+import cn.misection.cvac.ast.clas.*;
+import cn.misection.cvac.ast.decl.*;
+import cn.misection.cvac.ast.entry.*;
+import cn.misection.cvac.ast.expr.*;
+import cn.misection.cvac.ast.method.*;
+import cn.misection.cvac.ast.program.*;
+import cn.misection.cvac.ast.statement.*;
+import cn.misection.cvac.ast.type.*;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -14,7 +21,7 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     private ClassTable classTable;
     private MethodVariableTable methodVarTable;
     private String currentClass;
-    private Ast.Type.T type;
+    private AbstractType type;
     private boolean isOk; // the cn.misection.cvac.ast is correct?
     private HashSet<String> curMthLocals; //current method locals
 
@@ -38,14 +45,16 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
         System.out.println("Error: Line " + lineNum + " " + msg);
     }
 
-    private boolean isMatch(Ast.Type.T target, Ast.Type.T cur)
+    private boolean isMatch(AbstractType target, AbstractType cur)
     {
         if (target.toString().equals(cur.toString()))
-            return true;
-        else if (target instanceof Ast.Type.CvaClass && cur instanceof Ast.Type.CvaClass)
         {
-            String tarName = ((Ast.Type.CvaClass) target).literal;
-            String curName = ((Ast.Type.CvaClass) cur).literal;
+            return true;
+        }
+        else if (target instanceof CvaClassType && cur instanceof CvaClassType)
+        {
+            String tarName = ((CvaClassType) target).getLiteral();
+            String curName = ((CvaClassType) cur).getLiteral();
             boolean flag = tarName.equals(curName);
             while (curName != null && !flag)
             {
@@ -53,70 +62,91 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
                 flag = tarName.equals(curName);
             }
             return flag;
-        } else return false;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     // Type
     @Override
-    public void visit(Ast.Type.CvaBoolean t) {}
+    public void visit(CvaBoolean t)
+    {
+    }
 
     @Override
-    public void visit(Ast.Type.CvaClass t) {}
+    public void visit(CvaClassType t)
+    {
+    }
 
     @Override
-    public void visit(Ast.Type.Int t) {}
+    public void visit(CvaInt t)
+    {
+    }
 
     // Dec
     @Override
-    public void visit(Ast.Decl.CvaDeclaration d) {}
+    public void visit(CvaDeclaration d)
+    {
+    }
 
     // Exp
     @Override
-    public void visit(Ast.Expr.CvaAddExpr e)
+    public void visit(CvaAddExpr e)
     {
-        this.visit(e.left);
-        Ast.Type.T lefty = this.type;
-        this.visit(e.right);
+        this.visit(e.getLeft());
+        AbstractType lefty = this.type;
+        this.visit(e.getRight());
         if (!this.type.toString().equals(lefty.toString()))
-            error(e.lineNum, "add expression" +
+        {
+            error(e.getLineNum(), "add expression" +
                     " the type of left is " + lefty.toString() +
                     ", but the type of right is " + this.type.toString());
-        else if (!new Ast.Type.Int().toString().equals(this.type.toString()))
-            error(e.lineNum, " only integer numbers can be added.");
+        }
+        else if (!new CvaInt().toString().equals(this.type.toString()))
+        {
+            error(e.getLineNum(), " only integer numbers can be added.");
+        }
 
-        this.type = new Ast.Type.Int();
+        this.type = new CvaInt();
     }
 
     @Override
-    public void visit(Ast.Expr.CvaAndAndExpr e)
+    public void visit(CvaAndAndExpr e)
     {
-        this.visit(e.left);
-        Ast.Type.T lefty = this.type;
-        this.visit(e.right);
+        this.visit(e.getLeft());
+        AbstractType lefty = this.type;
+        this.visit(e.getRight());
         if (!this.type.toString().equals(lefty.toString()))
-            error(e.lineNum, "and expression" +
+        {
+            error(e.getLineNum(), "and expression" +
                     " the type of left is " + lefty.toString() +
                     ", but the type of right is " + this.type.toString());
-        else if (!new Ast.Type.CvaBoolean().toString().equals(this.type.toString()))
-            error(e.lineNum, " only integer numbers can be added.");
+        }
+        else if (!new CvaBoolean().toString().equals(this.type.toString()))
+        {
+            error(e.getLineNum(), " only integer numbers can be added.");
+        }
 
-        this.type = new Ast.Type.CvaBoolean();
+        this.type = new CvaBoolean();
     }
 
     @Override
-    public void visit(Ast.Expr.CvaCallExpr e)
+    public void visit(CvaCallExpr e)
     {
-        this.visit(e.exp);
-        Ast.Type.CvaClass expType = null;
+        this.visit(e.getExpr());
+        CvaClassType expType = null;
 
-        if (this.type instanceof Ast.Type.CvaClass)
+        if (this.type instanceof CvaClassType)
         {
-            expType = ((Ast.Type.CvaClass) this.type);
-            e.type = expType.literal;
-        } else
+            expType = ((CvaClassType) this.type);
+            e.setType(expType.getLiteral());
+        }
+        else
         {
-            error(e.lineNum, "only an instance of class can be invoked.");
-            this.type = new Ast.Type.T()
+            error(e.getLineNum(), "only an instance of class can be invoked.");
+            this.type = new AbstractType()
             {
                 @Override
                 public String toString()
@@ -127,113 +157,132 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
             return;
         }
 
-        LinkedList<Ast.Type.T> argsty = new LinkedList<>();
-        e.args.forEach(arg ->
+        LinkedList<AbstractType> argsty = new LinkedList<>();
+        e.getArgs().forEach(arg ->
         {
             this.visit(arg);
             argsty.addLast(this.type);
         });
 
-        MethodType mty = this.classTable.getMethodType(expType.literal, e.literal);
+        MethodType mty = this.classTable.getMethodType(expType.getLiteral(), e.getLiteral());
 
         if (mty == null)
         {
-            error(e.lineNum, "the method you are calling haven't been defined.");
-            e.at = argsty;
-            e.rt = new Ast.Type.T()
-            {
-                @Override
-                public String toString()
-                {
-                    return "unknown";
-                }
-            };
-            this.type = e.rt;
+            error(e.getLineNum(), "the method you are calling haven't been defined.");
+            e.setArgTypeList(argsty);
+            e.setRetType(
+                    new AbstractType()
+                    {
+                        @Override
+                        public String toString()
+                        {
+                            return "unknown";
+                        }
+                    }
+            );
+
+            this.type = e.getRetType();
             return;
         }
 
-        if (mty.argsType.size() != argsty.size())
-            error(e.lineNum, "the count of arguments is not match.");
+        if (mty.getArgsType().size() != argsty.size())
+        {
+            error(e.getLineNum(), "the count of arguments is not match.");
+        }
 
-        for (int i = 0; i < mty.argsType.size(); i++)
-            if (!isMatch(((Ast.Decl.CvaDeclaration) mty.argsType.get(i)).type, argsty.get(i)))
-                error(e.args.get(i).lineNum, "the parameter " + (i + 1) +
-                        " needs a " + ((Ast.Decl.CvaDeclaration) mty.argsType.get(i)).type.toString() +
+        for (int i = 0; i < mty.getArgsType().size(); i++)
+        {
+            if (!isMatch(((CvaDeclaration) mty.getArgsType().get(i)).getType(), argsty.get(i)))
+            {
+                error(e.getArgs().get(i).getLineNum(), "the parameter " + (i + 1) +
+                        " needs a " + ((CvaDeclaration) mty.getArgsType().get(i)).getType().toString() +
                         ", but got a " + argsty.get(i).toString());
+            }
+        }
 
 
-        e.at = argsty;
-        e.rt = mty.retType;
-        this.type = mty.retType;
+        e.setArgTypeList(argsty);
+        e.setRetType(mty.getRetType());
+        this.type = mty.getRetType();
     }
 
     @Override
-    public void visit(Ast.Expr.CvaFalseExpr e)
+    public void visit(CvaFalseExpr e)
     {
-        this.type = new Ast.Type.CvaBoolean();
+        this.type = new CvaBoolean();
     }
 
     @Override
-    public void visit(Ast.Expr.CvaIdentifier e)
+    public void visit(CvaIdentifier e)
     {
-        Ast.Type.T type = this.methodVarTable.get(e.literal);
+        AbstractType type = this.methodVarTable.get(e.getLiteral());
         boolean isField = type == null;
         String className = currentClass;
         while (type == null && className != null)
         {
-            type = this.classTable.getFieldType(className, e.literal);
+            type = this.classTable.getFieldType(className, e.getLiteral());
             className = this.classTable.getClassBinding(className).base;
         }
 
-        if (this.curMthLocals.contains(e.literal))
-            error(e.lineNum, "you should assign \"" + e.literal + "\" a value before use it.");
+        if (this.curMthLocals.contains(e.getLiteral()))
+        {
+            error(e.getLineNum(), "you should assign \"" + e.getLiteral() + "\" a value before use it.");
+        }
 
         if (type == null)
         {
-            error(e.lineNum, "you should declare \"" + e.literal + "\" before use it.");
-            e.type = new Ast.Type.T()
-            {
-                @Override
-                public String toString()
-                {
-                    return "unknown";
-                }
-            };
-            this.type = e.type;
-        } else
+            error(e.getLineNum(), "you should declare \"" + e.getLiteral() + "\" before use it.");
+            e.setType(
+                    new AbstractType()
+                    {
+                        @Override
+                        public String toString()
+                        {
+                            return "unknown";
+                        }
+                    }
+            );
+            this.type = e.getType();
+        }
+        else
         {
-            e.isField = isField;
-            e.type = type;
+            e.setField(isField);
+            e.setType(type);
             this.type = type;
         }
     }
 
     @Override
-    public void visit(Ast.Expr.CvaLTExpr e)
+    public void visit(CvaLTExpr e)
     {
-        this.visit(e.left);
-        Ast.Type.T lefty = this.type;
-        this.visit(e.right);
+        this.visit(e.getLeft());
+        AbstractType lefty = this.type;
+        this.visit(e.getRight());
         if (!this.type.toString().equals(lefty.toString()))
         {
-            error(e.lineNum, "compare expression" +
+            error(e.getLineNum(), "compare expression" +
                     " the type of left is " + lefty.toString() +
                     ", but the type of right is " + this.type.toString());
-        } else if (!new Ast.Type.Int().toString().equals(this.type.toString()))
-            error(e.lineNum, "only integer numbers can be compared.");
+        }
+        else if (!new CvaInt().toString().equals(this.type.toString()))
+        {
+            error(e.getLineNum(), "only integer numbers can be compared.");
+        }
 
-        this.type = new Ast.Type.CvaBoolean();
+        this.type = new CvaBoolean();
     }
 
     @Override
-    public void visit(Ast.Expr.CvaNewExpr e)
+    public void visit(CvaNewExpr e)
     {
-        if (this.classTable.getClassBinding(e.literal) != null)
-            this.type = new Ast.Type.CvaClass(e.literal);
+        if (this.classTable.getClassBinding(e.getLiteral()) != null)
+        {
+            this.type = new CvaClassType(e.getLiteral());
+        }
         else
         {
-            error(e.lineNum, "cannot find the declaration of class \"" + e.literal + "\".");
-            this.type = new Ast.Type.T()
+            error(e.getLineNum(), "cannot find the declaration of class \"" + e.getLiteral() + "\".");
+            this.type = new AbstractType()
             {
                 @Override
                 public String toString()
@@ -245,178 +294,201 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Expr.CvaNegateExpr e)
+    public void visit(CvaNegateExpr e)
     {
-        this.visit(e.expr);
-        if (!this.type.toString().equals(new Ast.Type.CvaBoolean().toString()))
-            error(e.lineNum, "the exp cannot calculate to a boolean.");
-
-        this.type = new Ast.Type.CvaBoolean();
-    }
-
-    @Override
-    public void visit(Ast.Expr.CvaNumberInt e)
-    {
-        this.type = new Ast.Type.Int();
-    }
-
-    @Override
-    public void visit(Ast.Expr.CvaSubExpr e)
-    {
-        this.visit(e.left);
-        Ast.Type.T lefty = this.type;
-        this.visit(e.right);
-        if (!this.type.toString().equals(lefty.toString()))
-            error(e.lineNum, "sub expression" +
-                    " the type of left is " + lefty.toString() +
-                    ", but the type of right is " + this.type.toString());
-        else if (!new Ast.Type.Int().toString().equals(this.type.toString()))
-
-            error(e.lineNum, " only integer numbers can be subbed.");
-
-        this.type = new Ast.Type.Int();
-    }
-
-    @Override
-    public void visit(Ast.Expr.CvaThisExpr e)
-    {
-        this.type = new Ast.Type.CvaClass(currentClass);
-    }
-
-    @Override
-    public void visit(Ast.Expr.CvaMuliExpr e)
-    {
-        this.visit(e.left);
-        Ast.Type.T lefty = this.type;
-        this.visit(e.right);
-        if (!this.type.toString().equals(lefty.toString()))
-            error(e.lineNum, "times expression" +
-                    " the type of left is " + lefty.toString() +
-                    ", but the type of right is " + this.type.toString());
-        else if (!new Ast.Type.Int().toString().equals(this.type.toString()))
-            error(e.lineNum, "only integer numbers can be timed.");
-
-        this.type = new Ast.Type.Int();
-    }
-
-    @Override
-    public void visit(Ast.Expr.CvaTrueExpr e)
-    {
-        this.type = new Ast.Type.CvaBoolean();
-    }
-
-    @Override
-    public void visit(Ast.Stm.CvaAssign s)
-    {
-        this.visit(s.exp);
-        s.type = this.type;
-
-        if (this.curMthLocals.contains(s.id))
-            this.curMthLocals.remove(s.id);
-
-        Ast.Expr.CvaIdentifier cvaIdentifier = new Ast.Expr.CvaIdentifier(s.id, s.lineNum);
-        this.visit(cvaIdentifier);
-        Ast.Type.T idty = this.type;
-        //if (!this.type.toString().equals(idty.toString()))
-        if (!isMatch(idty, s.type))
-            error(s.lineNum, "the type of \"" + s.id + "\" is " + idty.toString() +
-                    ", but the type of expression is " + s.type.toString() +
-                    ". Assign failed.");
-
-    }
-
-    @Override
-    public void visit(Ast.Stm.CvaBlock s)
-    {
-        s.stms.forEach(this::visit);
-    }
-
-    @Override
-    public void visit(Ast.Stm.CvaIfStatement s)
-    {
-        this.visit(s.condition);
-        if (!this.type.toString().equals(new Ast.Type.CvaBoolean().toString()))
-            error(s.condition.lineNum,
-                    "the condition's type should be a boolean.");
-
-        this.visit(s.thenStm);
-        this.visit(s.elseStm);
-    }
-
-    @Override
-    public void visit(Ast.Stm.CvaWriteOperation s)
-    {
-        this.visit(s.exp);
-        if (!this.type.toString().equals(new Ast.Type.Int().toString()))
-            error(s.exp.lineNum,
-                    "the expression in \"print()\" must be a integer " +
-                            "or can be calculate to an integer.");
-    }
-
-    @Override
-    public void visit(Ast.Stm.CvaWhileStatement s)
-    {
-        this.visit(s.condition);
-        if (!this.type.toString().equals(new Ast.Type.CvaBoolean().toString()))
-            error(s.condition.lineNum, "the condition's type should be a boolean.");
-
-        this.visit(s.body);
-    }
-
-    @Override
-    public void visit(Ast.Method.CvaMethod m)
-    {
-        this.methodVarTable = new MethodVariableTable();
-        this.methodVarTable.put(m.formals, m.locals);
-        this.curMthLocals = new HashSet<>();
-        m.locals.forEach(local -> this.curMthLocals.add(((Ast.Decl.CvaDeclaration) local).literal));
-        m.stms.forEach(this::visit);
-        this.visit(m.retExp);
-        // if (!this.type.toString().equals(m.retType.toString()))
-        if (!isMatch(m.retType, this.type))
-            error(m.retExp.lineNum,
-                    "the return expression's type is not match the method \"" +
-                            m.literal + "\" declared.");
-
-    }
-
-    @Override
-    public void visit(Ast.Clas.CvaClass c)
-    {
-        this.currentClass = c.literal;
-        c.methods.forEach(this::visit);
-    }
-
-    @Override
-    public void visit(Ast.MainClass.CvaEntry c)
-    {
-        this.currentClass = c.id;
-        this.visit(c.stm);
-    }
-
-    @Override
-    public void visit(Ast.Program.CvaProgram p)
-    {
-        // put main class to class table
-        this.classTable.putClassBinding(((Ast.MainClass.CvaEntry) p.mainClass).id,
-                new ClassBinding(null));
-
-        for (Ast.Clas.T c : p.classes)
+        this.visit(e.getExpr());
+        if (!this.type.toString().equals(new CvaBoolean().toString()))
         {
-            Ast.Clas.CvaClass cla = ((Ast.Clas.CvaClass) c);
-            this.classTable.putClassBinding(cla.literal, new ClassBinding(cla.parent));
-
-            cla.fields.forEach(field -> this.classTable.putFieldToClass(cla.literal,
-                    ((Ast.Decl.CvaDeclaration) field).literal,
-                    ((Ast.Decl.CvaDeclaration) field).type));
-
-            cla.methods.forEach(method -> this.classTable.putMethodToClass(cla.literal,
-                    ((Ast.Method.CvaMethod) method).literal,
-                    new MethodType(((Ast.Method.CvaMethod) method).retType,
-                            ((Ast.Method.CvaMethod) method).formals)));
+            error(e.getLineNum(), "the exp cannot calculate to a boolean.");
         }
 
-        this.visit(p.mainClass);
-        p.classes.forEach(this::visit);
+        this.type = new CvaBoolean();
+    }
+
+    @Override
+    public void visit(CvaNumberInt e)
+    {
+        this.type = new CvaInt();
+    }
+
+    @Override
+    public void visit(CvaSubExpr e)
+    {
+        this.visit(e.getLeft());
+        AbstractType lefty = this.type;
+        this.visit(e.getRight());
+        if (!this.type.toString().equals(lefty.toString()))
+        {
+            error(e.getLineNum(), "sub expression" +
+                    " the type of left is " + lefty.toString() +
+                    ", but the type of right is " + this.type.toString());
+        }
+        else if (!new CvaInt().toString().equals(this.type.toString()))
+
+        {
+            error(e.getLineNum(), " only integer numbers can be subbed.");
+        }
+
+        this.type = new CvaInt();
+    }
+
+    @Override
+    public void visit(CvaThisExpr e)
+    {
+        this.type = new CvaClassType(currentClass);
+    }
+
+    @Override
+    public void visit(CvaMuliExpr e)
+    {
+        this.visit(e.getLeft());
+        AbstractType lefty = this.type;
+        this.visit(e.getRight());
+        if (!this.type.toString().equals(lefty.toString()))
+        {
+            error(e.getLineNum(), "times expression" +
+                    " the type of left is " + lefty.toString() +
+                    ", but the type of right is " + this.type.toString());
+        }
+        else if (!new CvaInt().toString().equals(this.type.toString()))
+        {
+            error(e.getLineNum(), "only integer numbers can be timed.");
+        }
+
+        this.type = new CvaInt();
+    }
+
+    @Override
+    public void visit(CvaTrueExpr e)
+    {
+        this.type = new CvaBoolean();
+    }
+
+    @Override
+    public void visit(CvaAssign s)
+    {
+        this.visit(s.getExpr());
+        s.setType(this.type);
+
+        if (this.curMthLocals.contains(s.getLiteral()))
+        {
+            this.curMthLocals.remove(s.getLiteral());
+        }
+
+        CvaIdentifier cvaIdentifier = new CvaIdentifier(s.getLineNum(), s.getLiteral());
+        this.visit(cvaIdentifier);
+        AbstractType idty = this.type;
+        //if (!this.type.toString().equals(idty.toString()))
+        if (!isMatch(idty, s.getType()))
+        {
+            error(s.getLineNum(), String.format("the type of \"%s\" is %s, but the type of expression is %s. Assign failed.",
+                    s.getLiteral(), idty.toString(), s.getType().toString()));
+        }
+
+    }
+
+    @Override
+    public void visit(CvaBlock s)
+    {
+        s.getStatementList().forEach(this::visit);
+    }
+
+    @Override
+    public void visit(CvaIfStatement s)
+    {
+        this.visit(s.getCondition());
+        if (!this.type.toString().equals(new CvaBoolean().toString()))
+        {
+            error(s.getCondition().getLineNum(),
+                    "the condition's type should be a boolean.");
+        }
+
+        this.visit(s.getThenStatement());
+        this.visit(s.getElseStatement());
+    }
+
+    @Override
+    public void visit(CvaWriteOperation s)
+    {
+        this.visit(s.getExpr());
+        if (!this.type.toString().equals(new CvaInt().toString()))
+        {
+            error(s.getExpr().getLineNum(),
+                    String.format("the expression in \"printf()\" must be a integer or can be calculate to an integer."));
+        }
+    }
+
+    @Override
+    public void visit(CvaWhileStatement s)
+    {
+        this.visit(s.getCondition());
+        if (!this.type.toString().equals(new CvaBoolean().toString()))
+        {
+            error(s.getCondition().getLineNum(), "the condition's type should be a boolean.");
+        }
+
+        this.visit(s.getBody());
+    }
+
+    @Override
+    public void visit(CvaMethod method)
+    {
+        this.methodVarTable = new MethodVariableTable();
+        this.methodVarTable.put(method.getFormalList(), method.getLocalList());
+        this.curMthLocals = new HashSet<>();
+        method.getLocalList().forEach(local ->
+                this.curMthLocals.add(((CvaDeclaration) local).getLiteral()));
+        method.getStatementList().forEach(this::visit);
+        this.visit(method.getRetExpr());
+        // if (!this.type.toString().equals(m.retType.toString()))
+        if (!isMatch(method.getRetType(), this.type))
+        {
+            error(method.getRetExpr().getLineNum(),
+                    String.format("the return expression's type is not match the method \"%s\" declared.", 
+                            method.getLiteral()));
+        }
+
+    }
+
+    @Override
+    public void visit(CvaClass cvaClass)
+    {
+        this.currentClass = cvaClass.getLiteral();
+        cvaClass.getMethodList().forEach(this::visit);
+    }
+
+    @Override
+    public void visit(CvaEntry c)
+    {
+        this.currentClass = c.getLiteral();
+        this.visit(c.getStatement());
+    }
+
+    @Override
+    public void visit(CvaProgram cvaProgram)
+    {
+        // put main class to class table
+        this.classTable.putClassBinding(((CvaEntry) cvaProgram.getEntry()).getLiteral(),
+                new ClassBinding(null));
+
+        for (AbstractClass abstractClass : cvaProgram.getClassList())
+        {
+            CvaClass cla = ((CvaClass) abstractClass);
+            this.classTable.putClassBinding(cla.getLiteral(), new ClassBinding(cla.getParent()));
+
+            cla.getFieldList().forEach(field -> this.classTable.putFieldToClass(cla.getLiteral(),
+                    ((CvaDeclaration) field).getLiteral(),
+                    ((CvaDeclaration) field).getType())
+            );
+
+            cla.getMethodList().forEach(method -> this.classTable.putMethodToClass(cla.getLiteral(),
+                    ((CvaMethod) method).getLiteral(),
+                    new MethodType(
+                            ((CvaMethod) method).getRetType(),
+                            ((CvaMethod) method).getFormalList()))
+            );
+        }
+        this.visit(cvaProgram.getEntry());
+        cvaProgram.getClassList().forEach(this::visit);
     }
 }

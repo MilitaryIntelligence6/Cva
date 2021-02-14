@@ -13,7 +13,7 @@ public class CvaToken
     /**
      * extra lexeme of the token
      */
-    private String lexeme;
+    private String literal;
 
     /**
      * the line number of the token
@@ -27,11 +27,11 @@ public class CvaToken
         this.lineNum = lineNum;
     }
 
-    public CvaToken(CvaKind kind, int lineNum, String lexeme)
+    public CvaToken(CvaKind kind, int lineNum, String literal)
     {
         this.kind = kind;
         this.lineNum = lineNum;
-        this.lexeme = lexeme;
+        this.literal = literal;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class CvaToken
     {
         return String.format("Token {%s lexeme: %s : at line %d}",
                 this.kind.toString(),
-                lexeme == null ? "null" : this.lexeme,
+                literal == null ? "null" : this.literal,
                 this.lineNum);
     }
 
@@ -48,9 +48,9 @@ public class CvaToken
         return kind;
     }
 
-    public String getLexeme()
+    public String getLiteral()
     {
-        return lexeme;
+        return literal;
     }
 
     public int getLineNum()

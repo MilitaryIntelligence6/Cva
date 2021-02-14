@@ -29,4 +29,14 @@ public class CvaAddExpr extends AbstractExpression
     {
         return right;
     }
+
+    public void setLeft(AbstractExpression left)
+    {
+        this.left = left;
+    }
+
+    public void setRight(AbstractExpression right)
+    {
+        this.right = right;
+    }
 }

@@ -1,12 +1,21 @@
 package cn.misection.cvac.parser;
 
-import cn.misection.cvac.ast.Ast;
+import cn.misection.cvac.ast.clas.*;
+import cn.misection.cvac.ast.decl.*;
+import cn.misection.cvac.ast.entry.*;
+import cn.misection.cvac.ast.expr.*;
+import cn.misection.cvac.ast.method.*;
+import cn.misection.cvac.ast.program.*;
+import cn.misection.cvac.ast.statement.*;
+import cn.misection.cvac.ast.type.*;
+
 import cn.misection.cvac.lexer.CvaKind;
 import cn.misection.cvac.lexer.CvaToken;
-import cn.misection.cvac.lexer.Lexer;
 import cn.misection.cvac.lexer.IBufferedQueue;
+import cn.misection.cvac.lexer.Lexer;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -98,21 +107,21 @@ public class Parser
     // ExpList -> Exp ExpRest*
     //         ->
     // ExpRest -> , Exp
-    private LinkedList<Ast.Expr.T> parseExpList()
+    private LinkedList<AbstractExpression> parseExpList()
     {
-        LinkedList<Ast.Expr.T> explist = new LinkedList<>();
+        LinkedList<AbstractExpression> explist = new LinkedList<>();
         if (curToken.getKind() == CvaKind.CLOSE_PAREN)
         {
             return explist;
         }
-        Ast.Expr.T tem = parseExp();
-        tem.lineNum = curToken.getLineNum();
+        AbstractExpression tem = parseExp();
+        tem.setLineNum(curToken.getLineNum());
         explist.addLast(tem);
         while (curToken.getKind() == CvaKind.COMMA)
         {
             advance();
             tem = parseExp();
-            tem.lineNum = curToken.getLineNum();
+            tem.setLineNum(curToken.getLineNum());
             explist.add(tem);
         }
         return explist;
@@ -125,42 +134,41 @@ public class Parser
     //  -> this
     //  -> id
     //  -> new id()
-    private Ast.Expr.T parseAtomExp()
+    private AbstractExpression parseAtomExp()
     {
-        Ast.Expr.T exp;
+        AbstractExpression exp;
         switch (curToken.getKind())
         {
             case OPEN_PAREN:
                 advance();
                 exp = parseExp();
-                exp.lineNum = curToken.getLineNum();
+                exp.setLineNum(curToken.getLineNum());
                 //advance();
                 eatToken(CvaKind.CLOSE_PAREN);
                 return exp;
             case NUMBER:
-                exp = new Ast.Expr.CvaNumberInt(Integer.parseInt(curToken.getLexeme()),
-                        curToken.getLineNum());
+                exp = new CvaNumberInt(curToken.getLineNum(), Integer.parseInt(curToken.getLiteral()));
                 advance();
                 return exp;
             case TRUE:
-                exp = new Ast.Expr.CvaTrueExpr(curToken.getLineNum());
+                exp = new CvaTrueExpr(curToken.getLineNum());
                 advance();
                 return exp;
             case FALSE:
-                exp = new Ast.Expr.CvaFalseExpr(curToken.getLineNum());
+                exp = new CvaFalseExpr(curToken.getLineNum());
                 advance();
                 return exp;
             case THIS:
-                exp = new Ast.Expr.CvaThisExpr(curToken.getLineNum());
+                exp = new CvaThisExpr(curToken.getLineNum());
                 advance();
                 return exp;
             case IDENTIFIER:
-                exp = new Ast.Expr.CvaIdentifier(curToken.getLexeme(), curToken.getLineNum());
+                exp = new CvaIdentifier(curToken.getLineNum(), curToken.getLiteral());
                 advance();
                 return exp;
             case NEW:
                 advance();
-                exp = new Ast.Expr.CvaNewExpr(curToken.getLexeme(), curToken.getLineNum());
+                exp = new CvaNewExpr(curToken.getLineNum(), curToken.getLiteral());
                 advance();
                 eatToken(CvaKind.OPEN_PAREN);
                 eatToken(CvaKind.CLOSE_PAREN);
@@ -173,24 +181,29 @@ public class Parser
 
     // NotExp -> AtomExp
     //  -> AtomExp.id(expList)
-    private Ast.Expr.T parseNotExp()
+    private AbstractExpression parseNotExp()
     {
-        Ast.Expr.T exp = parseAtomExp();
+        AbstractExpression expr = parseAtomExp();
         while (curToken.getKind() == CvaKind.DOT)
         {
             advance();
-            CvaToken id = curToken;
+            CvaToken token = curToken;
             eatToken(CvaKind.IDENTIFIER);
             eatToken(CvaKind.OPEN_PAREN);
-            exp = new Ast.Expr.CvaCallExpr(exp, id.getLexeme(), parseExpList(), id.getLineNum());
+            expr = new CvaCallExpr(
+                    token.getLineNum(),
+                    token.getLiteral(),
+                    expr,
+                    parseExpList()
+            );
             eatToken(CvaKind.CLOSE_PAREN);
         }
-        return exp;
+        return expr;
     }
 
     // TimesExp -> ! TimesExp
     //  -> NotExp
-    private Ast.Expr.T parseTimesExp()
+    private AbstractExpression parseTimesExp()
     {
         int i = 0;
         while (curToken.getKind() == CvaKind.NEGATE)
@@ -198,22 +211,23 @@ public class Parser
             advance();
             i++;
         }
-        Ast.Expr.T exp = parseNotExp();
-        Ast.Expr.T tem = new Ast.Expr.CvaNegateExpr(exp, exp.lineNum);
+        AbstractExpression exp = parseNotExp();
+        AbstractExpression tem = new CvaNegateExpr(
+                exp.getLineNum(), exp);
         return i % 2 == 0 ? exp : tem;
     }
 
     // AddSubExp -> TimesExp * TimesExp
     //  -> TimesExp
-    private Ast.Expr.T parseAddSubExp()
+    private AbstractExpression parseAddSubExp()
     {
-        Ast.Expr.T tem = parseTimesExp();
-        Ast.Expr.T exp = tem;
+        AbstractExpression tem = parseTimesExp();
+        AbstractExpression exp = tem;
         while (curToken.getKind() == CvaKind.STAR)
         {
             advance();
             tem = parseTimesExp();
-            exp = new Ast.Expr.CvaMuliExpr(exp, tem, tem.lineNum);
+            exp = new CvaMuliExpr(tem.getLineNum(), exp, tem);
         }
         return exp;
     }
@@ -221,46 +235,50 @@ public class Parser
     // LtExp -> AddSubExp + AddSubExp
     //  -> AddSubExp - AddSubExp
     //  -> AddSubExp
-    private Ast.Expr.T parseLTExp()
+    private AbstractExpression parseLTExp()
     {
-        Ast.Expr.T exp = parseAddSubExp();
+        AbstractExpression exp = parseAddSubExp();
         while (curToken.getKind() == CvaKind.ADD || curToken.getKind() == CvaKind.SUB)
         {
-            boolean isAdd = curToken.getKind() == CvaKind.ADD;
+            boolean addFlag = curToken.getKind() == CvaKind.ADD;
             advance();
-            Ast.Expr.T tem = parseAddSubExp();
-            exp = isAdd ? new Ast.Expr.CvaAddExpr(exp, tem, exp.lineNum)
-                    : tem instanceof Ast.Expr.CvaNumberInt ? new Ast.Expr.CvaAddExpr(exp,
-                    new Ast.Expr.CvaNumberInt(-((Ast.Expr.CvaNumberInt) tem).value, tem.lineNum), tem.lineNum)
-                    : new Ast.Expr.CvaSubExpr(exp, tem, exp.lineNum);
+            AbstractExpression tem = parseAddSubExp();
+            exp = addFlag ? 
+                    new CvaAddExpr(exp.getLineNum(), exp, tem)
+                    : tem instanceof CvaNumberInt
+                    ? new CvaAddExpr(tem.getLineNum(),
+                    exp,
+                    new CvaNumberInt(tem.getLineNum(),
+                            -((CvaNumberInt) tem).getValue()))
+                    : new CvaSubExpr(exp.getLineNum(), exp, tem);
         }
         return exp;
     }
 
     // AndExp -> LtExp < LtExp
     // -> LtExp
-    private Ast.Expr.T parseAndExp()
+    private AbstractExpression parseAndExp()
     {
-        Ast.Expr.T exp = parseLTExp();
+        AbstractExpression exp = parseLTExp();
         while (curToken.getKind() == CvaKind.LESS_THAN)
         {
             advance();
-            Ast.Expr.T tem = parseLTExp();
-            exp = new Ast.Expr.CvaLTExpr(exp, tem, exp.lineNum);
+            AbstractExpression tem = parseLTExp();
+            exp = new CvaLTExpr(exp.getLineNum(), exp, tem);
         }
         return exp;
     }
 
     // Exp -> AndExp && AndExp
     //  -> AndExp
-    private Ast.Expr.T parseExp()
+    private AbstractExpression parseExp()
     {
-        Ast.Expr.T exp = parseAndExp();
+        AbstractExpression exp = parseAndExp();
         while (curToken.getKind() == CvaKind.AND_AND)
         {
             advance();
-            Ast.Expr.T tem = parseAndExp();
-            exp = new Ast.Expr.CvaAndAndExpr(exp, tem, exp.lineNum);
+            AbstractExpression tem = parseAndExp();
+            exp = new CvaAndAndExpr(exp.getLineNum(), exp, tem);
         }
         return exp;
     }
@@ -270,14 +288,14 @@ public class Parser
     //  -> while (Exp) Statement
     //  -> print(Exp);
     //  -> id = Exp;
-    private Ast.Stm.T parseStatement()
+    private AbstractStatement parseStatement()
     {
-        Ast.Stm.T stm = null;
+        AbstractStatement stm = null;
         if (curToken.getKind() == CvaKind.OPEN_CURLY_BRACE)
         {
             eatToken(CvaKind.OPEN_CURLY_BRACE);
             int lineNum = curToken.getLineNum();
-            stm = new Ast.Stm.CvaBlock(parseStatements(), lineNum);
+            stm = new CvaBlock(lineNum, parseStatements());
             eatToken(CvaKind.CLOSE_CURLY_BRACE);
         }
         else if (curToken.getKind() == CvaKind.IF)
@@ -285,42 +303,42 @@ public class Parser
             int lineNum = curToken.getLineNum();
             eatToken(CvaKind.IF);
             eatToken(CvaKind.OPEN_PAREN);
-            Ast.Expr.T condition = parseExp();
+            AbstractExpression condition = parseExp();
             eatToken(CvaKind.CLOSE_PAREN);
-            Ast.Stm.T then_stm = parseStatement();
+            AbstractStatement thenStm = parseStatement();
             eatToken(CvaKind.ELSE);
-            Ast.Stm.T else_stm = parseStatement();
-            stm = new Ast.Stm.CvaIfStatement(condition, then_stm, else_stm, lineNum);
+            AbstractStatement elseStm = parseStatement();
+            stm = new CvaIfStatement(lineNum, condition, thenStm, elseStm);
         }
         else if (curToken.getKind() == CvaKind.WHILE)
         {
             int lineNum = curToken.getLineNum();
             eatToken(CvaKind.WHILE);
             eatToken(CvaKind.OPEN_PAREN);
-            Ast.Expr.T condition = parseExp();
+            AbstractExpression condition = parseExp();
             eatToken(CvaKind.CLOSE_PAREN);
-            Ast.Stm.T body = parseStatement();
-            stm = new Ast.Stm.CvaWhileStatement(condition, body, lineNum);
+            AbstractStatement body = parseStatement();
+            stm = new CvaWhileStatement(lineNum, condition, body);
         }
         else if (curToken.getKind() == CvaKind.WRITE)
         {
             int lineNum = curToken.getLineNum();
             eatToken(CvaKind.WRITE);
             eatToken(CvaKind.OPEN_PAREN);
-            Ast.Expr.T exp = parseExp();
+            AbstractExpression exp = parseExp();
             eatToken(CvaKind.CLOSE_PAREN);
             eatToken(CvaKind.SEMI);
-            stm = new Ast.Stm.CvaWriteOperation(exp, lineNum);
+            stm = new CvaWriteOperation(lineNum, exp);
         }
         else if (curToken.getKind() == CvaKind.IDENTIFIER)
         {
-            String id = curToken.getLexeme();
+            String literal = curToken.getLiteral();
             int lineNum = curToken.getLineNum();
             eatToken(CvaKind.IDENTIFIER);
             eatToken(CvaKind.ASSIGN);
-            Ast.Expr.T exp = parseExp();
+            AbstractExpression exp = parseExp();
             eatToken(CvaKind.SEMI);
-            stm = new Ast.Stm.CvaAssign(id, exp, lineNum);
+            stm = new CvaAssign(lineNum, literal, exp);
         }
         else
         {
@@ -332,9 +350,9 @@ public class Parser
 
     // Statements -> Statement Statements
     //  ->
-    private LinkedList<Ast.Stm.T> parseStatements()
+    private LinkedList<AbstractStatement> parseStatements()
     {
-        LinkedList<Ast.Stm.T> stms = new LinkedList<>();
+        LinkedList<AbstractStatement> stms = new LinkedList<>();
         while (curToken.getKind() == CvaKind.OPEN_CURLY_BRACE || curToken.getKind() == CvaKind.IF
                 || curToken.getKind() == CvaKind.WHILE || curToken.getKind() == CvaKind.IDENTIFIER
                 || curToken.getKind() == CvaKind.WRITE)
@@ -348,22 +366,23 @@ public class Parser
     // Type -> int
     //  -> boolean
     //  -> id
-    private Ast.Type.T parseType()
+    private AbstractType parseType()
     {
-        Ast.Type.T type = null;
+        AbstractType type = null;
         if (curToken.getKind() == CvaKind.BOOLEAN)
         {
-            type = new Ast.Type.CvaBoolean();
+            type = new CvaBoolean();
             advance();
         }
         else if (curToken.getKind() == CvaKind.INT)
         {
-            type = new Ast.Type.Int();
+            type = new CvaInt();
             advance();
         }
         else if (curToken.getKind() == CvaKind.IDENTIFIER)
         {
-            type = new Ast.Type.CvaClass(curToken.getLexeme());
+            // 应该是type;
+            type = new CvaClassType(curToken.getLiteral());
             advance();
         }
         else
@@ -374,10 +393,10 @@ public class Parser
     }
 
     // VarDecl -> Type id;
-    private Ast.Decl.T parseVarDecl()
+    private AbstractDeclaration parseVarDecl()
     {
         this.mark();
-        Ast.Type.T type = parseType();
+        AbstractType type = parseType();
         if (curToken.getKind() == CvaKind.ASSIGN)  // maybe a assign statement in method
         {
             this.reset();
@@ -386,13 +405,13 @@ public class Parser
         }
         else if (curToken.getKind() == CvaKind.IDENTIFIER)
         {
-            String id = curToken.getLexeme();
+            String literal = curToken.getLiteral();
             advance();
             if (curToken.getKind() == CvaKind.SEMI)
             {
                 this.unMark();
                 valDeclFlag = true;
-                Ast.Decl.T dec = new Ast.Decl.CvaDeclaration(type, id, curToken.getLineNum());
+                AbstractDeclaration dec = new CvaDeclaration(curToken.getLineNum(), literal, type);
                 eatToken(CvaKind.SEMI);
                 return dec;
             }
@@ -417,14 +436,14 @@ public class Parser
 
     // VarDecls -> VarDecl VarDecls
     //  ->
-    private LinkedList<Ast.Decl.T> parseVarDecls()
+    private LinkedList<AbstractDeclaration> parseVarDecls()
     {
-        LinkedList<Ast.Decl.T> decs = new LinkedList<>();
+        LinkedList<AbstractDeclaration> decs = new LinkedList<>();
         valDeclFlag = true;
         while (curToken.getKind() == CvaKind.INT || curToken.getKind() == CvaKind.BOOLEAN
                 || curToken.getKind() == CvaKind.IDENTIFIER)
         {
-            Ast.Decl.T dec = parseVarDecl();
+            AbstractDeclaration dec = parseVarDecl();
             if (dec != null)
             {
                 decs.addLast(dec);
@@ -440,18 +459,18 @@ public class Parser
     // FormalList -> Type id FormalRest*
     //  ->
     // FormalRest -> , Type id
-    private LinkedList<Ast.Decl.T> parseFormalList()
+    private LinkedList<AbstractDeclaration> parseFormalList()
     {
-        LinkedList<Ast.Decl.T> decs = new LinkedList<>();
+        LinkedList<AbstractDeclaration> decs = new LinkedList<>();
         if (curToken.getKind() == CvaKind.INT || curToken.getKind() == CvaKind.BOOLEAN
                 || curToken.getKind() == CvaKind.IDENTIFIER)
         {
-            decs.addLast(new Ast.Decl.CvaDeclaration(parseType(), curToken.getLexeme(), curToken.getLineNum()));
+            decs.addLast(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), parseType()));
             eatToken(CvaKind.IDENTIFIER);
             while (curToken.getKind() == CvaKind.COMMA)
             {
                 advance();
-                decs.addLast(new Ast.Decl.CvaDeclaration(parseType(), curToken.getLexeme(), curToken.getLineNum()));
+                decs.addLast(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), parseType()));
                 eatToken(CvaKind.IDENTIFIER);
             }
         }
@@ -460,30 +479,31 @@ public class Parser
 
     // Method -> Type id (FormalList)
     //          {VarDec* Statement* return Exp; }
-    private Ast.Method.T parseMethod()
+    private AbstractMethod parseMethod()
     {
-        Ast.Type.T retType = parseType();
-        String id = curToken.getLexeme();
+        AbstractType retType = parseType();
+        String literal = curToken.getLiteral();
         eatToken(CvaKind.IDENTIFIER);
         eatToken(CvaKind.OPEN_PAREN);
-        LinkedList<Ast.Decl.T> formalList = parseFormalList();
+        LinkedList<AbstractDeclaration> formalList = parseFormalList();
         eatToken(CvaKind.CLOSE_PAREN);
         eatToken(CvaKind.OPEN_CURLY_BRACE);
-        LinkedList<Ast.Decl.T> varDecs = parseVarDecls();
-        LinkedList<Ast.Stm.T> stms = parseStatements();
+        LinkedList<AbstractDeclaration> varDecs = parseVarDecls();
+        LinkedList<AbstractStatement> stms = parseStatements();
         eatToken(CvaKind.RETURN);
-        Ast.Expr.T retExp = parseExp();
+        AbstractExpression retExp = parseExp();
         eatToken(CvaKind.SEMI);
         eatToken(CvaKind.CLOSE_CURLY_BRACE);
 
-        return new Ast.Method.CvaMethod(retType, id, formalList, varDecs, stms, retExp);
+        return new CvaMethod(literal,
+                retType, retExp, formalList, varDecs, stms);
     }
 
     // MethodDecls -> MethodDecl MethodDecls*
     //  ->
-    private LinkedList<Ast.Method.T> parseMethodDecls()
+    private LinkedList<AbstractMethod> parseMethodDecls()
     {
-        LinkedList<Ast.Method.T> methods = new LinkedList<>();
+        LinkedList<AbstractMethod> methods = new LinkedList<>();
         while (curToken.getKind() == CvaKind.IDENTIFIER ||
                 curToken.getKind() == CvaKind.INT ||
                 curToken.getKind() == CvaKind.BOOLEAN)
@@ -496,30 +516,30 @@ public class Parser
 
     // ClassDecl -> class id { VarDecl* MethodDecl* }
     //  -> class id : id { VarDecl* Method* }
-    private Ast.Clas.T parseClassDecl()
+    private AbstractClass parseClassDecl()
     {
         eatToken(CvaKind.CLASS);
-        String id = curToken.getLexeme();
+        String id = curToken.getLiteral();
         eatToken(CvaKind.IDENTIFIER);
         String superClass = null;
         if (curToken.getKind() == CvaKind.COLON)
         {
             advance();
-            superClass = curToken.getLexeme();
+            superClass = curToken.getLiteral();
             eatToken(CvaKind.IDENTIFIER);
         }
         eatToken(CvaKind.OPEN_CURLY_BRACE);
-        LinkedList<Ast.Decl.T> decs = parseVarDecls();
-        LinkedList<Ast.Method.T> methods = parseMethodDecls();
+        LinkedList<AbstractDeclaration> decs = parseVarDecls();
+        LinkedList<AbstractMethod> methods = parseMethodDecls();
         eatToken(CvaKind.CLOSE_CURLY_BRACE);
-        return new Ast.Clas.CvaClass(id, superClass, decs, methods);
+        return new CvaClass(id, superClass, decs, methods);
     }
 
     // ClassDecls -> ClassDecl ClassDecls*
     //  ->
-    private LinkedList<Ast.Clas.T> parseClassDecls()
+    private LinkedList<AbstractClass> parseClassDecls()
     {
-        LinkedList<Ast.Clas.T> classes = new LinkedList<>();
+        LinkedList<AbstractClass> classes = new LinkedList<>();
         while (curToken.getKind() == CvaKind.CLASS)
         {
             classes.addLast(parseClassDecl());
@@ -535,10 +555,10 @@ public class Parser
     //            Statement
     //        }
     //    }
-    private Ast.MainClass.CvaEntry parseMainClass()
+    private CvaEntry parseMainClass()
     {
         eatToken(CvaKind.CLASS);
-        String id = curToken.getLexeme();
+        String literal = curToken.getLiteral();
         eatToken(CvaKind.IDENTIFIER);
         eatToken(CvaKind.OPEN_CURLY_BRACE);
         eatToken(CvaKind.VOID);
@@ -546,22 +566,22 @@ public class Parser
         eatToken(CvaKind.OPEN_PAREN);
         eatToken(CvaKind.CLOSE_PAREN);
         eatToken(CvaKind.OPEN_CURLY_BRACE);
-        Ast.Stm.T stm = parseStatement();
+        AbstractStatement stm = parseStatement();
         eatToken(CvaKind.CLOSE_CURLY_BRACE);
         eatToken(CvaKind.CLOSE_CURLY_BRACE);
-        return new Ast.MainClass.CvaEntry(id, stm);
+        return new CvaEntry(literal, stm);
     }
 
     // Program -> MainClass ClassDecl*
-    private Ast.Program.CvaProgram parseProgram()
+    private CvaProgram parseProgram()
     {
-        Ast.MainClass.CvaEntry main = parseMainClass();
-        LinkedList<Ast.Clas.T> classes = parseClassDecls();
+        CvaEntry main = parseMainClass();
+        List<AbstractClass> classes = parseClassDecls();
         eatToken(CvaKind.EOF);
-        return new Ast.Program.CvaProgram(main, classes);
+        return new CvaProgram(main, classes);
     }
 
-    public Ast.Program.T parse()
+    public CvaProgram parse()
     {
         return parseProgram();
     }
