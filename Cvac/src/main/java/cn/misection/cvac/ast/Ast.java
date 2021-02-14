@@ -11,9 +11,9 @@ public class Ast
         public static abstract class T
         {}
 
-        public static class Boolean extends T
+        public static class CvaBoolean extends T
         {
-            public Boolean() {}
+            public CvaBoolean() {}
 
             @Override
             public String toString()
@@ -22,19 +22,19 @@ public class Ast
             }
         }
 
-        public static class ClassType extends T
+        public static class CvaClass extends T
         {
-            public String id;
+            public String literal;
 
-            public ClassType(String id)
+            public CvaClass(String literal)
             {
-                this.id = id;
+                this.literal = literal;
             }
 
             @Override
             public String toString()
             {
-                return this.id;
+                return this.literal;
             }
         }
 
@@ -52,40 +52,40 @@ public class Ast
     }
 
     // Dec
-    public static class Dec
+    public static class Decl
     {
         public static abstract class T
         {
             public int lineNum;
         }
 
-        public static class DecSingle extends T
+        public static class CvaDeclaration extends T
         {
             public Type.T type;
-            public String id;
+            public String literal;
 
-            public DecSingle(Type.T type, String id, int lineNum)
+            public CvaDeclaration(Type.T type, String literal, int lineNum)
             {
                 this.type = type;
-                this.id = id;
+                this.literal = literal;
                 this.lineNum = lineNum;
             }
         }
     }
 
     // Expression
-    public static class Exp
+    public static class Expr
     {
         public static abstract class T
         {
             public int lineNum;
         }
 
-        public static class Add extends T
+        public static class CvaAddExpr extends T
         {
             public T left, right;
 
-            public Add(T left, T right, int lineNum)
+            public CvaAddExpr(T left, T right, int lineNum)
             {
                 this.left = left;
                 this.right = right;
@@ -93,11 +93,11 @@ public class Ast
             }
         }
 
-        public static class And extends T
+        public static class CvaAndAndExpr extends T
         {
             public T left, right;
 
-            public And(T left, T right, int lineNum)
+            public CvaAndAndExpr(T left, T right, int lineNum)
             {
                 this.left = left;
                 this.right = right;
@@ -108,7 +108,7 @@ public class Ast
         /**
          * 原来call;
          */
-        public static class Function extends T
+        public static class CvaCallExpr extends T
         {
             public T exp;
             public String literal;
@@ -117,7 +117,7 @@ public class Ast
             public java.util.LinkedList<Type.T> at; // arg's type
             public Type.T rt;
 
-            public Function(T exp, String literal, java.util.LinkedList<T> args, int lineNum)
+            public CvaCallExpr(T exp, String literal, java.util.LinkedList<T> args, int lineNum)
             {
                 this.exp = exp;
                 this.literal = literal;
@@ -127,27 +127,27 @@ public class Ast
             }
         }
 
-        public static class False extends T
+        public static class CvaFalseExpr extends T
         {
-            public False(int lineNum)
+            public CvaFalseExpr(int lineNum)
             {
                 this.lineNum = lineNum;
             }
         }
 
-        public static class Identifier extends T
+        public static class CvaIdentifier extends T
         {
             public String literal; // name of the id
             public Type.T type; // type of the id
             public boolean isField; // whether or not a field
 
-            public Identifier(String literal, int lineNum)
+            public CvaIdentifier(String literal, int lineNum)
             {
                 this.literal = literal;
                 this.lineNum = lineNum;
             }
 
-            public Identifier(String literal, Type.T type, boolean isField, int lineNum)
+            public CvaIdentifier(String literal, Type.T type, boolean isField, int lineNum)
             {
                 this.literal = literal;
                 this.type = type;
@@ -156,11 +156,11 @@ public class Ast
             }
         }
 
-        public static class LT extends T
+        public static class CvaLTExpr extends T
         {
             public T left, right;
 
-            public LT(T left, T right, int lineNum)
+            public CvaLTExpr(T left, T right, int lineNum)
             {
                 this.left = left;
                 this.right = right;
@@ -168,11 +168,11 @@ public class Ast
             }
         }
 
-        public static class NewObject extends T
+        public static class CvaNewExpr extends T
         {
             public String literal;
 
-            public NewObject(String literal, int lineNum)
+            public CvaNewExpr(String literal, int lineNum)
             {
                 this.literal = literal;
                 this.lineNum = lineNum;
@@ -253,10 +253,10 @@ public class Ast
         public static class CvaAssign extends T
         {
             public String id;
-            public Exp.T exp;
+            public Expr.T exp;
             public Type.T type; // type of the id
 
-            public CvaAssign(String id, Exp.T exp, int lineNum)
+            public CvaAssign(String id, Expr.T exp, int lineNum)
             {
                 this.id = id;
                 this.exp = exp;
@@ -278,10 +278,10 @@ public class Ast
 
         public static class CvaIfStatement extends T
         {
-            public Exp.T condition;
+            public Expr.T condition;
             public T thenStm, elseStm;
 
-            public CvaIfStatement(Exp.T condition, T thenStm, T elseStm, int lineNum)
+            public CvaIfStatement(Expr.T condition, T thenStm, T elseStm, int lineNum)
             {
                 this.condition = condition;
                 this.thenStm = thenStm;
@@ -292,9 +292,9 @@ public class Ast
 
         public static class CvaWriteOperation extends T
         {
-            public Exp.T exp;
+            public Expr.T exp;
 
-            public CvaWriteOperation(Exp.T exp, int lineNum)
+            public CvaWriteOperation(Expr.T exp, int lineNum)
             {
                 this.exp = exp;
                 this.lineNum = lineNum;
@@ -303,10 +303,10 @@ public class Ast
 
         public static class CvaWhileStatement extends T
         {
-            public Exp.T condition;
+            public Expr.T condition;
             public T body;
 
-            public CvaWhileStatement(Exp.T condition, T body, int lineNum)
+            public CvaWhileStatement(Expr.T condition, T body, int lineNum)
             {
                 this.condition = condition;
                 this.body = body;
@@ -320,23 +320,23 @@ public class Ast
         public static abstract class T
         {}
 
-        public static class MethodSingle extends T
+        public static class CvaMethod extends T
         {
             public Type.T retType;
-            public String id;
-            public java.util.LinkedList<Dec.T> formals;
-            public java.util.LinkedList<Dec.T> locals;
+            public String literal;
+            public java.util.LinkedList<Decl.T> formals;
+            public java.util.LinkedList<Decl.T> locals;
             public java.util.LinkedList<Stm.T> stms;
-            public Exp.T retExp;
+            public Expr.T retExp;
 
-            public MethodSingle(Type.T retType, String id,
-                                java.util.LinkedList<Dec.T> formals,
-                                java.util.LinkedList<Dec.T> locals,
-                                java.util.LinkedList<Stm.T> stms,
-                                Exp.T retExp)
+            public CvaMethod(Type.T retType, String literal,
+                             java.util.LinkedList<Decl.T> formals,
+                             java.util.LinkedList<Decl.T> locals,
+                             java.util.LinkedList<Stm.T> stms,
+                             Expr.T retExp)
             {
                 this.retType = retType;
-                this.id = id;
+                this.literal = literal;
                 this.formals = formals;
                 this.locals = locals;
                 this.stms = stms;
@@ -345,24 +345,24 @@ public class Ast
         }
     }
 
-    public static class Class
+    public static class Clas
     {
         public static abstract class T
         {}
 
-        public static class ClassSingle extends T
+        public static class CvaClass extends T
         {
-            public String id;
-            public String base; // null for no-base
-            public java.util.LinkedList<Dec.T> fields;
+            public String literal;
+            public String parent; // null for no-base
+            public java.util.LinkedList<Decl.T> fields;
             public java.util.LinkedList<Method.T> methods;
 
-            public ClassSingle(String id, String base,
-                               java.util.LinkedList<Dec.T> fields,
-                               java.util.LinkedList<Method.T> methods)
+            public CvaClass(String literal, String parent,
+                            java.util.LinkedList<Decl.T> fields,
+                            java.util.LinkedList<Method.T> methods)
             {
-                this.id = id;
-                this.base = base;
+                this.literal = literal;
+                this.parent = parent;
                 this.fields = fields;
                 this.methods = methods;
             }
@@ -374,12 +374,12 @@ public class Ast
         public static abstract class T
         {}
 
-        public static class MainClassSingle extends T
+        public static class CvaEntry extends T
         {
             public String id;
             public Stm.T stm;
 
-            public MainClassSingle(String id, Stm.T stm)
+            public CvaEntry(String id, Stm.T stm)
             {
                 this.id = id;
                 this.stm = stm;
@@ -392,13 +392,13 @@ public class Ast
         public static abstract class T
         {}
 
-        public static class ProgramSingle extends T
+        public static class CvaProgram extends T
         {
             public MainClass.T mainClass;
-            public java.util.LinkedList<Class.T> classes;
+            public java.util.LinkedList<Clas.T> classes;
 
-            public ProgramSingle(MainClass.T mainClass,
-                                 java.util.LinkedList<Class.T> classes)
+            public CvaProgram(MainClass.T mainClass,
+                              java.util.LinkedList<Clas.T> classes)
             {
                 this.mainClass = mainClass;
                 this.classes = classes;

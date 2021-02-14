@@ -9,4 +9,14 @@ package cn.misection.cvac.ast.type;
  */
 public abstract class AbstractType implements IType
 {
+    public AbstractType()
+    {
+    }
+
+    /**
+     * 转string;
+     * @return
+     */
+    @Override
+    public abstract String toString();
 }

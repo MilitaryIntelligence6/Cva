@@ -18,33 +18,33 @@ public class DeadCodeDel implements cn.misection.cvac.ast.Visitor, Optimizable
     private boolean isOptimizing;
 
     @Override
-    public void visit(Ast.Type.Boolean t) {}
+    public void visit(Ast.Type.CvaBoolean t) {}
 
     @Override
-    public void visit(Ast.Type.ClassType t) {}
+    public void visit(Ast.Type.CvaClass t) {}
 
     @Override
     public void visit(Ast.Type.Int t) {}
 
     @Override
-    public void visit(Ast.Dec.DecSingle d) {}
+    public void visit(Ast.Decl.CvaDeclaration d) {}
 
     @Override
-    public void visit(Ast.Exp.Add e)
+    public void visit(Ast.Expr.CvaAddExpr e)
     {
         this.visit(e.left);
         this.visit(e.right);
     }
 
     @Override
-    public void visit(Ast.Exp.And e)
+    public void visit(Ast.Expr.CvaAndAndExpr e)
     {
         this.visit(e.left);
         this.visit(e.right);
     }
 
     @Override
-    public void visit(Ast.Exp.Function e)
+    public void visit(Ast.Expr.CvaCallExpr e)
     {
         this.visit(e.exp);
         e.args.forEach(this::visit);
@@ -52,53 +52,53 @@ public class DeadCodeDel implements cn.misection.cvac.ast.Visitor, Optimizable
     }
 
     @Override
-    public void visit(Ast.Exp.False e) {}
+    public void visit(Ast.Expr.CvaFalseExpr e) {}
 
     @Override
-    public void visit(Ast.Exp.Identifier e)
+    public void visit(Ast.Expr.CvaIdentifier e)
     {
         if (this.localVars.contains(e.literal))
             this.localLiveness.add(e.literal);
     }
 
     @Override
-    public void visit(Ast.Exp.LT e)
+    public void visit(Ast.Expr.CvaLTExpr e)
     {
         this.visit(e.left);
         this.visit(e.right);
     }
 
     @Override
-    public void visit(Ast.Exp.NewObject e) {}
+    public void visit(Ast.Expr.CvaNewExpr e) {}
 
     @Override
-    public void visit(Ast.Exp.CvaNegateExpr e)
+    public void visit(Ast.Expr.CvaNegateExpr e)
     {
         this.visit(e.expr);
     }
 
     @Override
-    public void visit(Ast.Exp.CvaNumberInt e) {}
+    public void visit(Ast.Expr.CvaNumberInt e) {}
 
     @Override
-    public void visit(Ast.Exp.CvaSubExpr e)
+    public void visit(Ast.Expr.CvaSubExpr e)
     {
         this.visit(e.left);
         this.visit(e.right);
     }
 
     @Override
-    public void visit(Ast.Exp.CvaThisExpr e) {}
+    public void visit(Ast.Expr.CvaThisExpr e) {}
 
     @Override
-    public void visit(Ast.Exp.CvaMuliExpr e)
+    public void visit(Ast.Expr.CvaMuliExpr e)
     {
         this.visit(e.left);
         this.visit(e.right);
     }
 
     @Override
-    public void visit(Ast.Exp.CvaTrueExpr e) {}
+    public void visit(Ast.Expr.CvaTrueExpr e) {}
 
     @Override
     public void visit(Ast.Stm.CvaAssign s)
@@ -183,11 +183,11 @@ public class DeadCodeDel implements cn.misection.cvac.ast.Visitor, Optimizable
     }
 
     @Override
-    public void visit(Ast.Method.MethodSingle m)
+    public void visit(Ast.Method.CvaMethod m)
     {
         this.localVars = new HashSet<>();
-        m.formals.forEach(f -> this.localVars.add(((Ast.Dec.DecSingle) f).id));
-        m.locals.forEach(l -> this.localVars.add(((Ast.Dec.DecSingle) l).id));
+        m.formals.forEach(f -> this.localVars.add(((Ast.Decl.CvaDeclaration) f).literal));
+        m.locals.forEach(l -> this.localVars.add(((Ast.Decl.CvaDeclaration) l).literal));
         this.localLiveness = new HashSet<>();
 
         // this.isAssign = false;
@@ -205,20 +205,20 @@ public class DeadCodeDel implements cn.misection.cvac.ast.Visitor, Optimizable
     }
 
     @Override
-    public void visit(Ast.Class.ClassSingle c)
+    public void visit(Ast.Clas.CvaClass c)
     {
         this.curFields = new HashSet<>();
         c.fields.forEach(f ->
-                this.curFields.add(((Ast.Dec.DecSingle) f).id));
+                this.curFields.add(((Ast.Decl.CvaDeclaration) f).literal));
 
         c.methods.forEach(this::visit);
     }
 
     @Override
-    public void visit(Ast.MainClass.MainClassSingle c) {}
+    public void visit(Ast.MainClass.CvaEntry c) {}
 
     @Override
-    public void visit(Ast.Program.ProgramSingle p)
+    public void visit(Ast.Program.CvaProgram p)
     {
         this.isOptimizing = false;
         p.classes.forEach(this::visit);

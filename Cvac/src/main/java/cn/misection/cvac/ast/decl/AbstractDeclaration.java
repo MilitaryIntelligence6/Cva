@@ -9,4 +9,15 @@ package cn.misection.cvac.ast.decl;
  */
 public abstract class AbstractDeclaration implements IDeclaration
 {
+    protected int lineNum;
+
+    public AbstractDeclaration(int lineNum)
+    {
+        this.lineNum = lineNum;
+    }
+
+    public int getLineNum()
+    {
+        return lineNum;
+    }
 }

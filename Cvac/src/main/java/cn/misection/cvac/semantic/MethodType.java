@@ -10,9 +10,9 @@ import java.util.LinkedList;
 public class MethodType
 {
     public Ast.Type.T retType;
-    public LinkedList<Ast.Dec.T> argsType;
+    public LinkedList<Ast.Decl.T> argsType;
 
-    public MethodType(Ast.Type.T retType, LinkedList<Ast.Dec.T> decs)
+    public MethodType(Ast.Type.T retType, LinkedList<Ast.Decl.T> decs)
     {
         this.retType = retType;
         this.argsType = decs;

@@ -42,10 +42,10 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     {
         if (target.toString().equals(cur.toString()))
             return true;
-        else if (target instanceof Ast.Type.ClassType && cur instanceof Ast.Type.ClassType)
+        else if (target instanceof Ast.Type.CvaClass && cur instanceof Ast.Type.CvaClass)
         {
-            String tarName = ((Ast.Type.ClassType) target).id;
-            String curName = ((Ast.Type.ClassType) cur).id;
+            String tarName = ((Ast.Type.CvaClass) target).literal;
+            String curName = ((Ast.Type.CvaClass) cur).literal;
             boolean flag = tarName.equals(curName);
             while (curName != null && !flag)
             {
@@ -58,21 +58,21 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
 
     // Type
     @Override
-    public void visit(Ast.Type.Boolean t) {}
+    public void visit(Ast.Type.CvaBoolean t) {}
 
     @Override
-    public void visit(Ast.Type.ClassType t) {}
+    public void visit(Ast.Type.CvaClass t) {}
 
     @Override
     public void visit(Ast.Type.Int t) {}
 
     // Dec
     @Override
-    public void visit(Ast.Dec.DecSingle d) {}
+    public void visit(Ast.Decl.CvaDeclaration d) {}
 
     // Exp
     @Override
-    public void visit(Ast.Exp.Add e)
+    public void visit(Ast.Expr.CvaAddExpr e)
     {
         this.visit(e.left);
         Ast.Type.T lefty = this.type;
@@ -88,7 +88,7 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.And e)
+    public void visit(Ast.Expr.CvaAndAndExpr e)
     {
         this.visit(e.left);
         Ast.Type.T lefty = this.type;
@@ -97,22 +97,22 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
             error(e.lineNum, "and expression" +
                     " the type of left is " + lefty.toString() +
                     ", but the type of right is " + this.type.toString());
-        else if (!new Ast.Type.Boolean().toString().equals(this.type.toString()))
+        else if (!new Ast.Type.CvaBoolean().toString().equals(this.type.toString()))
             error(e.lineNum, " only integer numbers can be added.");
 
-        this.type = new Ast.Type.Boolean();
+        this.type = new Ast.Type.CvaBoolean();
     }
 
     @Override
-    public void visit(Ast.Exp.Function e)
+    public void visit(Ast.Expr.CvaCallExpr e)
     {
         this.visit(e.exp);
-        Ast.Type.ClassType expType = null;
+        Ast.Type.CvaClass expType = null;
 
-        if (this.type instanceof Ast.Type.ClassType)
+        if (this.type instanceof Ast.Type.CvaClass)
         {
-            expType = ((Ast.Type.ClassType) this.type);
-            e.type = expType.id;
+            expType = ((Ast.Type.CvaClass) this.type);
+            e.type = expType.literal;
         } else
         {
             error(e.lineNum, "only an instance of class can be invoked.");
@@ -134,7 +134,7 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
             argsty.addLast(this.type);
         });
 
-        MethodType mty = this.classTable.getMethodType(expType.id, e.literal);
+        MethodType mty = this.classTable.getMethodType(expType.literal, e.literal);
 
         if (mty == null)
         {
@@ -156,9 +156,9 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
             error(e.lineNum, "the count of arguments is not match.");
 
         for (int i = 0; i < mty.argsType.size(); i++)
-            if (!isMatch(((Ast.Dec.DecSingle) mty.argsType.get(i)).type, argsty.get(i)))
+            if (!isMatch(((Ast.Decl.CvaDeclaration) mty.argsType.get(i)).type, argsty.get(i)))
                 error(e.args.get(i).lineNum, "the parameter " + (i + 1) +
-                        " needs a " + ((Ast.Dec.DecSingle) mty.argsType.get(i)).type.toString() +
+                        " needs a " + ((Ast.Decl.CvaDeclaration) mty.argsType.get(i)).type.toString() +
                         ", but got a " + argsty.get(i).toString());
 
 
@@ -168,13 +168,13 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.False e)
+    public void visit(Ast.Expr.CvaFalseExpr e)
     {
-        this.type = new Ast.Type.Boolean();
+        this.type = new Ast.Type.CvaBoolean();
     }
 
     @Override
-    public void visit(Ast.Exp.Identifier e)
+    public void visit(Ast.Expr.CvaIdentifier e)
     {
         Ast.Type.T type = this.methodVarTable.get(e.literal);
         boolean isField = type == null;
@@ -209,7 +209,7 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.LT e)
+    public void visit(Ast.Expr.CvaLTExpr e)
     {
         this.visit(e.left);
         Ast.Type.T lefty = this.type;
@@ -222,14 +222,14 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
         } else if (!new Ast.Type.Int().toString().equals(this.type.toString()))
             error(e.lineNum, "only integer numbers can be compared.");
 
-        this.type = new Ast.Type.Boolean();
+        this.type = new Ast.Type.CvaBoolean();
     }
 
     @Override
-    public void visit(Ast.Exp.NewObject e)
+    public void visit(Ast.Expr.CvaNewExpr e)
     {
         if (this.classTable.getClassBinding(e.literal) != null)
-            this.type = new Ast.Type.ClassType(e.literal);
+            this.type = new Ast.Type.CvaClass(e.literal);
         else
         {
             error(e.lineNum, "cannot find the declaration of class \"" + e.literal + "\".");
@@ -245,23 +245,23 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.CvaNegateExpr e)
+    public void visit(Ast.Expr.CvaNegateExpr e)
     {
         this.visit(e.expr);
-        if (!this.type.toString().equals(new Ast.Type.Boolean().toString()))
+        if (!this.type.toString().equals(new Ast.Type.CvaBoolean().toString()))
             error(e.lineNum, "the exp cannot calculate to a boolean.");
 
-        this.type = new Ast.Type.Boolean();
+        this.type = new Ast.Type.CvaBoolean();
     }
 
     @Override
-    public void visit(Ast.Exp.CvaNumberInt e)
+    public void visit(Ast.Expr.CvaNumberInt e)
     {
         this.type = new Ast.Type.Int();
     }
 
     @Override
-    public void visit(Ast.Exp.CvaSubExpr e)
+    public void visit(Ast.Expr.CvaSubExpr e)
     {
         this.visit(e.left);
         Ast.Type.T lefty = this.type;
@@ -278,13 +278,13 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.CvaThisExpr e)
+    public void visit(Ast.Expr.CvaThisExpr e)
     {
-        this.type = new Ast.Type.ClassType(currentClass);
+        this.type = new Ast.Type.CvaClass(currentClass);
     }
 
     @Override
-    public void visit(Ast.Exp.CvaMuliExpr e)
+    public void visit(Ast.Expr.CvaMuliExpr e)
     {
         this.visit(e.left);
         Ast.Type.T lefty = this.type;
@@ -300,9 +300,9 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.CvaTrueExpr e)
+    public void visit(Ast.Expr.CvaTrueExpr e)
     {
-        this.type = new Ast.Type.Boolean();
+        this.type = new Ast.Type.CvaBoolean();
     }
 
     @Override
@@ -314,8 +314,8 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
         if (this.curMthLocals.contains(s.id))
             this.curMthLocals.remove(s.id);
 
-        Ast.Exp.Identifier identifier = new Ast.Exp.Identifier(s.id, s.lineNum);
-        this.visit(identifier);
+        Ast.Expr.CvaIdentifier cvaIdentifier = new Ast.Expr.CvaIdentifier(s.id, s.lineNum);
+        this.visit(cvaIdentifier);
         Ast.Type.T idty = this.type;
         //if (!this.type.toString().equals(idty.toString()))
         if (!isMatch(idty, s.type))
@@ -335,7 +335,7 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     public void visit(Ast.Stm.CvaIfStatement s)
     {
         this.visit(s.condition);
-        if (!this.type.toString().equals(new Ast.Type.Boolean().toString()))
+        if (!this.type.toString().equals(new Ast.Type.CvaBoolean().toString()))
             error(s.condition.lineNum,
                     "the condition's type should be a boolean.");
 
@@ -357,63 +357,63 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     public void visit(Ast.Stm.CvaWhileStatement s)
     {
         this.visit(s.condition);
-        if (!this.type.toString().equals(new Ast.Type.Boolean().toString()))
+        if (!this.type.toString().equals(new Ast.Type.CvaBoolean().toString()))
             error(s.condition.lineNum, "the condition's type should be a boolean.");
 
         this.visit(s.body);
     }
 
     @Override
-    public void visit(Ast.Method.MethodSingle m)
+    public void visit(Ast.Method.CvaMethod m)
     {
         this.methodVarTable = new MethodVariableTable();
         this.methodVarTable.put(m.formals, m.locals);
         this.curMthLocals = new HashSet<>();
-        m.locals.forEach(local -> this.curMthLocals.add(((Ast.Dec.DecSingle) local).id));
+        m.locals.forEach(local -> this.curMthLocals.add(((Ast.Decl.CvaDeclaration) local).literal));
         m.stms.forEach(this::visit);
         this.visit(m.retExp);
         // if (!this.type.toString().equals(m.retType.toString()))
         if (!isMatch(m.retType, this.type))
             error(m.retExp.lineNum,
                     "the return expression's type is not match the method \"" +
-                            m.id + "\" declared.");
+                            m.literal + "\" declared.");
 
     }
 
     @Override
-    public void visit(Ast.Class.ClassSingle c)
+    public void visit(Ast.Clas.CvaClass c)
     {
-        this.currentClass = c.id;
+        this.currentClass = c.literal;
         c.methods.forEach(this::visit);
     }
 
     @Override
-    public void visit(Ast.MainClass.MainClassSingle c)
+    public void visit(Ast.MainClass.CvaEntry c)
     {
         this.currentClass = c.id;
         this.visit(c.stm);
     }
 
     @Override
-    public void visit(Ast.Program.ProgramSingle p)
+    public void visit(Ast.Program.CvaProgram p)
     {
         // put main class to class table
-        this.classTable.putClassBinding(((Ast.MainClass.MainClassSingle) p.mainClass).id,
+        this.classTable.putClassBinding(((Ast.MainClass.CvaEntry) p.mainClass).id,
                 new ClassBinding(null));
 
-        for (Ast.Class.T c : p.classes)
+        for (Ast.Clas.T c : p.classes)
         {
-            Ast.Class.ClassSingle cla = ((Ast.Class.ClassSingle) c);
-            this.classTable.putClassBinding(cla.id, new ClassBinding(cla.base));
+            Ast.Clas.CvaClass cla = ((Ast.Clas.CvaClass) c);
+            this.classTable.putClassBinding(cla.literal, new ClassBinding(cla.parent));
 
-            cla.fields.forEach(field -> this.classTable.putFieldToClass(cla.id,
-                    ((Ast.Dec.DecSingle) field).id,
-                    ((Ast.Dec.DecSingle) field).type));
+            cla.fields.forEach(field -> this.classTable.putFieldToClass(cla.literal,
+                    ((Ast.Decl.CvaDeclaration) field).literal,
+                    ((Ast.Decl.CvaDeclaration) field).type));
 
-            cla.methods.forEach(method -> this.classTable.putMethodToClass(cla.id,
-                    ((Ast.Method.MethodSingle) method).id,
-                    new MethodType(((Ast.Method.MethodSingle) method).retType,
-                            ((Ast.Method.MethodSingle) method).formals)));
+            cla.methods.forEach(method -> this.classTable.putMethodToClass(cla.literal,
+                    ((Ast.Method.CvaMethod) method).literal,
+                    new MethodType(((Ast.Method.CvaMethod) method).retType,
+                            ((Ast.Method.CvaMethod) method).formals)));
         }
 
         this.visit(p.mainClass);

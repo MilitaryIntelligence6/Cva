@@ -7,7 +7,7 @@ import cn.misection.cvac.ast.Ast;
  */
 public class ConstantFolder implements cn.misection.cvac.ast.Visitor, Optimizable
 {
-    private Ast.Exp.T lastExp;
+    private Ast.Expr.T lastExp;
     private boolean isOptimizing;
 
     private boolean isConstant()
@@ -15,61 +15,61 @@ public class ConstantFolder implements cn.misection.cvac.ast.Visitor, Optimizabl
         return lastExp != null && this.isConstant(this.lastExp);
     }
 
-    private boolean isConstant(Ast.Exp.T exp)
+    private boolean isConstant(Ast.Expr.T exp)
     {
-        return exp instanceof Ast.Exp.CvaNumberInt
-                || exp instanceof Ast.Exp.CvaTrueExpr
-                || exp instanceof Ast.Exp.False;
+        return exp instanceof Ast.Expr.CvaNumberInt
+                || exp instanceof Ast.Expr.CvaTrueExpr
+                || exp instanceof Ast.Expr.CvaFalseExpr;
     }
 
     @Override
-    public void visit(Ast.Type.Boolean t) {}
+    public void visit(Ast.Type.CvaBoolean t) {}
 
     @Override
-    public void visit(Ast.Type.ClassType t) {}
+    public void visit(Ast.Type.CvaClass t) {}
 
     @Override
     public void visit(Ast.Type.Int t) {}
 
     @Override
-    public void visit(Ast.Dec.DecSingle d) {}
+    public void visit(Ast.Decl.CvaDeclaration d) {}
 
     @Override
-    public void visit(Ast.Exp.Add e)
+    public void visit(Ast.Expr.CvaAddExpr e)
     {
         this.visit(e.left);
         if (isConstant())
         {
-            Ast.Exp.CvaNumberInt temLeft = (Ast.Exp.CvaNumberInt) this.lastExp;
+            Ast.Expr.CvaNumberInt temLeft = (Ast.Expr.CvaNumberInt) this.lastExp;
             this.visit(e.right);
             if (isConstant())
             {
                 this.isOptimizing = true;
-                this.lastExp = new Ast.Exp.CvaNumberInt(
-                        temLeft.value + ((Ast.Exp.CvaNumberInt) this.lastExp).value,
+                this.lastExp = new Ast.Expr.CvaNumberInt(
+                        temLeft.value + ((Ast.Expr.CvaNumberInt) this.lastExp).value,
                         this.lastExp.lineNum);
-            } else this.lastExp = new Ast.Exp.Add(temLeft, this.lastExp, this.lastExp.lineNum);
+            } else this.lastExp = new Ast.Expr.CvaAddExpr(temLeft, this.lastExp, this.lastExp.lineNum);
         } else this.lastExp = e;
     }
 
     @Override
-    public void visit(Ast.Exp.And e)
+    public void visit(Ast.Expr.CvaAndAndExpr e)
     {
         this.visit(e.left);
-        Ast.Exp.T temLeft = this.lastExp;
+        Ast.Expr.T temLeft = this.lastExp;
         this.visit(e.right);
-        Ast.Exp.T temRight = this.lastExp;
+        Ast.Expr.T temRight = this.lastExp;
 
         this.isOptimizing = true;
-        if (temLeft instanceof Ast.Exp.False
-                || temRight instanceof Ast.Exp.False)
-            this.lastExp = new Ast.Exp.False(e.lineNum);
-        else if (temLeft instanceof Ast.Exp.CvaTrueExpr
-                && temRight instanceof Ast.Exp.CvaTrueExpr)
+        if (temLeft instanceof Ast.Expr.CvaFalseExpr
+                || temRight instanceof Ast.Expr.CvaFalseExpr)
+            this.lastExp = new Ast.Expr.CvaFalseExpr(e.lineNum);
+        else if (temLeft instanceof Ast.Expr.CvaTrueExpr
+                && temRight instanceof Ast.Expr.CvaTrueExpr)
             this.lastExp = temLeft;
-        else if (temLeft instanceof Ast.Exp.CvaTrueExpr)
+        else if (temLeft instanceof Ast.Expr.CvaTrueExpr)
             this.lastExp = temRight;
-        else if (temRight instanceof Ast.Exp.CvaTrueExpr)
+        else if (temRight instanceof Ast.Expr.CvaTrueExpr)
             this.lastExp = temLeft;
         else
         {
@@ -79,9 +79,9 @@ public class ConstantFolder implements cn.misection.cvac.ast.Visitor, Optimizabl
     }
 
     @Override
-    public void visit(Ast.Exp.Function e)
+    public void visit(Ast.Expr.CvaCallExpr e)
     {
-        java.util.LinkedList<Ast.Exp.T> _args = new java.util.LinkedList<>();
+        java.util.LinkedList<Ast.Expr.T> _args = new java.util.LinkedList<>();
         e.args.forEach(arg ->
         {
             this.visit(arg);
@@ -92,108 +92,108 @@ public class ConstantFolder implements cn.misection.cvac.ast.Visitor, Optimizabl
     }
 
     @Override
-    public void visit(Ast.Exp.False e)
+    public void visit(Ast.Expr.CvaFalseExpr e)
     {
         this.lastExp = e;
     }
 
     @Override
-    public void visit(Ast.Exp.Identifier e)
+    public void visit(Ast.Expr.CvaIdentifier e)
     {
         this.lastExp = e;
     }
 
     @Override
-    public void visit(Ast.Exp.LT e)
+    public void visit(Ast.Expr.CvaLTExpr e)
     {
         this.visit(e.left);
         if (isConstant())
         {
-            Ast.Exp.CvaNumberInt temLeft = (Ast.Exp.CvaNumberInt) this.lastExp;
+            Ast.Expr.CvaNumberInt temLeft = (Ast.Expr.CvaNumberInt) this.lastExp;
             this.visit(e.right);
             if (isConstant())
             {
                 this.isOptimizing = true;
-                this.lastExp = temLeft.value < ((Ast.Exp.CvaNumberInt) this.lastExp).value
-                        ? new Ast.Exp.CvaTrueExpr(this.lastExp.lineNum)
-                        : new Ast.Exp.False(this.lastExp.lineNum);
+                this.lastExp = temLeft.value < ((Ast.Expr.CvaNumberInt) this.lastExp).value
+                        ? new Ast.Expr.CvaTrueExpr(this.lastExp.lineNum)
+                        : new Ast.Expr.CvaFalseExpr(this.lastExp.lineNum);
             }
-            else this.lastExp = new Ast.Exp.LT(temLeft, this.lastExp, this.lastExp.lineNum);
+            else this.lastExp = new Ast.Expr.CvaLTExpr(temLeft, this.lastExp, this.lastExp.lineNum);
         } else this.lastExp = e;
     }
 
     @Override
-    public void visit(Ast.Exp.NewObject e)
+    public void visit(Ast.Expr.CvaNewExpr e)
     {
         this.lastExp = e;
     }
 
     @Override
-    public void visit(Ast.Exp.CvaNegateExpr e)
+    public void visit(Ast.Expr.CvaNegateExpr e)
     {
         this.visit(e.expr);
         if (isConstant())
         {
             this.isOptimizing = true;
-            this.lastExp = this.lastExp instanceof Ast.Exp.CvaTrueExpr
-                    ? new Ast.Exp.False(this.lastExp.lineNum)
-                    : new Ast.Exp.CvaTrueExpr(this.lastExp.lineNum);
+            this.lastExp = this.lastExp instanceof Ast.Expr.CvaTrueExpr
+                    ? new Ast.Expr.CvaFalseExpr(this.lastExp.lineNum)
+                    : new Ast.Expr.CvaTrueExpr(this.lastExp.lineNum);
         }
         else this.lastExp = e;
     }
 
     @Override
-    public void visit(Ast.Exp.CvaNumberInt e)
+    public void visit(Ast.Expr.CvaNumberInt e)
     {
         this.lastExp = e;
     }
 
     @Override
-    public void visit(Ast.Exp.CvaSubExpr e)
+    public void visit(Ast.Expr.CvaSubExpr e)
     {
         this.visit(e.left);
         if (isConstant())
         {
-            Ast.Exp.CvaNumberInt temLeft = (Ast.Exp.CvaNumberInt) this.lastExp;
+            Ast.Expr.CvaNumberInt temLeft = (Ast.Expr.CvaNumberInt) this.lastExp;
             this.visit(e.right);
             if (isConstant())
             {
                 this.isOptimizing = true;
-                this.lastExp = new Ast.Exp.CvaNumberInt(
-                        temLeft.value - ((Ast.Exp.CvaNumberInt) this.lastExp).value,
+                this.lastExp = new Ast.Expr.CvaNumberInt(
+                        temLeft.value - ((Ast.Expr.CvaNumberInt) this.lastExp).value,
                         this.lastExp.lineNum);
             }
-            else this.lastExp = new Ast.Exp.CvaSubExpr(temLeft, this.lastExp, this.lastExp.lineNum);
+            else this.lastExp = new Ast.Expr.CvaSubExpr(temLeft, this.lastExp, this.lastExp.lineNum);
         } else this.lastExp = e;
     }
 
     @Override
-    public void visit(Ast.Exp.CvaThisExpr e)
+    public void visit(Ast.Expr.CvaThisExpr e)
     {
         this.lastExp = e;
     }
 
     @Override
-    public void visit(Ast.Exp.CvaMuliExpr e)
+    public void visit(Ast.Expr.CvaMuliExpr e)
     {
         this.visit(e.left);
         if (isConstant())
         {
-            Ast.Exp.CvaNumberInt temLeft = (Ast.Exp.CvaNumberInt) this.lastExp;
+            Ast.Expr.CvaNumberInt temLeft = (Ast.Expr.CvaNumberInt) this.lastExp;
             this.visit(e.right);
             if (isConstant())
             {
                 this.isOptimizing = true;
-                this.lastExp = new Ast.Exp.CvaNumberInt(
-                        temLeft.value * ((Ast.Exp.CvaNumberInt) this.lastExp).value,
+                this.lastExp = new Ast.Expr.CvaNumberInt(
+                        temLeft.value * ((Ast.Expr.CvaNumberInt) this.lastExp).value,
                         this.lastExp.lineNum);
             }
-            else this.lastExp = new Ast.Exp.CvaMuliExpr(temLeft, this.lastExp, this.lastExp.lineNum);
+            else this.lastExp = new Ast.Expr.CvaMuliExpr(temLeft, this.lastExp, this.lastExp.lineNum);
         } else this.lastExp = e;
     }
 
     @Override
-    public void visit(Ast.Exp.CvaTrueExpr e)
+    public void visit(Ast.Expr.CvaTrueExpr e)
     {
         this.lastExp = e;
     }
@@ -236,7 +236,7 @@ public class ConstantFolder implements cn.misection.cvac.ast.Visitor, Optimizabl
     }
 
     @Override
-    public void visit(Ast.Method.MethodSingle m)
+    public void visit(Ast.Method.CvaMethod m)
     {
         m.stms.forEach(this::visit);
         this.visit(m.retExp);
@@ -244,19 +244,19 @@ public class ConstantFolder implements cn.misection.cvac.ast.Visitor, Optimizabl
     }
 
     @Override
-    public void visit(Ast.Class.ClassSingle c)
+    public void visit(Ast.Clas.CvaClass c)
     {
         c.methods.forEach(this::visit);
     }
 
     @Override
-    public void visit(Ast.MainClass.MainClassSingle c)
+    public void visit(Ast.MainClass.CvaEntry c)
     {
         this.visit(c.stm);
     }
 
     @Override
-    public void visit(Ast.Program.ProgramSingle p)
+    public void visit(Ast.Program.CvaProgram p)
     {
         this.isOptimizing = false;
         this.visit(p.mainClass);

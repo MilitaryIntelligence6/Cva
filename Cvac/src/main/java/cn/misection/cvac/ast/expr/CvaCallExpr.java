@@ -12,7 +12,7 @@ import java.util.Queue;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:56:00
  */
-public class CvaFunctionExpr extends AbstractExpression
+public class CvaCallExpr extends AbstractExpression
 {
     private String id;
 
@@ -33,7 +33,7 @@ public class CvaFunctionExpr extends AbstractExpression
      */
     private List<AbstractType> argTypeList;
 
-    public CvaFunctionExpr(int lineNum, String id, AbstractExpression expr, List<AbstractExpression> args, List<AbstractType> argTypeList)
+    public CvaCallExpr(int lineNum, String id, AbstractExpression expr, List<AbstractExpression> args, List<AbstractType> argTypeList)
     {
         super(lineNum);
         this.id = id;

@@ -13,55 +13,55 @@ public class UnReachableDel implements cn.misection.cvac.ast.Visitor, Optimizabl
     private boolean isOptimizing;
 
     @Override
-    public void visit(Ast.Type.Boolean t) {}
+    public void visit(Ast.Type.CvaBoolean t) {}
 
     @Override
-    public void visit(Ast.Type.ClassType t) {}
+    public void visit(Ast.Type.CvaClass t) {}
 
     @Override
     public void visit(Ast.Type.Int t) {}
 
     @Override
-    public void visit(Ast.Dec.DecSingle d) {}
+    public void visit(Ast.Decl.CvaDeclaration d) {}
 
     @Override
-    public void visit(Ast.Exp.Add e) {}
+    public void visit(Ast.Expr.CvaAddExpr e) {}
 
     @Override
-    public void visit(Ast.Exp.And e) {}
+    public void visit(Ast.Expr.CvaAndAndExpr e) {}
 
     @Override
-    public void visit(Ast.Exp.Function e) {}
+    public void visit(Ast.Expr.CvaCallExpr e) {}
 
     @Override
-    public void visit(Ast.Exp.False e) {}
+    public void visit(Ast.Expr.CvaFalseExpr e) {}
 
     @Override
-    public void visit(Ast.Exp.Identifier e) {}
+    public void visit(Ast.Expr.CvaIdentifier e) {}
 
     @Override
-    public void visit(Ast.Exp.LT e) {}
+    public void visit(Ast.Expr.CvaLTExpr e) {}
 
     @Override
-    public void visit(Ast.Exp.NewObject e) {}
+    public void visit(Ast.Expr.CvaNewExpr e) {}
 
     @Override
-    public void visit(Ast.Exp.CvaNegateExpr e) {}
+    public void visit(Ast.Expr.CvaNegateExpr e) {}
 
     @Override
-    public void visit(Ast.Exp.CvaNumberInt e) {}
+    public void visit(Ast.Expr.CvaNumberInt e) {}
 
     @Override
-    public void visit(Ast.Exp.CvaSubExpr e) {}
+    public void visit(Ast.Expr.CvaSubExpr e) {}
 
     @Override
-    public void visit(Ast.Exp.CvaThisExpr e) {}
+    public void visit(Ast.Expr.CvaThisExpr e) {}
 
     @Override
-    public void visit(Ast.Exp.CvaMuliExpr e) {}
+    public void visit(Ast.Expr.CvaMuliExpr e) {}
 
     @Override
-    public void visit(Ast.Exp.CvaTrueExpr e) {}
+    public void visit(Ast.Expr.CvaTrueExpr e) {}
 
     @Override
     public void visit(Ast.Stm.CvaAssign s)
@@ -88,12 +88,12 @@ public class UnReachableDel implements cn.misection.cvac.ast.Visitor, Optimizabl
     @Override
     public void visit(Ast.Stm.CvaIfStatement s)
     {
-        if (s.condition instanceof Ast.Exp.CvaTrueExpr)
+        if (s.condition instanceof Ast.Expr.CvaTrueExpr)
         {
             this.isOptimizing = true;
             this.curStm = s.thenStm;
             this.visit(this.curStm);
-        } else if (s.condition instanceof Ast.Exp.False)
+        } else if (s.condition instanceof Ast.Expr.CvaFalseExpr)
         {
             this.isOptimizing = true;
             this.curStm = s.elseStm;
@@ -110,12 +110,12 @@ public class UnReachableDel implements cn.misection.cvac.ast.Visitor, Optimizabl
     @Override
     public void visit(Ast.Stm.CvaWhileStatement s)
     {
-        if (s.condition instanceof Ast.Exp.False)
+        if (s.condition instanceof Ast.Expr.CvaFalseExpr)
         {
             this.isOptimizing = true;
             this.curStm = null;
         }
-        else if (s.condition instanceof Ast.Exp.CvaTrueExpr)
+        else if (s.condition instanceof Ast.Expr.CvaTrueExpr)
         {
             System.out.println("Warning: at line " + s.lineNum
                     + " : " + "unend-loop!");
@@ -125,7 +125,7 @@ public class UnReachableDel implements cn.misection.cvac.ast.Visitor, Optimizabl
     }
 
     @Override
-    public void visit(Ast.Method.MethodSingle m)
+    public void visit(Ast.Method.CvaMethod m)
     {
         LinkedList<Ast.Stm.T> _stms = new LinkedList<>();
         m.stms.forEach(stm ->
@@ -140,20 +140,20 @@ public class UnReachableDel implements cn.misection.cvac.ast.Visitor, Optimizabl
     }
 
     @Override
-    public void visit(Ast.Class.ClassSingle c)
+    public void visit(Ast.Clas.CvaClass c)
     {
         c.methods.forEach(this::visit);
     }
 
     @Override
-    public void visit(Ast.MainClass.MainClassSingle c)
+    public void visit(Ast.MainClass.CvaEntry c)
     {
         this.visit(c.stm);
         c.stm = this.curStm;
     }
 
     @Override
-    public void visit(Ast.Program.ProgramSingle p)
+    public void visit(Ast.Program.CvaProgram p)
     {
         this.isOptimizing = false;
         this.visit(p.mainClass);

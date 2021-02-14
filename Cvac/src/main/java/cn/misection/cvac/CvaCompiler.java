@@ -92,7 +92,7 @@ public class CvaCompiler
         doMkDIrs();
 
         // 现在是从il读到文件中而不是先创建il, il步骤在前, 需要设定一个全局;
-        String ilPath = String.format("%s.il", translator.prog.mainClass.id);
+        String ilPath = String.format("%s.il", translator.prog.mainClass.getLiteral());
 //        String ilPath = String.format("%s/%s.il", DEBUG_IL_DIR, translator.prog.mainClass.id);
 //        mkFile(ilPath);
         // ascii instructions to binary file
@@ -100,7 +100,7 @@ public class CvaCompiler
 
         for (cn.misection.cvac.codegen.ast.Ast.Class.ClassSingle cla : translator.prog.classes)
         {
-            String filePath = String.format("%s.il", cla.id);
+            String filePath = String.format("%s.il", cla.getLiteral());
 //            String filePath = String.format("%s/%s.il", DEBUG_IL_DIR, cla.id);
 //            mkFile(filePath);
             jasmin.Main.main(new String[] {filePath});

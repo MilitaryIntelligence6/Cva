@@ -17,28 +17,28 @@ public class MethodVariableTable
         this.table = new Hashtable<>();
     }
 
-    public void put(LinkedList<Ast.Dec.T> formals, LinkedList<Ast.Dec.T> locals)
+    public void put(LinkedList<Ast.Decl.T> formals, LinkedList<Ast.Decl.T> locals)
     {
-        for (Ast.Dec.T dec : formals)
+        for (Ast.Decl.T dec : formals)
         {
-            Ast.Dec.DecSingle decc = ((Ast.Dec.DecSingle) dec);
-            if (this.table.get(decc.id) != null)
+            Ast.Decl.CvaDeclaration decc = ((Ast.Decl.CvaDeclaration) dec);
+            if (this.table.get(decc.literal) != null)
             {
-                System.out.println("duplicated parameter: " + decc.id +
+                System.out.println("duplicated parameter: " + decc.literal +
                         " at line " + decc.lineNum);
                 System.exit(1);
-            } else this.table.put(decc.id, decc.type);
+            } else this.table.put(decc.literal, decc.type);
         }
 
-        for (Ast.Dec.T dec : locals)
+        for (Ast.Decl.T dec : locals)
         {
-            Ast.Dec.DecSingle decc = ((Ast.Dec.DecSingle) dec);
-            if (this.table.get(decc.id) != null)
+            Ast.Decl.CvaDeclaration decc = ((Ast.Decl.CvaDeclaration) dec);
+            if (this.table.get(decc.literal) != null)
             {
-                System.out.println("duplicated variable: " + decc.id +
+                System.out.println("duplicated variable: " + decc.literal +
                         " at line " + decc.lineNum);
                 System.exit(1);
-            } else this.table.put(decc.id, decc.type);
+            } else this.table.put(decc.literal, decc.type);
         }
     }
 

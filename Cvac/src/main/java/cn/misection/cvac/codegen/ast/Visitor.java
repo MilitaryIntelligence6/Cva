@@ -55,8 +55,8 @@ public interface Visitor
             this.visit(((Ast.Stm.Ldc) s));
         else if (s instanceof Ast.Stm.New)
             this.visit(((Ast.Stm.New) s));
-        else if (s instanceof Ast.Stm.Print)
-            this.visit(((Ast.Stm.Print) s));
+        else if (s instanceof Ast.Stm.Write)
+            this.visit(((Ast.Stm.Write) s));
         else // if (s instanceof Ast.Stm.Putfield)
             this.visit(((Ast.Stm.Putfield) s));
     }
@@ -93,7 +93,7 @@ public interface Visitor
 
     void visit(Ast.Stm.New s);
 
-    void visit(Ast.Stm.Print s);
+    void visit(Ast.Stm.Write s);
 
     void visit(Ast.Stm.Putfield s);
 

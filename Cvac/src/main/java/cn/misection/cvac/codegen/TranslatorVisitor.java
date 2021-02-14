@@ -42,15 +42,15 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
         this.stms.add(s);
     }
 
-    public void visit(Ast.Type.Boolean t)
+    public void visit(Ast.Type.CvaBoolean t)
     {
         this.type = new Type.Int();
     }
 
     @Override
-    public void visit(Ast.Type.ClassType t)
+    public void visit(Ast.Type.CvaClass t)
     {
-        this.type = new Type.ClassType(t.id);
+        this.type = new Type.ClassType(t.literal);
     }
 
     @Override
@@ -60,16 +60,16 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Dec.DecSingle d)
+    public void visit(Ast.Decl.CvaDeclaration d)
     {
         this.visit(d.type);
-        this.dec = new Dec.DecSingle(this.type, d.id);
+        this.dec = new Dec.DecSingle(this.type, d.literal);
         if (this.indexTable != null) // if it is field
-        this.indexTable.put(d.id, index++);
+        this.indexTable.put(d.literal, index++);
     }
 
     @Override
-    public void visit(Ast.Exp.Add e)
+    public void visit(Ast.Expr.CvaAddExpr e)
     {
         this.visit(e.left);
         this.visit(e.right);
@@ -77,7 +77,7 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.And e)
+    public void visit(Ast.Expr.CvaAndAndExpr e)
     {
         Label f = new Label();
         Label r = new Label();
@@ -95,7 +95,7 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.Function e)
+    public void visit(Ast.Expr.CvaCallExpr e)
     {
         this.visit(e.exp);
         e.args.forEach(this::visit);
@@ -111,33 +111,33 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.False e)
+    public void visit(Ast.Expr.CvaFalseExpr e)
     {
         emit(new Stm.Ldc(0));
     }
 
     @Override
-    public void visit(Ast.Exp.Identifier e)
+    public void visit(Ast.Expr.CvaIdentifier e)
     {
         if (e.isField)
         {
             emit(new Stm.Aload(0));
             Ast.Type.T type = e.type;
             emit(new Stm.Getfield(this.classId + '/' + e.literal,
-                    type instanceof Ast.Type.ClassType ?
-                            ("L" + ((Ast.Type.ClassType) type).id + ";")
+                    type instanceof Ast.Type.CvaClass ?
+                            ("L" + ((Ast.Type.CvaClass) type).literal + ";")
                             : "I"));
         } else
         {
             int index = this.indexTable.get(e.literal);
-            if (e.type instanceof Ast.Type.ClassType)
+            if (e.type instanceof Ast.Type.CvaClass)
                 emit(new Stm.Aload(index));
             else emit(new Stm.Iload(index));
         }
     }
 
     @Override
-    public void visit(Ast.Exp.LT e)
+    public void visit(Ast.Expr.CvaLTExpr e)
     {
         Label t = new Label();
         Label r = new Label();
@@ -152,13 +152,13 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.NewObject e)
+    public void visit(Ast.Expr.CvaNewExpr e)
     {
         emit(new Stm.New(e.literal));
     }
 
     @Override
-    public void visit(Ast.Exp.CvaNegateExpr e)
+    public void visit(Ast.Expr.CvaNegateExpr e)
     {
         Label f = new Label();
         Label r = new Label();
@@ -173,13 +173,13 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.CvaNumberInt e)
+    public void visit(Ast.Expr.CvaNumberInt e)
     {
         emit(new Stm.Ldc(e.value));
     }
 
     @Override
-    public void visit(Ast.Exp.CvaSubExpr e)
+    public void visit(Ast.Expr.CvaSubExpr e)
     {
         this.visit(e.left);
         this.visit(e.right);
@@ -187,13 +187,13 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.CvaThisExpr e)
+    public void visit(Ast.Expr.CvaThisExpr e)
     {
         emit(new Stm.Aload(0));
     }
 
     @Override
-    public void visit(Ast.Exp.CvaMuliExpr e)
+    public void visit(Ast.Expr.CvaMuliExpr e)
     {
         this.visit(e.left);
         this.visit(e.right);
@@ -201,7 +201,7 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.CvaTrueExpr e)
+    public void visit(Ast.Expr.CvaTrueExpr e)
     {
         emit(new Stm.Ldc(1));
     }
@@ -213,7 +213,7 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
         {
             int index = this.indexTable.get(s.id);
             this.visit(s.exp);
-            if (s.type instanceof Ast.Type.ClassType)
+            if (s.type instanceof Ast.Type.CvaClass)
                 emit(new Stm.Astore(index));
             else emit(new Stm.Istore(index));
         } catch (NullPointerException e)
@@ -221,8 +221,8 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
             emit(new Stm.Aload(0));
             this.visit(s.exp);
             emit(new Stm.Putfield(this.classId + '/' + s.id,
-                    s.type instanceof Ast.Type.ClassType ?
-                            ("L" + ((Ast.Type.ClassType) s.type).id + ";")
+                    s.type instanceof Ast.Type.CvaClass ?
+                            ("L" + ((Ast.Type.CvaClass) s.type).literal + ";")
                             : "I"));
         }
     }
@@ -252,7 +252,7 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     public void visit(Ast.Stm.CvaWriteOperation s)
     {
         this.visit(s.exp);
-        emit(new Stm.Print());
+        emit(new Stm.Write());
     }
 
     @Override
@@ -270,7 +270,7 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Method.MethodSingle m)
+    public void visit(Ast.Method.CvaMethod m)
     {
         this.index = 1;
         this.indexTable = new Hashtable<>();
@@ -295,18 +295,18 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
 
         this.visit(m.retExp);
 
-        if (m.retType instanceof Ast.Type.ClassType)
+        if (m.retType instanceof Ast.Type.CvaClass)
             emit(new Stm.Areturn());
         else emit(new Stm.Ireturn());
 
-        this.method = new Method.MethodSingle(_retType, m.id, this.classId,
+        this.method = new Method.MethodSingle(_retType, m.literal, this.classId,
                 _formals, _locals, this.stms, 0, this.index);
     }
 
     @Override
-    public void visit(Ast.Class.ClassSingle c)
+    public void visit(Ast.Clas.CvaClass c)
     {
-        this.classId = c.id;
+        this.classId = c.literal;
         LinkedList<Dec.DecSingle> _fields = new LinkedList<>();
         c.fields.forEach(f ->
         {
@@ -320,11 +320,11 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
             _methods.add(this.method);
         });
         this.classs = new cn.misection.cvac.codegen.ast.Ast.Class.ClassSingle(
-                c.id, c.base, _fields, _methods);
+                c.literal, c.parent, _fields, _methods);
     }
 
     @Override
-    public void visit(Ast.MainClass.MainClassSingle c)
+    public void visit(Ast.MainClass.CvaEntry c)
     {
         this.visit(c.stm);
         this.mainClass = new MainClass.MainClassSingle(c.id, this.stms);
@@ -332,7 +332,7 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Program.ProgramSingle p)
+    public void visit(Ast.Program.CvaProgram p)
     {
         this.visit(p.mainClass);
         LinkedList<cn.misection.cvac.codegen.ast.Ast.Class.ClassSingle> _class =

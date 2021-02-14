@@ -9,49 +9,49 @@ import java.util.Hashtable;
  */
 public class UnUsedVarDel implements cn.misection.cvac.ast.Visitor, Optimizable
 {
-    private Hashtable<String, Ast.Dec.DecSingle> unUsedLocals;
-    private Hashtable<String, Ast.Dec.DecSingle> unUsedArgs;
+    private Hashtable<String, Ast.Decl.CvaDeclaration> unUsedLocals;
+    private Hashtable<String, Ast.Decl.CvaDeclaration> unUsedArgs;
     private boolean isOptimizing;
     public boolean givesWarning;
 
     @Override
-    public void visit(Ast.Type.Boolean t) {}
+    public void visit(Ast.Type.CvaBoolean t) {}
 
     @Override
-    public void visit(Ast.Type.ClassType t) {}
+    public void visit(Ast.Type.CvaClass t) {}
 
     @Override
     public void visit(Ast.Type.Int t) {}
 
     @Override
-    public void visit(Ast.Dec.DecSingle d) {}
+    public void visit(Ast.Decl.CvaDeclaration d) {}
 
     @Override
-    public void visit(Ast.Exp.Add e)
+    public void visit(Ast.Expr.CvaAddExpr e)
     {
         this.visit(e.left);
         this.visit(e.right);
     }
 
     @Override
-    public void visit(Ast.Exp.And e)
+    public void visit(Ast.Expr.CvaAndAndExpr e)
     {
         this.visit(e.left);
         this.visit(e.right);
     }
 
     @Override
-    public void visit(Ast.Exp.Function e)
+    public void visit(Ast.Expr.CvaCallExpr e)
     {
         this.visit(e.exp);
         e.args.forEach(this::visit);
     }
 
     @Override
-    public void visit(Ast.Exp.False e) {}
+    public void visit(Ast.Expr.CvaFalseExpr e) {}
 
     @Override
-    public void visit(Ast.Exp.Identifier e)
+    public void visit(Ast.Expr.CvaIdentifier e)
     {
         if (this.unUsedLocals.containsKey(e.literal))
             this.unUsedLocals.remove(e.literal);
@@ -60,48 +60,48 @@ public class UnUsedVarDel implements cn.misection.cvac.ast.Visitor, Optimizable
     }
 
     @Override
-    public void visit(Ast.Exp.LT e)
+    public void visit(Ast.Expr.CvaLTExpr e)
     {
         this.visit(e.left);
         this.visit(e.right);
     }
 
     @Override
-    public void visit(Ast.Exp.NewObject e) {}
+    public void visit(Ast.Expr.CvaNewExpr e) {}
 
     @Override
-    public void visit(Ast.Exp.CvaNegateExpr e)
+    public void visit(Ast.Expr.CvaNegateExpr e)
     {
         this.visit(e.expr);
     }
 
     @Override
-    public void visit(Ast.Exp.CvaNumberInt e) {}
+    public void visit(Ast.Expr.CvaNumberInt e) {}
 
     @Override
-    public void visit(Ast.Exp.CvaSubExpr e)
+    public void visit(Ast.Expr.CvaSubExpr e)
     {
         this.visit(e.left);
         this.visit(e.right);
     }
 
     @Override
-    public void visit(Ast.Exp.CvaThisExpr e) {}
+    public void visit(Ast.Expr.CvaThisExpr e) {}
 
     @Override
-    public void visit(Ast.Exp.CvaMuliExpr e)
+    public void visit(Ast.Expr.CvaMuliExpr e)
     {
         this.visit(e.left);
         this.visit(e.right);
     }
 
     @Override
-    public void visit(Ast.Exp.CvaTrueExpr e) {}
+    public void visit(Ast.Expr.CvaTrueExpr e) {}
 
     @Override
     public void visit(Ast.Stm.CvaAssign s)
     {
-        this.visit(new Ast.Exp.Identifier(s.id, s.lineNum));
+        this.visit(new Ast.Expr.CvaIdentifier(s.id, s.lineNum));
         this.visit(s.exp);
     }
 
@@ -133,20 +133,20 @@ public class UnUsedVarDel implements cn.misection.cvac.ast.Visitor, Optimizable
     }
 
     @Override
-    public void visit(Ast.Method.MethodSingle m)
+    public void visit(Ast.Method.CvaMethod m)
     {
         this.unUsedLocals = new Hashtable<>();
         m.locals.forEach(local ->
         {
-            Ast.Dec.DecSingle l = (Ast.Dec.DecSingle) local;
-            this.unUsedLocals.put(l.id, l);
+            Ast.Decl.CvaDeclaration l = (Ast.Decl.CvaDeclaration) local;
+            this.unUsedLocals.put(l.literal, l);
         });
 
         this.unUsedArgs = new Hashtable<>();
         m.formals.forEach(formal ->
         {
-            Ast.Dec.DecSingle f = (Ast.Dec.DecSingle) formal;
-            this.unUsedArgs.put(f.id, f);
+            Ast.Decl.CvaDeclaration f = (Ast.Decl.CvaDeclaration) formal;
+            this.unUsedArgs.put(f.literal, f);
         });
 
         m.stms.forEach(this::visit);
@@ -159,7 +159,7 @@ public class UnUsedVarDel implements cn.misection.cvac.ast.Visitor, Optimizable
             if (givesWarning)
                 System.out.println("Warning: at line " + uao.lineNum + " : "
                         + "the argument \"" + uak + "\" of method \""
-                        + m.id + "\" you have never used.");
+                        + m.literal + "\" you have never used.");
         });
 
         this.unUsedLocals.forEach((ulk, ulo) ->
@@ -173,16 +173,16 @@ public class UnUsedVarDel implements cn.misection.cvac.ast.Visitor, Optimizable
     }
 
     @Override
-    public void visit(Ast.Class.ClassSingle c)
+    public void visit(Ast.Clas.CvaClass c)
     {
         c.methods.forEach(this::visit);
     }
 
     @Override
-    public void visit(Ast.MainClass.MainClassSingle c) {}
+    public void visit(Ast.MainClass.CvaEntry c) {}
 
     @Override
-    public void visit(Ast.Program.ProgramSingle p)
+    public void visit(Ast.Program.CvaProgram p)
     {
         this.isOptimizing = false;
         p.classes.forEach(this::visit);

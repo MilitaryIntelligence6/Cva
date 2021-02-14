@@ -10,98 +10,140 @@ public interface Visitor
     // Type
     default void visit(Type.T t)
     {
-        if (t instanceof Type.Boolean)
-            this.visit(((Type.Boolean) t));
-        else if (t instanceof Type.ClassType)
-            this.visit(((Type.ClassType) t));
+        if (t instanceof Type.CvaBoolean)
+        {
+            this.visit(((Type.CvaBoolean) t));
+        }
+        else if (t instanceof Type.CvaClass)
+        {
+            this.visit(((Type.CvaClass) t));
+        }
         else if (t instanceof Type.Int)
+        {
             this.visit(((Type.Int) t));
+        }
     }
 
-    void visit(Type.Boolean t);
+    void visit(Type.CvaBoolean t);
 
-    void visit(Type.ClassType t);
+    void visit(Type.CvaClass t);
 
     void visit(Type.Int t);
 
     // Dec
-    default void visit(Dec.T d)
+    default void visit(Decl.T d)
     {
-        this.visit(((Dec.DecSingle) d));
+        this.visit(((Decl.CvaDeclaration) d));
     }
 
-    void visit(Dec.DecSingle d);
+    void visit(Decl.CvaDeclaration d);
 
     // Exp
-    default void visit(Exp.T e)
+    default void visit(Expr.T e)
     {
-        if (e instanceof Exp.Add)
-            this.visit(((Exp.Add) e));
-        else if (e instanceof Exp.And)
-            this.visit(((Exp.And) e));
-        else if (e instanceof Exp.Function)
-            this.visit(((Exp.Function) e));
-        else if (e instanceof Exp.False)
-            this.visit(((Exp.False) e));
-        else if (e instanceof Exp.Identifier)
-            this.visit(((Exp.Identifier) e));
-        else if (e instanceof Exp.LT)
-            this.visit(((Exp.LT) e));
-        else if (e instanceof Exp.NewObject)
-            this.visit(((Exp.NewObject) e));
-        else if (e instanceof Exp.CvaNegateExpr)
-            this.visit(((Exp.CvaNegateExpr) e));
-        else if (e instanceof Exp.CvaNumberInt)
-            this.visit(((Exp.CvaNumberInt) e));
-        else if (e instanceof Exp.CvaSubExpr)
-            this.visit(((Exp.CvaSubExpr) e));
-        else if (e instanceof Exp.CvaThisExpr)
-            this.visit(((Exp.CvaThisExpr) e));
-        else if (e instanceof Exp.CvaMuliExpr)
-            this.visit(((Exp.CvaMuliExpr) e));
+        if (e instanceof Expr.CvaAddExpr)
+        {
+            this.visit(((Expr.CvaAddExpr) e));
+        }
+        else if (e instanceof Expr.CvaAndAndExpr)
+        {
+            this.visit(((Expr.CvaAndAndExpr) e));
+        }
+        else if (e instanceof Expr.CvaCallExpr)
+        {
+            this.visit(((Expr.CvaCallExpr) e));
+        }
+        else if (e instanceof Expr.CvaFalseExpr)
+        {
+            this.visit(((Expr.CvaFalseExpr) e));
+        }
+        else if (e instanceof Expr.CvaIdentifier)
+        {
+            this.visit(((Expr.CvaIdentifier) e));
+        }
+        else if (e instanceof Expr.CvaLTExpr)
+        {
+            this.visit(((Expr.CvaLTExpr) e));
+        }
+        else if (e instanceof Expr.CvaNewExpr)
+        {
+            this.visit(((Expr.CvaNewExpr) e));
+        }
+        else if (e instanceof Expr.CvaNegateExpr)
+        {
+            this.visit(((Expr.CvaNegateExpr) e));
+        }
+        else if (e instanceof Expr.CvaNumberInt)
+        {
+            this.visit(((Expr.CvaNumberInt) e));
+        }
+        else if (e instanceof Expr.CvaSubExpr)
+        {
+            this.visit(((Expr.CvaSubExpr) e));
+        }
+        else if (e instanceof Expr.CvaThisExpr)
+        {
+            this.visit(((Expr.CvaThisExpr) e));
+        }
+        else if (e instanceof Expr.CvaMuliExpr)
+        {
+            this.visit(((Expr.CvaMuliExpr) e));
+        }
         else // if (e instanceof Ast.Exp.True)
-            this.visit(((Exp.CvaTrueExpr) e));
+        {
+            this.visit(((Expr.CvaTrueExpr) e));
+        }
     }
 
-    void visit(Exp.Add e);
+    void visit(Expr.CvaAddExpr e);
 
-    void visit(Exp.And e);
+    void visit(Expr.CvaAndAndExpr e);
 
-    void visit(Exp.Function e);
+    void visit(Expr.CvaCallExpr e);
 
-    void visit(Exp.False e);
+    void visit(Expr.CvaFalseExpr e);
 
-    void visit(Exp.Identifier e);
+    void visit(Expr.CvaIdentifier e);
 
-    void visit(Exp.LT e);
+    void visit(Expr.CvaLTExpr e);
 
-    void visit(Exp.NewObject e);
+    void visit(Expr.CvaNewExpr e);
 
-    void visit(Exp.CvaNegateExpr e);
+    void visit(Expr.CvaNegateExpr e);
 
-    void visit(Exp.CvaNumberInt e);
+    void visit(Expr.CvaNumberInt e);
 
-    void visit(Exp.CvaSubExpr e);
+    void visit(Expr.CvaSubExpr e);
 
-    void visit(Exp.CvaThisExpr e);
+    void visit(Expr.CvaThisExpr e);
 
-    void visit(Exp.CvaMuliExpr e);
+    void visit(Expr.CvaMuliExpr e);
 
-    void visit(Exp.CvaTrueExpr e);
+    void visit(Expr.CvaTrueExpr e);
 
     // Stm
     default void visit(Stm.T s)
     {
         if (s instanceof Stm.CvaAssign)
+        {
             this.visit(((Stm.CvaAssign) s));
+        }
         else if (s instanceof Stm.CvaBlock)
+        {
             this.visit(((Stm.CvaBlock) s));
+        }
         else if (s instanceof Stm.CvaIfStatement)
+        {
             this.visit(((Stm.CvaIfStatement) s));
+        }
         else if (s instanceof Stm.CvaWriteOperation)
+        {
             this.visit(((Stm.CvaWriteOperation) s));
+        }
         else // if (s instanceof Ast.Stm.While)
+        {
             this.visit(((Stm.CvaWhileStatement) s));
+        }
     }
 
     void visit(Stm.CvaAssign s);
@@ -117,31 +159,31 @@ public interface Visitor
     // Method
     default void visit(Method.T m)
     {
-        this.visit(((Method.MethodSingle) m));
+        this.visit(((Method.CvaMethod) m));
     }
 
-    void visit(Method.MethodSingle m);
+    void visit(Method.CvaMethod m);
 
     // Class
-    default void visit(Ast.Class.T c)
+    default void visit(Clas.T c)
     {
-        this.visit(((Ast.Class.ClassSingle) c));
+        this.visit(((Clas.CvaClass) c));
     }
 
-    void visit(Ast.Class.ClassSingle c);
+    void visit(Clas.CvaClass c);
 
     default void visit(MainClass.T c)
     {
-        this.visit(((MainClass.MainClassSingle) c));
+        this.visit(((MainClass.CvaEntry) c));
     }
 
-    void visit(MainClass.MainClassSingle c);
+    void visit(MainClass.CvaEntry c);
 
     // Program
     default void visit(Program.T p)
     {
-        this.visit(((Program.ProgramSingle) p));
+        this.visit(((Program.CvaProgram) p));
     }
 
-    void visit(Program.ProgramSingle p);
+    void visit(Program.CvaProgram p);
 }

@@ -1,6 +1,7 @@
 package cn.misection.cvac.codegen;
 
 import cn.misection.cvac.codegen.ast.Ast;
+import cn.misection.cvac.codegen.ast.Visitor;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -8,13 +9,13 @@ import java.io.IOException;
 /**
  * Created by Mengxu on 2017/1/18.
  */
-public class ByteCodeGenerator implements cn.misection.cvac.codegen.ast.Visitor
+public class ByteCodeGenerator implements Visitor
 {
     private java.io.BufferedWriter writer;
 
     private void writeln(String s)
     {
-        write(s + "\n");
+        write(String.format("%s\n", s));
     }
 
     private void write(String s)
@@ -31,13 +32,13 @@ public class ByteCodeGenerator implements cn.misection.cvac.codegen.ast.Visitor
 
     private void iwriteln(String s)
     {
-        write("    " + s + "\n");
+        write(String.format("    %s\n", s));
     }
 
     @Override
     public void visit(Ast.Type.ClassType t)
     {
-        this.write("L" + t.id + ";");
+        this.write(String.format("L%s;", t.getLiteral()));
     }
 
     @Override
@@ -55,7 +56,7 @@ public class ByteCodeGenerator implements cn.misection.cvac.codegen.ast.Visitor
     @Override
     public void visit(Ast.Stm.Aload s)
     {
-        this.iwriteln("aload " + s.index);
+        this.iwriteln(String.format("aload %d", s.getIndex()));
     }
 
     @Override
@@ -67,19 +68,19 @@ public class ByteCodeGenerator implements cn.misection.cvac.codegen.ast.Visitor
     @Override
     public void visit(Ast.Stm.Astore s)
     {
-        this.iwriteln("astore " + s.index);
+        this.iwriteln(String.format("astore %d", s.getIndex()));
     }
 
     @Override
     public void visit(Ast.Stm.Goto s)
     {
-        this.iwriteln("goto " + s.l.toString());
+        this.iwriteln(String.format("goto %s", s.getLabel().toString()));
     }
 
     @Override
     public void visit(Ast.Stm.Getfield s)
     {
-        this.iwriteln("getfield " + s.fieldSpec + " " + s.descriptor);
+        this.iwriteln(String.format("getfield %s %s", s.getFieldSpec(), s.descriptor));
     }
 
     @Override
@@ -91,13 +92,13 @@ public class ByteCodeGenerator implements cn.misection.cvac.codegen.ast.Visitor
     @Override
     public void visit(Ast.Stm.Ificmplt s)
     {
-        this.iwriteln("if_icmplt " + s.l.toString());
+        this.iwriteln(String.format("if_icmplt %s", s.getLabel().toString()));
     }
 
     @Override
     public void visit(Ast.Stm.Iload s)
     {
-        this.iwriteln("iload " + s.index);
+        this.iwriteln(String.format("iload %d", s.getIndex()));
     }
 
     @Override
@@ -109,7 +110,7 @@ public class ByteCodeGenerator implements cn.misection.cvac.codegen.ast.Visitor
     @Override
     public void visit(Ast.Stm.Invokevirtual s)
     {
-        this.write("    invokevirtual " + s.c + "/" + s.f + "(");
+        this.write(String.format("    invokevirtual %s/%s(", s.c, s.f));
         s.at.forEach(this::visit);
         this.write(")");
         this.visit(s.rt);
@@ -125,7 +126,7 @@ public class ByteCodeGenerator implements cn.misection.cvac.codegen.ast.Visitor
     @Override
     public void visit(Ast.Stm.Istore s)
     {
-        this.iwriteln("istore " + s.index);
+        this.iwriteln(String.format("istore %d", s.getIndex()));
     }
 
     @Override
@@ -137,49 +138,50 @@ public class ByteCodeGenerator implements cn.misection.cvac.codegen.ast.Visitor
     @Override
     public void visit(Ast.Stm.LabelJ s)
     {
-        this.writeln(s.label.toString() + ":");
+        this.writeln(String.format("%s:", s.getLabel().toString()));
     }
 
     @Override
     public void visit(Ast.Stm.Ldc s)
     {
-        this.iwriteln("ldc " + s.i);
+        this.iwriteln(String.format("ldc %d", s.getInteg()));
     }
 
     @Override
     public void visit(Ast.Stm.New s)
     {
-        this.iwriteln("new " + s.c);
+        this.iwriteln(String.format("new %s", s.getClas()));
         this.iwriteln("dup");
-        this.iwriteln("invokespecial " + s.c + "/<init>()V");
+        this.iwriteln(String.format("invokespecial %s/<init>()V", s.getClas()));
     }
 
     @Override
-    public void visit(Ast.Stm.Print s)
+    public void visit(Ast.Stm.Write s)
     {
         this.iwriteln("getstatic java/lang/System/out Ljava/io/PrintStream;");
         this.iwriteln("swap");
+        // TODO 封装常量字段, 同时把println变成print;
         this.iwriteln("invokevirtual java/io/PrintStream/println(I)V");
     }
 
     @Override
     public void visit(Ast.Stm.Putfield s)
     {
-        this.iwriteln("putfield " + s.fieldSpec + " " + s.descriptor);
+        this.iwriteln(String.format("putfield %s %s", s.getFieldSpec(), s.descriptor));
     }
 
     @Override
     public void visit(Ast.Method.MethodSingle m)
     {
-        this.write(".method public " + m.id + "(");
-        m.formals.forEach(f -> this.visit(f.type));
+        this.write(String.format(".method public %s(", m.getId()));
+        m.getFormals().forEach(f -> this.visit(f.getType()));
         this.write(")");
-        this.visit(m.retType);
+        this.visit(m.getRetType());
         this.writeln("");
         this.writeln(".limit stack 4096");
-        this.writeln(".limit locals " + (m.index + 1));
+        this.writeln(String.format(".limit locals %d", m.getIndex() + 1));
 
-        m.stms.forEach(this::visit);
+        m.getStms().forEach(this::visit);
         this.writeln(".end method");
     }
 
@@ -188,8 +190,9 @@ public class ByteCodeGenerator implements cn.misection.cvac.codegen.ast.Visitor
     {
         try
         {
+            // FIXME 路劲;
             this.writer = new java.io.BufferedWriter(new java.io.OutputStreamWriter(
-                    new java.io.FileOutputStream(c.id + ".il")));
+                    new java.io.FileOutputStream(String.format("%s.il", c.getLiteral()))));
         } catch (FileNotFoundException e)
         {
             e.printStackTrace();
@@ -199,26 +202,26 @@ public class ByteCodeGenerator implements cn.misection.cvac.codegen.ast.Visitor
         this.writeln("; This file is automatically generated by the compiler");
         this.writeln("; Do Not Modify!\n");
 
-        this.writeln(".class public " + c.id);
-        if (c.base == null)
+        this.writeln(String.format(".class public %s", c.getLiteral()));
+        if (c.getBase() == null)
             this.writeln(".super java/lang/Object");
-        else this.writeln(".super " + c.base);
+        else this.writeln(String.format(".super %s", c.getBase()));
 
-        c.fields.forEach(f ->
+        c.getFields().forEach(f ->
         {
-            this.write(".field public " + f.id + " ");
-            this.visit(f.type);
+            this.write(String.format(".field public %s ", f.getLiteral()));
+            this.visit(f.getType());
             this.writeln("");
         });
 
         this.writeln(".method public <init>()V");
         this.iwriteln("aload 0");
-        if (c.base == null)
+        if (c.getBase() == null)
             this.iwriteln("invokespecial java/lang/Object/<init>()V");
-        else this.iwriteln("invokespecial " + c.base + "/<init>()V");
+        else this.iwriteln(String.format("invokespecial %s/<init>()V", c.getBase()));
         this.iwriteln("return");
         this.writeln(".end method");
-        c.methods.forEach(this::visit);
+        c.getMethods().forEach(this::visit);
 
         try
         {
@@ -236,7 +239,7 @@ public class ByteCodeGenerator implements cn.misection.cvac.codegen.ast.Visitor
         try
         {
             this.writer = new java.io.BufferedWriter(new java.io.OutputStreamWriter(
-                    new java.io.FileOutputStream(c.id + ".il")));
+                    new java.io.FileOutputStream(String.format("%s.il", c.getLiteral()))));
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -246,12 +249,12 @@ public class ByteCodeGenerator implements cn.misection.cvac.codegen.ast.Visitor
         this.writeln("; This file is automatically generated by the compiler");
         this.writeln("; Do Not Modify!\n");
 
-        this.writeln(".class public " + c.id);
+        this.writeln(String.format(".class public %s", c.getLiteral()));
         this.writeln(".super java/lang/Object");
         this.writeln(".method public static main([Ljava/lang/String;)V");
         this.writeln(".limit stack 4096");
         this.writeln(".limit locals 2");
-        c.stms.forEach(this::visit);
+        c.getStms().forEach(this::visit);
         this.iwriteln("return");
         this.writeln(".end method");
 

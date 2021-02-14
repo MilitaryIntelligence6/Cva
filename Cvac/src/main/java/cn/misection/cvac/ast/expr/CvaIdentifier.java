@@ -9,7 +9,7 @@ import cn.misection.cvac.ast.type.AbstractType;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:19:00
  */
-public class Identifier extends AbstractExpression
+public class CvaIdentifier extends AbstractExpression
 {
     private String literal;
 
@@ -20,13 +20,13 @@ public class Identifier extends AbstractExpression
      */
     private boolean fieldFlag;
 
-    public Identifier(int lineNum, String literal)
+    public CvaIdentifier(int lineNum, String literal)
     {
         super(lineNum);
         this.literal = literal;
     }
 
-    public Identifier(int lineNum, String literal, AbstractType type, boolean fieldFlag)
+    public CvaIdentifier(int lineNum, String literal, AbstractType type, boolean fieldFlag)
     {
         super(lineNum);
         this.literal = literal;

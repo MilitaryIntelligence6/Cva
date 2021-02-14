@@ -9,28 +9,28 @@ import java.util.HashMap;
  */
 public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor, Optimizable
 {
-    private HashMap<String, Ast.Exp.T> conorcopy; // constant or copy in current method
-    private Ast.Exp.T curExp;
+    private HashMap<String, Ast.Expr.T> conorcopy; // constant or copy in current method
+    private Ast.Expr.T curExp;
     private boolean canChange;
     private boolean inWhile; // if in while body, the left of assign should be delete from conorcopy
     private boolean isOptimizing;
 
-    private boolean isEqual(Ast.Exp.T fir, Ast.Exp.T sec)
+    private boolean isEqual(Ast.Expr.T fir, Ast.Expr.T sec)
     {
-        return (fir instanceof Ast.Exp.CvaNumberInt
-                && sec instanceof Ast.Exp.CvaNumberInt
-                && ((Ast.Exp.CvaNumberInt) fir).value == ((Ast.Exp.CvaNumberInt) sec).value)
-                || (fir instanceof Ast.Exp.Identifier
-                && sec instanceof Ast.Exp.Identifier
-                && ((Ast.Exp.Identifier) fir).literal.equals(((Ast.Exp.Identifier) sec).literal));
+        return (fir instanceof Ast.Expr.CvaNumberInt
+                && sec instanceof Ast.Expr.CvaNumberInt
+                && ((Ast.Expr.CvaNumberInt) fir).value == ((Ast.Expr.CvaNumberInt) sec).value)
+                || (fir instanceof Ast.Expr.CvaIdentifier
+                && sec instanceof Ast.Expr.CvaIdentifier
+                && ((Ast.Expr.CvaIdentifier) fir).literal.equals(((Ast.Expr.CvaIdentifier) sec).literal));
 
     }
 
-    private HashMap<String, Ast.Exp.T> intersection(
-            HashMap<String, Ast.Exp.T> first,
-            HashMap<String, Ast.Exp.T> second)
+    private HashMap<String, Ast.Expr.T> intersection(
+            HashMap<String, Ast.Expr.T> first,
+            HashMap<String, Ast.Expr.T> second)
     {
-        HashMap<String, Ast.Exp.T> result = new HashMap<>();
+        HashMap<String, Ast.Expr.T> result = new HashMap<>();
         first.forEach((k, v) ->
         {
             if (second.containsKey(k) && isEqual(v, second.get(k)))
@@ -40,19 +40,19 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Type.Boolean t) {}
+    public void visit(Ast.Type.CvaBoolean t) {}
 
     @Override
-    public void visit(Ast.Type.ClassType t) {}
+    public void visit(Ast.Type.CvaClass t) {}
 
     @Override
     public void visit(Ast.Type.Int t) {}
 
     @Override
-    public void visit(Ast.Dec.DecSingle d) {}
+    public void visit(Ast.Decl.CvaDeclaration d) {}
 
     @Override
-    public void visit(Ast.Exp.Add e)
+    public void visit(Ast.Expr.CvaAddExpr e)
     {
         this.visit(e.left);
         if (this.canChange)
@@ -64,7 +64,7 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.And e)
+    public void visit(Ast.Expr.CvaAndAndExpr e)
     {
         this.visit(e.left);
         if (this.canChange)
@@ -76,7 +76,7 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.Function e)
+    public void visit(Ast.Expr.CvaCallExpr e)
     {
         this.visit(e.exp);
         for (int i = 0; i < e.args.size(); i++)
@@ -89,14 +89,14 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.False e)
+    public void visit(Ast.Expr.CvaFalseExpr e)
     {
         this.curExp = e;
         this.canChange = true;
     }
 
     @Override
-    public void visit(Ast.Exp.Identifier e)
+    public void visit(Ast.Expr.CvaIdentifier e)
     {
         if (this.conorcopy.containsKey(e.literal))
         {
@@ -107,7 +107,7 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.LT e)
+    public void visit(Ast.Expr.CvaLTExpr e)
     {
         this.visit(e.left);
         if (this.canChange)
@@ -119,13 +119,13 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.NewObject e)
+    public void visit(Ast.Expr.CvaNewExpr e)
     {
         this.canChange = false;
     }
 
     @Override
-    public void visit(Ast.Exp.CvaNegateExpr e)
+    public void visit(Ast.Expr.CvaNegateExpr e)
     {
         this.visit(e.expr);
         if (this.canChange)
@@ -134,14 +134,14 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.CvaNumberInt e)
+    public void visit(Ast.Expr.CvaNumberInt e)
     {
         this.curExp = e;
         this.canChange = true;
     }
 
     @Override
-    public void visit(Ast.Exp.CvaSubExpr e)
+    public void visit(Ast.Expr.CvaSubExpr e)
     {
         this.visit(e.left);
         if (this.canChange)
@@ -153,13 +153,13 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.CvaThisExpr e)
+    public void visit(Ast.Expr.CvaThisExpr e)
     {
         this.canChange = false;
     }
 
     @Override
-    public void visit(Ast.Exp.CvaMuliExpr e)
+    public void visit(Ast.Expr.CvaMuliExpr e)
     {
         this.visit(e.left);
         if (this.canChange)
@@ -171,7 +171,7 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.CvaTrueExpr e)
+    public void visit(Ast.Expr.CvaTrueExpr e)
     {
         this.curExp = e;
         this.canChange = true;
@@ -187,7 +187,7 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
             return;
         }
 
-        if (s.exp instanceof Ast.Exp.Identifier || s.exp instanceof Ast.Exp.CvaNumberInt)
+        if (s.exp instanceof Ast.Expr.CvaIdentifier || s.exp instanceof Ast.Expr.CvaNumberInt)
             this.conorcopy.put(s.id, s.exp);
         else
         {
@@ -211,11 +211,11 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
         if (this.canChange)
             s.condition = this.curExp;
 
-        HashMap<String, Ast.Exp.T> _original = new HashMap<>();
+        HashMap<String, Ast.Expr.T> _original = new HashMap<>();
         this.conorcopy.forEach(_original::put);
         this.visit(s.thenStm);
 
-        HashMap<String, Ast.Exp.T> _left = this.conorcopy;
+        HashMap<String, Ast.Expr.T> _left = this.conorcopy;
         this.conorcopy = _original;
         this.visit(s.elseStm);
 
@@ -247,7 +247,7 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Method.MethodSingle m)
+    public void visit(Ast.Method.CvaMethod m)
     {
         this.conorcopy = new HashMap<>();
         m.stms.forEach(this::visit);
@@ -257,7 +257,7 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Class.ClassSingle c)
+    public void visit(Ast.Clas.CvaClass c)
     {
         c.methods.forEach(m ->
         {
@@ -267,10 +267,10 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.MainClass.MainClassSingle c) {}
+    public void visit(Ast.MainClass.CvaEntry c) {}
 
     @Override
-    public void visit(Ast.Program.ProgramSingle p)
+    public void visit(Ast.Program.CvaProgram p)
     {
         this.isOptimizing = false;
         p.classes.forEach(this::visit);
