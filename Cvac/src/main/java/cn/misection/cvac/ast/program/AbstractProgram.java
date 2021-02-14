@@ -3,7 +3,7 @@ package cn.misection.cvac.ast.program;
 import cn.misection.cvac.ast.clas.AbstractClass;
 import cn.misection.cvac.ast.entry.AbstractEntry;
 
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -17,12 +17,12 @@ public abstract class AbstractProgram implements IProgram
 {
     protected AbstractEntry entry;
 
-    protected Queue<AbstractClass> classQueue;
+    protected List<AbstractClass> classList;
 
-    protected AbstractProgram(AbstractEntry entry, Queue<AbstractClass> classQueue)
+    protected AbstractProgram(AbstractEntry entry, List<AbstractClass> classList)
     {
         this.entry = entry;
-        this.classQueue = classQueue;
+        this.classList = classList;
     }
 
     public AbstractEntry getEntry()
@@ -30,8 +30,8 @@ public abstract class AbstractProgram implements IProgram
         return entry;
     }
 
-    public Queue<AbstractClass> getClassQueue()
+    public List<AbstractClass> getClassList()
     {
-        return classQueue;
+        return classList;
     }
 }

@@ -3,17 +3,17 @@ package cn.misection.cvac.ast.expr;
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
- * @ClassName CvaAndAndExpr
+ * @ClassName CvaSubExpr
  * @Description TODO
- * @CreateTime 2021年02月14日 18:51:00
+ * @CreateTime 2021年02月14日 19:30:00
  */
-public class CvaAndAndExpr extends AbstractExpression
+public class CvaSubExpr extends AbstractExpression
 {
     private AbstractExpression left;
 
     private AbstractExpression right;
 
-    public CvaAndAndExpr(int lineNum, AbstractExpression left, AbstractExpression right)
+    public CvaSubExpr(int lineNum, AbstractExpression left, AbstractExpression right)
     {
         super(lineNum);
         this.left = left;

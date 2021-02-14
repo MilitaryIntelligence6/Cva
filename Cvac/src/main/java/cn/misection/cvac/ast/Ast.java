@@ -105,19 +105,22 @@ public class Ast
             }
         }
 
-        public static class Call extends T
+        /**
+         * 原来call;
+         */
+        public static class Function extends T
         {
             public T exp;
-            public String id;
+            public String literal;
             public java.util.LinkedList<T> args;
             public String type; // type of first field "exp"
             public java.util.LinkedList<Type.T> at; // arg's type
             public Type.T rt;
 
-            public Call(T exp, String id, java.util.LinkedList<T> args, int lineNum)
+            public Function(T exp, String literal, java.util.LinkedList<T> args, int lineNum)
             {
                 this.exp = exp;
-                this.id = id;
+                this.literal = literal;
                 this.args = args;
                 this.type = null;
                 this.lineNum = lineNum;
@@ -132,21 +135,21 @@ public class Ast
             }
         }
 
-        public static class Id extends T
+        public static class Identifier extends T
         {
-            public String id; // name of the id
+            public String literal; // name of the id
             public Type.T type; // type of the id
             public boolean isField; // whether or not a field
 
-            public Id(String id, int lineNum)
+            public Identifier(String literal, int lineNum)
             {
-                this.id = id;
+                this.literal = literal;
                 this.lineNum = lineNum;
             }
 
-            public Id(String id, Type.T type, boolean isField, int lineNum)
+            public Identifier(String literal, Type.T type, boolean isField, int lineNum)
             {
-                this.id = id;
+                this.literal = literal;
                 this.type = type;
                 this.isField = isField;
                 this.lineNum = lineNum;
@@ -167,42 +170,42 @@ public class Ast
 
         public static class NewObject extends T
         {
-            public String id;
+            public String literal;
 
-            public NewObject(String id, int lineNum)
+            public NewObject(String literal, int lineNum)
             {
-                this.id = id;
+                this.literal = literal;
                 this.lineNum = lineNum;
             }
         }
 
-        public static class Not extends T
+        public static class CvaNegateExpr extends T
         {
-            public T exp;
+            public T expr;
 
-            public Not(T exp, int lineNum)
+            public CvaNegateExpr(T expr, int lineNum)
             {
-                this.exp = exp;
+                this.expr = expr;
                 this.lineNum = lineNum;
             }
         }
 
-        public static class Num extends T
+        public static class CvaNumberInt extends T
         {
-            public int num;
+            public int value;
 
-            public Num(int num, int lineNum)
+            public CvaNumberInt(int value, int lineNum)
             {
-                this.num = num;
+                this.value = value;
                 this.lineNum = lineNum;
             }
         }
 
-        public static class Sub extends T
+        public static class CvaSubExpr extends T
         {
             public T left, right;
 
-            public Sub(T left, T right, int lineNum)
+            public CvaSubExpr(T left, T right, int lineNum)
             {
                 this.left = left;
                 this.right = right;
@@ -210,19 +213,19 @@ public class Ast
             }
         }
 
-        public static class This extends T
+        public static class CvaThisExpr extends T
         {
-            public This(int lineNum)
+            public CvaThisExpr(int lineNum)
             {
                 this.lineNum = lineNum;
             }
         }
 
-        public static class Times extends T
+        public static class CvaMuliExpr extends T
         {
             public T left, right;
 
-            public Times(T left, T right, int lineNum)
+            public CvaMuliExpr(T left, T right, int lineNum)
             {
                 this.left = left;
                 this.right = right;
@@ -230,9 +233,9 @@ public class Ast
             }
         }
 
-        public static class True extends T
+        public static class CvaTrueExpr extends T
         {
-            public True(int lineNum)
+            public CvaTrueExpr(int lineNum)
             {
                 this.lineNum = lineNum;
             }
@@ -247,13 +250,13 @@ public class Ast
             public int lineNum;
         }
 
-        public static class Assign extends T
+        public static class CvaAssign extends T
         {
             public String id;
             public Exp.T exp;
             public Type.T type; // type of the id
 
-            public Assign(String id, Exp.T exp, int lineNum)
+            public CvaAssign(String id, Exp.T exp, int lineNum)
             {
                 this.id = id;
                 this.exp = exp;
@@ -262,23 +265,23 @@ public class Ast
             }
         }
 
-        public static class Block extends T
+        public static class CvaBlock extends T
         {
             public java.util.LinkedList<T> stms;
 
-            public Block(java.util.LinkedList<T> stms, int lineNum)
+            public CvaBlock(java.util.LinkedList<T> stms, int lineNum)
             {
                 this.stms = stms;
                 this.lineNum = lineNum;
             }
         }
 
-        public static class If extends T
+        public static class CvaIfStatement extends T
         {
             public Exp.T condition;
             public T thenStm, elseStm;
 
-            public If(Exp.T condition, T thenStm, T elseStm, int lineNum)
+            public CvaIfStatement(Exp.T condition, T thenStm, T elseStm, int lineNum)
             {
                 this.condition = condition;
                 this.thenStm = thenStm;
@@ -287,23 +290,23 @@ public class Ast
             }
         }
 
-        public static class Write extends T
+        public static class CvaWriteOperation extends T
         {
             public Exp.T exp;
 
-            public Write(Exp.T exp, int lineNum)
+            public CvaWriteOperation(Exp.T exp, int lineNum)
             {
                 this.exp = exp;
                 this.lineNum = lineNum;
             }
         }
 
-        public static class While extends T
+        public static class CvaWhileStatement extends T
         {
             public Exp.T condition;
             public T body;
 
-            public While(Exp.T condition, T body, int lineNum)
+            public CvaWhileStatement(Exp.T condition, T body, int lineNum)
             {
                 this.condition = condition;
                 this.body = body;

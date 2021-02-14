@@ -44,7 +44,7 @@ public class DeadCodeDel implements cn.misection.cvac.ast.Visitor, Optimizable
     }
 
     @Override
-    public void visit(Ast.Exp.Call e)
+    public void visit(Ast.Exp.Function e)
     {
         this.visit(e.exp);
         e.args.forEach(this::visit);
@@ -55,10 +55,10 @@ public class DeadCodeDel implements cn.misection.cvac.ast.Visitor, Optimizable
     public void visit(Ast.Exp.False e) {}
 
     @Override
-    public void visit(Ast.Exp.Id e)
+    public void visit(Ast.Exp.Identifier e)
     {
-        if (this.localVars.contains(e.id))
-            this.localLiveness.add(e.id);
+        if (this.localVars.contains(e.literal))
+            this.localLiveness.add(e.literal);
     }
 
     @Override
@@ -72,36 +72,36 @@ public class DeadCodeDel implements cn.misection.cvac.ast.Visitor, Optimizable
     public void visit(Ast.Exp.NewObject e) {}
 
     @Override
-    public void visit(Ast.Exp.Not e)
+    public void visit(Ast.Exp.CvaNegateExpr e)
     {
-        this.visit(e.exp);
+        this.visit(e.expr);
     }
 
     @Override
-    public void visit(Ast.Exp.Num e) {}
+    public void visit(Ast.Exp.CvaNumberInt e) {}
 
     @Override
-    public void visit(Ast.Exp.Sub e)
-    {
-        this.visit(e.left);
-        this.visit(e.right);
-    }
-
-    @Override
-    public void visit(Ast.Exp.This e) {}
-
-    @Override
-    public void visit(Ast.Exp.Times e)
+    public void visit(Ast.Exp.CvaSubExpr e)
     {
         this.visit(e.left);
         this.visit(e.right);
     }
 
     @Override
-    public void visit(Ast.Exp.True e) {}
+    public void visit(Ast.Exp.CvaThisExpr e) {}
 
     @Override
-    public void visit(Ast.Stm.Assign s)
+    public void visit(Ast.Exp.CvaMuliExpr e)
+    {
+        this.visit(e.left);
+        this.visit(e.right);
+    }
+
+    @Override
+    public void visit(Ast.Exp.CvaTrueExpr e) {}
+
+    @Override
+    public void visit(Ast.Stm.CvaAssign s)
     {
         if (this.localLiveness.contains(s.id)
                 || this.curFields.contains(s.id))
@@ -119,7 +119,7 @@ public class DeadCodeDel implements cn.misection.cvac.ast.Visitor, Optimizable
     }
 
     @Override
-    public void visit(Ast.Stm.Block s)
+    public void visit(Ast.Stm.CvaBlock s)
     {
         for (int i = s.stms.size() - 1; i >= 0; i--)
         {
@@ -134,7 +134,7 @@ public class DeadCodeDel implements cn.misection.cvac.ast.Visitor, Optimizable
     }
 
     @Override
-    public void visit(Ast.Stm.If s)
+    public void visit(Ast.Stm.CvaIfStatement s)
     {
         HashSet<String> temOriginal = new HashSet<>();
         this.localLiveness.forEach(temOriginal::add);
@@ -160,7 +160,7 @@ public class DeadCodeDel implements cn.misection.cvac.ast.Visitor, Optimizable
     }
 
     @Override
-    public void visit(Ast.Stm.Write s)
+    public void visit(Ast.Stm.CvaWriteOperation s)
     {
         // this.isAssign = false;
         this.visit(s.exp);
@@ -168,7 +168,7 @@ public class DeadCodeDel implements cn.misection.cvac.ast.Visitor, Optimizable
     }
 
     @Override
-    public void visit(Ast.Stm.While s)
+    public void visit(Ast.Stm.CvaWhileStatement s)
     {
         HashSet<String> temOriginal = new HashSet<>();
         this.localLiveness.forEach(temOriginal::add);

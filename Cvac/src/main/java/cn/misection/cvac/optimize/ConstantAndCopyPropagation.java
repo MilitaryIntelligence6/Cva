@@ -17,12 +17,12 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
 
     private boolean isEqual(Ast.Exp.T fir, Ast.Exp.T sec)
     {
-        return (fir instanceof Ast.Exp.Num
-                && sec instanceof Ast.Exp.Num
-                && ((Ast.Exp.Num) fir).num == ((Ast.Exp.Num) sec).num)
-                || (fir instanceof Ast.Exp.Id
-                && sec instanceof Ast.Exp.Id
-                && ((Ast.Exp.Id) fir).id.equals(((Ast.Exp.Id) sec).id));
+        return (fir instanceof Ast.Exp.CvaNumberInt
+                && sec instanceof Ast.Exp.CvaNumberInt
+                && ((Ast.Exp.CvaNumberInt) fir).value == ((Ast.Exp.CvaNumberInt) sec).value)
+                || (fir instanceof Ast.Exp.Identifier
+                && sec instanceof Ast.Exp.Identifier
+                && ((Ast.Exp.Identifier) fir).literal.equals(((Ast.Exp.Identifier) sec).literal));
 
     }
 
@@ -76,7 +76,7 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.Call e)
+    public void visit(Ast.Exp.Function e)
     {
         this.visit(e.exp);
         for (int i = 0; i < e.args.size(); i++)
@@ -96,13 +96,13 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.Id e)
+    public void visit(Ast.Exp.Identifier e)
     {
-        if (this.conorcopy.containsKey(e.id))
+        if (this.conorcopy.containsKey(e.literal))
         {
             this.isOptimizing = true;
             this.canChange = true;
-            this.curExp = this.conorcopy.get(e.id);
+            this.curExp = this.conorcopy.get(e.literal);
         } else this.canChange = false;
     }
 
@@ -125,23 +125,23 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.Not e)
+    public void visit(Ast.Exp.CvaNegateExpr e)
     {
-        this.visit(e.exp);
+        this.visit(e.expr);
         if (this.canChange)
-            e.exp = this.curExp;
+            e.expr = this.curExp;
         this.canChange = false;
     }
 
     @Override
-    public void visit(Ast.Exp.Num e)
+    public void visit(Ast.Exp.CvaNumberInt e)
     {
         this.curExp = e;
         this.canChange = true;
     }
 
     @Override
-    public void visit(Ast.Exp.Sub e)
+    public void visit(Ast.Exp.CvaSubExpr e)
     {
         this.visit(e.left);
         if (this.canChange)
@@ -153,13 +153,13 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.This e)
+    public void visit(Ast.Exp.CvaThisExpr e)
     {
         this.canChange = false;
     }
 
     @Override
-    public void visit(Ast.Exp.Times e)
+    public void visit(Ast.Exp.CvaMuliExpr e)
     {
         this.visit(e.left);
         if (this.canChange)
@@ -171,14 +171,14 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.True e)
+    public void visit(Ast.Exp.CvaTrueExpr e)
     {
         this.curExp = e;
         this.canChange = true;
     }
 
     @Override
-    public void visit(Ast.Stm.Assign s)
+    public void visit(Ast.Stm.CvaAssign s)
     {
         if (this.inWhile)
         {
@@ -187,7 +187,7 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
             return;
         }
 
-        if (s.exp instanceof Ast.Exp.Id || s.exp instanceof Ast.Exp.Num)
+        if (s.exp instanceof Ast.Exp.Identifier || s.exp instanceof Ast.Exp.CvaNumberInt)
             this.conorcopy.put(s.id, s.exp);
         else
         {
@@ -197,13 +197,13 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Stm.Block s)
+    public void visit(Ast.Stm.CvaBlock s)
     {
         s.stms.forEach(this::visit);
     }
 
     @Override
-    public void visit(Ast.Stm.If s)
+    public void visit(Ast.Stm.CvaIfStatement s)
     {
         if (this.inWhile) return;
 
@@ -224,7 +224,7 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
 
 
     @Override
-    public void visit(Ast.Stm.Write s)
+    public void visit(Ast.Stm.CvaWriteOperation s)
     {
         if (this.inWhile) return;
 
@@ -234,7 +234,7 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Stm.While s)
+    public void visit(Ast.Stm.CvaWhileStatement s)
     {
         // TODO: it is wrong when in multi-layer-loop
         // delete the var which be changed

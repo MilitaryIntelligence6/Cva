@@ -104,7 +104,7 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.Call e)
+    public void visit(Ast.Exp.Function e)
     {
         this.visit(e.exp);
         Ast.Type.ClassType expType = null;
@@ -134,7 +134,7 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
             argsty.addLast(this.type);
         });
 
-        MethodType mty = this.classTable.getMethodType(expType.id, e.id);
+        MethodType mty = this.classTable.getMethodType(expType.id, e.literal);
 
         if (mty == null)
         {
@@ -174,23 +174,23 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.Id e)
+    public void visit(Ast.Exp.Identifier e)
     {
-        Ast.Type.T type = this.methodVarTable.get(e.id);
+        Ast.Type.T type = this.methodVarTable.get(e.literal);
         boolean isField = type == null;
         String className = currentClass;
         while (type == null && className != null)
         {
-            type = this.classTable.getFieldType(className, e.id);
+            type = this.classTable.getFieldType(className, e.literal);
             className = this.classTable.getClassBinding(className).base;
         }
 
-        if (this.curMthLocals.contains(e.id))
-            error(e.lineNum, "you should assign \"" + e.id + "\" a value before use it.");
+        if (this.curMthLocals.contains(e.literal))
+            error(e.lineNum, "you should assign \"" + e.literal + "\" a value before use it.");
 
         if (type == null)
         {
-            error(e.lineNum, "you should declare \"" + e.id + "\" before use it.");
+            error(e.lineNum, "you should declare \"" + e.literal + "\" before use it.");
             e.type = new Ast.Type.T()
             {
                 @Override
@@ -228,11 +228,11 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     @Override
     public void visit(Ast.Exp.NewObject e)
     {
-        if (this.classTable.getClassBinding(e.id) != null)
-            this.type = new Ast.Type.ClassType(e.id);
+        if (this.classTable.getClassBinding(e.literal) != null)
+            this.type = new Ast.Type.ClassType(e.literal);
         else
         {
-            error(e.lineNum, "cannot find the declaration of class \"" + e.id + "\".");
+            error(e.lineNum, "cannot find the declaration of class \"" + e.literal + "\".");
             this.type = new Ast.Type.T()
             {
                 @Override
@@ -245,9 +245,9 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.Not e)
+    public void visit(Ast.Exp.CvaNegateExpr e)
     {
-        this.visit(e.exp);
+        this.visit(e.expr);
         if (!this.type.toString().equals(new Ast.Type.Boolean().toString()))
             error(e.lineNum, "the exp cannot calculate to a boolean.");
 
@@ -255,13 +255,13 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.Num e)
+    public void visit(Ast.Exp.CvaNumberInt e)
     {
         this.type = new Ast.Type.Int();
     }
 
     @Override
-    public void visit(Ast.Exp.Sub e)
+    public void visit(Ast.Exp.CvaSubExpr e)
     {
         this.visit(e.left);
         Ast.Type.T lefty = this.type;
@@ -278,13 +278,13 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.This e)
+    public void visit(Ast.Exp.CvaThisExpr e)
     {
         this.type = new Ast.Type.ClassType(currentClass);
     }
 
     @Override
-    public void visit(Ast.Exp.Times e)
+    public void visit(Ast.Exp.CvaMuliExpr e)
     {
         this.visit(e.left);
         Ast.Type.T lefty = this.type;
@@ -300,13 +300,13 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.True e)
+    public void visit(Ast.Exp.CvaTrueExpr e)
     {
         this.type = new Ast.Type.Boolean();
     }
 
     @Override
-    public void visit(Ast.Stm.Assign s)
+    public void visit(Ast.Stm.CvaAssign s)
     {
         this.visit(s.exp);
         s.type = this.type;
@@ -314,8 +314,8 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
         if (this.curMthLocals.contains(s.id))
             this.curMthLocals.remove(s.id);
 
-        Ast.Exp.Id id = new Ast.Exp.Id(s.id, s.lineNum);
-        this.visit(id);
+        Ast.Exp.Identifier identifier = new Ast.Exp.Identifier(s.id, s.lineNum);
+        this.visit(identifier);
         Ast.Type.T idty = this.type;
         //if (!this.type.toString().equals(idty.toString()))
         if (!isMatch(idty, s.type))
@@ -326,13 +326,13 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Stm.Block s)
+    public void visit(Ast.Stm.CvaBlock s)
     {
         s.stms.forEach(this::visit);
     }
 
     @Override
-    public void visit(Ast.Stm.If s)
+    public void visit(Ast.Stm.CvaIfStatement s)
     {
         this.visit(s.condition);
         if (!this.type.toString().equals(new Ast.Type.Boolean().toString()))
@@ -344,7 +344,7 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Stm.Write s)
+    public void visit(Ast.Stm.CvaWriteOperation s)
     {
         this.visit(s.exp);
         if (!this.type.toString().equals(new Ast.Type.Int().toString()))
@@ -354,7 +354,7 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Stm.While s)
+    public void visit(Ast.Stm.CvaWhileStatement s)
     {
         this.visit(s.condition);
         if (!this.type.toString().equals(new Ast.Type.Boolean().toString()))

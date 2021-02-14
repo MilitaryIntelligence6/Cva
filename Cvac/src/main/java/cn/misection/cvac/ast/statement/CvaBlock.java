@@ -1,5 +1,6 @@
 package cn.misection.cvac.ast.statement;
 
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -11,16 +12,16 @@ import java.util.Queue;
  */
 public class CvaBlock extends AbstractStatement
 {
-    private Queue<AbstractStatement> statementQueue;
+    private List<AbstractStatement> statementList;
 
-    public CvaBlock(int lineNum, Queue<AbstractStatement> statementQueue)
+    public CvaBlock(int lineNum, List<AbstractStatement> statementList)
     {
         super(lineNum);
-        this.statementQueue = statementQueue;
+        this.statementList = statementList;
     }
 
-    public Queue<AbstractStatement> getStatementQueue()
+    public List<AbstractStatement> getStatementList()
     {
-        return statementQueue;
+        return statementList;
     }
 }

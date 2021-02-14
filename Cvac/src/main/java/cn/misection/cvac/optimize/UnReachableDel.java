@@ -31,13 +31,13 @@ public class UnReachableDel implements cn.misection.cvac.ast.Visitor, Optimizabl
     public void visit(Ast.Exp.And e) {}
 
     @Override
-    public void visit(Ast.Exp.Call e) {}
+    public void visit(Ast.Exp.Function e) {}
 
     @Override
     public void visit(Ast.Exp.False e) {}
 
     @Override
-    public void visit(Ast.Exp.Id e) {}
+    public void visit(Ast.Exp.Identifier e) {}
 
     @Override
     public void visit(Ast.Exp.LT e) {}
@@ -46,39 +46,39 @@ public class UnReachableDel implements cn.misection.cvac.ast.Visitor, Optimizabl
     public void visit(Ast.Exp.NewObject e) {}
 
     @Override
-    public void visit(Ast.Exp.Not e) {}
+    public void visit(Ast.Exp.CvaNegateExpr e) {}
 
     @Override
-    public void visit(Ast.Exp.Num e) {}
+    public void visit(Ast.Exp.CvaNumberInt e) {}
 
     @Override
-    public void visit(Ast.Exp.Sub e) {}
+    public void visit(Ast.Exp.CvaSubExpr e) {}
 
     @Override
-    public void visit(Ast.Exp.This e) {}
+    public void visit(Ast.Exp.CvaThisExpr e) {}
 
     @Override
-    public void visit(Ast.Exp.Times e) {}
+    public void visit(Ast.Exp.CvaMuliExpr e) {}
 
     @Override
-    public void visit(Ast.Exp.True e) {}
+    public void visit(Ast.Exp.CvaTrueExpr e) {}
 
     @Override
-    public void visit(Ast.Stm.Assign s)
+    public void visit(Ast.Stm.CvaAssign s)
     {
         this.curStm = s;
     }
 
     @Override
-    public void visit(Ast.Stm.Block s)
+    public void visit(Ast.Stm.CvaBlock s)
     {
         LinkedList<Ast.Stm.T> _stms = new LinkedList<>();
         s.stms.forEach(stm ->
         {
             this.visit(stm);
             if (curStm != null)
-                if (curStm instanceof Ast.Stm.Block)
-                    ((Ast.Stm.Block) curStm).stms.forEach(_stms::add);
+                if (curStm instanceof Ast.Stm.CvaBlock)
+                    ((Ast.Stm.CvaBlock) curStm).stms.forEach(_stms::add);
                 else _stms.add(curStm);
         });
         s.stms = _stms;
@@ -86,9 +86,9 @@ public class UnReachableDel implements cn.misection.cvac.ast.Visitor, Optimizabl
     }
 
     @Override
-    public void visit(Ast.Stm.If s)
+    public void visit(Ast.Stm.CvaIfStatement s)
     {
-        if (s.condition instanceof Ast.Exp.True)
+        if (s.condition instanceof Ast.Exp.CvaTrueExpr)
         {
             this.isOptimizing = true;
             this.curStm = s.thenStm;
@@ -102,20 +102,20 @@ public class UnReachableDel implements cn.misection.cvac.ast.Visitor, Optimizabl
     }
 
     @Override
-    public void visit(Ast.Stm.Write s)
+    public void visit(Ast.Stm.CvaWriteOperation s)
     {
         this.curStm = s;
     }
 
     @Override
-    public void visit(Ast.Stm.While s)
+    public void visit(Ast.Stm.CvaWhileStatement s)
     {
         if (s.condition instanceof Ast.Exp.False)
         {
             this.isOptimizing = true;
             this.curStm = null;
         }
-        else if (s.condition instanceof Ast.Exp.True)
+        else if (s.condition instanceof Ast.Exp.CvaTrueExpr)
         {
             System.out.println("Warning: at line " + s.lineNum
                     + " : " + "unend-loop!");
@@ -132,8 +132,8 @@ public class UnReachableDel implements cn.misection.cvac.ast.Visitor, Optimizabl
         {
             this.visit(stm);
             if (this.curStm != null)
-                if (this.curStm instanceof Ast.Stm.Block)
-                    ((Ast.Stm.Block) this.curStm).stms.forEach(_stms::add);
+                if (this.curStm instanceof Ast.Stm.CvaBlock)
+                    ((Ast.Stm.CvaBlock) this.curStm).stms.forEach(_stms::add);
                 else _stms.add(curStm);
         });
         m.stms = _stms;

@@ -95,7 +95,7 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.Call e)
+    public void visit(Ast.Exp.Function e)
     {
         this.visit(e.exp);
         e.args.forEach(this::visit);
@@ -107,7 +107,7 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
             this.visit(a);
             at.add(this.type);
         });
-        emit(new Stm.Invokevirtual(e.id, e.type, at, rt));
+        emit(new Stm.Invokevirtual(e.literal, e.type, at, rt));
     }
 
     @Override
@@ -117,19 +117,19 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.Id e)
+    public void visit(Ast.Exp.Identifier e)
     {
         if (e.isField)
         {
             emit(new Stm.Aload(0));
             Ast.Type.T type = e.type;
-            emit(new Stm.Getfield(this.classId + '/' + e.id,
+            emit(new Stm.Getfield(this.classId + '/' + e.literal,
                     type instanceof Ast.Type.ClassType ?
                             ("L" + ((Ast.Type.ClassType) type).id + ";")
                             : "I"));
         } else
         {
-            int index = this.indexTable.get(e.id);
+            int index = this.indexTable.get(e.literal);
             if (e.type instanceof Ast.Type.ClassType)
                 emit(new Stm.Aload(index));
             else emit(new Stm.Iload(index));
@@ -154,15 +154,15 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     @Override
     public void visit(Ast.Exp.NewObject e)
     {
-        emit(new Stm.New(e.id));
+        emit(new Stm.New(e.literal));
     }
 
     @Override
-    public void visit(Ast.Exp.Not e)
+    public void visit(Ast.Exp.CvaNegateExpr e)
     {
         Label f = new Label();
         Label r = new Label();
-        this.visit(e.exp);
+        this.visit(e.expr);
         emit(new Stm.Ldc(1));
         emit(new Stm.Ificmplt(f));
         emit(new Stm.Ldc(1));
@@ -173,13 +173,13 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.Num e)
+    public void visit(Ast.Exp.CvaNumberInt e)
     {
-        emit(new Stm.Ldc(e.num));
+        emit(new Stm.Ldc(e.value));
     }
 
     @Override
-    public void visit(Ast.Exp.Sub e)
+    public void visit(Ast.Exp.CvaSubExpr e)
     {
         this.visit(e.left);
         this.visit(e.right);
@@ -187,13 +187,13 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.This e)
+    public void visit(Ast.Exp.CvaThisExpr e)
     {
         emit(new Stm.Aload(0));
     }
 
     @Override
-    public void visit(Ast.Exp.Times e)
+    public void visit(Ast.Exp.CvaMuliExpr e)
     {
         this.visit(e.left);
         this.visit(e.right);
@@ -201,13 +201,13 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Exp.True e)
+    public void visit(Ast.Exp.CvaTrueExpr e)
     {
         emit(new Stm.Ldc(1));
     }
 
     @Override
-    public void visit(Ast.Stm.Assign s)
+    public void visit(Ast.Stm.CvaAssign s)
     {
         try
         {
@@ -228,13 +228,13 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Stm.Block s)
+    public void visit(Ast.Stm.CvaBlock s)
     {
         s.stms.forEach(this::visit);
     }
 
     @Override
-    public void visit(Ast.Stm.If s)
+    public void visit(Ast.Stm.CvaIfStatement s)
     {
         Label l = new Label();
         Label r = new Label();
@@ -249,14 +249,14 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(Ast.Stm.Write s)
+    public void visit(Ast.Stm.CvaWriteOperation s)
     {
         this.visit(s.exp);
         emit(new Stm.Print());
     }
 
     @Override
-    public void visit(Ast.Stm.While s)
+    public void visit(Ast.Stm.CvaWhileStatement s)
     {
         Label con = new Label();
         Label end = new Label();

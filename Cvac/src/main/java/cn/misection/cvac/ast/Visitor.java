@@ -39,80 +39,80 @@ public interface Visitor
             this.visit(((Exp.Add) e));
         else if (e instanceof Exp.And)
             this.visit(((Exp.And) e));
-        else if (e instanceof Exp.Call)
-            this.visit(((Exp.Call) e));
+        else if (e instanceof Exp.Function)
+            this.visit(((Exp.Function) e));
         else if (e instanceof Exp.False)
             this.visit(((Exp.False) e));
-        else if (e instanceof Exp.Id)
-            this.visit(((Exp.Id) e));
+        else if (e instanceof Exp.Identifier)
+            this.visit(((Exp.Identifier) e));
         else if (e instanceof Exp.LT)
             this.visit(((Exp.LT) e));
         else if (e instanceof Exp.NewObject)
             this.visit(((Exp.NewObject) e));
-        else if (e instanceof Exp.Not)
-            this.visit(((Exp.Not) e));
-        else if (e instanceof Exp.Num)
-            this.visit(((Exp.Num) e));
-        else if (e instanceof Exp.Sub)
-            this.visit(((Exp.Sub) e));
-        else if (e instanceof Exp.This)
-            this.visit(((Exp.This) e));
-        else if (e instanceof Exp.Times)
-            this.visit(((Exp.Times) e));
+        else if (e instanceof Exp.CvaNegateExpr)
+            this.visit(((Exp.CvaNegateExpr) e));
+        else if (e instanceof Exp.CvaNumberInt)
+            this.visit(((Exp.CvaNumberInt) e));
+        else if (e instanceof Exp.CvaSubExpr)
+            this.visit(((Exp.CvaSubExpr) e));
+        else if (e instanceof Exp.CvaThisExpr)
+            this.visit(((Exp.CvaThisExpr) e));
+        else if (e instanceof Exp.CvaMuliExpr)
+            this.visit(((Exp.CvaMuliExpr) e));
         else // if (e instanceof Ast.Exp.True)
-            this.visit(((Exp.True) e));
+            this.visit(((Exp.CvaTrueExpr) e));
     }
 
     void visit(Exp.Add e);
 
     void visit(Exp.And e);
 
-    void visit(Exp.Call e);
+    void visit(Exp.Function e);
 
     void visit(Exp.False e);
 
-    void visit(Exp.Id e);
+    void visit(Exp.Identifier e);
 
     void visit(Exp.LT e);
 
     void visit(Exp.NewObject e);
 
-    void visit(Exp.Not e);
+    void visit(Exp.CvaNegateExpr e);
 
-    void visit(Exp.Num e);
+    void visit(Exp.CvaNumberInt e);
 
-    void visit(Exp.Sub e);
+    void visit(Exp.CvaSubExpr e);
 
-    void visit(Exp.This e);
+    void visit(Exp.CvaThisExpr e);
 
-    void visit(Exp.Times e);
+    void visit(Exp.CvaMuliExpr e);
 
-    void visit(Exp.True e);
+    void visit(Exp.CvaTrueExpr e);
 
     // Stm
     default void visit(Stm.T s)
     {
-        if (s instanceof Stm.Assign)
-            this.visit(((Stm.Assign) s));
-        else if (s instanceof Stm.Block)
-            this.visit(((Stm.Block) s));
-        else if (s instanceof Stm.If)
-            this.visit(((Stm.If) s));
-        else if (s instanceof Stm.Write)
-            this.visit(((Stm.Write) s));
+        if (s instanceof Stm.CvaAssign)
+            this.visit(((Stm.CvaAssign) s));
+        else if (s instanceof Stm.CvaBlock)
+            this.visit(((Stm.CvaBlock) s));
+        else if (s instanceof Stm.CvaIfStatement)
+            this.visit(((Stm.CvaIfStatement) s));
+        else if (s instanceof Stm.CvaWriteOperation)
+            this.visit(((Stm.CvaWriteOperation) s));
         else // if (s instanceof Ast.Stm.While)
-            this.visit(((Stm.While) s));
+            this.visit(((Stm.CvaWhileStatement) s));
     }
 
-    void visit(Stm.Assign s);
+    void visit(Stm.CvaAssign s);
 
-    void visit(Stm.Block s);
+    void visit(Stm.CvaBlock s);
 
-    void visit(Stm.If s);
+    void visit(Stm.CvaIfStatement s);
 
-    void visit(Stm.Write s);
+    void visit(Stm.CvaWriteOperation s);
 
-    void visit(Stm.While s);
+    void visit(Stm.CvaWhileStatement s);
 
     // Method
     default void visit(Method.T m)

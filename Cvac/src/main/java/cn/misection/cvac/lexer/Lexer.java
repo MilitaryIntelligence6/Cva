@@ -182,7 +182,7 @@ public class Lexer
                         }
                         else if (isIdentifier(sb.toString()))
                         {
-                            return new CvaToken(CvaKind.ID, lineNum, sb.toString());
+                            return new CvaToken(CvaKind.IDENTIFIER, lineNum, sb.toString());
                         }
                         else
                         {

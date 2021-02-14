@@ -56,7 +56,7 @@ public enum CvaKind
     /**
      * Identifier
      */
-    ID,
+    IDENTIFIER,
 
     /**
      * if
@@ -322,11 +322,6 @@ public enum CvaKind
      * ternimal;
      * 终结符, 右值;
      */
-
-    /**
-     * NAME;
-     */
-    IDENTIFIER,
 
     TYPE,
 

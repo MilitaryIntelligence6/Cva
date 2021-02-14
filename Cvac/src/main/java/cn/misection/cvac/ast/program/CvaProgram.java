@@ -3,8 +3,7 @@ package cn.misection.cvac.ast.program;
 import cn.misection.cvac.ast.clas.AbstractClass;
 import cn.misection.cvac.ast.entry.AbstractEntry;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.List;
 
 /**
  * @author Military Intelligence 6 root
@@ -15,7 +14,7 @@ import java.util.Queue;
  */
 public class CvaProgram extends AbstractProgram
 {
-    public CvaProgram(AbstractEntry entry, Queue<AbstractClass> classQueue)
+    public CvaProgram(AbstractEntry entry, List<AbstractClass> classQueue)
     {
         super(entry, classQueue);
     }

@@ -41,7 +41,7 @@ public class UnUsedVarDel implements cn.misection.cvac.ast.Visitor, Optimizable
     }
 
     @Override
-    public void visit(Ast.Exp.Call e)
+    public void visit(Ast.Exp.Function e)
     {
         this.visit(e.exp);
         e.args.forEach(this::visit);
@@ -51,12 +51,12 @@ public class UnUsedVarDel implements cn.misection.cvac.ast.Visitor, Optimizable
     public void visit(Ast.Exp.False e) {}
 
     @Override
-    public void visit(Ast.Exp.Id e)
+    public void visit(Ast.Exp.Identifier e)
     {
-        if (this.unUsedLocals.containsKey(e.id))
-            this.unUsedLocals.remove(e.id);
-        else if (this.unUsedArgs.containsKey(e.id))
-            this.unUsedArgs.remove(e.id);
+        if (this.unUsedLocals.containsKey(e.literal))
+            this.unUsedLocals.remove(e.literal);
+        else if (this.unUsedArgs.containsKey(e.literal))
+            this.unUsedArgs.remove(e.literal);
     }
 
     @Override
@@ -70,49 +70,49 @@ public class UnUsedVarDel implements cn.misection.cvac.ast.Visitor, Optimizable
     public void visit(Ast.Exp.NewObject e) {}
 
     @Override
-    public void visit(Ast.Exp.Not e)
+    public void visit(Ast.Exp.CvaNegateExpr e)
     {
-        this.visit(e.exp);
+        this.visit(e.expr);
     }
 
     @Override
-    public void visit(Ast.Exp.Num e) {}
+    public void visit(Ast.Exp.CvaNumberInt e) {}
 
     @Override
-    public void visit(Ast.Exp.Sub e)
+    public void visit(Ast.Exp.CvaSubExpr e)
     {
         this.visit(e.left);
         this.visit(e.right);
     }
 
     @Override
-    public void visit(Ast.Exp.This e) {}
+    public void visit(Ast.Exp.CvaThisExpr e) {}
 
     @Override
-    public void visit(Ast.Exp.Times e)
+    public void visit(Ast.Exp.CvaMuliExpr e)
     {
         this.visit(e.left);
         this.visit(e.right);
     }
 
     @Override
-    public void visit(Ast.Exp.True e) {}
+    public void visit(Ast.Exp.CvaTrueExpr e) {}
 
     @Override
-    public void visit(Ast.Stm.Assign s)
+    public void visit(Ast.Stm.CvaAssign s)
     {
-        this.visit(new Ast.Exp.Id(s.id, s.lineNum));
+        this.visit(new Ast.Exp.Identifier(s.id, s.lineNum));
         this.visit(s.exp);
     }
 
     @Override
-    public void visit(Ast.Stm.Block s)
+    public void visit(Ast.Stm.CvaBlock s)
     {
         s.stms.forEach(this::visit);
     }
 
     @Override
-    public void visit(Ast.Stm.If s)
+    public void visit(Ast.Stm.CvaIfStatement s)
     {
         this.visit(s.condition);
         this.visit(s.thenStm);
@@ -120,13 +120,13 @@ public class UnUsedVarDel implements cn.misection.cvac.ast.Visitor, Optimizable
     }
 
     @Override
-    public void visit(Ast.Stm.Write s)
+    public void visit(Ast.Stm.CvaWriteOperation s)
     {
         this.visit(s.exp);
     }
 
     @Override
-    public void visit(Ast.Stm.While s)
+    public void visit(Ast.Stm.CvaWhileStatement s)
     {
         this.visit(s.condition);
         this.visit(s.body);

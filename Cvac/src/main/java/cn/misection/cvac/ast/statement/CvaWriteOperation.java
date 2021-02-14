@@ -9,11 +9,11 @@ import cn.misection.cvac.ast.expr.AbstractExpression;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:43:00
  */
-public class CvaWriteStatement extends AbstractStatement
+public class CvaWriteOperation extends AbstractStatement
 {
     private AbstractExpression expr;
 
-    public CvaWriteStatement(int lineNum, AbstractExpression expr)
+    public CvaWriteOperation(int lineNum, AbstractExpression expr)
     {
         super(lineNum);
         this.expr = expr;

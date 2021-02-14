@@ -12,23 +12,23 @@ import cn.misection.cvac.ast.type.AbstractType;
  */
 public class CvaAssign extends AbstractStatement
 {
-    private String id;
+    private String literal;
 
     private AbstractExpression expr;
 
     private AbstractType type;
 
-    public CvaAssign(int lineNum, String id, AbstractExpression expr, AbstractType type)
+    public CvaAssign(int lineNum, String literal, AbstractExpression expr, AbstractType type)
     {
         super(lineNum);
-        this.id = id;
+        this.literal = literal;
         this.expr = expr;
         this.type = type;
     }
 
-    public String getId()
+    public String getLiteral()
     {
-        return id;
+        return literal;
     }
 
     public AbstractExpression getExpr()
