@@ -13,7 +13,7 @@ import java.io.*;
  * @version 1.0
  * @since <pre>2月 14, 2021</pre>
  */
-public class BufferedHandlerTest
+public class BufferedQueueHandlerTest
 {
 
     @Before
@@ -90,7 +90,7 @@ try {
         String path = "debug/hello/hello.c";
         File file = new File(path);
 
-        BufferedHandler handler = new BufferedHandler(
+        BufferedQueueHandler handler = new BufferedQueueHandler(
                 new BufferedReader(
                         new FileReader(file)
                 )

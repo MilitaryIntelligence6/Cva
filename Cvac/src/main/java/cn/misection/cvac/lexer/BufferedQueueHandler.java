@@ -11,11 +11,11 @@ import java.io.Reader;
  * @Description TODO
  * @CreateTime 2021年02月14日 14:10:00
  */
-public class BufferedHandler extends BufferedReader
+public class BufferedQueueHandler extends BufferedReader implements QueueHandleable
 {
     private final StringBuffer buffer = new StringBuffer();
 
-    public BufferedHandler(Reader in) throws IOException
+    public BufferedQueueHandler(Reader in) throws IOException
     {
         super(in);
         init();
@@ -36,28 +36,32 @@ public class BufferedHandler extends BufferedReader
         this.close();
     }
 
+    @Override
     public char peek()
     {
         return peek(0);
     }
 
+    @Override
     public char peek(int num)
     {
         return buffer.charAt(num);
     }
 
-    public String poll(int num)
-    {
-        String polled = buffer.substring(0, num);
-        buffer.delete(0, num);
-        return polled;
-    }
-
+    @Override
     public char poll()
     {
         char c = peek();
         buffer.delete(0, 1);
         return c;
+    }
+
+    @Override
+    public String poll(int num)
+    {
+        String polled = buffer.substring(0, num);
+        buffer.delete(0, num);
+        return polled;
     }
 
     public StringBuffer getBuffer()
