@@ -42,9 +42,11 @@ public class CvaCompiler
 
     private static final String DEBUG_FILE = "res/cvasrc/debug.cva";
 
-    private static final String DEBUG_IL_DIR = String.format("%s/debug/il", CURRENT_SHELL_PATH);
+//    private static final String DEBUG_IL_DIR = String.format("%s/debug/il", CURRENT_SHELL_PATH);
+    private static final String DEBUG_IL_DIR = "debug/il";
 
-    private static final String DEBUG_CLASS_DIR = String.format("%s/debug/classes", CURRENT_SHELL_PATH);
+//    private static final String DEBUG_CLASS_DIR = String.format("%s/debug/classes", CURRENT_SHELL_PATH);
+    private static final String DEBUG_CLASS_DIR = "debug/classes";
 
 
     public static void main(String[] args)
@@ -89,12 +91,19 @@ public class CvaCompiler
 
         doMkDIrs();
 
+        // 现在是从il读到文件中而不是先创建il, il步骤在前, 需要设定一个全局;
+        String ilPath = String.format("%s.il", translator.prog.mainClass.id);
+//        String ilPath = String.format("%s/%s.il", DEBUG_IL_DIR, translator.prog.mainClass.id);
+//        mkFile(ilPath);
         // ascii instructions to binary file
-        jasmin.Main.main(new String[] {String.format("%s/%s.il", DEBUG_IL_DIR, translator.prog.mainClass.id)});
+        jasmin.Main.main(new String[] {ilPath});
 
         for (cn.misection.cvac.codegen.ast.Ast.Class.ClassSingle cla : translator.prog.classes)
         {
-            jasmin.Main.main(new String[] {String.format("%s/%s.il", DEBUG_IL_DIR, cla.id)});
+            String filePath = String.format("%s.il", cla.id);
+//            String filePath = String.format("%s/%s.il", DEBUG_IL_DIR, cla.id);
+//            mkFile(filePath);
+            jasmin.Main.main(new String[] {filePath});
         }
     }
 
@@ -136,7 +145,7 @@ public class CvaCompiler
         }
         else
         {
-            return dir.mkdir();
+            return dir.mkdirs();
         }
     }
 
@@ -146,9 +155,28 @@ public class CvaCompiler
         {
             System.err.printf("mkdir %s failed!\n", DEBUG_CLASS_DIR);
         }
-        if (mkDirs(DEBUG_IL_DIR))
+        if (!mkDirs(DEBUG_IL_DIR))
         {
             System.err.printf("mkdir %s failed\n", DEBUG_IL_DIR);
+        }
+    }
+
+    private static void mkFile(String filePath)
+    {
+        File ilFile = new File(filePath);
+        if (!ilFile.exists())
+        {
+            try
+            {
+                if (!ilFile.createNewFile())
+                {
+                    System.err.printf("创建文件%s失败!\n", ilFile);
+                }
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 }
