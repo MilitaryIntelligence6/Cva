@@ -78,15 +78,15 @@ public class CvaCompiler
     private static void geneCode(IBufferedQueue fStream)
     {
         Parser parser = new Parser(fStream);
-        CvaProgram prog = parser.parse();
+        CvaProgram program = parser.parse();
 
-        doCheck(prog);
+        doCheck(program);
 
 //        Optimizer optimizer = new Optimizer();
 //        optimizer.optimize(prog);
 
         TranslatorVisitor translator = new TranslatorVisitor();
-        translator.visit(prog);
+        translator.visit(program);
 
         ByteCodeGenerator generator = new ByteCodeGenerator();
         generator.visit(translator.prog);
