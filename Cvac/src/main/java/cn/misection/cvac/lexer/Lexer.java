@@ -1,7 +1,6 @@
 package cn.misection.cvac.lexer;
 
-import cn.misection.cvac.lexer.Kind;
-
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -13,13 +12,13 @@ public class Lexer
     /**
      * input stream of the file;
      */
-    private InputStream fstream;
+    private InputStream fStream;
 
     private int lineNum;
 
-    public Lexer(InputStream fstream)
+    public Lexer(InputStream fStream)
     {
-        this.fstream = fstream;
+        this.fStream = fStream;
         this.lineNum = 1;
     }
 
@@ -41,7 +40,7 @@ public class Lexer
 
     private Token nextTokenInternal() throws IOException
     {
-        int c = this.fstream.read();
+        int c = this.fStream.read();
 
         if (-1 == c)
         {
@@ -55,18 +54,18 @@ public class Lexer
             {
                 lineNum++;
             }
-            c = this.fstream.read();
+            c = this.fStream.read();
         }
 
         // deal with comments
         if ('/' == c)
         {
-            c = fstream.read();
+            c = fStream.read();
             if ('/' == c)
             {
                 while ('\n' != c)
                 {
-                    c = this.fstream.read();
+                    c = this.fStream.read();
                 }
                 lineNum++;
                 return nextTokenInternal(); // tail recursion
@@ -84,7 +83,7 @@ public class Lexer
             case '+':
                 return new Token(Kind.ADD, lineNum);
             case '&':
-                c = this.fstream.read();
+                c = this.fStream.read();
                 if ('&' == c)
                 {
                     return new Token(Kind.AND, lineNum);
@@ -125,8 +124,8 @@ public class Lexer
                 sb.append((char) c);
                 while (true)
                 {
-                    this.fstream.mark(1);
-                    c = this.fstream.read();
+                    this.fStream.mark(1);
+                    c = this.fStream.read();
                     if (-1 != c && ' ' != c && '\t' != c
                             && '\n' != c && '\r' != c
                             && !isSpecialCharacter(c))
@@ -135,7 +134,7 @@ public class Lexer
                     }
                     else
                     {
-                        this.fstream.reset();
+                        this.fStream.reset();
                         break;
                     }
                 }

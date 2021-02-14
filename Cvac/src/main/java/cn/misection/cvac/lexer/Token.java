@@ -37,8 +37,9 @@ public class Token
     @Override
     public String toString()
     {
-        return "Token_" + this.kind.toString()
-                + (lexeme == null ? "" : " : " + this.lexeme)
-                + " : at line " + this.lineNum;
+        return String.format("Token{%s lexeme: %s : at line %d}",
+                this.kind.toString(),
+                lexeme == null ? "" : this.lexeme,
+                this.lineNum);
     }
 }
