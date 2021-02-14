@@ -3,7 +3,7 @@ package cn.misection.cvac.parser;
 import cn.misection.cvac.ast.Ast;
 import cn.misection.cvac.lexer.Lexer;
 import cn.misection.cvac.lexer.Token;
-import cn.misection.cvac.lexer.Token.Kind;
+import cn.misection.cvac.lexer.Kind;
 
 import java.io.InputStream;
 import java.util.LinkedList;

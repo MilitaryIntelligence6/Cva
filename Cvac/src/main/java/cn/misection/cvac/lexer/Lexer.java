@@ -1,6 +1,6 @@
 package cn.misection.cvac.lexer;
 
-import cn.misection.cvac.lexer.Token.Kind;
+import cn.misection.cvac.lexer.Kind;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +10,11 @@ import java.io.InputStream;
  */
 public class Lexer
 {
-    private InputStream fstream; // input stream of the file
+    /**
+     * input stream of the file;
+     */
+    private InputStream fstream;
+
     private int lineNum;
 
     public Lexer(InputStream fstream)
