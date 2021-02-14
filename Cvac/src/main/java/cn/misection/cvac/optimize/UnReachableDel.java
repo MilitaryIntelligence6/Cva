@@ -91,18 +91,18 @@ public class UnReachableDel implements cn.misection.cvac.ast.Visitor, Optimizabl
         if (s.condition instanceof Ast.Exp.True)
         {
             this.isOptimizing = true;
-            this.curStm = s.then_stm;
+            this.curStm = s.thenStm;
             this.visit(this.curStm);
         } else if (s.condition instanceof Ast.Exp.False)
         {
             this.isOptimizing = true;
-            this.curStm = s.else_stm;
+            this.curStm = s.elseStm;
             this.visit(this.curStm);
         } else this.curStm = s;
     }
 
     @Override
-    public void visit(Ast.Stm.Print s)
+    public void visit(Ast.Stm.Write s)
     {
         this.curStm = s;
     }

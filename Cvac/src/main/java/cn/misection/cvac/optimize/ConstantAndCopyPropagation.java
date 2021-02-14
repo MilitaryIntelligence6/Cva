@@ -213,18 +213,18 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
 
         HashMap<String, Ast.Exp.T> _original = new HashMap<>();
         this.conorcopy.forEach(_original::put);
-        this.visit(s.then_stm);
+        this.visit(s.thenStm);
 
         HashMap<String, Ast.Exp.T> _left = this.conorcopy;
         this.conorcopy = _original;
-        this.visit(s.else_stm);
+        this.visit(s.elseStm);
 
         this.conorcopy = intersection(_left, this.conorcopy);
     }
 
 
     @Override
-    public void visit(Ast.Stm.Print s)
+    public void visit(Ast.Stm.Write s)
     {
         if (this.inWhile) return;
 

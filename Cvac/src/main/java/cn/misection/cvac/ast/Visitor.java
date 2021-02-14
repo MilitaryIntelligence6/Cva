@@ -98,8 +98,8 @@ public interface Visitor
             this.visit(((Stm.Block) s));
         else if (s instanceof Stm.If)
             this.visit(((Stm.If) s));
-        else if (s instanceof Stm.Print)
-            this.visit(((Stm.Print) s));
+        else if (s instanceof Stm.Write)
+            this.visit(((Stm.Write) s));
         else // if (s instanceof Ast.Stm.While)
             this.visit(((Stm.While) s));
     }
@@ -110,7 +110,7 @@ public interface Visitor
 
     void visit(Stm.If s);
 
-    void visit(Stm.Print s);
+    void visit(Stm.Write s);
 
     void visit(Stm.While s);
 

@@ -1,6 +1,6 @@
 package cn.misection.cvac.lexer;
 
-public enum Kind
+public enum CvaKind
 {
     /**
      * +
@@ -81,7 +81,7 @@ public enum Kind
     /**
      * }
      */
-    CLOSE_BRACE,
+    CLOSE_CURLY_BRACE,
 
     /**
      * (
@@ -234,6 +234,10 @@ public enum Kind
 
     PARAM_DECLARATION,
 
+    /**
+     * 导包语句;
+     */
+    CALL,
 
     /**
      * enum;

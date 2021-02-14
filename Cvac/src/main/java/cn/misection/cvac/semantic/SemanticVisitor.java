@@ -339,12 +339,12 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
             error(s.condition.lineNum,
                     "the condition's type should be a boolean.");
 
-        this.visit(s.then_stm);
-        this.visit(s.else_stm);
+        this.visit(s.thenStm);
+        this.visit(s.elseStm);
     }
 
     @Override
-    public void visit(Ast.Stm.Print s)
+    public void visit(Ast.Stm.Write s)
     {
         this.visit(s.exp);
         if (!this.type.toString().equals(new Ast.Type.Int().toString()))

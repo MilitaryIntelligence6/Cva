@@ -20,15 +20,15 @@ public class Lexer
         this.lineNum = 1;
     }
 
-    public Token nextToken()
+    public CvaToken nextToken()
     {
-        Token token = null;
+        CvaToken token = null;
         token = lex();
 
         return token;
     }
 
-    private Token lex()
+    private CvaToken lex()
     {
         int c = this.queueStream.poll();
 
@@ -68,7 +68,7 @@ public class Lexer
 //                System.out.printf("Error is found at line %d%n", lineNum);
 //                System.exit(1);
                 {
-                    return new Token(Kind.DIV_OPERATOR, lineNum);
+                    return new CvaToken(CvaKind.DIV_OPERATOR, lineNum);
                 }
             }
         }
@@ -81,19 +81,19 @@ public class Lexer
                 {
                     System.err.println("bug place");
                 }
-                return new Token(Kind.EOF, lineNum);
+                return new CvaToken(CvaKind.EOF, lineNum);
             }
             case '+':
-                return new Token(Kind.ADD, lineNum);
+                return new CvaToken(CvaKind.ADD, lineNum);
             case '-':
-                return new Token(Kind.SUB, lineNum);
+                return new CvaToken(CvaKind.SUB, lineNum);
             case '*':
-                return new Token(Kind.STAR, lineNum);
+                return new CvaToken(CvaKind.STAR, lineNum);
             case '&':
                 c = this.queueStream.poll();
                 if ('&' == c)
                 {
-                    return new Token(Kind.AND_AND, lineNum);
+                    return new CvaToken(CvaKind.AND_AND, lineNum);
                 }
                 else
                 {
@@ -101,27 +101,27 @@ public class Lexer
                     System.exit(1);
                 }
             case '=':
-                return new Token(Kind.ASSIGN, lineNum);
+                return new CvaToken(CvaKind.ASSIGN, lineNum);
             case ':':
-                return new Token(Kind.COLON, lineNum);
+                return new CvaToken(CvaKind.COLON, lineNum);
             case ',':
-                return new Token(Kind.COMMA, lineNum);
+                return new CvaToken(CvaKind.COMMA, lineNum);
             case '.':
-                return new Token(Kind.DOT, lineNum);
+                return new CvaToken(CvaKind.DOT, lineNum);
             case '{':
-                return new Token(Kind.OPEN_CURLY_BRACE, lineNum);
+                return new CvaToken(CvaKind.OPEN_CURLY_BRACE, lineNum);
             case '(':
-                return new Token(Kind.OPEN_PAREN, lineNum);
+                return new CvaToken(CvaKind.OPEN_PAREN, lineNum);
             case '<':
-                return new Token(Kind.LESS_THAN, lineNum);
+                return new CvaToken(CvaKind.LESS_THAN, lineNum);
             case '!':
-                return new Token(Kind.NEGATE, lineNum);
+                return new CvaToken(CvaKind.NEGATE, lineNum);
             case '}':
-                return new Token(Kind.CLOSE_BRACE, lineNum);
+                return new CvaToken(CvaKind.CLOSE_CURLY_BRACE, lineNum);
             case ')':
-                return new Token(Kind.CLOSE_PAREN, lineNum);
+                return new CvaToken(CvaKind.CLOSE_PAREN, lineNum);
             case ';':
-                return new Token(Kind.SEMI, lineNum);
+                return new CvaToken(CvaKind.SEMI, lineNum);
             default:
             {
                 StringBuilder sb = new StringBuilder();
@@ -144,45 +144,45 @@ public class Lexer
                 switch (sb.toString())
                 {
                     case "boolean":
-                        return new Token(Kind.BOOLEAN, lineNum);
+                        return new CvaToken(CvaKind.BOOLEAN, lineNum);
                     case "class":
-                        return new Token(Kind.CLASS, lineNum);
+                        return new CvaToken(CvaKind.CLASS, lineNum);
                     case "else":
-                        return new Token(Kind.ELSE, lineNum);
+                        return new CvaToken(CvaKind.ELSE, lineNum);
                     case "false":
-                        return new Token(Kind.FALSE, lineNum);
+                        return new CvaToken(CvaKind.FALSE, lineNum);
                     case "if":
-                        return new Token(Kind.IF, lineNum);
+                        return new CvaToken(CvaKind.IF, lineNum);
                     case "int":
-                        return new Token(Kind.INT, lineNum);
+                        return new CvaToken(CvaKind.INT, lineNum);
                     case "main":
-                        return new Token(Kind.MAIN, lineNum);
+                        return new CvaToken(CvaKind.MAIN, lineNum);
                     case "new":
-                        return new Token(Kind.NEW, lineNum);
+                        return new CvaToken(CvaKind.NEW, lineNum);
                     // TODO 删掉对print的兼容;
                     case "print":
                     case "printf":
                     case "echo":
-                        return new Token(Kind.WRITE, lineNum);
+                        return new CvaToken(CvaKind.WRITE, lineNum);
                     case "return":
-                        return new Token(Kind.RETURN, lineNum);
+                        return new CvaToken(CvaKind.RETURN, lineNum);
                     case "this":
-                        return new Token(Kind.THIS, lineNum);
+                        return new CvaToken(CvaKind.THIS, lineNum);
                     case "true":
-                        return new Token(Kind.TRUE, lineNum);
+                        return new CvaToken(CvaKind.TRUE, lineNum);
                     case "void":
-                        return new Token(Kind.VOID, lineNum);
+                        return new CvaToken(CvaKind.VOID, lineNum);
                     case "while":
-                        return new Token(Kind.WHILE, lineNum);
+                        return new CvaToken(CvaKind.WHILE, lineNum);
                     default:
                     {
                         if (isNumber(sb.toString()))
                         {
-                            return new Token(Kind.NUMBER, lineNum, sb.toString());
+                            return new CvaToken(CvaKind.NUMBER, lineNum, sb.toString());
                         }
                         else if (isIdentifier(sb.toString()))
                         {
-                            return new Token(Kind.ID, lineNum, sb.toString());
+                            return new CvaToken(CvaKind.ID, lineNum, sb.toString());
                         }
                         else
                         {
@@ -218,9 +218,8 @@ public class Lexer
 
     private static boolean isIdentifier(String str)
     {
-        return str.charAt(0) >= 'a' || str.charAt(0) <= 'z'
-                || str.charAt(0) >= 'A' || str.charAt(0) <= 'Z'
-                || str.charAt(0) == '_';
+        // 只接受字母开头, 不接受下划线开头;
+        return Character.isAlphabetic(str.charAt(0));
     }
 
 }

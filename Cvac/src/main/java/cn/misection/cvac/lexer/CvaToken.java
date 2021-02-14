@@ -3,12 +3,12 @@ package cn.misection.cvac.lexer;
 /**
  * Created by Mengxu on 2017/1/6.
  */
-public class Token
+public class CvaToken
 {
     /**
      * the kind of the token
      */
-    private Kind kind;
+    private CvaKind kind;
 
     /**
      * extra lexeme of the token
@@ -21,13 +21,13 @@ public class Token
     private int lineNum;
 
 
-    public Token(Kind kind, int lineNum)
+    public CvaToken(CvaKind kind, int lineNum)
     {
         this.kind = kind;
         this.lineNum = lineNum;
     }
 
-    public Token(Kind kind, int lineNum, String lexeme)
+    public CvaToken(CvaKind kind, int lineNum, String lexeme)
     {
         this.kind = kind;
         this.lineNum = lineNum;
@@ -37,13 +37,13 @@ public class Token
     @Override
     public String toString()
     {
-        return String.format("Token{%s lexeme: %s : at line %d}",
+        return String.format("Token {%s lexeme: %s : at line %d}",
                 this.kind.toString(),
-                lexeme == null ? "" : this.lexeme,
+                lexeme == null ? "null" : this.lexeme,
                 this.lineNum);
     }
 
-    public Kind getKind()
+    public CvaKind getKind()
     {
         return kind;
     }

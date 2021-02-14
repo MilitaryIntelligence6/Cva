@@ -216,12 +216,12 @@ public class ConstantFolder implements cn.misection.cvac.ast.Visitor, Optimizabl
     {
         this.visit(s.condition);
         s.condition = this.lastExp;
-        this.visit(s.then_stm);
-        this.visit(s.else_stm);
+        this.visit(s.thenStm);
+        this.visit(s.elseStm);
     }
 
     @Override
-    public void visit(Ast.Stm.Print s)
+    public void visit(Ast.Stm.Write s)
     {
         this.visit(s.exp);
         s.exp = this.lastExp;

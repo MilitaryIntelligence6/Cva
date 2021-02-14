@@ -136,7 +136,7 @@ try {
         }
 
         Lexer lexer = new Lexer(fstream);
-        Token current;
+        CvaToken current;
 
         int i = 0;
         do
@@ -144,7 +144,7 @@ try {
             current = lexer.nextToken();
             System.out.printf("Token %d is %s%n", i, current.toString());
             i++;
-        } while (current.getKind() != Kind.EOF);
+        } while (current.getKind() != CvaKind.EOF);
 
     }
 } 

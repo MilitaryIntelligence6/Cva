@@ -1,8 +1,9 @@
 package cn.misection.cvac.parser.impl;
 
-import cn.misection.cvac.lexer.Lexer;
+import cn.misection.cvac.lexer.CvaKind;
+import cn.misection.cvac.lexer.CvaToken;
 import cn.misection.cvac.lexer.IBufferedQueue;
-import cn.misection.cvac.lexer.Token;
+import cn.misection.cvac.lexer.Lexer;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -21,7 +22,7 @@ public class Parser
     /**
      * 目前的Token;
      */
-    private Token curToken;
+    private CvaToken curToken;
 
     /**
      * for vardecl cn.misection.cvac.parser;
@@ -30,7 +31,7 @@ public class Parser
 
     private boolean markingFlag = false;
 
-    private Queue<Token> markedTokenQueue;
+    private Queue<CvaToken> markedTokenQueue;
 
     public Parser(IBufferedQueue queueStream)
     {
@@ -71,6 +72,7 @@ public class Parser
 
     /**
      * 解除记录buff;
+     *
      * @SideEffect 清空队列;
      */
     private void deMark()
@@ -86,5 +88,34 @@ public class Parser
         advance();
     }
 
-//    private void eatToken
+    /**
+     * eat Token 是规定语法是死的, 根据一个解析规则如MainClass;
+     * 如果不满足就不要;
+     * 属于递归下降预测的死语法;
+     * @param kind 期望的kind;
+     */
+    private void eatToken(CvaKind kind)
+    {
+        // FIXME, 写成 遇到EOF就走, 尾巴上那个-1暂时还没解决;
+        // 暂时可以关掉了;
+        if (kind == curToken.getKind())// || kind == CvaKind.EOF)
+        {
+            advance();
+        }
+        else
+        {
+            System.err.printf("Line %d :Expects: %s, but got: %s%n",
+                    curToken.getLineNum(),
+                    kind.toString(),
+                    curToken.getKind().toString());
+            System.exit(1);
+        }
+    }
+
+    private void error()
+    {
+        System.out.printf("Syntax error at line %s compilation aborting...\n%n",
+                curToken != null ? curToken.getLineNum() : "unknow");
+        System.exit(1);
+    }
 }

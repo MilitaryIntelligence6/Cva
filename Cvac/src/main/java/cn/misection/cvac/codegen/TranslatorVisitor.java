@@ -241,15 +241,15 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
         this.visit(s.condition);
         emit(new Stm.Ldc(1));
         emit(new Stm.Ificmplt(l));
-        this.visit(s.then_stm);
+        this.visit(s.thenStm);
         emit(new Stm.Goto(r));
         emit(new Stm.LabelJ(l));
-        this.visit(s.else_stm);
+        this.visit(s.elseStm);
         emit(new Stm.LabelJ(r));
     }
 
     @Override
-    public void visit(Ast.Stm.Print s)
+    public void visit(Ast.Stm.Write s)
     {
         this.visit(s.exp);
         emit(new Stm.Print());

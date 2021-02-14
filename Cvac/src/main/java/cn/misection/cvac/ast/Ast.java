@@ -276,22 +276,22 @@ public class Ast
         public static class If extends T
         {
             public Exp.T condition;
-            public T then_stm, else_stm;
+            public T thenStm, elseStm;
 
-            public If(Exp.T condition, T then_stm, T else_stm, int lineNum)
+            public If(Exp.T condition, T thenStm, T elseStm, int lineNum)
             {
                 this.condition = condition;
-                this.then_stm = then_stm;
-                this.else_stm = else_stm;
+                this.thenStm = thenStm;
+                this.elseStm = elseStm;
                 this.lineNum = lineNum;
             }
         }
 
-        public static class Print extends T
+        public static class Write extends T
         {
             public Exp.T exp;
 
-            public Print(Exp.T exp, int lineNum)
+            public Write(Exp.T exp, int lineNum)
             {
                 this.exp = exp;
                 this.lineNum = lineNum;

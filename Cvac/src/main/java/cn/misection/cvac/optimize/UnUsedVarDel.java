@@ -115,12 +115,12 @@ public class UnUsedVarDel implements cn.misection.cvac.ast.Visitor, Optimizable
     public void visit(Ast.Stm.If s)
     {
         this.visit(s.condition);
-        this.visit(s.then_stm);
-        this.visit(s.else_stm);
+        this.visit(s.thenStm);
+        this.visit(s.elseStm);
     }
 
     @Override
-    public void visit(Ast.Stm.Print s)
+    public void visit(Ast.Stm.Write s)
     {
         this.visit(s.exp);
     }

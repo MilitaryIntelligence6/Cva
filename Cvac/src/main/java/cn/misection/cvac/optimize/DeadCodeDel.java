@@ -138,18 +138,18 @@ public class DeadCodeDel implements cn.misection.cvac.ast.Visitor, Optimizable
     {
         HashSet<String> temOriginal = new HashSet<>();
         this.localLiveness.forEach(temOriginal::add);
-        this.visit(s.then_stm);
+        this.visit(s.thenStm);
         if (this.shouldDel)
-            s.then_stm = null;
+            s.thenStm = null;
         HashSet<String> _leftLiveness = this.localLiveness;
 
         this.localLiveness = temOriginal;
-        this.visit(s.else_stm);
+        this.visit(s.elseStm);
         if (this.shouldDel)
-            s.else_stm = null;
+            s.elseStm = null;
         _leftLiveness.forEach(this.localLiveness::add);
 
-        this.shouldDel = s.then_stm == null && s.then_stm == null;
+        this.shouldDel = s.thenStm == null && s.thenStm == null;
         if (this.shouldDel)
         {
             this.localLiveness = temOriginal;
@@ -160,7 +160,7 @@ public class DeadCodeDel implements cn.misection.cvac.ast.Visitor, Optimizable
     }
 
     @Override
-    public void visit(Ast.Stm.Print s)
+    public void visit(Ast.Stm.Write s)
     {
         // this.isAssign = false;
         this.visit(s.exp);
