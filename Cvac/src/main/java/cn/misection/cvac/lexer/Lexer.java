@@ -22,10 +22,7 @@ public class Lexer
 
     public CvaToken nextToken()
     {
-        CvaToken token = null;
-        token = lex();
-
-        return token;
+        return lex();
     }
 
     private CvaToken lex()

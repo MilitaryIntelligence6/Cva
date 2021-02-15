@@ -28,7 +28,12 @@ public class CvaMethod extends AbstractMethod
 
     private List<AbstractStatement> statementList;
 
-    public CvaMethod(String literal, AbstractType retType, AbstractExpression retExpr, List<AbstractDeclaration> formalList, List<AbstractDeclaration> localList, List<AbstractStatement> statementList)
+    public CvaMethod(String literal,
+                     AbstractType retType,
+                     AbstractExpression retExpr,
+                     List<AbstractDeclaration> formalList,
+                     List<AbstractDeclaration> localList,
+                     List<AbstractStatement> statementList)
     {
         this.literal = literal;
         this.retType = retType;

@@ -15,6 +15,7 @@ import java.util.LinkedList;
 
 /**
  * Created by Mengxu on 2017/1/13.
+ * 语义分析;
  */
 public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
 {
@@ -431,21 +432,24 @@ public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(CvaMethod method)
+    public void visit(CvaMethod cvaMethod)
     {
         this.methodVarTable = new MethodVariableTable();
-        this.methodVarTable.put(method.getFormalList(), method.getLocalList());
+        this.methodVarTable.put(
+                cvaMethod.getFormalList(),
+                cvaMethod.getLocalList()
+        );
         this.curMthLocals = new HashSet<>();
-        method.getLocalList().forEach(local ->
+        cvaMethod.getLocalList().forEach(local ->
                 this.curMthLocals.add(((CvaDeclaration) local).getLiteral()));
-        method.getStatementList().forEach(this::visit);
-        this.visit(method.getRetExpr());
+        cvaMethod.getStatementList().forEach(this::visit);
+        this.visit(cvaMethod.getRetExpr());
         // if (!this.type.toString().equals(m.retType.toString()))
-        if (!isMatch(method.getRetType(), this.type))
+        if (!isMatch(cvaMethod.getRetType(), this.type))
         {
-            error(method.getRetExpr().getLineNum(),
+            error(cvaMethod.getRetExpr().getLineNum(),
                     String.format("the return expression's type is not match the method \"%s\" declared.", 
-                            method.getLiteral()));
+                            cvaMethod.getLiteral()));
         }
 
     }

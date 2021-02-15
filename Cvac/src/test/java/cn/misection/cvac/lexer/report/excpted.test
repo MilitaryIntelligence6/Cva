@@ -1,0 +1,73 @@
+
+Token 0 is Token_Class : at line 1
+Token 1 is Token_ID : TestMain : at line 1
+Token 2 is Token_Lbrace : at line 2
+Token 3 is Token_Void : at line 4
+Token 4 is Token_Main : at line 4
+Token 5 is Token_Lparen : at line 4
+Token 6 is Token_Rparen : at line 4
+Token 7 is Token_Lbrace : at line 5
+Token 8 is Token_Print : at line 6
+Token 9 is Token_Lparen : at line 6
+Token 10 is Token_New : at line 6
+Token 11 is Token_ID : Test : at line 6
+Token 12 is Token_Lparen : at line 6
+Token 13 is Token_Rparen : at line 6
+Token 14 is Token_Dot : at line 6
+Token 15 is Token_ID : Compute : at line 6
+Token 16 is Token_Lparen : at line 6
+Token 17 is Token_NUM : 10 : at line 6
+Token 18 is Token_Rparen : at line 6
+Token 19 is Token_Rparen : at line 6
+Token 20 is Token_Semi : at line 6
+Token 21 is Token_Rbrace : at line 7
+Token 22 is Token_Rbrace : at line 8
+Token 23 is Token_Class : at line 10
+Token 24 is Token_ID : Test : at line 10
+Token 25 is Token_Lbrace : at line 11
+Token 26 is Token_Int : at line 12
+Token 27 is Token_ID : Compute : at line 12
+Token 28 is Token_Lparen : at line 12
+Token 29 is Token_Int : at line 12
+Token 30 is Token_ID : num : at line 12
+Token 31 is Token_Rparen : at line 12
+Token 32 is Token_Lbrace : at line 13
+Token 33 is Token_Int : at line 14
+Token 34 is Token_ID : total : at line 14
+Token 35 is Token_Semi : at line 14
+Token 36 is Token_If : at line 15
+Token 37 is Token_Lparen : at line 15
+Token 38 is Token_ID : num : at line 15
+Token 39 is Token_LT : at line 15
+Token 40 is Token_NUM : 1 : at line 15
+Token 41 is Token_Rparen : at line 15
+Token 42 is Token_Lbrace : at line 16
+Token 43 is Token_ID : total : at line 17
+Token 44 is Token_Assign : at line 17
+Token 45 is Token_NUM : 1 : at line 17
+Token 46 is Token_Semi : at line 17
+Token 47 is Token_Rbrace : at line 18
+Token 48 is Token_Else : at line 19
+Token 49 is Token_Lbrace : at line 20
+Token 50 is Token_ID : total : at line 21
+Token 51 is Token_Assign : at line 21
+Token 52 is Token_ID : num : at line 21
+Token 53 is Token_Times : at line 21
+Token 54 is Token_Lparen : at line 21
+Token 55 is Token_This : at line 21
+Token 56 is Token_Dot : at line 21
+Token 57 is Token_ID : Compute : at line 21
+Token 58 is Token_Lparen : at line 21
+Token 59 is Token_ID : num : at line 21
+Token 60 is Token_Sub : at line 21
+Token 61 is Token_NUM : 1 : at line 21
+Token 62 is Token_Rparen : at line 21
+Token 63 is Token_Rparen : at line 21
+Token 64 is Token_Semi : at line 21
+Token 65 is Token_Rbrace : at line 22
+Token 66 is Token_Return : at line 23
+Token 67 is Token_ID : total : at line 23
+Token 68 is Token_Semi : at line 23
+Token 69 is Token_Rbrace : at line 24
+Token 70 is Token_Rbrace : at line 25
+Token 71 is Token_EOF : at line 25

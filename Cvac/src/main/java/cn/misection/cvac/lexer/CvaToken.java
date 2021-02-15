@@ -37,7 +37,7 @@ public class CvaToken
     @Override
     public String toString()
     {
-        return String.format("Token {%s lexeme: %s : at line %d}",
+        return String.format("Token {%s literal: %s : at line %d}",
                 this.kind.toString(),
                 literal == null ? "null" : this.literal,
                 this.lineNum);

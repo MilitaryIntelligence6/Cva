@@ -167,12 +167,12 @@ public interface Visitor
     void visit(CvaWhileStatement s);
 
     // Method
-    default void visit(AbstractMethod m)
+    default void visit(AbstractMethod abstractMethod)
     {
-        this.visit(((CvaMethod) m));
+        this.visit(((CvaMethod) abstractMethod));
     }
 
-    void visit(CvaMethod method);
+    void visit(CvaMethod cvaMethod);
 
     // Class
     default void visit(AbstractClass abstractClass)

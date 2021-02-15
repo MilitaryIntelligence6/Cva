@@ -295,32 +295,32 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(CvaMethod method)
+    public void visit(CvaMethod cvaMethod)
     {
         this.index = 1;
         this.indexTable = new Hashtable<>();
-        this.visit(method.getRetType());
+        this.visit(cvaMethod.getRetType());
         Type.T theRetType = this.type;
 
         LinkedList<Dec.DecSingle> formalList = new LinkedList<>();
-        method.getFormalList().forEach(f ->
+        cvaMethod.getFormalList().forEach(f ->
         {
             this.visit(f);
             formalList.add(this.dec);
         });
 
         LinkedList<Dec.DecSingle> localList = new LinkedList<>();
-        method.getLocalList().forEach(l ->
+        cvaMethod.getLocalList().forEach(l ->
         {
             this.visit(l);
             localList.add(this.dec);
         });
         this.stms = new LinkedList<>();
-        method.getStatementList().forEach(this::visit);
+        cvaMethod.getStatementList().forEach(this::visit);
 
-        this.visit(method.getRetExpr());
+        this.visit(cvaMethod.getRetExpr());
 
-        if (method.getRetType() instanceof CvaClassType)
+        if (cvaMethod.getRetType() instanceof CvaClassType)
         {
             emit(new Stm.Areturn());
         }
@@ -329,7 +329,7 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
             emit(new Stm.Ireturn());
         }
 
-        this.method = new Method.MethodSingle(theRetType, method.getLiteral(), this.classId,
+        this.method = new Method.MethodSingle(theRetType, cvaMethod.getLiteral(), this.classId,
                 formalList, localList, this.stms, 0, this.index);
     }
 

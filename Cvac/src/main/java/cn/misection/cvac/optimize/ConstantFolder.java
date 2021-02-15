@@ -305,11 +305,11 @@ public class ConstantFolder implements cn.misection.cvac.ast.Visitor, Optimizabl
     }
 
     @Override
-    public void visit(CvaMethod method)
+    public void visit(CvaMethod cvaMethod)
     {
-        method.getStatementList().forEach(this::visit);
-        this.visit(method.getRetExpr());
-        method.setRetExpr(this.lastExp);
+        cvaMethod.getStatementList().forEach(this::visit);
+        this.visit(cvaMethod.getRetExpr());
+        cvaMethod.setRetExpr(this.lastExp);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package cn.misection.cvac;
 
 import cn.misection.cvac.ast.FrontAst;
+import cn.misection.cvac.ast.program.AbstractProgram;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.codegen.ByteCodeGenerator;
 import cn.misection.cvac.codegen.TranslatorVisitor;
@@ -78,7 +79,7 @@ public class CvaCompiler
     private static void geneCode(IBufferedQueue fStream)
     {
         Parser parser = new Parser(fStream);
-        CvaProgram program = parser.parse();
+        AbstractProgram program = parser.parse();
 
         doCheck(program);
 
@@ -109,7 +110,7 @@ public class CvaCompiler
         }
     }
 
-    private static void doCheck(CvaProgram prog)
+    private static void doCheck(AbstractProgram prog)
     {
         SemanticVisitor checker = new SemanticVisitor();
         checker.visit(prog);

@@ -21,40 +21,42 @@ public class MethodVariableTable
         this.table = new Hashtable<>();
     }
 
-    public void put(List<AbstractDeclaration> formals, List<AbstractDeclaration> locals)
+    public void put(List<AbstractDeclaration> formalList,
+                    List<AbstractDeclaration> localList)
     {
-        for (AbstractDeclaration dec : formals)
+        for (AbstractDeclaration formal : formalList)
         {
-            CvaDeclaration decc = ((CvaDeclaration) dec);
-            if (this.table.get(decc.getLiteral()) != null)
+            CvaDeclaration decl = ((CvaDeclaration) formal);
+            if (this.table.get(decl.getLiteral()) != null)
             {
-                System.out.printf("duplicated parameter: %s at line %d%n", decc.getLiteral(), decc.getLineNum());
+                System.err.printf("duplicated parameter: %s at line %d%n",
+                        decl.getLiteral(), decl.getLineNum());
                 System.exit(1);
             }
             else
             {
-                this.table.put(decc.getLiteral(), decc.getType());
+                this.table.put(decl.getLiteral(), decl.getType());
             }
         }
 
-        for (AbstractDeclaration dec : locals)
+        for (AbstractDeclaration local : localList)
         {
-            CvaDeclaration decc = ((CvaDeclaration) dec);
-            if (this.table.get(decc.getLiteral()) != null)
+            CvaDeclaration decl = ((CvaDeclaration) local);
+            if (this.table.get(decl.getLiteral()) != null)
             {
-                System.out.printf("duplicated variable: %s at line %d%n",
-                        decc.getLiteral(), decc.getLineNum());
+                System.err.printf("duplicated variable: %s at line %d%n",
+                        decl.getLiteral(), decl.getLineNum());
                 System.exit(1);
             }
             else
             {
-                this.table.put(decc.getLiteral(), decc.getType());
+                this.table.put(decl.getLiteral(), decl.getType());
             }
         }
     }
 
-    public AbstractType get(String id)
+    public AbstractType get(String literal)
     {
-        return this.table.get(id);
+        return this.table.get(literal);
     }
 }

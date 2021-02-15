@@ -310,14 +310,14 @@ public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor
     }
 
     @Override
-    public void visit(CvaMethod method)
+    public void visit(CvaMethod cvaMethod)
     {
         this.conorcopy = new HashMap<>();
-        method.getStatementList().forEach(this::visit);
-        this.visit(method.getRetExpr());
+        cvaMethod.getStatementList().forEach(this::visit);
+        this.visit(cvaMethod.getRetExpr());
         if (this.canChange)
         {
-            method.setRetExpr(this.curExpr);
+            cvaMethod.setRetExpr(this.curExpr);
         }
     }
 

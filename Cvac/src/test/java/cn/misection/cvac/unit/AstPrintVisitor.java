@@ -1,309 +1,327 @@
-//package cn.misection.cvac.unit;
-//
-//import cn.misection.cvac.ast.Ast;
-//
-///**
-// * Created by Mengxu on 2017/1/12.
-// */
-//public class AstPrintVisitor implements cn.misection.sharpcvac.ast.Visitor
-//{
-//    private int indentLevel = 4;
-//
-//    private void indent()
-//    {
-//        indentLevel += 4;
-//    }
-//
-//    private void unIndent()
-//    {
-//        indentLevel -= 4;
-//    }
-//
-//    private void printSpaces()
-//    {
-//        for (int i = indentLevel; i > 0; i--)
-//            System.out.print(" ");
-//    }
-//
-//    @Override
-//    public void visit(Ast.Type.Boolean t)
-//    {
-//        System.out.print("boolean");
-//    }
-//
-//    @Override
-//    public void visit(Ast.Type.ClassType t)
-//    {
-//        System.out.print(t.id);
-//    }
-//
-//    @Override
-//    public void visit(Ast.Type.Int t)
-//    {
-//        System.out.print("int");
-//    }
-//
-//    @Override
-//    public void visit(Ast.Dec.DecSingle d)
-//    {
-//        this.visit(d.type);
-//        System.out.print(" " + d.id);
-//    }
-//
-//    @Override
-//    public void visit(Ast.Exp.Add e)
-//    {
-//        this.visit(e.left);
-//        System.out.print(" + ");
-//        this.visit(e.right);
-//    }
-//
-//    @Override
-//    public void visit(Ast.Exp.And e)
-//    {
-//        this.visit(e.left);
-//        System.out.print(" && ");
-//        this.visit(e.right);
-//    }
-//
-//    @Override
-//    public void visit(Ast.Exp.Call e)
-//    {
-//        this.visit(e.exp);
-//        System.out.print("." + e.id + "(");
-//        for (int i = 0; i < e.args.size(); i++)
-//        {
-//            if (i != 0)
-//                System.out.print(",");
-//            this.visit(e.args.get(i));
-//        }
-//        System.out.print(")");
-//    }
-//
-//    @Override
-//    public void visit(Ast.Exp.False e)
-//    {
-//        System.out.print("false");
-//    }
-//
-//    @Override
-//    public void visit(Ast.Exp.Id e)
-//    {
-//        System.out.print(e.id);
-//    }
-//
-//    @Override
-//    public void visit(Ast.Exp.LT e)
-//    {
-//        this.visit(e.left);
-//        System.out.print(" < ");
-//        this.visit(e.right);
-//    }
-//
-//    @Override
-//    public void visit(Ast.Exp.NewObject e)
-//    {
-//        System.out.print("new " + e.id + "()");
-//    }
-//
-//    @Override
-//    public void visit(Ast.Exp.Not e)
-//    {
-//        if (e.exp instanceof Ast.Exp.Id)
-//        {
-//            System.out.print("!");
-//            this.visit(e.exp);
-//        } else
-//        {
-//            System.out.print("!(");
-//            this.visit(e.exp);
-//            System.out.print(")");
-//        }
-//    }
-//
-//    @Override
-//    public void visit(Ast.Exp.Num e)
-//    {
-//        System.out.print(e.num);
-//    }
-//
-//    @Override
-//    public void visit(Ast.Exp.Sub e)
-//    {
-//        this.visit(e.left);
-//        System.out.print(" - ");
-//        this.visit(e.right);
-//    }
-//
-//    @Override
-//    public void visit(Ast.Exp.This e)
-//    {
-//        System.out.print("this");
-//    }
-//
-//    @Override
-//    public void visit(Ast.Exp.Times e)
-//    {
-//        this.visit(e.left);
-//        System.out.print(" * ");
-//        if (e.right instanceof Ast.Exp.Add || e.right instanceof Ast.Exp.Sub)
-//        {
-//            System.out.print("(");
-//            this.visit(e.right);
-//            System.out.print(")");
-//        } else this.visit(e.right);
-//
-//    }
-//
-//    @Override
-//    public void visit(Ast.Exp.True e)
-//    {
-//        System.out.print("true");
-//    }
-//
-//    @Override
-//    public void visit(Ast.Stm.Assign s)
-//    {
-//        this.printSpaces();
-//        System.out.print(s.id + " = ");
-//        this.visit(s.exp);
-//        System.out.print(";");
-//        System.out.println();
-//    }
-//
-//    @Override
-//    public void visit(Ast.Stm.Block s)
-//    {
-//        this.printSpaces();
-//        System.out.println("{");
-//        this.indent();
-//        for (Ast.Stm.T stm : s.stms)
-//        {
-//            this.visit(stm);
-//        }
-//        this.unIndent();
-//        this.printSpaces();
-//        System.out.println("}");
-//    }
-//
-//    @Override
-//    public void visit(Ast.Stm.If s)
-//    {
-//        this.printSpaces();
-//        System.out.print("if (");
-//        this.visit(s.condition);
-//        System.out.print(")");
-//        System.out.println();
-//        this.indent();
-//        this.visit(s.then_stm);
-//        this.unIndent();
-//        this.printSpaces();
-//        System.out.println("else");
-//        this.indent();
-//        this.visit(s.else_stm);
-//        this.unIndent();
-//    }
-//
-//    @Override
-//    public void visit(Ast.Stm.Print s)
-//    {
-//        this.printSpaces();
-//        System.out.print("print(");
-//        this.visit(s.exp);
-//        System.out.print(");");
-//        System.out.println();
-//    }
-//
-//    @Override
-//    public void visit(Ast.Stm.While s)
-//    {
-//        this.printSpaces();
-//        System.out.print("while (");
-//        this.visit(s.condition);
-//        System.out.print(")");
-//        System.out.println();
-//        this.visit(s.body);
-//    }
-//
-//    @Override
-//    public void visit(Ast.Method.MethodSingle m)
-//    {
-//        this.printSpaces();
-//        this.visit(m.retType);
-//        System.out.print(" " + m.id + "(");
-//        for (int i = 0; i < m.formals.size(); i++)
-//        {
-//            if (i != 0)
-//                System.out.print(", ");
-//            this.visit(m.formals.get(i));
-//        }
-//        System.out.println(")");
-//        this.printSpaces();
-//        System.out.println("{");
-//        this.indent();
-//        for (Ast.Dec.T dec : m.locals)
-//        {
-//            this.printSpaces();
-//            this.visit(dec);
-//            System.out.print(";");
-//            System.out.println();
-//        }
-//        for (Ast.Stm.T stm : m.stms)
-//        {
-//            this.visit(stm);
-//        }
-//        this.printSpaces();
-//        System.out.print("return ");
-//        this.visit(m.retExp);
-//        System.out.print(";");
-//        System.out.println();
-//        this.unIndent();
-//        printSpaces();
-//        System.out.println("}");
-//    }
-//
-//    @Override
-//    public void visit(Ast.Class.ClassSingle c)
-//    {
-//        System.out.print("class " + c.id);
-//        if (c.base != null)
-//            System.out.print(" : " + c.base);
-//        System.out.println();
-//        System.out.println("{");
-//        for (Ast.Dec.T dec : c.fields)
-//        {
-//            printSpaces();
-//            this.visit(dec);
-//            System.out.println(";");
-//        }
-//        for (Ast.Method.T method : c.methods)
-//        {
-//            this.visit(method);
-//        }
-//        System.out.println("}");
-//    }
-//
-//    @Override
-//    public void visit(Ast.MainClass.MainClassSingle c)
-//    {
-//        System.out.println("class " + c.id);
-//        System.out.println("{");
-//        System.out.println("    void main()");
-//        System.out.println("    {");
-//        this.indent();
-//        this.visit(c.stm);
-//        this.unIndent();
-//        System.out.println("    }");
-//        System.out.println("}");
-//    }
-//
-//    @Override
-//    public void visit(Ast.Program.ProgramSingle p)
-//    {
-//        this.visit(p.mainClass);
-//        for (Ast.Class.T c : p.classes)
-//        {
-//            this.visit(c);
-//        }
-//    }
-//}
+package cn.misection.cvac.unit;
+
+import cn.misection.cvac.ast.clas.*;
+import cn.misection.cvac.ast.decl.*;
+import cn.misection.cvac.ast.entry.*;
+import cn.misection.cvac.ast.expr.*;
+import cn.misection.cvac.ast.method.*;
+import cn.misection.cvac.ast.program.*;
+import cn.misection.cvac.ast.statement.*;
+import cn.misection.cvac.ast.type.*;
+
+/**
+ * Created by Mengxu on 2017/1/12.
+ */
+public class AstPrintVisitor implements cn.misection.cvac.ast.Visitor
+{
+    private int indentLevel = 4;
+
+    private void indent()
+    {
+        indentLevel += 4;
+    }
+
+    private void unIndent()
+    {
+        indentLevel -= 4;
+    }
+
+    private void printSpaces()
+    {
+        // indentLevel, space数目;
+        for (int i = indentLevel; i > 0; i--)
+        {
+            System.out.print(" ");
+        }
+    }
+
+    @Override
+    public void visit(CvaBoolean t)
+    {
+        System.out.print("boolean");
+    }
+
+    @Override
+    public void visit(CvaClassType t)
+    {
+        System.out.print(t.getLiteral());
+    }
+
+    @Override
+    public void visit(CvaInt t)
+    {
+        System.out.print("int");
+    }
+
+    @Override
+    public void visit(CvaDeclaration d)
+    {
+        this.visit(d.getType());
+        System.out.print(" " + d.getLiteral());
+    }
+
+    @Override
+    public void visit(CvaAddExpr e)
+    {
+        this.visit(e.getLeft());
+        System.out.print(" + ");
+        this.visit(e.getRight());
+    }
+
+    @Override
+    public void visit(CvaAndAndExpr e)
+    {
+        this.visit(e.getLeft());
+        System.out.print(" && ");
+        this.visit(e.getRight());
+    }
+
+    @Override
+    public void visit(CvaCallExpr e)
+    {
+        this.visit(e.getExpr());
+        System.out.print("." + e.getLiteral() + "(");
+        for (int i = 0; i < e.getArgs().size(); i++)
+        {
+            if (i != 0)
+            {
+                System.out.print(",");
+            }
+            this.visit(e.getArgs().get(i));
+        }
+        System.out.print(")");
+    }
+
+    @Override
+    public void visit(CvaFalseExpr e)
+    {
+        System.out.print("false");
+    }
+
+    @Override
+    public void visit(CvaIdentifier e)
+    {
+        System.out.print(e.getLiteral());
+    }
+
+    @Override
+    public void visit(CvaLTExpr e)
+    {
+        this.visit(e.getLeft());
+        System.out.print(" < ");
+        this.visit(e.getRight());
+    }
+
+    @Override
+    public void visit(CvaNewExpr e)
+    {
+        System.out.print("new " + e.getLiteral() + "()");
+    }
+
+    @Override
+    public void visit(CvaNegateExpr e)
+    {
+        if (e.getExpr() instanceof CvaIdentifier)
+        {
+            System.out.print("!");
+            this.visit(e.getExpr());
+        }
+        else
+        {
+            System.out.print("!(");
+            this.visit(e.getExpr());
+            System.out.print(")");
+        }
+    }
+
+    @Override
+    public void visit(CvaNumberInt e)
+    {
+        System.out.print(e.getValue());
+    }
+
+    @Override
+    public void visit(CvaSubExpr e)
+    {
+        this.visit(e.getLeft());
+        System.out.print(" - ");
+        this.visit(e.getRight());
+    }
+
+    @Override
+    public void visit(CvaThisExpr e)
+    {
+        System.out.print("this");
+    }
+
+    @Override
+    public void visit(CvaMuliExpr e)
+    {
+        this.visit(e.getLeft());
+        System.out.print(" * ");
+        if (e.getRight() instanceof CvaAddExpr || e.getRight() instanceof CvaSubExpr)
+        {
+            System.out.print("(");
+            this.visit(e.getRight());
+            System.out.print(")");
+        } else this.visit(e.getRight());
+
+    }
+
+    @Override
+    public void visit(CvaTrueExpr e)
+    {
+        System.out.print("true");
+    }
+
+    @Override
+    public void visit(CvaAssign s)
+    {
+        this.printSpaces();
+        System.out.print(s.getLiteral() + " = ");
+        this.visit(s.getExpr());
+        System.out.print(";");
+        System.out.println();
+    }
+
+    @Override
+    public void visit(CvaBlock s)
+    {
+        this.printSpaces();
+        System.out.println("{");
+        this.indent();
+        for (AbstractStatement stm : s.getStatementList())
+        {
+            this.visit(stm);
+        }
+        this.unIndent();
+        this.printSpaces();
+        System.out.println("}");
+    }
+
+    @Override
+    public void visit(CvaIfStatement s)
+    {
+        this.printSpaces();
+        System.out.print("if (");
+        this.visit(s.getCondition());
+        System.out.print(")");
+        System.out.println();
+        this.indent();
+        this.visit(s.getThenStatement());
+        this.unIndent();
+        this.printSpaces();
+        System.out.println("else");
+        this.indent();
+        this.visit(s.getElseStatement());
+        this.unIndent();
+    }
+
+    @Override
+    public void visit(CvaWriteOperation s)
+    {
+        this.printSpaces();
+        System.out.print("print(");
+        this.visit(s.getExpr());
+        System.out.print(");");
+        System.out.println();
+    }
+
+    @Override
+    public void visit(CvaWhileStatement s)
+    {
+        this.printSpaces();
+        System.out.print("while (");
+        this.visit(s.getCondition());
+        System.out.print(")");
+        System.out.println();
+        this.visit(s.getBody());
+    }
+
+    @Override
+    public void visit(CvaMethod m)
+    {
+        this.printSpaces();
+        this.visit(m.getRetType());
+        System.out.print(" " + m.getLiteral() + "(");
+        // formalList是argList;
+        for (int i = 0; i < m.getFormalList().size(); i++)
+        {
+            if (i != 0)
+            {
+                System.out.print(", ");
+            }
+            this.visit(m.getFormalList().get(i));
+        }
+        System.out.println(")");
+        this.printSpaces();
+        System.out.println("{");
+        this.indent();
+        for (AbstractDeclaration dec : m.getLocalList())
+        {
+            this.printSpaces();
+            this.visit(dec);
+            System.out.print(";");
+            System.out.println();
+        }
+        for (AbstractStatement stm : m.getStatementList())
+        {
+            this.visit(stm);
+        }
+        this.printSpaces();
+        System.out.print("return ");
+        this.visit(m.getRetExpr());
+        System.out.print(";");
+        System.out.println();
+        this.unIndent();
+        printSpaces();
+        System.out.println("}");
+    }
+
+    @Override
+    public void visit(CvaClass cvaClass)
+    {
+        System.out.print("class " + cvaClass.getLiteral());
+        if (cvaClass.getParent() != null)
+        {
+            System.out.printf(" : %s", cvaClass.getParent());
+        }
+        System.out.println();
+        System.out.println("{");
+        for (AbstractDeclaration dec : cvaClass.getFieldList())
+        {
+            printSpaces();
+            this.visit(dec);
+            System.out.println(";");
+        }
+        for (AbstractMethod method : cvaClass.getMethodList())
+        {
+            this.visit(method);
+        }
+        System.out.println("}");
+    }
+
+    @Override
+    public void visit(CvaEntry c)
+    {
+        System.out.println("class " + c.getLiteral());
+        System.out.println("{");
+        System.out.println("    void main()");
+        System.out.println("    {");
+        this.indent();
+        this.visit(c.getStatement());
+        this.unIndent();
+        System.out.println("    }");
+        System.out.println("}");
+    }
+
+    @Override
+    public void visit(CvaProgram cvaProgram)
+    {
+        this.visit(cvaProgram.getEntry());
+        for (AbstractClass abstractClass : cvaProgram.getClassList())
+        {
+            this.visit(abstractClass);
+        }
+    }
+}
