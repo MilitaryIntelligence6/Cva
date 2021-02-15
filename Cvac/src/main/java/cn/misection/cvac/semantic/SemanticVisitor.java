@@ -24,8 +24,16 @@ public class SemanticVisitor implements IVisitor
     private MethodVariableTable methodVarTable;
     private String currentClass;
     private AbstractType type;
-    private boolean isOk; // the cn.misection.cvac.ast is correct?
-    private HashSet<String> curMthLocals; //current method locals
+
+    /**
+     * // the cn.misection.cvac.ast is correct?;
+     */
+    private boolean isOk;
+
+    /**
+     * //current method locals;
+     */
+    private HashSet<String> curMthLocals;
 
     public SemanticVisitor()
     {
@@ -41,10 +49,10 @@ public class SemanticVisitor implements IVisitor
         return this.isOk;
     }
 
-    private void error(int lineNum, String msg)
+    private void errorLog(int lineNum, String msg)
     {
         this.isOk = false;
-        System.out.println("Error: Line " + lineNum + " " + msg);
+        System.out.printf("Error: Line %d %s%n", lineNum, msg);
     }
 
     private boolean isMatch(AbstractType target, AbstractType cur)
@@ -102,13 +110,13 @@ public class SemanticVisitor implements IVisitor
         this.visit(e.getRight());
         if (!this.type.toString().equals(lefty.toString()))
         {
-            error(e.getLineNum(), "add expression" +
-                    " the type of left is " + lefty.toString() +
-                    ", but the type of right is " + this.type.toString());
+            errorLog(e.getLineNum(),
+                    String.format("add expression the type of left is %s, but the type of right is %s",
+                            lefty.toString(), this.type.toString()));
         }
         else if (!new CvaInt().toString().equals(this.type.toString()))
         {
-            error(e.getLineNum(), " only integer numbers can be added.");
+            errorLog(e.getLineNum(), " only integer numbers can be added.");
         }
 
         this.type = new CvaInt();
@@ -122,13 +130,12 @@ public class SemanticVisitor implements IVisitor
         this.visit(e.getRight());
         if (!this.type.toString().equals(lefty.toString()))
         {
-            error(e.getLineNum(), "and expression" +
-                    " the type of left is " + lefty.toString() +
-                    ", but the type of right is " + this.type.toString());
+            errorLog(e.getLineNum(),
+                    String.format("and expression the type of left is %s, but the type of right is %s", lefty.toString(), this.type.toString()));
         }
         else if (!new CvaBoolean().toString().equals(this.type.toString()))
         {
-            error(e.getLineNum(), " only integer numbers can be added.");
+            errorLog(e.getLineNum(), " only integer numbers can be added.");
         }
 
         this.type = new CvaBoolean();
@@ -147,7 +154,7 @@ public class SemanticVisitor implements IVisitor
         }
         else
         {
-            error(e.getLineNum(), "only an instance of class can be invoked.");
+            errorLog(e.getLineNum(), "only an instance of class can be invoked.");
             this.type = new AbstractType()
             {
                 @Override
@@ -170,7 +177,7 @@ public class SemanticVisitor implements IVisitor
 
         if (mty == null)
         {
-            error(e.getLineNum(), "the method you are calling haven't been defined.");
+            errorLog(e.getLineNum(), "the method you are calling haven't been defined.");
             e.setArgTypeList(argsty);
             e.setRetType(
                     new AbstractType()
@@ -189,16 +196,16 @@ public class SemanticVisitor implements IVisitor
 
         if (mty.getArgsType().size() != argsty.size())
         {
-            error(e.getLineNum(), "the count of arguments is not match.");
+            errorLog(e.getLineNum(), "the count of arguments is not match.");
         }
 
         for (int i = 0; i < mty.getArgsType().size(); i++)
         {
             if (!isMatch(((CvaDeclaration) mty.getArgsType().get(i)).getType(), argsty.get(i)))
             {
-                error(e.getArgs().get(i).getLineNum(), "the parameter " + (i + 1) +
-                        " needs a " + ((CvaDeclaration) mty.getArgsType().get(i)).getType().toString() +
-                        ", but got a " + argsty.get(i).toString());
+                errorLog(e.getArgs().get(i).getLineNum(),
+                        String.format("the parameter %d needs a %s, but got a %s",
+                                i + 1, ((CvaDeclaration) mty.getArgsType().get(i)).getType().toString(), argsty.get(i).toString()));
             }
         }
 
@@ -228,12 +235,16 @@ public class SemanticVisitor implements IVisitor
 
         if (this.curMthLocals.contains(e.getLiteral()))
         {
-            error(e.getLineNum(), "you should assign \"" + e.getLiteral() + "\" a value before use it.");
+            errorLog(e.getLineNum(),
+                    String.format("you should assign \"%s\" a value before use it.",
+                    e.getLiteral()));
         }
 
         if (type == null)
         {
-            error(e.getLineNum(), "you should declare \"" + e.getLiteral() + "\" before use it.");
+            errorLog(e.getLineNum(),
+                    String.format("you should declare \"%s\" before use it.",
+                            e.getLiteral()));
             e.setType(
                     new AbstractType()
                     {
@@ -262,13 +273,13 @@ public class SemanticVisitor implements IVisitor
         this.visit(e.getRight());
         if (!this.type.toString().equals(lefty.toString()))
         {
-            error(e.getLineNum(), "compare expression" +
-                    " the type of left is " + lefty.toString() +
-                    ", but the type of right is " + this.type.toString());
+            errorLog(e.getLineNum(),
+                    String.format("compare expression the type of left is %s, but the type of right is %s",
+                    lefty.toString(), this.type.toString()));
         }
         else if (!new CvaInt().toString().equals(this.type.toString()))
         {
-            error(e.getLineNum(), "only integer numbers can be compared.");
+            errorLog(e.getLineNum(), "only integer numbers can be compared.");
         }
 
         this.type = new CvaBoolean();
@@ -283,7 +294,9 @@ public class SemanticVisitor implements IVisitor
         }
         else
         {
-            error(e.getLineNum(), "cannot find the declaration of class \"" + e.getLiteral() + "\".");
+            errorLog(e.getLineNum(),
+                    String.format("cannot find the declaration of class \"%s\".",
+                            e.getLiteral()));
             this.type = new AbstractType()
             {
                 @Override
@@ -301,7 +314,7 @@ public class SemanticVisitor implements IVisitor
         this.visit(e.getExpr());
         if (!this.type.toString().equals(new CvaBoolean().toString()))
         {
-            error(e.getLineNum(), "the exp cannot calculate to a boolean.");
+            errorLog(e.getLineNum(), "the exp cannot calculate to a boolean.");
         }
 
         this.type = new CvaBoolean();
@@ -321,14 +334,14 @@ public class SemanticVisitor implements IVisitor
         this.visit(e.getRight());
         if (!this.type.toString().equals(lefty.toString()))
         {
-            error(e.getLineNum(), "sub expression" +
-                    " the type of left is " + lefty.toString() +
-                    ", but the type of right is " + this.type.toString());
+            errorLog(e.getLineNum(),
+                    String.format("sub expression the type of left is %s, but the type of right is %s",
+                    lefty.toString(), this.type.toString()));
         }
         else if (!new CvaInt().toString().equals(this.type.toString()))
 
         {
-            error(e.getLineNum(), " only integer numbers can be subbed.");
+            errorLog(e.getLineNum(), " only integer numbers can be subbed.");
         }
 
         this.type = new CvaInt();
@@ -348,13 +361,13 @@ public class SemanticVisitor implements IVisitor
         this.visit(e.getRight());
         if (!this.type.toString().equals(lefty.toString()))
         {
-            error(e.getLineNum(), "times expression" +
-                    " the type of left is " + lefty.toString() +
-                    ", but the type of right is " + this.type.toString());
+            errorLog(e.getLineNum(),
+                    String.format("times expression the type of left is %s, but the type of right is %s",
+                            lefty.toString(), this.type.toString()));
         }
         else if (!new CvaInt().toString().equals(this.type.toString()))
         {
-            error(e.getLineNum(), "only integer numbers can be timed.");
+            errorLog(e.getLineNum(), "only integer numbers can be timed.");
         }
 
         this.type = new CvaInt();
@@ -383,7 +396,7 @@ public class SemanticVisitor implements IVisitor
         //if (!this.type.toString().equals(idty.toString()))
         if (!isMatch(idty, s.getType()))
         {
-            error(s.getLineNum(), String.format("the type of \"%s\" is %s, but the type of expression is %s. Assign failed.",
+            errorLog(s.getLineNum(), String.format("the type of \"%s\" is %s, but the type of expression is %s. Assign failed.",
                     s.getLiteral(), idty.toString(), s.getType().toString()));
         }
 
@@ -401,7 +414,7 @@ public class SemanticVisitor implements IVisitor
         this.visit(s.getCondition());
         if (!this.type.toString().equals(new CvaBoolean().toString()))
         {
-            error(s.getCondition().getLineNum(),
+            errorLog(s.getCondition().getLineNum(),
                     "the condition's type should be a boolean.");
         }
 
@@ -415,7 +428,7 @@ public class SemanticVisitor implements IVisitor
         this.visit(s.getExpr());
         if (!this.type.toString().equals(new CvaInt().toString()))
         {
-            error(s.getExpr().getLineNum(),
+            errorLog(s.getExpr().getLineNum(),
                     String.format("the expression in \"printf()\" must be a integer or can be calculate to an integer."));
         }
     }
@@ -426,7 +439,7 @@ public class SemanticVisitor implements IVisitor
         this.visit(s.getCondition());
         if (!this.type.toString().equals(new CvaBoolean().toString()))
         {
-            error(s.getCondition().getLineNum(), "the condition's type should be a boolean.");
+            errorLog(s.getCondition().getLineNum(), "the condition's type should be a boolean.");
         }
 
         this.visit(s.getBody());
@@ -448,7 +461,7 @@ public class SemanticVisitor implements IVisitor
         // if (!this.type.toString().equals(m.retType.toString()))
         if (!isMatch(cvaMethod.getRetType(), this.type))
         {
-            error(cvaMethod.getRetExpr().getLineNum(),
+            errorLog(cvaMethod.getRetExpr().getLineNum(),
                     String.format("the return expression's type is not match the method \"%s\" declared.", 
                             cvaMethod.getLiteral()));
         }

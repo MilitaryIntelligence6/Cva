@@ -113,7 +113,7 @@ public class Parser
     private void error()
     {
         System.out.printf("Syntax error at line %s compilation aborting...\n%n",
-                curToken != null ? curToken.getLineNum() + "" : "unknow");
+                curToken != null ? curToken.getLineNum() : "unknow");
         System.exit(1);
     }
 

@@ -22,7 +22,7 @@ public class ClassTable
     {
         if (this.table.get(c) != null)
         {
-            System.out.println("duplicated class: " + c);
+            System.out.printf("duplicated class: %s%n", c);
             System.exit(1);
         }
         else

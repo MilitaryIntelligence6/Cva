@@ -16,6 +16,7 @@ public class Label
     @Override
     public String toString()
     {
-        return "Label_" + i;
+        // 这个地方是JVM汇编规范, 不能改!;
+        return String.format("Label_%d", i);
     }
 }

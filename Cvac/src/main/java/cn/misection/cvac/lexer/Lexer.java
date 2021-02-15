@@ -183,7 +183,7 @@ public class Lexer
                         }
                         else
                         {
-                            System.out.println("This is an illegal identifier at line " + lineNum);
+                            System.out.printf("This is an illegal identifier at line %d%n", lineNum);
                             System.exit(1);
                             return null;
                         }

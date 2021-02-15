@@ -138,9 +138,9 @@ public class TranslatorVisitor implements IVisitor
         {
             emit(new Stm.Aload(0));
             AbstractType type = e.getType();
-            emit(new Stm.Getfield(this.getClassId() + '/' + e.getLiteral(),
+            emit(new Stm.Getfield(String.format("%s/%s", this.getClassId(), e.getLiteral()),
                     type instanceof CvaClassType ?
-                            ("L" + ((CvaClassType) type).getLiteral() + ";")
+                            (String.format("L%s;", ((CvaClassType) type).getLiteral()))
                             : "I"));
         }
         else
