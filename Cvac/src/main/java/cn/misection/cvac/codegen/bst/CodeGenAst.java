@@ -41,7 +41,7 @@ public class CodeGenAst
             }
         }
 
-        public static class Int extends T
+        public static class GenInt extends T
         {
             @Override
             public String toString()
@@ -53,12 +53,12 @@ public class CodeGenAst
 
     public static class Dec
     {
-        public static class DecSingle
+        public static class GenDeclaration
         {
             private Type.T type;
             private String literal;
 
-            public DecSingle(Type.T type, String literal)
+            public GenDeclaration(String literal, Type.T type)
             {
                 this.setType(type);
                 this.setLiteral(literal);
@@ -92,11 +92,11 @@ public class CodeGenAst
         {
         }
 
-        public static class Aload extends T
+        public static class ALoad extends T
         {
             private int index;
 
-            public Aload(int index)
+            public ALoad(int index)
             {
                 this.setIndex(index);
             }
@@ -112,15 +112,15 @@ public class CodeGenAst
             }
         }
 
-        public static class Areturn extends T
+        public static class AReturn extends T
         {
         }
 
-        public static class Astore extends T
+        public static class AStore extends T
         {
             private int index;
 
-            public Astore(int index)
+            public AStore(int index)
             {
                 this.setIndex(index);
             }
@@ -156,12 +156,12 @@ public class CodeGenAst
             }
         }
 
-        public static class Getfield extends T
+        public static class GetField extends T
         {
             private String fieldSpec;
             public String descriptor;
 
-            public Getfield(String fieldSpec, String descriptor)
+            public GetField(String fieldSpec, String descriptor)
             {
                 this.setFieldSpec(fieldSpec);
                 this.descriptor = descriptor;
@@ -178,15 +178,15 @@ public class CodeGenAst
             }
         }
 
-        public static class Iadd extends T
+        public static class IAdd extends T
         {
         }
 
-        public static class Ificmplt extends T
+        public static class IFicmplt extends T
         {
             private Label label;
 
-            public Ificmplt(Label label)
+            public IFicmplt(Label label)
             {
                 this.setLabel(label);
             }
@@ -202,11 +202,11 @@ public class CodeGenAst
             }
         }
 
-        public static class Iload extends T
+        public static class ILoad extends T
         {
             private int index;
 
-            public Iload(int index)
+            public ILoad(int index)
             {
                 this.setIndex(index);
             }
@@ -222,35 +222,75 @@ public class CodeGenAst
             }
         }
 
-        public static class Imul extends T
+        public static class IMul extends T
         {
         }
 
         public static class InvokeVirtual extends T
         {
-            public String f;
-            public String c;
-            public List<Type.T> at;
-            public Type.T rt;
+            private String f;
+            private String c;
+            private List<Type.T> argTypeList;
+            private Type.T retType;
 
-            public InvokeVirtual(String f, String c, List<Type.T> at, Type.T rt)
+            public InvokeVirtual(String f, String c, List<Type.T> argTypeList, Type.T retType)
+            {
+                this.setF(f);
+                this.setC(c);
+                this.setArgTypeList(argTypeList);
+                this.setRetType(retType);
+            }
+
+            public String getF()
+            {
+                return f;
+            }
+
+            public void setF(String f)
             {
                 this.f = f;
+            }
+
+            public String getC()
+            {
+                return c;
+            }
+
+            public void setC(String c)
+            {
                 this.c = c;
-                this.at = at;
-                this.rt = rt;
+            }
+
+            public List<Type.T> getArgTypeList()
+            {
+                return argTypeList;
+            }
+
+            public void setArgTypeList(List<Type.T> argTypeList)
+            {
+                this.argTypeList = argTypeList;
+            }
+
+            public Type.T getRetType()
+            {
+                return retType;
+            }
+
+            public void setRetType(Type.T retType)
+            {
+                this.retType = retType;
             }
         }
 
-        public static class Ireturn extends T
+        public static class IReturn extends T
         {
         }
 
-        public static class Istore extends T
+        public static class IStore extends T
         {
             private int index;
 
-            public Istore(int index)
+            public IStore(int index)
             {
                 this.setIndex(index);
             }
@@ -266,7 +306,7 @@ public class CodeGenAst
             }
         }
 
-        public static class Isub extends T
+        public static class ISub extends T
         {
         }
 
@@ -334,12 +374,12 @@ public class CodeGenAst
         {
         }
 
-        public static class Putfield extends T
+        public static class PutField extends T
         {
             private String fieldSpec;
             public String descriptor;
 
-            public Putfield(String fieldSpec, String descriptor)
+            public PutField(String fieldSpec, String descriptor)
             {
                 this.setFieldSpec(fieldSpec);
                 this.descriptor = descriptor;
@@ -359,23 +399,23 @@ public class CodeGenAst
 
     public static class Method
     {
-        public static class MethodSingle
+        public static class GenMethod
         {
             private Type.T retType;
             private String literal;
             private String classId;
-            private List<Dec.DecSingle> formalList;
-            private List<Dec.DecSingle> localList;
+            private List<Dec.GenDeclaration> formalList;
+            private List<Dec.GenDeclaration> localList;
             private List<Stm.T> statementList;
             private int index; // number of index
             private int retExpr;
 
-            public MethodSingle(
+            public GenMethod(
                     String literal,
                     Type.T retType,
                     String classId,
-                    List<Dec.DecSingle> formalList,
-                    List<Dec.DecSingle> localList,
+                    List<Dec.GenDeclaration> formalList,
+                    List<Dec.GenDeclaration> localList,
                     List<Stm.T> statementList,
                     int retExpr,
                     int index
@@ -421,22 +461,22 @@ public class CodeGenAst
                 this.classId = classId;
             }
 
-            public List<Dec.DecSingle> getFormalList()
+            public List<Dec.GenDeclaration> getFormalList()
             {
                 return formalList;
             }
 
-            public void setFormalList(List<Dec.DecSingle> formalList)
+            public void setFormalList(List<Dec.GenDeclaration> formalList)
             {
                 this.formalList = formalList;
             }
 
-            public List<Dec.DecSingle> getLocalList()
+            public List<Dec.GenDeclaration> getLocalList()
             {
                 return localList;
             }
 
-            public void setLocalList(List<Dec.DecSingle> localList)
+            public void setLocalList(List<Dec.GenDeclaration> localList)
             {
                 this.localList = localList;
             }
@@ -479,12 +519,12 @@ public class CodeGenAst
         {
             private String literal;
             private String parent;
-            private List<Dec.DecSingle> fieldList;
-            private List<Method.MethodSingle> methodList;
+            private List<Dec.GenDeclaration> fieldList;
+            private List<Method.GenMethod> methodList;
 
             public GenClass(String literal, String parent,
-                            List<Dec.DecSingle> fieldList,
-                            List<Method.MethodSingle> methodList)
+                            List<Dec.GenDeclaration> fieldList,
+                            List<Method.GenMethod> methodList)
             {
                 this.setLiteral(literal);
                 this.setParent(parent);
@@ -512,22 +552,22 @@ public class CodeGenAst
                 this.parent = parent;
             }
 
-            public List<Dec.DecSingle> getFieldList()
+            public List<Dec.GenDeclaration> getFieldList()
             {
                 return fieldList;
             }
 
-            public void setFieldList(List<Dec.DecSingle> fieldList)
+            public void setFieldList(List<Dec.GenDeclaration> fieldList)
             {
                 this.fieldList = fieldList;
             }
 
-            public List<Method.MethodSingle> getMethodList()
+            public List<Method.GenMethod> getMethodList()
             {
                 return methodList;
             }
 
-            public void setMethodList(List<Method.MethodSingle> methodList)
+            public void setMethodList(List<Method.GenMethod> methodList)
             {
                 this.methodList = methodList;
             }

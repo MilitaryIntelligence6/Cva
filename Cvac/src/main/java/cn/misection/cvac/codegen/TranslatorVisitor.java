@@ -28,9 +28,9 @@ public class TranslatorVisitor implements IVisitor
 
     private Hashtable<String, Integer> indexTable;
     private Type.T type;
-    private Dec.DecSingle dec;
+    private Dec.GenDeclaration dec;
     private List<Stm.T> stms;
-    private Method.MethodSingle method;
+    private Method.GenMethod method;
     private CodeGenAst.Class.GenClass classs;
     private MainClass.GenEntry mainClass;
     private Program.GenProgram prog;
@@ -57,7 +57,7 @@ public class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaBoolean t)
     {
-        this.setType(new Type.Int());
+        this.setType(new Type.GenInt());
     }
 
     @Override
@@ -69,14 +69,16 @@ public class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaInt t)
     {
-        this.setType(new Type.Int());
+        this.setType(new Type.GenInt());
     }
 
     @Override
     public void visit(CvaDeclaration d)
     {
         this.visit(d.getType());
-        this.setDec(new Dec.DecSingle(this.getType(), d.getLiteral()));
+        this.setDec(new Dec.GenDeclaration(
+                d.getLiteral(),
+                this.getType()));
         if (this.indexTable != null) // if it is field
         {
             this.indexTable.put(d.getLiteral(), index++);
@@ -88,7 +90,7 @@ public class TranslatorVisitor implements IVisitor
     {
         this.visit(e.getLeft());
         this.visit(e.getRight());
-        emit(new Stm.Iadd());
+        emit(new Stm.IAdd());
     }
 
     @Override
@@ -98,10 +100,10 @@ public class TranslatorVisitor implements IVisitor
         Label r = new Label();
         this.visit(e.getLeft());
         emit(new Stm.Ldc(1));
-        emit(new Stm.Ificmplt(f));
+        emit(new Stm.IFicmplt(f));
         this.visit(e.getRight());
         emit(new Stm.Ldc(1));
-        emit(new Stm.Ificmplt(f));
+        emit(new Stm.IFicmplt(f));
         emit(new Stm.Ldc(1));
         emit(new Stm.Goto(r));
         emit(new Stm.LabelJ(f));
@@ -136,9 +138,9 @@ public class TranslatorVisitor implements IVisitor
     {
         if (e.isField())
         {
-            emit(new Stm.Aload(0));
+            emit(new Stm.ALoad(0));
             AbstractType type = e.getType();
-            emit(new Stm.Getfield(String.format("%s/%s", this.getClassId(), e.getLiteral()),
+            emit(new Stm.GetField(String.format("%s/%s", this.getClassId(), e.getLiteral()),
                     type instanceof CvaClassType ?
                             (String.format("L%s;", ((CvaClassType) type).getLiteral()))
                             : "I"));
@@ -148,11 +150,11 @@ public class TranslatorVisitor implements IVisitor
             int index = this.indexTable.get(e.getLiteral());
             if (e.getType() instanceof CvaClassType)
             {
-                emit(new Stm.Aload(index));
+                emit(new Stm.ALoad(index));
             }
             else
             {
-                emit(new Stm.Iload(index));
+                emit(new Stm.ILoad(index));
             }
         }
     }
@@ -164,7 +166,7 @@ public class TranslatorVisitor implements IVisitor
         Label r = new Label();
         this.visit(e.getLeft());
         this.visit(e.getRight());
-        emit(new Stm.Ificmplt(t));
+        emit(new Stm.IFicmplt(t));
         emit(new Stm.Ldc(0));
         emit(new Stm.Goto(r));
         emit(new Stm.LabelJ(t));
@@ -185,7 +187,7 @@ public class TranslatorVisitor implements IVisitor
         Label r = new Label();
         this.visit(e.getExpr());
         emit(new Stm.Ldc(1));
-        emit(new Stm.Ificmplt(f));
+        emit(new Stm.IFicmplt(f));
         emit(new Stm.Ldc(1));
         emit(new Stm.Goto(r));
         emit(new Stm.LabelJ(f));
@@ -204,13 +206,13 @@ public class TranslatorVisitor implements IVisitor
     {
         this.visit(e.getLeft());
         this.visit(e.getRight());
-        emit(new Stm.Isub());
+        emit(new Stm.ISub());
     }
 
     @Override
     public void visit(CvaThisExpr e)
     {
-        emit(new Stm.Aload(0));
+        emit(new Stm.ALoad(0));
     }
 
     @Override
@@ -218,7 +220,7 @@ public class TranslatorVisitor implements IVisitor
     {
         this.visit(e.getLeft());
         this.visit(e.getRight());
-        emit(new Stm.Imul());
+        emit(new Stm.IMul());
     }
 
     @Override
@@ -236,18 +238,18 @@ public class TranslatorVisitor implements IVisitor
             this.visit(s.getExpr());
             if (s.getType() instanceof CvaClassType)
             {
-                emit(new Stm.Astore(index));
+                emit(new Stm.AStore(index));
             }
             else
             {
-                emit(new Stm.Istore(index));
+                emit(new Stm.IStore(index));
             }
         }
         catch (NullPointerException e)
         {
-            emit(new Stm.Aload(0));
+            emit(new Stm.ALoad(0));
             this.visit(s.getExpr());
-            emit(new Stm.Putfield(String.format("%s/%s", this.getClassId(), s.getLiteral()),
+            emit(new Stm.PutField(String.format("%s/%s", this.getClassId(), s.getLiteral()),
                     s.getType() instanceof CvaClassType ?
                             (String.format("L%s;", ((CvaClassType) s.getType()).getLiteral()))
                             : "I"));
@@ -267,7 +269,7 @@ public class TranslatorVisitor implements IVisitor
         Label r = new Label();
         this.visit(s.getCondition());
         emit(new Stm.Ldc(1));
-        emit(new Stm.Ificmplt(l));
+        emit(new Stm.IFicmplt(l));
         this.visit(s.getThenStatement());
         emit(new Stm.Goto(r));
         emit(new Stm.LabelJ(l));
@@ -290,7 +292,7 @@ public class TranslatorVisitor implements IVisitor
         emit(new Stm.LabelJ(con));
         this.visit(s.getCondition());
         emit(new Stm.Ldc(1));
-        emit(new Stm.Ificmplt(end));
+        emit(new Stm.IFicmplt(end));
         this.visit(s.getBody());
         emit(new Stm.Goto(con));
         emit(new Stm.LabelJ(end));
@@ -304,14 +306,14 @@ public class TranslatorVisitor implements IVisitor
         this.visit(cvaMethod.getRetType());
         Type.T theRetType = this.getType();
 
-        List<Dec.DecSingle> formalList = new LinkedList<>();
+        List<Dec.GenDeclaration> formalList = new LinkedList<>();
         cvaMethod.getFormalList().forEach(f ->
         {
             this.visit(f);
             formalList.add(this.getDec());
         });
 
-        List<Dec.DecSingle> localList = new LinkedList<>();
+        List<Dec.GenDeclaration> localList = new LinkedList<>();
         cvaMethod.getLocalList().forEach(l ->
         {
             this.visit(l);
@@ -324,14 +326,14 @@ public class TranslatorVisitor implements IVisitor
 
         if (cvaMethod.getRetType() instanceof CvaClassType)
         {
-            emit(new Stm.Areturn());
+            emit(new Stm.AReturn());
         }
         else
         {
-            emit(new Stm.Ireturn());
+            emit(new Stm.IReturn());
         }
 
-        this.setMethod(new Method.MethodSingle(
+        this.setMethod(new Method.GenMethod(
                 cvaMethod.getLiteral(),
                 theRetType,
                 this.getClassId(),
@@ -346,13 +348,13 @@ public class TranslatorVisitor implements IVisitor
     public void visit(CvaClass cvaClass)
     {
         this.setClassId(cvaClass.getLiteral());
-        List<Dec.DecSingle> fieldList = new LinkedList<>();
+        List<Dec.GenDeclaration> fieldList = new LinkedList<>();
         cvaClass.getFieldList().forEach(f ->
         {
             this.visit(f);
             fieldList.add(this.getDec());
         });
-        List<Method.MethodSingle> methodList = new LinkedList<>();
+        List<Method.GenMethod> methodList = new LinkedList<>();
         cvaClass.getMethodList().forEach(m ->
         {
             this.visit(m);
@@ -403,12 +405,12 @@ public class TranslatorVisitor implements IVisitor
         this.type = type;
     }
 
-    public Dec.DecSingle getDec()
+    public Dec.GenDeclaration getDec()
     {
         return dec;
     }
 
-    public void setDec(Dec.DecSingle dec)
+    public void setDec(Dec.GenDeclaration dec)
     {
         this.dec = dec;
     }
@@ -423,12 +425,12 @@ public class TranslatorVisitor implements IVisitor
         this.stms = stms;
     }
 
-    public Method.MethodSingle getMethod()
+    public Method.GenMethod getMethod()
     {
         return method;
     }
 
-    public void setMethod(Method.MethodSingle method)
+    public void setMethod(Method.GenMethod method)
     {
         this.method = method;
     }

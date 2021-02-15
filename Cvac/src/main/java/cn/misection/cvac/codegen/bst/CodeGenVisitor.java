@@ -10,45 +10,45 @@ public interface CodeGenVisitor
     {
         if (t instanceof CodeGenAst.Type.ClassType)
             this.visit(((CodeGenAst.Type.ClassType) t));
-        else this.visit(((CodeGenAst.Type.Int) t));
+        else this.visit(((CodeGenAst.Type.GenInt) t));
     }
 
     void visit(CodeGenAst.Type.ClassType t);
 
-    void visit(CodeGenAst.Type.Int t);
+    void visit(CodeGenAst.Type.GenInt t);
 
     // Dec
-    void visit(CodeGenAst.Dec.DecSingle d);
+    void visit(CodeGenAst.Dec.GenDeclaration d);
 
     // Stm
     default void visit(CodeGenAst.Stm.T s)
     {
-        if (s instanceof CodeGenAst.Stm.Aload)
-            this.visit(((CodeGenAst.Stm.Aload) s));
-        else if (s instanceof CodeGenAst.Stm.Areturn)
-            this.visit(((CodeGenAst.Stm.Areturn) s));
-        else if (s instanceof CodeGenAst.Stm.Astore)
-            this.visit(((CodeGenAst.Stm.Astore) s));
+        if (s instanceof CodeGenAst.Stm.ALoad)
+            this.visit(((CodeGenAst.Stm.ALoad) s));
+        else if (s instanceof CodeGenAst.Stm.AReturn)
+            this.visit(((CodeGenAst.Stm.AReturn) s));
+        else if (s instanceof CodeGenAst.Stm.AStore)
+            this.visit(((CodeGenAst.Stm.AStore) s));
         else if (s instanceof CodeGenAst.Stm.Goto)
             this.visit(((CodeGenAst.Stm.Goto) s));
-        else if (s instanceof CodeGenAst.Stm.Getfield)
-            this.visit(((CodeGenAst.Stm.Getfield) s));
-        else if (s instanceof CodeGenAst.Stm.Iadd)
-            this.visit(((CodeGenAst.Stm.Iadd) s));
-        else if (s instanceof CodeGenAst.Stm.Ificmplt)
-            this.visit(((CodeGenAst.Stm.Ificmplt) s));
-        else if (s instanceof CodeGenAst.Stm.Iload)
-            this.visit(((CodeGenAst.Stm.Iload) s));
-        else if (s instanceof CodeGenAst.Stm.Imul)
-            this.visit(((CodeGenAst.Stm.Imul) s));
+        else if (s instanceof CodeGenAst.Stm.GetField)
+            this.visit(((CodeGenAst.Stm.GetField) s));
+        else if (s instanceof CodeGenAst.Stm.IAdd)
+            this.visit(((CodeGenAst.Stm.IAdd) s));
+        else if (s instanceof CodeGenAst.Stm.IFicmplt)
+            this.visit(((CodeGenAst.Stm.IFicmplt) s));
+        else if (s instanceof CodeGenAst.Stm.ILoad)
+            this.visit(((CodeGenAst.Stm.ILoad) s));
+        else if (s instanceof CodeGenAst.Stm.IMul)
+            this.visit(((CodeGenAst.Stm.IMul) s));
         else if (s instanceof CodeGenAst.Stm.InvokeVirtual)
             this.visit(((CodeGenAst.Stm.InvokeVirtual) s));
-        else if (s instanceof CodeGenAst.Stm.Ireturn)
-            this.visit(((CodeGenAst.Stm.Ireturn) s));
-        else if (s instanceof CodeGenAst.Stm.Istore)
-            this.visit(((CodeGenAst.Stm.Istore) s));
-        else if (s instanceof CodeGenAst.Stm.Isub)
-            this.visit(((CodeGenAst.Stm.Isub) s));
+        else if (s instanceof CodeGenAst.Stm.IReturn)
+            this.visit(((CodeGenAst.Stm.IReturn) s));
+        else if (s instanceof CodeGenAst.Stm.IStore)
+            this.visit(((CodeGenAst.Stm.IStore) s));
+        else if (s instanceof CodeGenAst.Stm.ISub)
+            this.visit(((CodeGenAst.Stm.ISub) s));
         else if (s instanceof CodeGenAst.Stm.LabelJ)
             this.visit(((CodeGenAst.Stm.LabelJ) s));
         else if (s instanceof CodeGenAst.Stm.Ldc)
@@ -58,34 +58,34 @@ public interface CodeGenVisitor
         else if (s instanceof CodeGenAst.Stm.Write)
             this.visit(((CodeGenAst.Stm.Write) s));
         else // if (s instanceof Ast.Stm.Putfield)
-            this.visit(((CodeGenAst.Stm.Putfield) s));
+            this.visit(((CodeGenAst.Stm.PutField) s));
     }
 
-    void visit(CodeGenAst.Stm.Aload s);
+    void visit(CodeGenAst.Stm.ALoad s);
 
-    void visit(CodeGenAst.Stm.Areturn s);
+    void visit(CodeGenAst.Stm.AReturn s);
 
-    void visit(CodeGenAst.Stm.Astore s);
+    void visit(CodeGenAst.Stm.AStore s);
 
     void visit(CodeGenAst.Stm.Goto s);
 
-    void visit(CodeGenAst.Stm.Getfield s);
+    void visit(CodeGenAst.Stm.GetField s);
 
-    void visit(CodeGenAst.Stm.Iadd s);
+    void visit(CodeGenAst.Stm.IAdd s);
 
-    void visit(CodeGenAst.Stm.Ificmplt s);
+    void visit(CodeGenAst.Stm.IFicmplt s);
 
-    void visit(CodeGenAst.Stm.Iload s);
+    void visit(CodeGenAst.Stm.ILoad s);
 
-    void visit(CodeGenAst.Stm.Imul s);
+    void visit(CodeGenAst.Stm.IMul s);
 
     void visit(CodeGenAst.Stm.InvokeVirtual s);
 
-    void visit(CodeGenAst.Stm.Ireturn s);
+    void visit(CodeGenAst.Stm.IReturn s);
 
-    void visit(CodeGenAst.Stm.Istore s);
+    void visit(CodeGenAst.Stm.IStore s);
 
-    void visit(CodeGenAst.Stm.Isub s);
+    void visit(CodeGenAst.Stm.ISub s);
 
     void visit(CodeGenAst.Stm.LabelJ s);
 
@@ -95,9 +95,9 @@ public interface CodeGenVisitor
 
     void visit(CodeGenAst.Stm.Write s);
 
-    void visit(CodeGenAst.Stm.Putfield s);
+    void visit(CodeGenAst.Stm.PutField s);
 
-    void visit(CodeGenAst.Method.MethodSingle m);
+    void visit(CodeGenAst.Method.GenMethod m);
 
     void visit(CodeGenAst.MainClass.GenEntry c);
 

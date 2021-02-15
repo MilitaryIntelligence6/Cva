@@ -42,31 +42,31 @@ public class ByteCodeGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(CodeGenAst.Type.Int t)
+    public void visit(CodeGenAst.Type.GenInt t)
     {
         this.write("I");
     }
 
     @Override
-    public void visit(CodeGenAst.Dec.DecSingle d)
+    public void visit(CodeGenAst.Dec.GenDeclaration d)
     {
         this.writeln(";Error: you are accessing the dec single instance.");
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.Aload s)
+    public void visit(CodeGenAst.Stm.ALoad s)
     {
         this.iwriteln(String.format("aload %d", s.getIndex()));
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.Areturn s)
+    public void visit(CodeGenAst.Stm.AReturn s)
     {
         this.iwriteln("areturn");
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.Astore s)
+    public void visit(CodeGenAst.Stm.AStore s)
     {
         this.iwriteln(String.format("astore %d", s.getIndex()));
     }
@@ -78,31 +78,31 @@ public class ByteCodeGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.Getfield s)
+    public void visit(CodeGenAst.Stm.GetField s)
     {
         this.iwriteln(String.format("getfield %s %s", s.getFieldSpec(), s.descriptor));
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.Iadd s)
+    public void visit(CodeGenAst.Stm.IAdd s)
     {
         this.iwriteln("iadd");
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.Ificmplt s)
+    public void visit(CodeGenAst.Stm.IFicmplt s)
     {
         this.iwriteln(String.format("if_icmplt %s", s.getLabel().toString()));
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.Iload s)
+    public void visit(CodeGenAst.Stm.ILoad s)
     {
         this.iwriteln(String.format("iload %d", s.getIndex()));
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.Imul s)
+    public void visit(CodeGenAst.Stm.IMul s)
     {
         this.iwriteln("imul");
     }
@@ -110,27 +110,27 @@ public class ByteCodeGenerator implements CodeGenVisitor
     @Override
     public void visit(CodeGenAst.Stm.InvokeVirtual s)
     {
-        this.write(String.format("    invokevirtual %s/%s(", s.c, s.f));
-        s.at.forEach(this::visit);
+        this.write(String.format("    invokevirtual %s/%s(", s.getC(), s.getF()));
+        s.getArgTypeList().forEach(this::visit);
         this.write(")");
-        this.visit(s.rt);
+        this.visit(s.getRetType());
         this.writeln("");
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.Ireturn s)
+    public void visit(CodeGenAst.Stm.IReturn s)
     {
         this.iwriteln("ireturn");
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.Istore s)
+    public void visit(CodeGenAst.Stm.IStore s)
     {
         this.iwriteln(String.format("istore %d", s.getIndex()));
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.Isub s)
+    public void visit(CodeGenAst.Stm.ISub s)
     {
         this.iwriteln("isub");
     }
@@ -165,13 +165,13 @@ public class ByteCodeGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.Putfield s)
+    public void visit(CodeGenAst.Stm.PutField s)
     {
         this.iwriteln(String.format("putfield %s %s", s.getFieldSpec(), s.descriptor));
     }
 
     @Override
-    public void visit(CodeGenAst.Method.MethodSingle m)
+    public void visit(CodeGenAst.Method.GenMethod m)
     {
         this.write(String.format(".method public %s(", m.getLiteral()));
         m.getFormalList().forEach(f -> this.visit(f.getType()));

@@ -1,6 +1,6 @@
 package cn.misection.cvac.codegen.bst.expr;
 
-import cn.misection.cvac.codegen.bst.type.AbstractType;
+import cn.misection.cvac.codegen.bst.btype.BaseType;
 
 import java.util.List;
 
@@ -30,9 +30,9 @@ public class CvaCallExpr extends AbstractExpression
     /**
      * arg's type;
      */
-    private List<AbstractType> argTypeList;
+    private List<BaseType> argTypeList;
 
-    public AbstractType retType;
+    public BaseType retType;
 
     public CvaCallExpr(int lineNum,
                        String literal,
@@ -71,12 +71,12 @@ public class CvaCallExpr extends AbstractExpression
         return type;
     }
 
-    public List<AbstractType> getArgTypeList()
+    public List<BaseType> getArgTypeList()
     {
         return argTypeList;
     }
 
-    public AbstractType getRetType()
+    public BaseType getRetType()
     {
         return retType;
     }
@@ -101,12 +101,12 @@ public class CvaCallExpr extends AbstractExpression
         this.type = type;
     }
 
-    public void setArgTypeList(List<AbstractType> argTypeList)
+    public void setArgTypeList(List<BaseType> argTypeList)
     {
         this.argTypeList = argTypeList;
     }
 
-    public void setRetType(AbstractType retType)
+    public void setRetType(BaseType retType)
     {
         this.retType = retType;
     }

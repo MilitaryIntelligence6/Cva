@@ -1,6 +1,6 @@
 package cn.misection.cvac.codegen.bst.expr;
 
-import cn.misection.cvac.codegen.bst.type.AbstractType;
+import cn.misection.cvac.codegen.bst.btype.BaseType;
 
 /**
  * @author Military Intelligence 6 root
@@ -13,7 +13,7 @@ public class CvaIdentifier extends AbstractExpression
 {
     private String literal;
 
-    private AbstractType type;
+    private BaseType type;
 
     /**
      * whether or not a field;
@@ -26,7 +26,7 @@ public class CvaIdentifier extends AbstractExpression
         this.literal = literal;
     }
 
-    public CvaIdentifier(int lineNum, String literal, AbstractType type, boolean fieldFlag)
+    public CvaIdentifier(int lineNum, String literal, BaseType type, boolean fieldFlag)
     {
         super(lineNum);
         this.literal = literal;
@@ -39,7 +39,7 @@ public class CvaIdentifier extends AbstractExpression
         return literal;
     }
 
-    public AbstractType getType()
+    public BaseType getType()
     {
         return type;
     }
@@ -54,7 +54,7 @@ public class CvaIdentifier extends AbstractExpression
         this.literal = literal;
     }
 
-    public void setType(AbstractType type)
+    public void setType(BaseType type)
     {
         this.type = type;
     }

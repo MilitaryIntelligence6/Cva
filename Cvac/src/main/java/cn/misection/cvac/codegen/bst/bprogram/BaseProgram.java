@@ -1,6 +1,6 @@
 package cn.misection.cvac.codegen.bst.bprogram;
 
-import cn.misection.cvac.codegen.bst.clas.BaseClass;
+import cn.misection.cvac.codegen.bst.bclas.BaseClass;
 import cn.misection.cvac.codegen.bst.bentry.BaseEntry;
 
 import java.util.List;
