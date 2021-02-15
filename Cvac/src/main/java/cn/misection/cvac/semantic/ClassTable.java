@@ -31,14 +31,14 @@ public class ClassTable
         }
     }
 
-    public void putFieldToClass(String c, String id, AbstractType type)
+    public void putFieldToClass(String c, String literal, AbstractType type)
     {
-        this.table.get(c).putField(id, type);
+        this.table.get(c).putField(literal, type);
     }
 
-    public void putMethodToClass(String c, String id, MethodType type)
+    public void putMethodToClass(String c, String literal, MethodType type)
     {
-        this.table.get(c).putMethod(id, type);
+        this.table.get(c).putMethod(literal, type);
     }
 
     public ClassBinding getClassBinding(String c)
@@ -46,10 +46,10 @@ public class ClassTable
         return this.table.get(c);
     }
 
-    public AbstractType getFieldType(String c, String id)
+    public AbstractType getFieldType(String c, String literal)
     {
         ClassBinding cb = this.table.get(c);
-        AbstractType type = cb.fields.get(id);
+        AbstractType type = cb.fields.get(literal);
         while (type == null)
         {
             if (cb.base == null)
@@ -58,15 +58,15 @@ public class ClassTable
             }
 
             cb = this.table.get(cb.base);
-            type = cb.fields.get(id);
+            type = cb.fields.get(literal);
         }
         return type;
     }
 
-    public MethodType getMethodType(String c, String id)
+    public MethodType getMethodType(String c, String literal)
     {
         ClassBinding cb = this.table.get(c);
-        MethodType type = cb.methods.get(id);
+        MethodType type = cb.methods.get(literal);
         while (type == null)
         {
             if (cb.base == null)
@@ -75,7 +75,7 @@ public class ClassTable
             }
 
             cb = this.table.get(cb.base);
-            type = cb.methods.get(id);
+            type = cb.methods.get(literal);
         }
         return type;
     }

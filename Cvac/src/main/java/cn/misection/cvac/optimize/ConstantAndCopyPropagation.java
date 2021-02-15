@@ -12,16 +12,24 @@ import cn.misection.cvac.ast.type.*;
 
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Mengxu on 2017/1/28.
  */
 public class ConstantAndCopyPropagation implements IVisitor, Optimizable
 {
-    private HashMap<String, AbstractExpression> conorcopy; // constant or copy in current method
+    /**
+     * // constant or copy in current method;
+     */
+    private Map<String, AbstractExpression> conorcopy;
     private AbstractExpression curExpr;
     private boolean canChange;
-    private boolean inWhile; // if in while body, the left of assign should be delete from conorcopy
+
+    /**
+     * // if in while body, the left of assign should be delete from conorcopy
+     */
+    private boolean inWhile;
     private boolean isOptimizing;
 
     private boolean isEqual(AbstractExpression fir, AbstractExpression sec)
@@ -35,11 +43,11 @@ public class ConstantAndCopyPropagation implements IVisitor, Optimizable
 
     }
 
-    private HashMap<String, AbstractExpression> intersection(
-            HashMap<String, AbstractExpression> first,
-            HashMap<String, AbstractExpression> second)
+    private Map<String, AbstractExpression> intersection(
+            Map<String, AbstractExpression> first,
+            Map<String, AbstractExpression> second)
     {
-        HashMap<String, AbstractExpression> result = new HashMap<>();
+        Map<String, AbstractExpression> result = new HashMap<>();
         first.forEach((k, v) ->
         {
             if (second.containsKey(k) && isEqual(v, second.get(k)))
@@ -270,11 +278,11 @@ public class ConstantAndCopyPropagation implements IVisitor, Optimizable
             s.setCondition(this.curExpr);
         }
 
-        HashMap<String, AbstractExpression> originalMap = new HashMap<>();
+        Map<String, AbstractExpression> originalMap = new HashMap<>();
         this.conorcopy.forEach(originalMap::put);
         this.visit(s.getThenStatement());
 
-        HashMap<String, AbstractExpression> leftMap = this.conorcopy;
+        Map<String, AbstractExpression> leftMap = this.conorcopy;
         this.conorcopy = originalMap;
         this.visit(s.getElseStatement());
 

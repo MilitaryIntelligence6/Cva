@@ -35,6 +35,8 @@ public class CvaCompiler
 
     private static final String COMPILE_TO_IL = "-i";
 
+    public static final String VERSION_INFO = "1.0.0";
+
     private static final int NORMAL_EXIT_STATUS = 0;
 
     private static final int ERROR_EXIT_STATUS = 1;
@@ -107,8 +109,9 @@ public class CvaCompiler
     {
         if (args.length == 0)
         {
-            System.out.println("Hello, this is a simple compiler!");
-            System.out.println("Please input the file name which you want to compile");
+            System.out.printf("Hello, this is Cva compiler! \n" +
+                    "Please input the file name which you want to compile\n" +
+                    "cvac version %s", VERSION_INFO);
             System.exit(NORMAL_EXIT_STATUS);
         }
         return args[0];

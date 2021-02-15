@@ -617,7 +617,7 @@ public class Parser
     private AbstractClass parseClassDecl()
     {
         eatToken(CvaKind.CLASS);
-        String id = curToken.getLiteral();
+        String literal = curToken.getLiteral();
         eatToken(CvaKind.IDENTIFIER);
         String superClass = null;
         if (curToken.getKind() == CvaKind.COLON)
@@ -630,7 +630,7 @@ public class Parser
         LinkedList<AbstractDeclaration> decs = parseVarDecls();
         LinkedList<AbstractMethod> methods = parseMethodDecls();
         eatToken(CvaKind.CLOSE_CURLY_BRACE);
-        return new CvaClass(id, superClass, decs, methods);
+        return new CvaClass(literal, superClass, decs, methods);
     }
 
     /**

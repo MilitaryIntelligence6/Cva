@@ -345,7 +345,7 @@ public class CodeGenAst
         public static class MethodSingle
         {
             private Type.T retType;
-            private String id;
+            private String literal;
             private String classId;
             private List<Dec.DecSingle> formals;
             private List<Dec.DecSingle> locals;
@@ -353,13 +353,13 @@ public class CodeGenAst
             private int index; // number of index
             private int retExp;
 
-            public MethodSingle(Type.T retType, String id, String classId,
+            public MethodSingle(Type.T retType, String literal, String classId,
                                 List<Dec.DecSingle> formals,
                                 List<Dec.DecSingle> locals,
                                 List<Stm.T> stms, int retExp, int index)
             {
                 this.setRetType(retType);
-                this.setId(id);
+                this.setLiteral(literal);
                 this.setClassId(classId);
                 this.setFormals(formals);
                 this.setLocals(locals);
@@ -378,14 +378,14 @@ public class CodeGenAst
                 this.retType = retType;
             }
 
-            public String getId()
+            public String getLiteral()
             {
-                return id;
+                return literal;
             }
 
-            public void setId(String id)
+            public void setLiteral(String literal)
             {
-                this.id = id;
+                this.literal = literal;
             }
 
             public String getClassId()

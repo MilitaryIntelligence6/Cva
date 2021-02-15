@@ -11,8 +11,8 @@ import cn.misection.cvac.ast.statement.AbstractStatement;
  */
 public class CvaEntry extends AbstractEntry
 {
-    public CvaEntry(String id, AbstractStatement statement)
+    public CvaEntry(String literal, AbstractStatement statement)
     {
-        super(id, statement);
+        super(literal, statement);
     }
 }

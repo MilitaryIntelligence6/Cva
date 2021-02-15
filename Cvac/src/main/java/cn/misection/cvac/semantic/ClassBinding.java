@@ -11,7 +11,10 @@ import java.util.Hashtable;
  */
 public class ClassBinding
 {
-    public String base; // null for non-existing base class
+    /**
+     * // null for non-existing base class
+     */
+    public String base;
     public Hashtable<String, AbstractType> fields;
     public Hashtable<String, MethodType> methods;
 
@@ -31,29 +34,29 @@ public class ClassBinding
         this.methods = methods;
     }
 
-    public void putField(String id, AbstractType type)
+    public void putField(String literal, AbstractType type)
     {
-        if (fields.get(id) != null)
+        if (fields.get(literal) != null)
         {
-            System.out.println("duplicated class field: " + id);
+            System.out.printf("duplicated class field: %s%n", literal);
             System.exit(1);
         }
         else
         {
-            fields.put(id, type);
+            fields.put(literal, type);
         }
     }
 
-    public void putMethod(String id, MethodType type)
+    public void putMethod(String literal, MethodType type)
     {
-        if (methods.get(id) != null)
+        if (methods.get(literal) != null)
         {
-            System.out.println("duplicated class method: " + id);
+            System.out.printf("duplicated class method: %s%n", literal);
             System.exit(1);
         }
         else
         {
-            methods.put(id, type);
+            methods.put(literal, type);
         }
     }
 }

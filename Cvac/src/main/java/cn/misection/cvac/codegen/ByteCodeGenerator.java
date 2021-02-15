@@ -173,7 +173,7 @@ public class ByteCodeGenerator implements CodeGenVisitor
     @Override
     public void visit(CodeGenAst.Method.MethodSingle m)
     {
-        this.write(String.format(".method public %s(", m.getId()));
+        this.write(String.format(".method public %s(", m.getLiteral()));
         m.getFormals().forEach(f -> this.visit(f.getType()));
         this.write(")");
         this.visit(m.getRetType());
