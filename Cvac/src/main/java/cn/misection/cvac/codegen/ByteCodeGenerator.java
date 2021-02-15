@@ -1,7 +1,7 @@
 package cn.misection.cvac.codegen;
 
-import cn.misection.cvac.codegen.ast.CodeGenAst;
-import cn.misection.cvac.codegen.ast.CodeGenVisitor;
+import cn.misection.cvac.codegen.bst.CodeGenAst;
+import cn.misection.cvac.codegen.bst.CodeGenVisitor;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

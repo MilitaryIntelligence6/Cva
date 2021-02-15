@@ -10,9 +10,9 @@ import cn.misection.cvac.ast.program.*;
 import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.*;
 
-import cn.misection.cvac.codegen.ast.CodeGenAst;
-import cn.misection.cvac.codegen.ast.CodeGenAst.*;
-import cn.misection.cvac.codegen.ast.Label;
+import cn.misection.cvac.codegen.bst.CodeGenAst;
+import cn.misection.cvac.codegen.bst.CodeGenAst.*;
+import cn.misection.cvac.codegen.bst.Label;
 
 import java.util.Hashtable;
 import java.util.LinkedList;

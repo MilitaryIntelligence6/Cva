@@ -3,7 +3,7 @@ package cn.misection.cvac;
 import cn.misection.cvac.ast.program.AbstractProgram;
 import cn.misection.cvac.codegen.ByteCodeGenerator;
 import cn.misection.cvac.codegen.TranslatorVisitor;
-import cn.misection.cvac.codegen.ast.CodeGenAst;
+import cn.misection.cvac.codegen.bst.CodeGenAst;
 import cn.misection.cvac.config.Macro;
 import cn.misection.cvac.constant.ConstPool;
 import cn.misection.cvac.lexer.BufferedQueueHandler;
