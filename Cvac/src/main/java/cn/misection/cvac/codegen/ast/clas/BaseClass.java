@@ -7,6 +7,6 @@ package cn.misection.cvac.codegen.ast.clas;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:54:00
  */
-public abstract class AbstractClass implements IClass
+public abstract class BaseClass implements IClass
 {
 }

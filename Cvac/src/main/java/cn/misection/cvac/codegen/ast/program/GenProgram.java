@@ -1,7 +1,7 @@
 package cn.misection.cvac.codegen.ast.program;
 
-import cn.misection.cvac.codegen.ast.clas.AbstractClass;
-import cn.misection.cvac.codegen.ast.entry.AbstractEntry;
+import cn.misection.cvac.codegen.ast.clas.BaseClass;
+import cn.misection.cvac.codegen.ast.entry.BaseEntry;
 
 import java.util.List;
 
@@ -12,9 +12,9 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:14:00
  */
-public class CvaProgram extends AbstractProgram
+public class GenProgram extends BaseProgram
 {
-    public CvaProgram(AbstractEntry entry, List<AbstractClass> classQueue)
+    public GenProgram(BaseEntry entry, List<BaseClass> classQueue)
     {
         super(entry, classQueue);
     }

@@ -12,7 +12,7 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:57:00
  */
-public class CvaClass extends AbstractClass
+public class GenClass extends BaseClass
 {
     private String literal;
 
@@ -22,7 +22,7 @@ public class CvaClass extends AbstractClass
 
     private List<AbstractMethod> methodList;
 
-    public CvaClass(String literal, String parent, List<AbstractDeclaration> fieldList, List<AbstractMethod> methodList)
+    public GenClass(String literal, String parent, List<AbstractDeclaration> fieldList, List<AbstractMethod> methodList)
     {
         this.literal = literal;
         this.parent = parent;

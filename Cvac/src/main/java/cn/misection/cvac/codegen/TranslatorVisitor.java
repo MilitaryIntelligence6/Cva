@@ -31,9 +31,9 @@ public class TranslatorVisitor implements IVisitor
     private Dec.DecSingle dec;
     private List<Stm.T> stms;
     private Method.MethodSingle method;
-    private CodeGenAst.Class.ClassSingle classs;
-    private MainClass.MainClassSingle mainClass;
-    private Program.ProgramSingle prog;
+    private CodeGenAst.Class.GenClass classs;
+    private MainClass.GenEntry mainClass;
+    private Program.GenProgram prog;
 
     public TranslatorVisitor()
     {
@@ -122,7 +122,7 @@ public class TranslatorVisitor implements IVisitor
             this.visit(a);
             at.add(this.getType());
         });
-        emit(new Stm.Invokevirtual(e.getLiteral(), e.getType(), at, rt));
+        emit(new Stm.InvokeVirtual(e.getLiteral(), e.getType(), at, rt));
     }
 
     @Override
@@ -331,8 +331,15 @@ public class TranslatorVisitor implements IVisitor
             emit(new Stm.Ireturn());
         }
 
-        this.setMethod(new Method.MethodSingle(theRetType, cvaMethod.getLiteral(), this.getClassId(),
-                formalList, localList, this.getStms(), 0, this.index));
+        this.setMethod(new Method.MethodSingle(
+                cvaMethod.getLiteral(),
+                theRetType,
+                this.getClassId(),
+                formalList,
+                localList,
+                this.getStms(),
+                0,
+                this.index));
     }
 
     @Override
@@ -351,7 +358,7 @@ public class TranslatorVisitor implements IVisitor
             this.visit(m);
             methodList.add(this.getMethod());
         });
-        this.setClasss(new CodeGenAst.Class.ClassSingle(
+        this.setClasss(new CodeGenAst.Class.GenClass(
                 cvaClass.getLiteral(), cvaClass.getParent(), fieldList, methodList));
     }
 
@@ -359,7 +366,7 @@ public class TranslatorVisitor implements IVisitor
     public void visit(CvaEntry c)
     {
         this.visit(c.getStatement());
-        this.setMainClass(new MainClass.MainClassSingle(c.getLiteral(), this.getStms()));
+        this.setMainClass(new MainClass.GenEntry(c.getLiteral(), this.getStms()));
         this.setStms(new LinkedList<>());
     }
 
@@ -367,13 +374,13 @@ public class TranslatorVisitor implements IVisitor
     public void visit(CvaProgram p)
     {
         this.visit(p.getEntry());
-        List<CodeGenAst.Class.ClassSingle> classList = new LinkedList<>();
+        List<CodeGenAst.Class.GenClass> classList = new LinkedList<>();
         p.getClassList().forEach(c ->
         {
             this.visit(c);
             classList.add(this.getClasss());
         });
-        this.setProg(new Program.ProgramSingle(this.getMainClass(), classList));
+        this.setProg(new Program.GenProgram(this.getMainClass(), classList));
     }
 
     public String getClassId()
@@ -426,32 +433,32 @@ public class TranslatorVisitor implements IVisitor
         this.method = method;
     }
 
-    public CodeGenAst.Class.ClassSingle getClasss()
+    public CodeGenAst.Class.GenClass getClasss()
     {
         return classs;
     }
 
-    public void setClasss(CodeGenAst.Class.ClassSingle classs)
+    public void setClasss(CodeGenAst.Class.GenClass classs)
     {
         this.classs = classs;
     }
 
-    public MainClass.MainClassSingle getMainClass()
+    public MainClass.GenEntry getMainClass()
     {
         return mainClass;
     }
 
-    public void setMainClass(MainClass.MainClassSingle mainClass)
+    public void setMainClass(MainClass.GenEntry mainClass)
     {
         this.mainClass = mainClass;
     }
 
-    public Program.ProgramSingle getProg()
+    public Program.GenProgram getProg()
     {
         return prog;
     }
 
-    public void setProg(Program.ProgramSingle prog)
+    public void setProg(Program.GenProgram prog)
     {
         this.prog = prog;
     }

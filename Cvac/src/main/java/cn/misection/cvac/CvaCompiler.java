@@ -82,11 +82,11 @@ public class CvaCompiler
 
         doMkDIrs();
         // 现在是从il读到文件中而不是先创建il, il步骤在前, 需要设定一个全局;
-        String ilPath = String.format("%s.il", translator.getProg().getMainClass().getLiteral());
+        String ilPath = String.format("%s.il", translator.getProg().getEntry().getLiteral());
         // ascii instructions to binary file
         jasmin.Main.main(new String[] {ilPath});
 
-        for (CodeGenAst.Class.ClassSingle cla : translator.getProg().getClasses())
+        for (CodeGenAst.Class.GenClass cla : translator.getProg().getClassList())
         {
             String filePath = String.format("%s.il", cla.getLiteral());
             jasmin.Main.main(new String[] {filePath});

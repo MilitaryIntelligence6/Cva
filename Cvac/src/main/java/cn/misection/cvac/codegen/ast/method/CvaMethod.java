@@ -20,7 +20,15 @@ public class CvaMethod extends AbstractMethod
 
     private AbstractType retType;
 
-    private AbstractExpression retExpr;
+    /**
+     * @deprecated
+     */
+//    private AbstractExpression retExpr;
+
+    /**
+     * new;
+     */
+    private String classId;
 
     private List<AbstractDeclaration> formalList;
 
@@ -28,19 +36,40 @@ public class CvaMethod extends AbstractMethod
 
     private List<AbstractStatement> statementList;
 
-    public CvaMethod(String literal,
-                     AbstractType retType,
-                     AbstractExpression retExpr,
-                     List<AbstractDeclaration> formalList,
-                     List<AbstractDeclaration> localList,
-                     List<AbstractStatement> statementList)
+    private int index;
+
+    private int retExpr;
+
+    /**
+     * 顺序很多, 注意!;
+     * @param literal
+     * @param retType
+     * @param classId
+     * @param formalList
+     * @param localList
+     * @param statementList
+     * @param retExpr
+     * @param index
+     */
+    public CvaMethod(
+            String literal,
+            AbstractType retType,
+            String classId,
+            List<AbstractDeclaration> formalList,
+            List<AbstractDeclaration> localList,
+            List<AbstractStatement> statementList,
+            int retExpr,
+            int index
+    )
     {
         this.literal = literal;
         this.retType = retType;
-        this.retExpr = retExpr;
+        this.classId = classId;
         this.formalList = formalList;
         this.localList = localList;
         this.statementList = statementList;
+        this.retExpr = retExpr;
+        this.index = index;
     }
 
     public String getLiteral()
@@ -53,10 +82,6 @@ public class CvaMethod extends AbstractMethod
         return retType;
     }
 
-    public AbstractExpression getRetExpr()
-    {
-        return retExpr;
-    }
 
     public List<AbstractDeclaration> getFormalList()
     {
@@ -81,11 +106,6 @@ public class CvaMethod extends AbstractMethod
     public void setRetType(AbstractType retType)
     {
         this.retType = retType;
-    }
-
-    public void setRetExpr(AbstractExpression retExpr)
-    {
-        this.retExpr = retExpr;
     }
 
     public void setFormalList(List<AbstractDeclaration> formalList)

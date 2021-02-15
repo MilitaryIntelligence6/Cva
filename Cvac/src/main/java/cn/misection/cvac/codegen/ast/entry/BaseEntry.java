@@ -2,6 +2,8 @@ package cn.misection.cvac.codegen.ast.entry;
 
 import cn.misection.cvac.codegen.ast.statement.AbstractStatement;
 
+import java.util.List;
+
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
@@ -9,16 +11,16 @@ import cn.misection.cvac.codegen.ast.statement.AbstractStatement;
  * @Description main 方法入口;
  * @CreateTime 2021年02月14日 17:54:00
  */
-public abstract class AbstractEntry implements IEntry
+public abstract class BaseEntry implements IEntry
 {
     protected String literal;
 
-    protected AbstractStatement statement;
+    protected List<AbstractStatement> statementList;
 
-    protected AbstractEntry(String literal, AbstractStatement statement)
+    protected BaseEntry(String literal, List<AbstractStatement> statementList)
     {
         this.literal = literal;
-        this.statement = statement;
+        this.statementList = statementList;
     }
 
     public String getLiteral()
@@ -26,9 +28,9 @@ public abstract class AbstractEntry implements IEntry
         return literal;
     }
 
-    public AbstractStatement getStatement()
+    public List<AbstractStatement> getStatementList()
     {
-        return statement;
+        return statementList;
     }
 
     public void setLiteral(String literal)
@@ -36,8 +38,8 @@ public abstract class AbstractEntry implements IEntry
         this.literal = literal;
     }
 
-    public void setStatement(AbstractStatement statement)
+    public void setStatementList(List<AbstractStatement> statementList)
     {
-        this.statement = statement;
+        this.statementList = statementList;
     }
 }

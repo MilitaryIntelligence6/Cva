@@ -4,13 +4,16 @@ import java.util.List;
 
 /**
  * Created by Mengxu on 2017/1/17.
+ *
  * @TODO 改这里;
  */
 public class CodeGenAst
 {
     public static class Type
     {
-        public static abstract class T {}
+        public static abstract class T
+        {
+        }
 
         public static class ClassType extends T
         {
@@ -85,7 +88,9 @@ public class CodeGenAst
 
     public static class Stm
     {
-        public static abstract class T {}
+        public static abstract class T
+        {
+        }
 
         public static class Aload extends T
         {
@@ -107,7 +112,9 @@ public class CodeGenAst
             }
         }
 
-        public static class Areturn extends T {}
+        public static class Areturn extends T
+        {
+        }
 
         public static class Astore extends T
         {
@@ -171,7 +178,9 @@ public class CodeGenAst
             }
         }
 
-        public static class Iadd extends T {}
+        public static class Iadd extends T
+        {
+        }
 
         public static class Ificmplt extends T
         {
@@ -213,16 +222,18 @@ public class CodeGenAst
             }
         }
 
-        public static class Imul extends T {}
+        public static class Imul extends T
+        {
+        }
 
-        public static class Invokevirtual extends T
+        public static class InvokeVirtual extends T
         {
             public String f;
             public String c;
             public List<Type.T> at;
             public Type.T rt;
 
-            public Invokevirtual(String f, String c, List<Type.T> at, Type.T rt)
+            public InvokeVirtual(String f, String c, List<Type.T> at, Type.T rt)
             {
                 this.f = f;
                 this.c = c;
@@ -231,7 +242,9 @@ public class CodeGenAst
             }
         }
 
-        public static class Ireturn extends T {}
+        public static class Ireturn extends T
+        {
+        }
 
         public static class Istore extends T
         {
@@ -253,7 +266,9 @@ public class CodeGenAst
             }
         }
 
-        public static class Isub extends T {}
+        public static class Isub extends T
+        {
+        }
 
         public static class LabelJ extends T
         {
@@ -315,7 +330,9 @@ public class CodeGenAst
             }
         }
 
-        public static class Write extends T {}
+        public static class Write extends T
+        {
+        }
 
         public static class Putfield extends T
         {
@@ -347,24 +364,30 @@ public class CodeGenAst
             private Type.T retType;
             private String literal;
             private String classId;
-            private List<Dec.DecSingle> formals;
-            private List<Dec.DecSingle> locals;
-            private List<Stm.T> stms;
+            private List<Dec.DecSingle> formalList;
+            private List<Dec.DecSingle> localList;
+            private List<Stm.T> statementList;
             private int index; // number of index
-            private int retExp;
+            private int retExpr;
 
-            public MethodSingle(Type.T retType, String literal, String classId,
-                                List<Dec.DecSingle> formals,
-                                List<Dec.DecSingle> locals,
-                                List<Stm.T> stms, int retExp, int index)
+            public MethodSingle(
+                    String literal,
+                    Type.T retType,
+                    String classId,
+                    List<Dec.DecSingle> formalList,
+                    List<Dec.DecSingle> localList,
+                    List<Stm.T> statementList,
+                    int retExpr,
+                    int index
+            )
             {
                 this.setRetType(retType);
                 this.setLiteral(literal);
                 this.setClassId(classId);
-                this.setFormals(formals);
-                this.setLocals(locals);
-                this.setStms(stms);
-                this.setRetExp(retExp);
+                this.setFormalList(formalList);
+                this.setLocalList(localList);
+                this.setStatementList(statementList);
+                this.setRetExpr(retExpr);
                 this.setIndex(index);
             }
 
@@ -398,34 +421,34 @@ public class CodeGenAst
                 this.classId = classId;
             }
 
-            public List<Dec.DecSingle> getFormals()
+            public List<Dec.DecSingle> getFormalList()
             {
-                return formals;
+                return formalList;
             }
 
-            public void setFormals(List<Dec.DecSingle> formals)
+            public void setFormalList(List<Dec.DecSingle> formalList)
             {
-                this.formals = formals;
+                this.formalList = formalList;
             }
 
-            public List<Dec.DecSingle> getLocals()
+            public List<Dec.DecSingle> getLocalList()
             {
-                return locals;
+                return localList;
             }
 
-            public void setLocals(List<Dec.DecSingle> locals)
+            public void setLocalList(List<Dec.DecSingle> localList)
             {
-                this.locals = locals;
+                this.localList = localList;
             }
 
-            public List<Stm.T> getStms()
+            public List<Stm.T> getStatementList()
             {
-                return stms;
+                return statementList;
             }
 
-            public void setStms(List<Stm.T> stms)
+            public void setStatementList(List<Stm.T> statementList)
             {
-                this.stms = stms;
+                this.statementList = statementList;
             }
 
             public int getIndex()
@@ -438,35 +461,35 @@ public class CodeGenAst
                 this.index = index;
             }
 
-            public int getRetExp()
+            public int getRetExpr()
             {
-                return retExp;
+                return retExpr;
             }
 
-            public void setRetExp(int retExp)
+            public void setRetExpr(int retExpr)
             {
-                this.retExp = retExp;
+                this.retExpr = retExpr;
             }
         }
     }
 
     public static class Class
     {
-        public static class ClassSingle
+        public static class GenClass
         {
             private String literal;
-            private String base;
-            private List<Dec.DecSingle> fields;
-            private List<Method.MethodSingle> methods;
+            private String parent;
+            private List<Dec.DecSingle> fieldList;
+            private List<Method.MethodSingle> methodList;
 
-            public ClassSingle(String literal, String base,
-                               List<Dec.DecSingle> fields,
-                               List<Method.MethodSingle> methods)
+            public GenClass(String literal, String parent,
+                            List<Dec.DecSingle> fieldList,
+                            List<Method.MethodSingle> methodList)
             {
                 this.setLiteral(literal);
-                this.setBase(base);
-                this.setFields(fields);
-                this.setMethods(methods);
+                this.setParent(parent);
+                this.setFieldList(fieldList);
+                this.setMethodList(methodList);
             }
 
             public String getLiteral()
@@ -479,50 +502,50 @@ public class CodeGenAst
                 this.literal = literal;
             }
 
-            public String getBase()
+            public String getParent()
             {
-                return base;
+                return parent;
             }
 
-            public void setBase(String base)
+            public void setParent(String parent)
             {
-                this.base = base;
+                this.parent = parent;
             }
 
-            public List<Dec.DecSingle> getFields()
+            public List<Dec.DecSingle> getFieldList()
             {
-                return fields;
+                return fieldList;
             }
 
-            public void setFields(List<Dec.DecSingle> fields)
+            public void setFieldList(List<Dec.DecSingle> fieldList)
             {
-                this.fields = fields;
+                this.fieldList = fieldList;
             }
 
-            public List<Method.MethodSingle> getMethods()
+            public List<Method.MethodSingle> getMethodList()
             {
-                return methods;
+                return methodList;
             }
 
-            public void setMethods(List<Method.MethodSingle> methods)
+            public void setMethodList(List<Method.MethodSingle> methodList)
             {
-                this.methods = methods;
+                this.methodList = methodList;
             }
         }
     }
 
     public static class MainClass
     {
-        public static class MainClassSingle
+        public static class GenEntry
         {
             private String literal;
-            private List<Stm.T> stms;
+            private List<Stm.T> statementList;
 
-            public MainClassSingle(String literal,
-                                   List<Stm.T> stms)
+            public GenEntry(String literal,
+                            List<Stm.T> statementList)
             {
                 this.setLiteral(literal);
-                this.setStms(stms);
+                this.setStatementList(statementList);
             }
 
             public String getLiteral()
@@ -535,50 +558,50 @@ public class CodeGenAst
                 this.literal = literal;
             }
 
-            public List<Stm.T> getStms()
+            public List<Stm.T> getStatementList()
             {
-                return stms;
+                return statementList;
             }
 
-            public void setStms(List<Stm.T> stms)
+            public void setStatementList(List<Stm.T> statementList)
             {
-                this.stms = stms;
+                this.statementList = statementList;
             }
         }
     }
 
     public static class Program
     {
-        public static class ProgramSingle
+        public static class GenProgram
         {
-            private MainClass.MainClassSingle mainClass;
-            private List<Class.ClassSingle> classes;
+            private MainClass.GenEntry entry;
+            private List<Class.GenClass> classList;
 
-            public ProgramSingle(MainClass.MainClassSingle mainClass,
-                                 List<Class.ClassSingle> classes)
+            public GenProgram(MainClass.GenEntry entry,
+                              List<Class.GenClass> classList)
             {
-                this.setMainClass(mainClass);
-                this.setClasses(classes);
+                this.setEntry(entry);
+                this.setClassList(classList);
             }
 
-            public MainClass.MainClassSingle getMainClass()
+            public MainClass.GenEntry getEntry()
             {
-                return mainClass;
+                return entry;
             }
 
-            public void setMainClass(MainClass.MainClassSingle mainClass)
+            public void setEntry(MainClass.GenEntry entry)
             {
-                this.mainClass = mainClass;
+                this.entry = entry;
             }
 
-            public List<Class.ClassSingle> getClasses()
+            public List<Class.GenClass> getClassList()
             {
-                return classes;
+                return classList;
             }
 
-            public void setClasses(List<Class.ClassSingle> classes)
+            public void setClassList(List<Class.GenClass> classList)
             {
-                this.classes = classes;
+                this.classList = classList;
             }
         }
     }

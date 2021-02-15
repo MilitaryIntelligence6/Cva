@@ -108,7 +108,7 @@ public class ByteCodeGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.Invokevirtual s)
+    public void visit(CodeGenAst.Stm.InvokeVirtual s)
     {
         this.write(String.format("    invokevirtual %s/%s(", s.c, s.f));
         s.at.forEach(this::visit);
@@ -174,19 +174,19 @@ public class ByteCodeGenerator implements CodeGenVisitor
     public void visit(CodeGenAst.Method.MethodSingle m)
     {
         this.write(String.format(".method public %s(", m.getLiteral()));
-        m.getFormals().forEach(f -> this.visit(f.getType()));
+        m.getFormalList().forEach(f -> this.visit(f.getType()));
         this.write(")");
         this.visit(m.getRetType());
         this.writeln("");
         this.writeln(".limit stack 4096");
         this.writeln(String.format(".limit locals %d", m.getIndex() + 1));
 
-        m.getStms().forEach(this::visit);
+        m.getStatementList().forEach(this::visit);
         this.writeln(".end method");
     }
 
     @Override
-    public void visit(CodeGenAst.Class.ClassSingle c)
+    public void visit(CodeGenAst.Class.GenClass c)
     {
         try
         {
@@ -203,11 +203,11 @@ public class ByteCodeGenerator implements CodeGenVisitor
         this.writeln("; Do Not Modify!\n");
 
         this.writeln(String.format(".class public %s", c.getLiteral()));
-        if (c.getBase() == null)
+        if (c.getParent() == null)
             this.writeln(".super java/lang/Object");
-        else this.writeln(String.format(".super %s", c.getBase()));
+        else this.writeln(String.format(".super %s", c.getParent()));
 
-        c.getFields().forEach(f ->
+        c.getFieldList().forEach(f ->
         {
             this.write(String.format(".field public %s ", f.getLiteral()));
             this.visit(f.getType());
@@ -216,12 +216,12 @@ public class ByteCodeGenerator implements CodeGenVisitor
 
         this.writeln(".method public <init>()V");
         this.iwriteln("aload 0");
-        if (c.getBase() == null)
+        if (c.getParent() == null)
             this.iwriteln("invokespecial java/lang/Object/<init>()V");
-        else this.iwriteln(String.format("invokespecial %s/<init>()V", c.getBase()));
+        else this.iwriteln(String.format("invokespecial %s/<init>()V", c.getParent()));
         this.iwriteln("return");
         this.writeln(".end method");
-        c.getMethods().forEach(this::visit);
+        c.getMethodList().forEach(this::visit);
 
         try
         {
@@ -234,7 +234,7 @@ public class ByteCodeGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(CodeGenAst.MainClass.MainClassSingle c)
+    public void visit(CodeGenAst.MainClass.GenEntry c)
     {
         try
         {
@@ -254,7 +254,7 @@ public class ByteCodeGenerator implements CodeGenVisitor
         this.writeln(".method public static main([Ljava/lang/String;)V");
         this.writeln(".limit stack 4096");
         this.writeln(".limit locals 2");
-        c.getStms().forEach(this::visit);
+        c.getStatementList().forEach(this::visit);
         this.iwriteln("return");
         this.writeln(".end method");
 
@@ -269,9 +269,9 @@ public class ByteCodeGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(CodeGenAst.Program.ProgramSingle p)
+    public void visit(CodeGenAst.Program.GenProgram p)
     {
-        this.visit(p.getMainClass());
-        p.getClasses().forEach(this::visit);
+        this.visit(p.getEntry());
+        p.getClassList().forEach(this::visit);
     }
 }

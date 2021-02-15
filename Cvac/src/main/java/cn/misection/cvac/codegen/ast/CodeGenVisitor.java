@@ -41,8 +41,8 @@ public interface CodeGenVisitor
             this.visit(((CodeGenAst.Stm.Iload) s));
         else if (s instanceof CodeGenAst.Stm.Imul)
             this.visit(((CodeGenAst.Stm.Imul) s));
-        else if (s instanceof CodeGenAst.Stm.Invokevirtual)
-            this.visit(((CodeGenAst.Stm.Invokevirtual) s));
+        else if (s instanceof CodeGenAst.Stm.InvokeVirtual)
+            this.visit(((CodeGenAst.Stm.InvokeVirtual) s));
         else if (s instanceof CodeGenAst.Stm.Ireturn)
             this.visit(((CodeGenAst.Stm.Ireturn) s));
         else if (s instanceof CodeGenAst.Stm.Istore)
@@ -79,7 +79,7 @@ public interface CodeGenVisitor
 
     void visit(CodeGenAst.Stm.Imul s);
 
-    void visit(CodeGenAst.Stm.Invokevirtual s);
+    void visit(CodeGenAst.Stm.InvokeVirtual s);
 
     void visit(CodeGenAst.Stm.Ireturn s);
 
@@ -99,9 +99,9 @@ public interface CodeGenVisitor
 
     void visit(CodeGenAst.Method.MethodSingle m);
 
-    void visit(CodeGenAst.MainClass.MainClassSingle c);
+    void visit(CodeGenAst.MainClass.GenEntry c);
 
-    void visit(CodeGenAst.Class.ClassSingle c);
+    void visit(CodeGenAst.Class.GenClass c);
 
-    void visit(CodeGenAst.Program.ProgramSingle p);
+    void visit(CodeGenAst.Program.GenProgram p);
 }
