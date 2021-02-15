@@ -1,5 +1,7 @@
 package cn.misection.cvac.ast;
 
+import java.util.List;
+
 /**
  * Created by Mengxu on 2017/1/7.
  */
@@ -112,12 +114,12 @@ public class FrontAst
         {
             public T exp;
             public String literal;
-            public java.util.LinkedList<T> args;
+            public List<T> args;
             public String type; // type of first field "exp"
-            public java.util.LinkedList<Type.T> at; // arg's type
+            public List<Type.T> at; // arg's type
             public Type.T rt;
 
-            public CvaCallExpr(T exp, String literal, java.util.LinkedList<T> args, int lineNum)
+            public CvaCallExpr(T exp, String literal, List<T> args, int lineNum)
             {
                 this.exp = exp;
                 this.literal = literal;
@@ -267,9 +269,9 @@ public class FrontAst
 
         public static class CvaBlock extends T
         {
-            public java.util.LinkedList<T> stms;
+            public List<T> stms;
 
-            public CvaBlock(java.util.LinkedList<T> stms, int lineNum)
+            public CvaBlock(List<T> stms, int lineNum)
             {
                 this.stms = stms;
                 this.lineNum = lineNum;
@@ -324,15 +326,15 @@ public class FrontAst
         {
             public Type.T retType;
             public String literal;
-            public java.util.LinkedList<Decl.T> formals;
-            public java.util.LinkedList<Decl.T> locals;
-            public java.util.LinkedList<Stm.T> stms;
+            public List<Decl.T> formals;
+            public List<Decl.T> locals;
+            public List<Stm.T> stms;
             public Expr.T retExp;
 
             public CvaMethod(Type.T retType, String literal,
-                             java.util.LinkedList<Decl.T> formals,
-                             java.util.LinkedList<Decl.T> locals,
-                             java.util.LinkedList<Stm.T> stms,
+                             List<Decl.T> formals,
+                             List<Decl.T> locals,
+                             List<Stm.T> stms,
                              Expr.T retExp)
             {
                 this.retType = retType;
@@ -354,12 +356,12 @@ public class FrontAst
         {
             public String literal;
             public String parent; // null for no-base
-            public java.util.LinkedList<Decl.T> fields;
-            public java.util.LinkedList<Method.T> methods;
+            public List<Decl.T> fields;
+            public List<Method.T> methods;
 
             public CvaClass(String literal, String parent,
-                            java.util.LinkedList<Decl.T> fields,
-                            java.util.LinkedList<Method.T> methods)
+                            List<Decl.T> fields,
+                            List<Method.T> methods)
             {
                 this.literal = literal;
                 this.parent = parent;
@@ -395,10 +397,10 @@ public class FrontAst
         public static class CvaProgram extends T
         {
             public MainClass.T mainClass;
-            public java.util.LinkedList<Clas.T> classes;
+            public List<Clas.T> classes;
 
             public CvaProgram(MainClass.T mainClass,
-                              java.util.LinkedList<Clas.T> classes)
+                              List<Clas.T> classes)
             {
                 this.mainClass = mainClass;
                 this.classes = classes;

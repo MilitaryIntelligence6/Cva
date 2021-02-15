@@ -1,6 +1,6 @@
 package cn.misection.cvac.codegen.ast;
 
-import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Mengxu on 2017/1/17.
@@ -219,10 +219,10 @@ public class CodeGenAst
         {
             public String f;
             public String c;
-            public LinkedList<Type.T> at;
+            public List<Type.T> at;
             public Type.T rt;
 
-            public Invokevirtual(String f, String c, LinkedList<Type.T> at, Type.T rt)
+            public Invokevirtual(String f, String c, List<Type.T> at, Type.T rt)
             {
                 this.f = f;
                 this.c = c;
@@ -347,16 +347,16 @@ public class CodeGenAst
             private Type.T retType;
             private String id;
             private String classId;
-            private LinkedList<Dec.DecSingle> formals;
-            private LinkedList<Dec.DecSingle> locals;
-            private LinkedList<Stm.T> stms;
+            private List<Dec.DecSingle> formals;
+            private List<Dec.DecSingle> locals;
+            private List<Stm.T> stms;
             private int index; // number of index
             private int retExp;
 
             public MethodSingle(Type.T retType, String id, String classId,
-                                LinkedList<Dec.DecSingle> formals,
-                                LinkedList<Dec.DecSingle> locals,
-                                LinkedList<Stm.T> stms, int retExp, int index)
+                                List<Dec.DecSingle> formals,
+                                List<Dec.DecSingle> locals,
+                                List<Stm.T> stms, int retExp, int index)
             {
                 this.setRetType(retType);
                 this.setId(id);
@@ -398,32 +398,32 @@ public class CodeGenAst
                 this.classId = classId;
             }
 
-            public LinkedList<Dec.DecSingle> getFormals()
+            public List<Dec.DecSingle> getFormals()
             {
                 return formals;
             }
 
-            public void setFormals(LinkedList<Dec.DecSingle> formals)
+            public void setFormals(List<Dec.DecSingle> formals)
             {
                 this.formals = formals;
             }
 
-            public LinkedList<Dec.DecSingle> getLocals()
+            public List<Dec.DecSingle> getLocals()
             {
                 return locals;
             }
 
-            public void setLocals(LinkedList<Dec.DecSingle> locals)
+            public void setLocals(List<Dec.DecSingle> locals)
             {
                 this.locals = locals;
             }
 
-            public LinkedList<Stm.T> getStms()
+            public List<Stm.T> getStms()
             {
                 return stms;
             }
 
-            public void setStms(LinkedList<Stm.T> stms)
+            public void setStms(List<Stm.T> stms)
             {
                 this.stms = stms;
             }
@@ -456,12 +456,12 @@ public class CodeGenAst
         {
             private String literal;
             private String base;
-            private LinkedList<Dec.DecSingle> fields;
-            private LinkedList<Method.MethodSingle> methods;
+            private List<Dec.DecSingle> fields;
+            private List<Method.MethodSingle> methods;
 
             public ClassSingle(String literal, String base,
-                               LinkedList<Dec.DecSingle> fields,
-                               LinkedList<Method.MethodSingle> methods)
+                               List<Dec.DecSingle> fields,
+                               List<Method.MethodSingle> methods)
             {
                 this.setLiteral(literal);
                 this.setBase(base);
@@ -489,22 +489,22 @@ public class CodeGenAst
                 this.base = base;
             }
 
-            public LinkedList<Dec.DecSingle> getFields()
+            public List<Dec.DecSingle> getFields()
             {
                 return fields;
             }
 
-            public void setFields(LinkedList<Dec.DecSingle> fields)
+            public void setFields(List<Dec.DecSingle> fields)
             {
                 this.fields = fields;
             }
 
-            public LinkedList<Method.MethodSingle> getMethods()
+            public List<Method.MethodSingle> getMethods()
             {
                 return methods;
             }
 
-            public void setMethods(LinkedList<Method.MethodSingle> methods)
+            public void setMethods(List<Method.MethodSingle> methods)
             {
                 this.methods = methods;
             }
@@ -516,10 +516,10 @@ public class CodeGenAst
         public static class MainClassSingle
         {
             private String literal;
-            private LinkedList<Stm.T> stms;
+            private List<Stm.T> stms;
 
             public MainClassSingle(String literal,
-                                   LinkedList<Stm.T> stms)
+                                   List<Stm.T> stms)
             {
                 this.setLiteral(literal);
                 this.setStms(stms);
@@ -535,12 +535,12 @@ public class CodeGenAst
                 this.literal = literal;
             }
 
-            public LinkedList<Stm.T> getStms()
+            public List<Stm.T> getStms()
             {
                 return stms;
             }
 
-            public void setStms(LinkedList<Stm.T> stms)
+            public void setStms(List<Stm.T> stms)
             {
                 this.stms = stms;
             }
@@ -552,10 +552,10 @@ public class CodeGenAst
         public static class ProgramSingle
         {
             public MainClass.MainClassSingle mainClass;
-            public LinkedList<Class.ClassSingle> classes;
+            public List<Class.ClassSingle> classes;
 
             public ProgramSingle(MainClass.MainClassSingle mainClass,
-                                 LinkedList<Class.ClassSingle> classes)
+                                 List<Class.ClassSingle> classes)
             {
                 this.mainClass = mainClass;
                 this.classes = classes;

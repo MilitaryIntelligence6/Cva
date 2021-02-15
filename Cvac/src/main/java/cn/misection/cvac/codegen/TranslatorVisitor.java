@@ -15,6 +15,7 @@ import cn.misection.cvac.codegen.ast.Label;
 
 import java.util.Hashtable;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Mengxu on 2017/1/17.
@@ -27,7 +28,7 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     private Hashtable<String, Integer> indexTable;
     private Type.T type;
     private Dec.DecSingle dec;
-    private LinkedList<Stm.T> stms;
+    private List<Stm.T> stms;
     private Method.MethodSingle method;
     private CodeGenAst.Class.ClassSingle classs;
     private MainClass.MainClassSingle mainClass;
@@ -114,7 +115,7 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
         e.getArgs().forEach(this::visit);
         this.visit(e.getRetType());
         Type.T rt = this.type;
-        LinkedList<Type.T> at = new LinkedList<>();
+        List<Type.T> at = new LinkedList<>();
         e.getArgTypeList().forEach(a ->
         {
             this.visit(a);
@@ -302,14 +303,14 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
         this.visit(cvaMethod.getRetType());
         Type.T theRetType = this.type;
 
-        LinkedList<Dec.DecSingle> formalList = new LinkedList<>();
+        List<Dec.DecSingle> formalList = new LinkedList<>();
         cvaMethod.getFormalList().forEach(f ->
         {
             this.visit(f);
             formalList.add(this.dec);
         });
 
-        LinkedList<Dec.DecSingle> localList = new LinkedList<>();
+        List<Dec.DecSingle> localList = new LinkedList<>();
         cvaMethod.getLocalList().forEach(l ->
         {
             this.visit(l);
@@ -337,13 +338,13 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     public void visit(CvaClass cvaClass)
     {
         this.classId = cvaClass.getLiteral();
-        LinkedList<Dec.DecSingle> fieldList = new LinkedList<>();
+        List<Dec.DecSingle> fieldList = new LinkedList<>();
         cvaClass.getFieldList().forEach(f ->
         {
             this.visit(f);
             fieldList.add(this.dec);
         });
-        LinkedList<Method.MethodSingle> methodList = new LinkedList<>();
+        List<Method.MethodSingle> methodList = new LinkedList<>();
         cvaClass.getMethodList().forEach(m ->
         {
             this.visit(m);
@@ -365,8 +366,7 @@ public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
     public void visit(CvaProgram p)
     {
         this.visit(p.getEntry());
-        LinkedList<CodeGenAst.Class.ClassSingle> classList =
-                new LinkedList<>();
+        List<CodeGenAst.Class.ClassSingle> classList = new LinkedList<>();
         p.getClassList().forEach(c ->
         {
             this.visit(c);

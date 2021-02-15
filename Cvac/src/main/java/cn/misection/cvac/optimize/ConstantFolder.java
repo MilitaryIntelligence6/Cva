@@ -10,6 +10,7 @@ import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.*;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Mengxu on 2017/1/23.
@@ -117,7 +118,7 @@ public class ConstantFolder implements cn.misection.cvac.ast.Visitor, Optimizabl
     @Override
     public void visit(CvaCallExpr e)
     {
-        LinkedList<AbstractExpression> argList = new java.util.LinkedList<>();
+        List<AbstractExpression> argList = new LinkedList<>();
         e.getArgs().forEach(arg ->
         {
             this.visit(arg);

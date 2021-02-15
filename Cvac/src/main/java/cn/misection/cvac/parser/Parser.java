@@ -21,6 +21,7 @@ import cn.misection.cvac.lexer.IBufferedQueue;
 import cn.misection.cvac.lexer.Lexer;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -113,7 +114,7 @@ public class Parser
     // ExpList -> Exp ExpRest*
     //         ->
     // ExpRest -> , Exp
-    private LinkedList<AbstractExpression> parseExpList()
+    private List<AbstractExpression> parseExpList()
     {
         LinkedList<AbstractExpression> explist = new LinkedList<>();
         if (curToken.getKind() == CvaKind.CLOSE_PAREN)
@@ -372,7 +373,7 @@ public class Parser
 
     // Statements -> Statement Statements
     //  ->
-    private LinkedList<AbstractStatement> parseStatements()
+    private List<AbstractStatement> parseStatements()
     {
         LinkedList<AbstractStatement> stms = new LinkedList<>();
         while (curToken.getKind() == CvaKind.OPEN_CURLY_BRACE || curToken.getKind() == CvaKind.IF
@@ -455,7 +456,7 @@ public class Parser
 
     // VarDecls -> VarDecl VarDecls
     //  ->
-    private LinkedList<AbstractDeclaration> parseVarDecls()
+    private List<AbstractDeclaration> parseVarDecls()
     {
         LinkedList<AbstractDeclaration> decs = new LinkedList<>();
         valDeclFlag = true;
@@ -478,7 +479,7 @@ public class Parser
     // FormalList -> Type id FormalRest*
     //  ->
     // FormalRest -> , Type id
-    private LinkedList<AbstractDeclaration> parseFormalList()
+    private List<AbstractDeclaration> parseFormalList()
     {
         LinkedList<AbstractDeclaration> decs = new LinkedList<>();
         switch (curToken.getKind())
@@ -522,11 +523,11 @@ public class Parser
         String literal = curToken.getLiteral();
         eatToken(CvaKind.IDENTIFIER);
         eatToken(CvaKind.OPEN_PAREN);
-        LinkedList<AbstractDeclaration> formalList = parseFormalList();
+        List<AbstractDeclaration> formalList = parseFormalList();
         eatToken(CvaKind.CLOSE_PAREN);
         eatToken(CvaKind.OPEN_CURLY_BRACE);
-        LinkedList<AbstractDeclaration> varDecs = parseVarDecls();
-        LinkedList<AbstractStatement> stms = parseStatements();
+        List<AbstractDeclaration> varDecs = parseVarDecls();
+        List<AbstractStatement> stms = parseStatements();
         eatToken(CvaKind.RETURN);
         AbstractExpression retExp = parseExp();
         eatToken(CvaKind.SEMI);
@@ -544,7 +545,7 @@ public class Parser
 
     // MethodDecls -> MethodDecl MethodDecls*
     //  ->
-    private LinkedList<AbstractMethod> parseMethodDecls()
+    private List<AbstractMethod> parseMethodDecls()
     {
         LinkedList<AbstractMethod> methods = new LinkedList<>();
         while (curToken.getKind() == CvaKind.IDENTIFIER ||
@@ -572,15 +573,15 @@ public class Parser
             eatToken(CvaKind.IDENTIFIER);
         }
         eatToken(CvaKind.OPEN_CURLY_BRACE);
-        LinkedList<AbstractDeclaration> decs = parseVarDecls();
-        LinkedList<AbstractMethod> methods = parseMethodDecls();
+        List<AbstractDeclaration> decs = parseVarDecls();
+        List<AbstractMethod> methods = parseMethodDecls();
         eatToken(CvaKind.CLOSE_CURLY_BRACE);
         return new CvaClass(literal, superClass, decs, methods);
     }
 
     // ClassDecls -> ClassDecl ClassDecls*
     //  ->
-    private LinkedList<AbstractClass> parseClassDecls()
+    private List<AbstractClass> parseClassDecls()
     {
         LinkedList<AbstractClass> classes = new LinkedList<>();
         while (curToken.getKind() == CvaKind.CLASS)
@@ -619,7 +620,7 @@ public class Parser
     private CvaProgram parseProgram()
     {
         CvaEntry main = parseMainClass();
-        LinkedList<AbstractClass> classes = parseClassDecls();
+        List<AbstractClass> classes = parseClassDecls();
         eatToken(CvaKind.EOF);
         return new CvaProgram(main, classes);
     }
