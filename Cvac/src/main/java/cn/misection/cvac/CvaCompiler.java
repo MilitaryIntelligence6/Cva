@@ -8,7 +8,7 @@ import cn.misection.cvac.codegen.ast.CodeGenAst;
 import cn.misection.cvac.config.Macro;
 import cn.misection.cvac.lexer.BufferedQueueHandler;
 import cn.misection.cvac.lexer.IBufferedQueue;
-//import cn.misection.cvac.optimize.Optimizer;
+import cn.misection.cvac.optimize.Optimizer;
 import cn.misection.cvac.parser.Parser;
 import cn.misection.cvac.semantic.SemanticVisitor;
 
@@ -82,8 +82,8 @@ public class CvaCompiler
 
         doCheck(program);
 
-//        Optimizer optimizer = new Optimizer();
-//        optimizer.optimize(prog);
+        Optimizer optimizer = new Optimizer();
+        optimizer.optimize(program);
 
         TranslatorVisitor translator = new TranslatorVisitor();
         translator.visit(program);

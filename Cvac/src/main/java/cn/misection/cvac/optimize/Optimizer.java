@@ -1,6 +1,6 @@
 package cn.misection.cvac.optimize;
 
-import cn.misection.cvac.ast.FrontAst;
+import cn.misection.cvac.ast.program.AbstractProgram;
 import cn.misection.cvac.ast.program.CvaProgram;
 
 /**
@@ -8,7 +8,7 @@ import cn.misection.cvac.ast.program.CvaProgram;
  */
 public class Optimizer
 {
-    public void optimize(CvaProgram cvaProgram)
+    public void optimize(AbstractProgram cvaProgram)
     {
         UnUsedVarDel varDeler = new UnUsedVarDel();
         varDeler.givesWarning = true;

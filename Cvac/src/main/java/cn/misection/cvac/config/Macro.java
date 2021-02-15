@@ -7,7 +7,7 @@ package cn.misection.cvac.config;
  * @Description TODO
  * @CreateTime 2021年02月13日 23:37:00
  */
-public class Macro
+public final class Macro
 {
     public static final boolean RELEASE = false;
 
