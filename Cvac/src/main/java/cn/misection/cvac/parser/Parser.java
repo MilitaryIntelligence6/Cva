@@ -1,20 +1,14 @@
 package cn.misection.cvac.parser;
 
-import cn.misection.cvac.ast.clas.AbstractClass;
-import cn.misection.cvac.ast.clas.CvaClass;
-import cn.misection.cvac.ast.decl.AbstractDeclaration;
-import cn.misection.cvac.ast.decl.CvaDeclaration;
-import cn.misection.cvac.ast.entry.CvaEntry;
+import cn.misection.cvac.ast.clas.*;
+import cn.misection.cvac.ast.decl.*;
+import cn.misection.cvac.ast.entry.*;
 import cn.misection.cvac.ast.expr.*;
-import cn.misection.cvac.ast.method.AbstractMethod;
-import cn.misection.cvac.ast.method.CvaMethod;
-import cn.misection.cvac.ast.program.AbstractProgram;
-import cn.misection.cvac.ast.program.CvaProgram;
+import cn.misection.cvac.ast.method.*;
+import cn.misection.cvac.ast.program.*;
 import cn.misection.cvac.ast.statement.*;
-import cn.misection.cvac.ast.type.AbstractType;
-import cn.misection.cvac.ast.type.CvaBoolean;
-import cn.misection.cvac.ast.type.CvaClassType;
-import cn.misection.cvac.ast.type.CvaInt;
+import cn.misection.cvac.ast.type.*;
+
 import cn.misection.cvac.lexer.CvaKind;
 import cn.misection.cvac.lexer.CvaToken;
 import cn.misection.cvac.lexer.IBufferedQueue;
