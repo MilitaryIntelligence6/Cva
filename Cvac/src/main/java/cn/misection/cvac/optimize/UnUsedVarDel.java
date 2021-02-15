@@ -1,5 +1,6 @@
 package cn.misection.cvac.optimize;
 
+import cn.misection.cvac.ast.IVisitor;
 import cn.misection.cvac.ast.clas.CvaClass;
 import cn.misection.cvac.ast.decl.CvaDeclaration;
 import cn.misection.cvac.ast.entry.CvaEntry;
@@ -16,7 +17,7 @@ import java.util.Hashtable;
 /**
  * Created by Mengxu on 2017/1/24.
  */
-public class UnUsedVarDel implements cn.misection.cvac.ast.Visitor, Optimizable
+public class UnUsedVarDel implements IVisitor, Optimizable
 {
     private Hashtable<String, CvaDeclaration> unUsedLocals;
     private Hashtable<String, CvaDeclaration> unUsedArgs;

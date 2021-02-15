@@ -1,5 +1,6 @@
 package cn.misection.cvac.optimize;
 
+import cn.misection.cvac.ast.IVisitor;
 import cn.misection.cvac.ast.clas.*;
 import cn.misection.cvac.ast.decl.*;
 import cn.misection.cvac.ast.entry.*;
@@ -15,7 +16,7 @@ import java.util.LinkedList;
 /**
  * Created by Mengxu on 2017/1/25.
  */
-public class UnReachableDel implements cn.misection.cvac.ast.Visitor, Optimizable
+public class UnReachableDel implements IVisitor, Optimizable
 {
     private AbstractStatement curStm;
     private boolean isOptimizing;

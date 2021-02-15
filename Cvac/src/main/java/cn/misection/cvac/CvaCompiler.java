@@ -1,6 +1,5 @@
 package cn.misection.cvac;
 
-import cn.misection.cvac.ast.FrontAst;
 import cn.misection.cvac.ast.program.AbstractProgram;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.codegen.ByteCodeGenerator;

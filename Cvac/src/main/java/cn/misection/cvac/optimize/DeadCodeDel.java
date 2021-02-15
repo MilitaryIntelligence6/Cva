@@ -1,5 +1,6 @@
 package cn.misection.cvac.optimize;
 
+import cn.misection.cvac.ast.IVisitor;
 import cn.misection.cvac.ast.clas.*;
 import cn.misection.cvac.ast.decl.*;
 import cn.misection.cvac.ast.entry.*;
@@ -15,7 +16,7 @@ import java.util.HashSet;
 /**
  * Created by Mengxu on 2017/1/27.
  */
-public class DeadCodeDel implements cn.misection.cvac.ast.Visitor, Optimizable
+public class DeadCodeDel implements IVisitor, Optimizable
 {
     private HashSet<String> curFields;  // the fields of current class
     private HashSet<String> localVars;  // the local variables and formals in current method

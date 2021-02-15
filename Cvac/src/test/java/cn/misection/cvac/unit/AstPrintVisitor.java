@@ -1,5 +1,6 @@
 package cn.misection.cvac.unit;
 
+import cn.misection.cvac.ast.IVisitor;
 import cn.misection.cvac.ast.clas.*;
 import cn.misection.cvac.ast.decl.*;
 import cn.misection.cvac.ast.entry.*;
@@ -12,7 +13,7 @@ import cn.misection.cvac.ast.type.*;
 /**
  * Created by Mengxu on 2017/1/12.
  */
-public class AstPrintVisitor implements cn.misection.cvac.ast.Visitor
+public class AstPrintVisitor implements IVisitor
 {
     private int indentLevel = 4;
 

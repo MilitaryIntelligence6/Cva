@@ -1,5 +1,6 @@
 package cn.misection.cvac.codegen;
 
+import cn.misection.cvac.ast.IVisitor;
 import cn.misection.cvac.ast.clas.*;
 import cn.misection.cvac.ast.decl.*;
 import cn.misection.cvac.ast.entry.*;
@@ -20,7 +21,7 @@ import java.util.List;
 /**
  * Created by Mengxu on 2017/1/17.
  */
-public class TranslatorVisitor implements cn.misection.cvac.ast.Visitor
+public class TranslatorVisitor implements IVisitor
 {
     private String classId;
     private int index;

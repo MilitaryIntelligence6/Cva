@@ -1,5 +1,6 @@
 package cn.misection.cvac.optimize;
 
+import cn.misection.cvac.ast.IVisitor;
 import cn.misection.cvac.ast.clas.*;
 import cn.misection.cvac.ast.decl.*;
 import cn.misection.cvac.ast.entry.*;
@@ -15,7 +16,7 @@ import java.util.List;
 /**
  * Created by Mengxu on 2017/1/23.
  */
-public class ConstantFolder implements cn.misection.cvac.ast.Visitor, Optimizable
+public class ConstantFolder implements IVisitor, Optimizable
 {
     private AbstractExpression lastExp;
     private boolean isOptimizing;

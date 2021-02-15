@@ -15,7 +15,7 @@ import cn.misection.cvac.ast.type.*;
 /**
  * Created by Mengxu on 2017/1/7.
  */
-public interface Visitor
+public interface IVisitor
 {
     // Type
     default void visit(AbstractType t)

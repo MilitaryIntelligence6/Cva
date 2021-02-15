@@ -1,5 +1,6 @@
 package cn.misection.cvac.semantic;
 
+import cn.misection.cvac.ast.IVisitor;
 import cn.misection.cvac.ast.clas.*;
 import cn.misection.cvac.ast.decl.*;
 import cn.misection.cvac.ast.entry.*;
@@ -17,7 +18,7 @@ import java.util.LinkedList;
  * Created by Mengxu on 2017/1/13.
  * 语义分析;
  */
-public class SemanticVisitor implements cn.misection.cvac.ast.Visitor
+public class SemanticVisitor implements IVisitor
 {
     private ClassTable classTable;
     private MethodVariableTable methodVarTable;

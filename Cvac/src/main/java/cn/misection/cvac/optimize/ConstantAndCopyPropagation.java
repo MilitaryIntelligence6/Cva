@@ -1,5 +1,6 @@
 package cn.misection.cvac.optimize;
 
+import cn.misection.cvac.ast.IVisitor;
 import cn.misection.cvac.ast.clas.*;
 import cn.misection.cvac.ast.decl.*;
 import cn.misection.cvac.ast.entry.*;
@@ -15,7 +16,7 @@ import java.util.HashMap;
 /**
  * Created by Mengxu on 2017/1/28.
  */
-public class ConstantAndCopyPropagation implements cn.misection.cvac.ast.Visitor, Optimizable
+public class ConstantAndCopyPropagation implements IVisitor, Optimizable
 {
     private HashMap<String, AbstractExpression> conorcopy; // constant or copy in current method
     private AbstractExpression curExpr;
