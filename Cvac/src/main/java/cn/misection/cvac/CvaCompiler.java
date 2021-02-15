@@ -1,11 +1,11 @@
 package cn.misection.cvac;
 
 import cn.misection.cvac.ast.program.AbstractProgram;
-import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.codegen.ByteCodeGenerator;
 import cn.misection.cvac.codegen.TranslatorVisitor;
 import cn.misection.cvac.codegen.ast.CodeGenAst;
 import cn.misection.cvac.config.Macro;
+import cn.misection.cvac.constant.ConstPool;
 import cn.misection.cvac.lexer.BufferedQueueHandler;
 import cn.misection.cvac.lexer.IBufferedQueue;
 import cn.misection.cvac.optimize.Optimizer;
@@ -39,20 +39,16 @@ public class CvaCompiler
 
     private static final int ERROR_EXIT_STATUS = 1;
 
-
-    public static final String CURRENT_SHELL_PATH = System.getProperty("user.dir");
-
     private static final String DEBUG_FILE = "res/cvasrc/debug.cva";
 
-//    private static final String DEBUG_IL_DIR = String.format("%s/debug/il", CURRENT_SHELL_PATH);
     private static final String DEBUG_IL_DIR = "debug/il";
 
-//    private static final String DEBUG_CLASS_DIR = String.format("%s/debug/classes", CURRENT_SHELL_PATH);
     private static final String DEBUG_CLASS_DIR = "debug/classes";
 
 
     public static void main(String[] args)
     {
+        logBanner();
         String fName = null;
         if (Macro.RELEASE)
         {
@@ -62,16 +58,7 @@ public class CvaCompiler
         {
             fName = DEBUG_FILE;
         }
-        IBufferedQueue fStream = null;
-        try
-        {
-            fStream = new BufferedQueueHandler(new FileReader(fName));
-        }
-        catch (IOException e)
-        {
-            System.out.printf("Cannot find the file: %s%n", fName);
-            System.exit(ERROR_EXIT_STATUS);
-        }
+        IBufferedQueue fStream = readStream(fName);
         geneCode(fStream);
     }
 
@@ -89,31 +76,25 @@ public class CvaCompiler
         translator.visit(program);
 
         ByteCodeGenerator generator = new ByteCodeGenerator();
-        generator.visit(translator.prog);
+        generator.visit(translator.getProg());
 
         doMkDIrs();
-
         // 现在是从il读到文件中而不是先创建il, il步骤在前, 需要设定一个全局;
-        String ilPath = String.format("%s.il", translator.prog.mainClass.getLiteral());
-//        String ilPath = String.format("%s/%s.il", DEBUG_IL_DIR, translator.prog.mainClass.id);
-//        mkFile(ilPath);
+        String ilPath = String.format("%s.il", translator.getProg().getMainClass().getLiteral());
         // ascii instructions to binary file
         jasmin.Main.main(new String[] {ilPath});
 
-        for (CodeGenAst.Class.ClassSingle cla : translator.prog.classes)
+        for (CodeGenAst.Class.ClassSingle cla : translator.getProg().getClasses())
         {
             String filePath = String.format("%s.il", cla.getLiteral());
-//            String filePath = String.format("%s/%s.il", DEBUG_IL_DIR, cla.id);
-//            mkFile(filePath);
             jasmin.Main.main(new String[] {filePath});
         }
     }
 
-    private static void doCheck(AbstractProgram prog)
+    private static void doCheck(AbstractProgram program)
     {
         SemanticVisitor checker = new SemanticVisitor();
-        checker.visit(prog);
-
+        checker.visit(program);
         // if the program is correct, we generate code for it
         if (!checker.isOK())
         {
@@ -180,5 +161,26 @@ public class CvaCompiler
                 e.printStackTrace();
             }
         }
+    }
+
+    private static void logBanner()
+    {
+        System.out.println(ConstPool.BANNER);
+    }
+
+    private static IBufferedQueue readStream(String fName)
+    {
+        try
+        {
+            IBufferedQueue fStream = new BufferedQueueHandler(new FileReader(fName));
+            return fStream;
+        }
+        catch (IOException e)
+        {
+            System.out.printf("Cannot find the file: %s%n", fName);
+            System.exit(ERROR_EXIT_STATUS);
+        }
+        // 不可达;
+        return null;
     }
 }

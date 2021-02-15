@@ -7,10 +7,13 @@
  */
 package cn.misection.cvac.lexer;
 
-
-class ConstantPool
+/**
+ * 前端常量类;
+ */
+class ConstPool
 {
     public static final char NEW_LINE = '\n';
 
     public static final char SPACE = ' ';
+
 }

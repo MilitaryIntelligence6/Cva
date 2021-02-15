@@ -32,7 +32,7 @@ public class BufferedQueueHandler extends BufferedReader implements IBufferedQue
         String line = null;
         while ((line = this.readLine()) != null)
         {
-            buffer.append(line).append(ConstantPool.NEW_LINE);
+            buffer.append(line).append(ConstPool.NEW_LINE);
         }
         this.close();
     }

@@ -551,13 +551,33 @@ public class CodeGenAst
     {
         public static class ProgramSingle
         {
-            public MainClass.MainClassSingle mainClass;
-            public List<Class.ClassSingle> classes;
+            private MainClass.MainClassSingle mainClass;
+            private List<Class.ClassSingle> classes;
 
             public ProgramSingle(MainClass.MainClassSingle mainClass,
                                  List<Class.ClassSingle> classes)
             {
+                this.setMainClass(mainClass);
+                this.setClasses(classes);
+            }
+
+            public MainClass.MainClassSingle getMainClass()
+            {
+                return mainClass;
+            }
+
+            public void setMainClass(MainClass.MainClassSingle mainClass)
+            {
                 this.mainClass = mainClass;
+            }
+
+            public List<Class.ClassSingle> getClasses()
+            {
+                return classes;
+            }
+
+            public void setClasses(List<Class.ClassSingle> classes)
+            {
                 this.classes = classes;
             }
         }

@@ -1,14 +1,19 @@
 package cn.misection.cvac.parser;
 
-import cn.misection.cvac.ast.clas.*;
-import cn.misection.cvac.ast.decl.*;
-import cn.misection.cvac.ast.entry.*;
+import cn.misection.cvac.ast.clas.AbstractClass;
+import cn.misection.cvac.ast.clas.CvaClass;
+import cn.misection.cvac.ast.decl.AbstractDeclaration;
+import cn.misection.cvac.ast.decl.CvaDeclaration;
+import cn.misection.cvac.ast.entry.CvaEntry;
 import cn.misection.cvac.ast.expr.*;
-import cn.misection.cvac.ast.method.*;
-import cn.misection.cvac.ast.program.*;
+import cn.misection.cvac.ast.method.AbstractMethod;
+import cn.misection.cvac.ast.method.CvaMethod;
+import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
-import cn.misection.cvac.ast.type.*;
-
+import cn.misection.cvac.ast.type.AbstractType;
+import cn.misection.cvac.ast.type.CvaBoolean;
+import cn.misection.cvac.ast.type.CvaClassType;
+import cn.misection.cvac.ast.type.CvaInt;
 import cn.misection.cvac.lexer.CvaKind;
 import cn.misection.cvac.lexer.CvaToken;
 import cn.misection.cvac.lexer.IBufferedQueue;
@@ -26,7 +31,9 @@ public class Parser
     private Lexer lexer;
     private CvaToken curToken;
 
-    // for vardecl cn.misection.cvac.parser
+    /**
+     * for vardecl cn.misection.cvac.parser;
+     */
     private boolean valDeclFlag;
     private boolean markingFlag;
     private Queue<CvaToken> markedTokens;
@@ -39,7 +46,9 @@ public class Parser
         markedTokens = new LinkedList<>();
     }
 
-    // utility methods
+    /**
+     * utility methods;
+     */
     private void advance()
     {
         if (markingFlag)
@@ -57,21 +66,27 @@ public class Parser
         }
     }
 
-    // start recording the tokens
+    /**
+     * start recording the tokens;
+     */
     private void mark()
     {
         markingFlag = true;
         markedTokens.offer(curToken);
     }
 
-    // stop recording the tokens and clear recorded
-    private void unMark()
+    /**
+     * stop recording the tokens and clear recorded
+     */
+    private void deMark()
     {
         markingFlag = false;
         markedTokens.clear();
     }
 
-    // reset current token and stop recording
+    /**
+     * reset current token and stop recording
+     */
     private void reset()
     {
         markingFlag = false;
@@ -102,11 +117,15 @@ public class Parser
         System.exit(1);
     }
 
-    // parse methods
-
-    // ExpList -> Exp ExpRest*
-    //         ->
-    // ExpRest -> , Exp
+    /**
+     * // parse methods
+     * <p>
+     * // ExpList -> Exp ExpRest*
+     * //         ->
+     * // ExpRest -> , Exp
+     *
+     * @return
+     */
     private LinkedList<AbstractExpression> parseExpList()
     {
         LinkedList<AbstractExpression> explist = new LinkedList<>();
@@ -127,13 +146,17 @@ public class Parser
         return explist;
     }
 
-    // AtomExp -> (exp)
-    //  -> Integer Literal
-    //  -> true
-    //  -> false
-    //  -> this
-    //  -> id
-    //  -> new id()
+    /**
+     * // AtomExp -> (exp)
+     * //  -> Integer Literal
+     * //  -> true
+     * //  -> false
+     * //  -> this
+     * //  -> id
+     * //  -> new id()
+     *
+     * @return
+     */
     private AbstractExpression parseAtomExp()
     {
         AbstractExpression exp;
@@ -179,8 +202,12 @@ public class Parser
         }
     }
 
-    // NotExp -> AtomExp
-    //  -> AtomExp.id(expList)
+    /**
+     * // NotExp -> AtomExp
+     * //  -> AtomExp.id(expList)
+     *
+     * @return
+     */
     private AbstractExpression parseNotExp()
     {
         AbstractExpression expr = parseAtomExp();
@@ -201,8 +228,12 @@ public class Parser
         return expr;
     }
 
-    // TimesExp -> ! TimesExp
-    //  -> NotExp
+    /**
+     * // TimesExp -> ! TimesExp
+     * //  -> NotExp
+     *
+     * @return
+     */
     private AbstractExpression parseTimesExp()
     {
         int i = 0;
@@ -217,8 +248,12 @@ public class Parser
         return i % 2 == 0 ? exp : tem;
     }
 
-    // AddSubExp -> TimesExp * TimesExp
-    //  -> TimesExp
+    /**
+     * // AddSubExp -> TimesExp * TimesExp
+     * //  -> TimesExp
+     *
+     * @return
+     */
     private AbstractExpression parseAddSubExp()
     {
         AbstractExpression tem = parseTimesExp();
@@ -232,9 +267,13 @@ public class Parser
         return exp;
     }
 
-    // LtExp -> AddSubExp + AddSubExp
-    //  -> AddSubExp - AddSubExp
-    //  -> AddSubExp
+    /**
+     * // LtExp -> AddSubExp + AddSubExp
+     * //  -> AddSubExp - AddSubExp
+     * //  -> AddSubExp
+     *
+     * @return
+     */
     private AbstractExpression parseLTExp()
     {
         AbstractExpression exp = parseAddSubExp();
@@ -243,7 +282,7 @@ public class Parser
             boolean addFlag = curToken.getKind() == CvaKind.ADD;
             advance();
             AbstractExpression tem = parseAddSubExp();
-            exp = addFlag ? 
+            exp = addFlag ?
                     new CvaAddExpr(exp.getLineNum(), exp, tem)
                     : tem instanceof CvaNumberInt
                     ? new CvaAddExpr(tem.getLineNum(),
@@ -255,8 +294,12 @@ public class Parser
         return exp;
     }
 
-    // AndExp -> LtExp < LtExp
-    // -> LtExp
+    /**
+     * // AndExp -> LtExp < LtExp
+     * // -> LtExp
+     *
+     * @return
+     */
     private AbstractExpression parseAndExp()
     {
         AbstractExpression exp = parseLTExp();
@@ -269,8 +312,12 @@ public class Parser
         return exp;
     }
 
-    // Exp -> AndExp && AndExp
-    //  -> AndExp
+    /**
+     * // Exp -> AndExp && AndExp
+     * //  -> AndExp
+     *
+     * @return
+     */
     private AbstractExpression parseExp()
     {
         AbstractExpression exp = parseAndExp();
@@ -283,11 +330,15 @@ public class Parser
         return exp;
     }
 
-    // Statement -> { Statement* }
-    //  -> if (Exp) Statement else Statement
-    //  -> while (Exp) Statement
-    //  -> print(Exp);
-    //  -> id = Exp;
+    /**
+     * // Statement -> { Statement* }
+     * //  -> if (Exp) Statement else Statement
+     * //  -> while (Exp) Statement
+     * //  -> print(Exp);
+     * //  -> id = Exp;
+     *
+     * @return
+     */
     private AbstractStatement parseStatement()
     {
         AbstractStatement stm = null;
@@ -348,8 +399,12 @@ public class Parser
         return stm;
     }
 
-    // Statements -> Statement Statements
-    //  ->
+    /**
+     * // Statements -> Statement Statements
+     * //  ->
+     *
+     * @return
+     */
     private LinkedList<AbstractStatement> parseStatements()
     {
         LinkedList<AbstractStatement> stms = new LinkedList<>();
@@ -363,9 +418,13 @@ public class Parser
         return stms;
     }
 
-    // Type -> int
-    //  -> boolean
-    //  -> id
+    /**
+     * // Type -> int
+     * //  -> boolean
+     * //  -> id
+     *
+     * @return
+     */
     private AbstractType parseType()
     {
         AbstractType type = null;
@@ -392,12 +451,17 @@ public class Parser
         return type;
     }
 
-    // VarDecl -> Type id;
+    /**
+     * // VarDecl -> Type id;
+     *
+     * @return
+     */
     private AbstractDeclaration parseVarDecl()
     {
         this.mark();
         AbstractType type = parseType();
-        if (curToken.getKind() == CvaKind.ASSIGN)  // maybe a assign statement in method
+        // maybe a assign statement in method;
+        if (curToken.getKind() == CvaKind.ASSIGN)
         {
             this.reset();
             valDeclFlag = false;
@@ -409,13 +473,14 @@ public class Parser
             advance();
             if (curToken.getKind() == CvaKind.SEMI)
             {
-                this.unMark();
+                this.deMark();
                 valDeclFlag = true;
                 AbstractDeclaration dec = new CvaDeclaration(curToken.getLineNum(), literal, type);
                 eatToken(CvaKind.SEMI);
                 return dec;
             }
-            else if (curToken.getKind() == CvaKind.OPEN_PAREN) // maybe a method in class
+            // maybe a method in class;
+            else if (curToken.getKind() == CvaKind.OPEN_PAREN)
             {
                 valDeclFlag = false;
                 this.reset();
@@ -434,8 +499,12 @@ public class Parser
         }
     }
 
-    // VarDecls -> VarDecl VarDecls
-    //  ->
+    /**
+     * // VarDecls -> VarDecl VarDecls
+     * //  ->
+     *
+     * @return
+     */
     private LinkedList<AbstractDeclaration> parseVarDecls()
     {
         LinkedList<AbstractDeclaration> decs = new LinkedList<>();
@@ -456,30 +525,50 @@ public class Parser
         return decs;
     }
 
-    // FormalList -> Type id FormalRest*
-    //  ->
-    // FormalRest -> , Type id
+    /**
+     * // FormalList -> Type id FormalRest*
+     * //  ->
+     * // FormalRest -> , Type id
+     *
+     * @return
+     */
     private LinkedList<AbstractDeclaration> parseFormalList()
     {
         LinkedList<AbstractDeclaration> decs = new LinkedList<>();
-        if (curToken.getKind() == CvaKind.INT || curToken.getKind() == CvaKind.BOOLEAN
-                || curToken.getKind() == CvaKind.IDENTIFIER)
+        switch (curToken.getKind())
         {
-            AbstractType type = parseType();
-            decs.addLast(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), type));
-            eatToken(CvaKind.IDENTIFIER);
-            while (curToken.getKind() == CvaKind.COMMA)
+            case INT:
+            case BOOLEAN:
+            case IDENTIFIER:
             {
-                advance();
-                decs.addLast(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), parseType()));
+                // 这里非常坑. 必须要先parser;
+                // parse的副作用是推一个token, 所以给new decl传参的时候先后顺序换了会导致意想不到的bug;
+                AbstractType type = parseType();
+                decs.addLast(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), type));
                 eatToken(CvaKind.IDENTIFIER);
+                while (curToken.getKind() == CvaKind.COMMA)
+                {
+                    advance();
+                    AbstractType argType = parseType();
+                    decs.addLast(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), argType));
+                    eatToken(CvaKind.IDENTIFIER);
+                }
+                break;
+            }
+            default:
+            {
+                break;
             }
         }
         return decs;
     }
 
-    // Method -> Type id (FormalList)
-    //          {VarDec* Statement* return Exp; }
+    /**
+     * // Method -> Type id (FormalList)
+     * //          {VarDec* Statement* return Exp; }
+     *
+     * @return
+     */
     private AbstractMethod parseMethod()
     {
         AbstractType retType = parseType();
@@ -500,8 +589,12 @@ public class Parser
                 retType, retExp, formalList, varDecs, stms);
     }
 
-    // MethodDecls -> MethodDecl MethodDecls*
-    //  ->
+    /**
+     * // MethodDecls -> MethodDecl MethodDecls*
+     * //  ->
+     *
+     * @return
+     */
     private LinkedList<AbstractMethod> parseMethodDecls()
     {
         LinkedList<AbstractMethod> methods = new LinkedList<>();
@@ -515,8 +608,12 @@ public class Parser
         return methods;
     }
 
-    // ClassDecl -> class id { VarDecl* MethodDecl* }
-    //  -> class id : id { VarDecl* Method* }
+    /**
+     * // ClassDecl -> class id { VarDecl* MethodDecl* }
+     * //  -> class id : id { VarDecl* Method* }
+     *
+     * @return
+     */
     private AbstractClass parseClassDecl()
     {
         eatToken(CvaKind.CLASS);
@@ -536,8 +633,12 @@ public class Parser
         return new CvaClass(id, superClass, decs, methods);
     }
 
-    // ClassDecls -> ClassDecl ClassDecls*
-    //  ->
+    /**
+     * // ClassDecls -> ClassDecl ClassDecls*
+     * //  ->
+     *
+     * @return
+     */
     private LinkedList<AbstractClass> parseClassDecls()
     {
         LinkedList<AbstractClass> classes = new LinkedList<>();
@@ -549,13 +650,17 @@ public class Parser
         return classes;
     }
 
-    // MainClass -> class id
-    //    {
-    //        void main()
-    //        {
-    //            Statement
-    //        }
-    //    }
+    /**
+     * // MainClass -> class id
+     * //    {
+     * //        void main()
+     * //        {
+     * //            Statement
+     * //        }
+     * //    }
+     *
+     * @return
+     */
     private CvaEntry parseEntry()
     {
         eatToken(CvaKind.CLASS);
@@ -574,7 +679,11 @@ public class Parser
         return new CvaEntry(literal, stm);
     }
 
-    // Program -> MainClass ClassDecl*
+    /**
+     * Program -> MainClass ClassDecl*
+     *
+     * @return
+     */
     private CvaProgram parseProgram()
     {
         CvaEntry main = parseEntry();

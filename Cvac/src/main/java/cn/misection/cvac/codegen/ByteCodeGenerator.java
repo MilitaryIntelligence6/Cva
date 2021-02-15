@@ -271,7 +271,7 @@ public class ByteCodeGenerator implements CodeGenVisitor
     @Override
     public void visit(CodeGenAst.Program.ProgramSingle p)
     {
-        this.visit(p.mainClass);
-        p.classes.forEach(this::visit);
+        this.visit(p.getMainClass());
+        p.getClasses().forEach(this::visit);
     }
 }

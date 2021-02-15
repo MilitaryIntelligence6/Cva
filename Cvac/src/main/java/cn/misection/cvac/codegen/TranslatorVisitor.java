@@ -33,50 +33,50 @@ public class TranslatorVisitor implements IVisitor
     private Method.MethodSingle method;
     private CodeGenAst.Class.ClassSingle classs;
     private MainClass.MainClassSingle mainClass;
-    public Program.ProgramSingle prog;
+    private Program.ProgramSingle prog;
 
     public TranslatorVisitor()
     {
-        this.classId = null;
+        this.setClassId(null);
         this.indexTable = null;
-        this.type = null;
-        this.dec = null;
-        this.stms = new LinkedList<>();
-        this.method = null;
-        this.classId = null;
-        this.mainClass = null;
-        this.classs = null;
-        this.prog = null;
+        this.setType(null);
+        this.setDec(null);
+        this.setStms(new LinkedList<>());
+        this.setMethod(null);
+        this.setClassId(null);
+        this.setMainClass(null);
+        this.setClasss(null);
+        this.setProg(null);
     }
 
     private void emit(Stm.T s)
     {
-        this.stms.add(s);
+        this.getStms().add(s);
     }
 
     @Override
     public void visit(CvaBoolean t)
     {
-        this.type = new Type.Int();
+        this.setType(new Type.Int());
     }
 
     @Override
     public void visit(CvaClassType t)
     {
-        this.type = new Type.ClassType(t.getLiteral());
+        this.setType(new Type.ClassType(t.getLiteral()));
     }
 
     @Override
     public void visit(CvaInt t)
     {
-        this.type = new Type.Int();
+        this.setType(new Type.Int());
     }
 
     @Override
     public void visit(CvaDeclaration d)
     {
         this.visit(d.getType());
-        this.dec = new Dec.DecSingle(this.type, d.getLiteral());
+        this.setDec(new Dec.DecSingle(this.getType(), d.getLiteral()));
         if (this.indexTable != null) // if it is field
         {
             this.indexTable.put(d.getLiteral(), index++);
@@ -115,12 +115,12 @@ public class TranslatorVisitor implements IVisitor
         this.visit(e.getExpr());
         e.getArgs().forEach(this::visit);
         this.visit(e.getRetType());
-        Type.T rt = this.type;
+        Type.T rt = this.getType();
         List<Type.T> at = new LinkedList<>();
         e.getArgTypeList().forEach(a ->
         {
             this.visit(a);
-            at.add(this.type);
+            at.add(this.getType());
         });
         emit(new Stm.Invokevirtual(e.getLiteral(), e.getType(), at, rt));
     }
@@ -138,7 +138,7 @@ public class TranslatorVisitor implements IVisitor
         {
             emit(new Stm.Aload(0));
             AbstractType type = e.getType();
-            emit(new Stm.Getfield(this.classId + '/' + e.getLiteral(),
+            emit(new Stm.Getfield(this.getClassId() + '/' + e.getLiteral(),
                     type instanceof CvaClassType ?
                             ("L" + ((CvaClassType) type).getLiteral() + ";")
                             : "I"));
@@ -247,7 +247,7 @@ public class TranslatorVisitor implements IVisitor
         {
             emit(new Stm.Aload(0));
             this.visit(s.getExpr());
-            emit(new Stm.Putfield(String.format("%s/%s", this.classId, s.getLiteral()),
+            emit(new Stm.Putfield(String.format("%s/%s", this.getClassId(), s.getLiteral()),
                     s.getType() instanceof CvaClassType ?
                             (String.format("L%s;", ((CvaClassType) s.getType()).getLiteral()))
                             : "I"));
@@ -302,22 +302,22 @@ public class TranslatorVisitor implements IVisitor
         this.index = 1;
         this.indexTable = new Hashtable<>();
         this.visit(cvaMethod.getRetType());
-        Type.T theRetType = this.type;
+        Type.T theRetType = this.getType();
 
         List<Dec.DecSingle> formalList = new LinkedList<>();
         cvaMethod.getFormalList().forEach(f ->
         {
             this.visit(f);
-            formalList.add(this.dec);
+            formalList.add(this.getDec());
         });
 
         List<Dec.DecSingle> localList = new LinkedList<>();
         cvaMethod.getLocalList().forEach(l ->
         {
             this.visit(l);
-            localList.add(this.dec);
+            localList.add(this.getDec());
         });
-        this.stms = new LinkedList<>();
+        this.setStms(new LinkedList<>());
         cvaMethod.getStatementList().forEach(this::visit);
 
         this.visit(cvaMethod.getRetExpr());
@@ -331,36 +331,36 @@ public class TranslatorVisitor implements IVisitor
             emit(new Stm.Ireturn());
         }
 
-        this.method = new Method.MethodSingle(theRetType, cvaMethod.getLiteral(), this.classId,
-                formalList, localList, this.stms, 0, this.index);
+        this.setMethod(new Method.MethodSingle(theRetType, cvaMethod.getLiteral(), this.getClassId(),
+                formalList, localList, this.getStms(), 0, this.index));
     }
 
     @Override
     public void visit(CvaClass cvaClass)
     {
-        this.classId = cvaClass.getLiteral();
+        this.setClassId(cvaClass.getLiteral());
         List<Dec.DecSingle> fieldList = new LinkedList<>();
         cvaClass.getFieldList().forEach(f ->
         {
             this.visit(f);
-            fieldList.add(this.dec);
+            fieldList.add(this.getDec());
         });
         List<Method.MethodSingle> methodList = new LinkedList<>();
         cvaClass.getMethodList().forEach(m ->
         {
             this.visit(m);
-            methodList.add(this.method);
+            methodList.add(this.getMethod());
         });
-        this.classs = new CodeGenAst.Class.ClassSingle(
-                cvaClass.getLiteral(), cvaClass.getParent(), fieldList, methodList);
+        this.setClasss(new CodeGenAst.Class.ClassSingle(
+                cvaClass.getLiteral(), cvaClass.getParent(), fieldList, methodList));
     }
 
     @Override
     public void visit(CvaEntry c)
     {
         this.visit(c.getStatement());
-        this.mainClass = new MainClass.MainClassSingle(c.getLiteral(), this.stms);
-        this.stms = new LinkedList<>();
+        this.setMainClass(new MainClass.MainClassSingle(c.getLiteral(), this.getStms()));
+        this.setStms(new LinkedList<>());
     }
 
     @Override
@@ -371,8 +371,88 @@ public class TranslatorVisitor implements IVisitor
         p.getClassList().forEach(c ->
         {
             this.visit(c);
-            classList.add(this.classs);
+            classList.add(this.getClasss());
         });
-        this.prog = new Program.ProgramSingle(this.mainClass, classList);
+        this.setProg(new Program.ProgramSingle(this.getMainClass(), classList));
+    }
+
+    public String getClassId()
+    {
+        return classId;
+    }
+
+    public void setClassId(String classId)
+    {
+        this.classId = classId;
+    }
+
+    public Type.T getType()
+    {
+        return type;
+    }
+
+    public void setType(Type.T type)
+    {
+        this.type = type;
+    }
+
+    public Dec.DecSingle getDec()
+    {
+        return dec;
+    }
+
+    public void setDec(Dec.DecSingle dec)
+    {
+        this.dec = dec;
+    }
+
+    public List<Stm.T> getStms()
+    {
+        return stms;
+    }
+
+    public void setStms(List<Stm.T> stms)
+    {
+        this.stms = stms;
+    }
+
+    public Method.MethodSingle getMethod()
+    {
+        return method;
+    }
+
+    public void setMethod(Method.MethodSingle method)
+    {
+        this.method = method;
+    }
+
+    public CodeGenAst.Class.ClassSingle getClasss()
+    {
+        return classs;
+    }
+
+    public void setClasss(CodeGenAst.Class.ClassSingle classs)
+    {
+        this.classs = classs;
+    }
+
+    public MainClass.MainClassSingle getMainClass()
+    {
+        return mainClass;
+    }
+
+    public void setMainClass(MainClass.MainClassSingle mainClass)
+    {
+        this.mainClass = mainClass;
+    }
+
+    public Program.ProgramSingle getProg()
+    {
+        return prog;
+    }
+
+    public void setProg(Program.ProgramSingle prog)
+    {
+        this.prog = prog;
     }
 }
