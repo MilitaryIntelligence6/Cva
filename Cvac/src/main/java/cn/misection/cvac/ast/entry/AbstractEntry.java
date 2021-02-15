@@ -30,4 +30,14 @@ public abstract class AbstractEntry implements IEntry
     {
         return statement;
     }
+
+    public void setLiteral(String literal)
+    {
+        this.literal = literal;
+    }
+
+    public void setStatement(AbstractStatement statement)
+    {
+        this.statement = statement;
+    }
 }

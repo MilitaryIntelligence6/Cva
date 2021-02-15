@@ -24,4 +24,9 @@ public class CvaBlock extends AbstractStatement
     {
         return statementList;
     }
+
+    public void setStatementList(List<AbstractStatement> statementList)
+    {
+        this.statementList = statementList;
+    }
 }
