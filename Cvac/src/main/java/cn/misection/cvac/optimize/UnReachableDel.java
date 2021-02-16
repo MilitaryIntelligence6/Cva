@@ -172,7 +172,7 @@ public class UnReachableDel implements IVisitor, Optimizable
         }
         else if (s.getCondition() instanceof CvaTrueExpr)
         {
-            System.out.printf("Warning: at line %d : unend-loop!%n",
+            System.out.printf("Warning: at Line %d:  unend-loop!%n",
                     s.getLineNum());
             this.curStm = s;
         }

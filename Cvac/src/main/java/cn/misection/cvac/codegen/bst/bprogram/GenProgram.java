@@ -14,7 +14,7 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:14:00
  */
-public class GenProgram extends BaseProgram
+public final class GenProgram extends BaseProgram
 {
     public GenProgram(GenEntry entry, List<GenClass> classList)
     {

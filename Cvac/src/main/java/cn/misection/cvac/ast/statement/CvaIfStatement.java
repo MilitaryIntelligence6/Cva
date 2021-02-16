@@ -9,7 +9,7 @@ import cn.misection.cvac.ast.expr.AbstractExpression;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:40:00
  */
-public class CvaIfStatement extends AbstractStatement
+public final class CvaIfStatement extends AbstractStatement
 {
     private AbstractExpression condition;
 

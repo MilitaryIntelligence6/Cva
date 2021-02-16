@@ -7,6 +7,6 @@ package cn.misection.cvac.codegen.bst.bstatement;
  * @Description 返回引用类型的指令;
  * @CreateTime 2021年02月16日 00:44:00
  */
-public class AReturn extends BaseStatement
+public final class AReturn extends BaseStatement
 {
 }

@@ -7,7 +7,7 @@ package cn.misection.cvac.codegen.bst.bstatement;
  * @Description load 引用类型的指令;
  * @CreateTime 2021年02月16日 00:43:00
  */
-public class ALoad extends BaseStatement
+public final class ALoad extends BaseStatement
 {
     private int index;
 

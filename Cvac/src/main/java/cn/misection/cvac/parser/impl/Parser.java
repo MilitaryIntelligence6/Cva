@@ -104,7 +104,7 @@ public class Parser
         }
         else
         {
-            System.err.printf("Line %d :Expects: %s, but got: %s%n",
+            System.err.printf("Line %d: Expects: %s, but got: %s%n",
                     curToken.getLineNum(),
                     kind.toString(),
                     curToken.getKind().toString());

@@ -14,7 +14,7 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 20:02:00
  */
-public class GenMethod extends BaseMethod
+public final class GenMethod extends BaseMethod
 {
     private String literal;
 

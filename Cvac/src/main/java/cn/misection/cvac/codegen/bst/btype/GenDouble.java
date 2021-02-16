@@ -3,19 +3,19 @@ package cn.misection.cvac.codegen.bst.btype;
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
- * @ClassName CvaString
+ * @ClassName CvaDouble
  * @Description TODO
- * @CreateTime 2021年02月14日 19:46:00
+ * @CreateTime 2021年02月14日 19:45:00
  */
-public class CvaString extends BaseType
+public final class GenDouble extends BaseType
 {
-    public CvaString()
+    public GenDouble()
     {
     }
 
     @Override
     public String toString()
     {
-        return "@String";
+        return "@double";
     }
 }

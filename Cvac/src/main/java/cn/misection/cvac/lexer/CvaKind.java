@@ -60,6 +60,11 @@ public enum CvaKind
     ELSE,
 
     /**
+     * void
+     */
+    VOID,
+
+    /**
      * byte;
      */
     BYTE,
@@ -177,11 +182,6 @@ public enum CvaKind
      * *
      */
     STAR,
-
-    /**
-     * void
-     */
-    VOID,
 
     /**
      * while
@@ -516,7 +516,7 @@ public enum CvaKind
 
     public static boolean isBasicType(CvaKind kind)
     {
-        return kind.ordinal() >= CvaKind.BYTE.ordinal()
+        return kind.ordinal() >= CvaKind.VOID.ordinal()
                 && kind.ordinal() <= CvaKind.POINTER.ordinal();
     }
 

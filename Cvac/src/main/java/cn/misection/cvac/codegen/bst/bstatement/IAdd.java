@@ -7,7 +7,7 @@ package cn.misection.cvac.codegen.bst.bstatement;
  * @Description TODO
  * @CreateTime 2021年02月16日 00:50:00
  */
-public class IAdd extends BaseStatement
+public final class IAdd extends BaseStatement
 {
 
 }

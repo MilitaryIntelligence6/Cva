@@ -7,7 +7,7 @@ package cn.misection.cvac.codegen.bst.btype;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:45:00
  */
-public class GenClassType extends BaseType
+public final class GenClassType extends BaseType
 {
     private String literal;
 

@@ -12,7 +12,7 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:14:00
  */
-public class CvaProgram extends AbstractProgram
+public final class CvaProgram extends AbstractProgram
 {
     public CvaProgram(AbstractEntry entry, List<AbstractClass> classQueue)
     {

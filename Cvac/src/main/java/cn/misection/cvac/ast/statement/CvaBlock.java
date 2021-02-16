@@ -10,7 +10,7 @@ import java.util.Queue;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:35:00
  */
-public class CvaBlock extends AbstractStatement
+public final class CvaBlock extends AbstractStatement
 {
     private List<AbstractStatement> statementList;
 

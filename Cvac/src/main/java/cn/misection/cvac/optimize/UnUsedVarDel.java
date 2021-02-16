@@ -190,7 +190,7 @@ public class UnUsedVarDel implements IVisitor, Optimizable
         {
             if (givesWarning)
             {
-                System.out.printf("Warning: at line %d : the argument \"%s\" of" +
+                System.out.printf("Warning: at Line %d:  the argument \"%s\" of" +
                                 " method \"%s\" you have never used.%n",
                         uao.getLineNum(), uak, m.getLiteral());
             }
@@ -200,7 +200,7 @@ public class UnUsedVarDel implements IVisitor, Optimizable
         {
             if (givesWarning)
             {
-                System.out.printf("Warning: at line %d : the local variable " +
+                System.out.printf("Warning: at Line %d:  the local variable " +
                                 "\"%s\" you have never used. Now we delete it.%n",
                         ulo.getLineNum(), ulk);
             }

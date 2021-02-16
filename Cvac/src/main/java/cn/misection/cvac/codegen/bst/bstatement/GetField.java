@@ -7,7 +7,7 @@ package cn.misection.cvac.codegen.bst.bstatement;
  * @Description TODO
  * @CreateTime 2021年02月16日 00:49:00
  */
-public class GetField extends BaseStatement
+public final class GetField extends BaseStatement
 {
     private String fieldSpec;
 

@@ -12,7 +12,7 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:57:00
  */
-public class GenClass extends BaseClass
+public final class GenClass extends BaseClass
 {
     private String literal;
 

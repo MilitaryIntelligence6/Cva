@@ -9,7 +9,7 @@ import cn.misection.cvac.ast.expr.AbstractExpression;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:43:00
  */
-public class CvaWriteOperation extends AbstractStatement
+public final class CvaWriteOperation extends AbstractStatement
 {
     private AbstractExpression expr;
 

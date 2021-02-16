@@ -11,7 +11,7 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月16日 00:53:00
  */
-public class InvokeVirtual extends BaseStatement
+public final class InvokeVirtual extends BaseStatement
 {
     /**
      * @FIXME

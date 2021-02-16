@@ -7,7 +7,7 @@ package cn.misection.cvac.codegen.bst.bstatement;
  * @Description TODO
  * @CreateTime 2021年02月16日 00:47:00
  */
-public class AStore extends BaseStatement
+public final class AStore extends BaseStatement
 {
     private int index;
 

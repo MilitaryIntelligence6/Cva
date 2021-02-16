@@ -119,7 +119,7 @@ public final class Parser
 
     private void errorLog(int lineNum, String expected, String got)
     {
-        System.err.printf("Line %d :Expects: %s, but got: %s%n",
+        System.err.printf("Line %d: Expects: %s, but got: %s%n",
                 lineNum, expected, got);
         System.exit(1);
     }
