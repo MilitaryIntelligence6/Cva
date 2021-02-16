@@ -13,20 +13,20 @@ public interface IBufferedQueue
      * 查看;
      * @return 队头;
      */
-    int peek();
+    char peek();
 
     /**
      * 查看队伍中某一个, 0开始;
      * @param num 0开始的位置
      * @return 查看的元素;
      */
-    int peek(int num);
+    char peek(int num);
 
     /**
      * 头出队一个;
      * @return 头;
      */
-    int poll();
+    char poll();
 
     /**
      * 获取队头前 num 个;

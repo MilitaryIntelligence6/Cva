@@ -21,6 +21,12 @@ final class LexerConstPool
 
     public static final char SPACE = ' ';
 
+    /**
+     * '\0'
+     * '\u0000'
+     */
+    public static final char EOF = 0;
+
     private LexerConstPool() {}
 }
 

@@ -34,26 +34,27 @@ public class BufferedQueueHandler extends BufferedReader implements IBufferedQue
         {
             buffer.append(line).append(LexerConstPool.NEW_LINE);
         }
+        buffer.append(LexerConstPool.EOF);
         this.close();
     }
 
     @Override
-    public int peek()
+    public char peek()
     {
-        return peek(0);
+        return isEmpty() ? 0 : buffer.charAt(0);
     }
 
     @Override
-    public int peek(int num)
+    public char peek(int num)
     {
         // TODO 判空不要在这里, 影响效率, 放到后面lexer中;
-        return isEmpty() ? -1 : buffer.charAt(num);
+        return num >= buffer.length() ? 0 : buffer.charAt(num);
     }
 
     @Override
-    public int poll()
+    public char poll()
     {
-        int c = peek();
+        char c = peek();
         buffer.delete(0, 1);
         return c;
     }

@@ -29,7 +29,7 @@ public class Lexer
 
     private CvaToken lex()
     {
-        int c = this.queueStream.poll();
+        char c = this.queueStream.poll();
 
         // skip all kinds of blanks
         while (Character.isWhitespace(c))
@@ -71,7 +71,7 @@ public class Lexer
         // 把单目符给抽象出来;
         switch (c)
         {
-            case -1:
+            case LexerConstPool.EOF:
             {
                 if (Macro.DEBUG)
                 {
@@ -123,9 +123,9 @@ public class Lexer
             default:
             {
                 // 先看c是否是非前缀字符, 这里是 int, 必须先转成char看在不在表中;
-                if (CvaKind.containsKind(String.valueOf((char) c)))
+                if (CvaKind.containsKind(String.valueOf(c)))
                 {
-                    return new CvaToken(CvaKind.selectReverse(String.valueOf((char) c)), lineNum);
+                    return new CvaToken(CvaKind.selectReverse(String.valueOf(c)), lineNum);
                 }
                 StringBuilder builder = new StringBuilder();
                 builder.append((char) c);
