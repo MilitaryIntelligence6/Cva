@@ -5,7 +5,7 @@ import cn.misection.cvac.codegen.IntermLangGenerator;
 import cn.misection.cvac.codegen.TranslatorVisitor;
 import cn.misection.cvac.codegen.bst.bclas.GenClass;
 import cn.misection.cvac.config.Macro;
-import cn.misection.cvac.constant.ConstPool;
+import cn.misection.cvac.constant.PublicConstPool;
 import cn.misection.cvac.lexer.BufferedQueueHandler;
 import cn.misection.cvac.lexer.IBufferedQueue;
 import cn.misection.cvac.optimize.Optimizer;
@@ -168,7 +168,7 @@ public final class CvaCompiler
 
     private static void logBanner()
     {
-        System.out.println(ConstPool.BANNER);
+        System.out.println(PublicConstPool.BANNER);
     }
 
     private static IBufferedQueue readStream(String fName)

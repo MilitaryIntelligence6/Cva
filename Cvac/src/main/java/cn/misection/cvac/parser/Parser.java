@@ -14,12 +14,13 @@ import cn.misection.cvac.ast.type.AbstractType;
 import cn.misection.cvac.ast.type.CvaBoolean;
 import cn.misection.cvac.ast.type.CvaClassType;
 import cn.misection.cvac.ast.type.CvaInt;
+import cn.misection.cvac.constant.PublicConstPool;
+import cn.misection.cvac.constant.TokenConstPool;
 import cn.misection.cvac.lexer.CvaKind;
 import cn.misection.cvac.lexer.CvaToken;
 import cn.misection.cvac.lexer.IBufferedQueue;
 import cn.misection.cvac.lexer.Lexer;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -691,26 +692,20 @@ public final class Parser
      */
     private CvaEntry parseEntry()
     {
-        eatToken(CvaKind.CLASS);
-        String literal = curToken.getLiteral();
-        eatToken(CvaKind.IDENTIFIER);
-        eatToken(CvaKind.OPEN_CURLY_BRACE);
+        if (curToken.getKind() == CvaKind.CLASS)
+        {
+            eatToken(CvaKind.CLASS);
+            String mainName = curToken.getLiteral();
+            eatToken(CvaKind.IDENTIFIER);
+            eatToken(CvaKind.OPEN_CURLY_BRACE);
 
-        // TODO 现在没用到. 以后要检查;
-        CvaKind mainType = parseMainRetType();
-
-        eatToken(CvaKind.MAIN);
-        eatToken(CvaKind.OPEN_PAREN);
-
-        parseMainArgs();
-
-        eatToken(CvaKind.CLOSE_PAREN);
-        eatToken(CvaKind.OPEN_CURLY_BRACE);
-        // 拓展到可以吃多个statement;
-        AbstractStatement stm = parseStatement();
-        eatToken(CvaKind.CLOSE_CURLY_BRACE);
-        eatToken(CvaKind.CLOSE_CURLY_BRACE);
-        return new CvaEntry(literal, stm);
+            AbstractStatement statement = parseMainMethod();
+            eatToken(CvaKind.CLOSE_CURLY_BRACE);
+            return new CvaEntry(mainName, statement);
+        }
+        String mainName = TokenConstPool.DEFAULT_MAIN_NAME;
+        AbstractStatement statement = parseMainMethod();
+        return new CvaEntry(mainName, statement);
     }
 
     /**
@@ -749,6 +744,24 @@ public final class Parser
                     String.valueOf(curKind));
         }
         return curKind;
+    }
+
+    private AbstractStatement parseMainMethod()
+    {
+        // TODO 现在没用到. 以后要检查;
+        CvaKind mainType = parseMainRetType();
+
+        eatToken(CvaKind.MAIN);
+        eatToken(CvaKind.OPEN_PAREN);
+
+        parseMainArgs();
+
+        eatToken(CvaKind.CLOSE_PAREN);
+        eatToken(CvaKind.OPEN_CURLY_BRACE);
+        // 拓展到可以吃多个statement;
+        AbstractStatement statement = parseStatement();
+        eatToken(CvaKind.CLOSE_CURLY_BRACE);
+        return statement;
     }
 
     /**

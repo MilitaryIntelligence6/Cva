@@ -49,7 +49,7 @@ public class Lexer
             {
                 case '/':
                 {
-                    while (nextCh != ConstPool.NEW_LINE)
+                    while (nextCh != LexerConstPool.NEW_LINE)
                     {
                         nextCh = (char) this.queueStream.poll();
                     }

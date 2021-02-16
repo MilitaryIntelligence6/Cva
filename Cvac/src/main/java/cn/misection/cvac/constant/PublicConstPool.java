@@ -7,7 +7,7 @@ package cn.misection.cvac.constant;
  * @Description TODO
  * @CreateTime 2021年02月15日 22:48:00
  */
-public final class ConstPool
+public final class PublicConstPool
 {
     /**
      * arrow;
@@ -201,5 +201,5 @@ public final class ConstPool
 //                    "  ░░░░░░      ░░     ░░      ░░ \n" +
 //                    "\n";
 
-    private ConstPool() {}
+    private PublicConstPool() {}
 }

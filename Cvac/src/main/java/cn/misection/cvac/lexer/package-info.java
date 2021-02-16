@@ -12,13 +12,13 @@ import java.util.HashMap;
 /**
  * 前端常量类;
  */
-final class ConstPool
+final class LexerConstPool
 {
     public static final char NEW_LINE = '\n';
 
     public static final char SPACE = ' ';
 
-    private ConstPool() {}
+    private LexerConstPool() {}
 }
 
 

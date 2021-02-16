@@ -58,7 +58,10 @@ public interface IVisitor
 
     void visit(CvaDeclaration d);
 
-    // Exp
+    /**
+     * 做成map之后, 可以精简代码分散, 但是这里要用反射, 算了;
+     * @param e
+     */
     default void visit(AbstractExpression e)
     {
         switch (e.getClass().getSimpleName())
