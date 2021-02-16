@@ -104,9 +104,15 @@ public enum CvaKind
     POINTER,
 
     /**
+     * String 不是基本类型, 但应是CvaDK内置类, 暂时不标记为class只有;
+     */
+    STRING,
+
+    /**
      * class
      */
     CLASS,
+
 
     /**
      * {
@@ -172,6 +178,11 @@ public enum CvaKind
      * -
      */
     SUB,
+
+    /**
+     * call;
+     */
+    CALL,
 
     /**
      * this
@@ -265,11 +276,6 @@ public enum CvaKind
     PARAM_DECLARATION,
 
     /**
-     * 导包语句;
-     */
-    CALL,
-
-    /**
      * enum;
      */
     ENUM_SPECIFIER,
@@ -357,16 +363,12 @@ public enum CvaKind
 
     STRUCT,
 
-
     /**
      * 左右括号?;
      */
     OPEN_BRACKETS,
 
     CLOSE_BRACKETS,
-
-
-    STRING,
 
     QUEST,
 

@@ -48,22 +48,33 @@ final class CvaTokenMap extends HashMap<String, CvaKind>
 
     private void init()
     {
-        this.put("boolean", CvaKind.BOOLEAN);
+        this.put("call", CvaKind.CALL);
+
         this.put("class", CvaKind.CLASS);
-        this.put("else", CvaKind.ELSE);
-        this.put("false", CvaKind.FALSE);
+
         this.put("if", CvaKind.IF);
-        this.put("int", CvaKind.INT);
+        this.put("else", CvaKind.ELSE);
+
         this.put("main", CvaKind.MAIN);
+
         this.put("new", CvaKind.NEW);
+
         this.put("echo", CvaKind.WRITE);
         this.put("printf", CvaKind.WRITE);
         this.put("println", CvaKind.WRITE);
+
         this.put("return", CvaKind.RETURN);
         this.put("this", CvaKind.THIS);
         this.put("true", CvaKind.TRUE);
+        this.put("false", CvaKind.FALSE);
+
         this.put("void", CvaKind.VOID);
+        this.put("byte", CvaKind.BYTE);
+        this.put("int", CvaKind.INT);
+        this.put("boolean", CvaKind.BOOLEAN);
+
         this.put("while", CvaKind.WHILE);
+        // 后面加;
         this.put("for", CvaKind.FOR);
     }
 }

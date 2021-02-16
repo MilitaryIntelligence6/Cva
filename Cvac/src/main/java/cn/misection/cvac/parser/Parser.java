@@ -48,6 +48,11 @@ public final class Parser
         markedTokenQueue = new LinkedList<>();
     }
 
+    public CvaProgram parse()
+    {
+        return parseProgram();
+    }
+
     /**
      * utility methods;
      */
@@ -697,12 +702,12 @@ public final class Parser
             case CLASS:
             {
                 eatToken(CvaKind.CLASS);
-                String mainName = curToken.getLiteral();
+                String entryName = curToken.getLiteral();
                 eatToken(CvaKind.IDENTIFIER);
                 eatToken(CvaKind.OPEN_CURLY_BRACE);
                 AbstractStatement statement = parseMainMethod();
                 eatToken(CvaKind.CLOSE_CURLY_BRACE);
-                return new CvaEntry(mainName, statement);
+                return new CvaEntry(entryName, statement);
             }
             default:
             {
@@ -720,15 +725,11 @@ public final class Parser
      */
     private CvaProgram parseProgram()
     {
+        parseCall();
         CvaEntry main = parseEntry();
         List<AbstractClass> classes = parseClassDecls();
         eatToken(CvaKind.EOF);
         return new CvaProgram(main, classes);
-    }
-
-    public CvaProgram parse()
-    {
-        return parseProgram();
     }
 
     /**
@@ -771,6 +772,7 @@ public final class Parser
 
     /**
      * @TODO 目前是eat, 以后要传入;
+     * 应返回参数List;
      */
     private void parseMainArgs()
     {
@@ -797,5 +799,10 @@ public final class Parser
 //                    String.valueOf(curToken.getKind()));
 //        }
 //        return decs;
+    }
+
+    private void parseCall()
+    {
+
     }
 }
