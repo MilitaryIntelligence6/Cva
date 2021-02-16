@@ -34,14 +34,16 @@ public class BufferedQueueHandler extends BufferedReader implements IBufferedQue
         {
             buffer.append(line).append(LexerConstPool.NEW_LINE);
         }
-        buffer.append(LexerConstPool.EOF);
+        // 简单粗暴的双重保险就能防止溢出了..;
+        buffer.append(LexerConstPool.EOF).append(LexerConstPool.EOF);
         this.close();
     }
 
     @Override
     public char peek()
     {
-        return isEmpty() ? 0 : buffer.charAt(0);
+        // buffer末位是eof, 就不怕溢出了;
+        return buffer.charAt(0);
     }
 
     @Override

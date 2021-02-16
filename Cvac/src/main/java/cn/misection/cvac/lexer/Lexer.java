@@ -34,9 +34,21 @@ public class Lexer
         // skip all kinds of blanks
         while (Character.isWhitespace(c))
         {
-            if ('\n' == c)
+            switch (c)
             {
-                lineNum++;
+                case LexerConstPool.NEW_LINE:
+                {
+                    lineNum++;
+                    break;
+                }
+                case LexerConstPool.EOF:
+                {
+                    return new CvaToken(CvaKind.EOF, lineNum);
+                }
+                default:
+                {
+                    break;
+                }
             }
             c = this.queueStream.poll();
         }
@@ -132,7 +144,8 @@ public class Lexer
                 while (true)
                 {
                     c = queueStream.peek();
-                    if (c != -1 && !Character.isWhitespace(c)
+                    if (c != LexerConstPool.EOF
+                            && !Character.isWhitespace(c)
                             && !isSpecialCharacter(c))
                     {
                         builder.append((char) c);
@@ -175,7 +188,7 @@ public class Lexer
                 || '{' == c || '(' == c || '<' == c || c == '>'
                 || '!' == c || c == '[' || c == ']'
                 || '}' == c || ')' == c || ';' == c || ':' == c
-                || '-' == c || '*' == c;
+                || '-' == c || '*' == c || c == LexerConstPool.EOF;
     }
 
     private static boolean isNumber(String str)

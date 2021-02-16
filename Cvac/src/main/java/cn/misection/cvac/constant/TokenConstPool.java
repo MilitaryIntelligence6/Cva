@@ -7,7 +7,7 @@ package cn.misection.cvac.constant;
  * @Description TODO
  * @CreateTime 2021年02月16日 20:32:00
  */
-public class TokenConstPool
+public final class TokenConstPool
 {
     public static final String DEFAULT_MAIN_NAME = "Application";
 }
