@@ -1,4 +1,6 @@
 // This is the entry point of the program
+
+
 int main()
 {
     echo(new Test().Compute(10));   // just a print statement

@@ -11,14 +11,12 @@ import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.*;
-import cn.misection.cvac.constant.PublicConstPool;
 import cn.misection.cvac.constant.TokenConstPool;
 import cn.misection.cvac.lexer.CvaKind;
 import cn.misection.cvac.lexer.CvaToken;
 import cn.misection.cvac.lexer.IBufferedQueue;
 import cn.misection.cvac.lexer.Lexer;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -29,14 +27,18 @@ import java.util.Queue;
 public final class Parser
 {
     private Lexer lexer;
+
     private CvaToken curToken;
 
     /**
      * for vardecl cn.misection.cvac.parser;
      */
     private boolean valDeclFlag;
+
     private boolean markingFlag;
+
     private Queue<CvaToken> markedTokenQueue;
+
 
     public Parser(IBufferedQueue queueStream)
     {
@@ -108,23 +110,23 @@ public final class Parser
         }
         else
         {
-            errorLog(curToken.getLineNum(),
-                    String.valueOf(kind),
+            errorLog(String.valueOf(kind),
                     String.valueOf(curToken.getKind()));
         }
     }
 
     private void errorLog()
     {
-        System.out.printf("Syntax error at line %s compilation aborting...\n%n",
+        System.err.printf("Syntax error at line %s compilation aborting...\n%n",
                 curToken != null ? curToken.getLineNum() : "unknown");
         System.exit(1);
     }
 
-    private void errorLog(int lineNum, String expected, String got)
+
+    private void errorLog(String expected, String got)
     {
         System.err.printf("Line %d: Expects: %s, but got: %s%n",
-                lineNum, expected, got);
+                curToken.getLineNum(), expected, got);
         System.exit(1);
     }
 
@@ -508,8 +510,7 @@ public final class Parser
             }
             default:
             {
-                errorLog(curToken.getLineNum(),
-                        "type",
+                errorLog("type",
                         String.valueOf(curToken));
                 // 不需要break打断虚拟机了已经;
             }
@@ -620,8 +621,7 @@ public final class Parser
         }
         else
         {
-            errorLog(curToken.getLineNum(),
-                    "type in func formal args list",
+            errorLog("type in func formal args list",
                     String.valueOf(curToken.getKind()));
         }
         return declList;
@@ -766,7 +766,7 @@ public final class Parser
      */
     private CvaProgram parseProgram()
     {
-        parseCall();
+        parseAllCallPkg();
         CvaEntry main = parseEntry();
         List<AbstractClass> classes = parseClassDecls();
         eatToken(CvaKind.EOF);
@@ -786,8 +786,7 @@ public final class Parser
         }
         else
         {
-            errorLog(curToken.getLineNum(),
-                    "type in main func decl",
+            errorLog("type in main func decl",
                     String.valueOf(curKind));
         }
         return curKind;
@@ -825,8 +824,7 @@ public final class Parser
             AbstractType type = parseType();
             if (!(type instanceof CvaString))
             {
-                errorLog(curToken.getLineNum(),
-                        "Sting[] args in main func",
+                errorLog("Sting[] args in main func",
                         String.valueOf(type));
             }
             eatToken(CvaKind.OPEN_BRACKETS);
@@ -836,16 +834,81 @@ public final class Parser
         }
         else
         {
-            errorLog(curToken.getLineNum(),
-                    "String[] in main formal args list",
+            errorLog("String[] in main formal args list",
                     String.valueOf(curToken.getKind()));
         }
         return cmdArgsDecl;
     }
 
-    private void parseCall()
+    private void parseAllCallPkg()
     {
+        while (curToken.getKind() == CvaKind.CALL)
+        {
+            parseCallKeyword();
+        }
+    }
 
+    private void parseCallKeyword()
+    {
+        eatToken(CvaKind.CALL);
+        parseCallPkg();
+    }
+
+    private void parseCallPkg()
+    {
+        // 规定至少一个pkg., 因为本包内不需要call;
+        // 第一个必为 id;
+        CvaKind memKind = curToken.getKind();
+        eatToken(CvaKind.IDENTIFIER);
+        while (true)
+        {
+            switch (curToken.getKind())
+            {
+                case DOT:
+                {
+                    if (memKind != CvaKind.IDENTIFIER)
+                    {
+                        errorLog();
+                    }
+                    memKind = CvaKind.DOT;
+                    eatToken(CvaKind.DOT);
+                    continue;
+                }
+                case IDENTIFIER:
+                {
+                    if (memKind != CvaKind.DOT)
+                    {
+                        errorLog();
+                    }
+                    memKind = CvaKind.IDENTIFIER;
+                    memKind = CvaKind.IDENTIFIER;
+                    eatToken(CvaKind.IDENTIFIER);
+                    continue;
+                }
+                case STAR:
+                {
+                    if (memKind != CvaKind.DOT)
+                    {
+                        errorLog();
+                    }
+                    eatToken(CvaKind.STAR);
+                    eatToken(CvaKind.SEMI);
+                    break;
+                }
+                case SEMI:
+                {
+                    eatToken(CvaKind.SEMI);
+                    break;
+                }
+                default:
+                {
+                    errorLog("pkg name or dot or star",
+                            String.valueOf(curToken));
+                    break;
+                }
+            }
+            break;
+        }
     }
 
     private AbstractStatement handleWriteOp()
