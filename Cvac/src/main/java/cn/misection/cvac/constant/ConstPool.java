@@ -7,7 +7,7 @@ package cn.misection.cvac.constant;
  * @Description TODO
  * @CreateTime 2021年02月15日 22:48:00
  */
-public class ConstPool
+public final class ConstPool
 {
     public static final String BANNER =
             " mm    mm            mmmm      mmmm                             mmmm   mm    mm     mm              mm      mm                     mmmm            mm               mm    \n" +
@@ -18,4 +18,9 @@ public class ConstPool
                     " ##    ##  \"##mmmm#    ##mmm     ##mmm   \"##mm##\"             ##mmmm#    ####    m##  ##m            ###  ###  \"##mm##\"   ##         ##mmm   \"##mm###               mm    \n" +
                     " \"\"    \"\"    \"\"\"\"\"      \"\"\"\"      \"\"\"\"     \"\"\"\"                 \"\"\"\"     \"\"\"\"    \"\"    \"\"            \"\"\"  \"\"\"    \"\"\"\"     \"\"          \"\"\"\"     \"\"\" \"\"               \"\"    \n";
 
+
+    private ConstPool()
+    {
+
+    }
 }

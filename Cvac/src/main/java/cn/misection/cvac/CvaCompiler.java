@@ -1,9 +1,8 @@
 package cn.misection.cvac;
 
 import cn.misection.cvac.ast.program.AbstractProgram;
-import cn.misection.cvac.codegen.ByteCodeGenerator;
+import cn.misection.cvac.codegen.IntermLangGenerator;
 import cn.misection.cvac.codegen.TranslatorVisitor;
-import cn.misection.cvac.codegen.bst.CodeGenAst;
 import cn.misection.cvac.codegen.bst.bclas.GenClass;
 import cn.misection.cvac.config.Macro;
 import cn.misection.cvac.constant.ConstPool;
@@ -78,7 +77,7 @@ public class CvaCompiler
         TranslatorVisitor translator = new TranslatorVisitor();
         translator.visit(program);
 
-        ByteCodeGenerator generator = new ByteCodeGenerator();
+        IntermLangGenerator generator = new IntermLangGenerator();
         generator.visit(translator.getProg());
 
         doMkDIrs();
