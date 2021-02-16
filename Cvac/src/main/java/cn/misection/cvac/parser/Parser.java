@@ -10,10 +10,7 @@ import cn.misection.cvac.ast.method.AbstractMethod;
 import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
-import cn.misection.cvac.ast.type.AbstractType;
-import cn.misection.cvac.ast.type.CvaBoolean;
-import cn.misection.cvac.ast.type.CvaClassType;
-import cn.misection.cvac.ast.type.CvaInt;
+import cn.misection.cvac.ast.type.*;
 import cn.misection.cvac.constant.PublicConstPool;
 import cn.misection.cvac.constant.TokenConstPool;
 import cn.misection.cvac.lexer.CvaKind;
@@ -21,6 +18,7 @@ import cn.misection.cvac.lexer.CvaToken;
 import cn.misection.cvac.lexer.IBufferedQueue;
 import cn.misection.cvac.lexer.Lexer;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -391,14 +389,7 @@ public final class Parser
             }
             case WRITE:
             {
-                int lineNum = curToken.getLineNum();
-                eatToken(CvaKind.WRITE);
-                eatToken(CvaKind.OPEN_PAREN);
-                AbstractExpression exp = parseExp();
-                eatToken(CvaKind.CLOSE_PAREN);
-                eatToken(CvaKind.SEMI);
-                statement = new CvaWriteOperation(lineNum, exp);
-                break;
+                return handleWriteOp();
             }
             case IDENTIFIER:
             {
@@ -414,10 +405,8 @@ public final class Parser
             default:
             {
                 errorLog();
-                break;
             }
         }
-
         return statement;
     }
 
@@ -464,26 +453,68 @@ public final class Parser
     private AbstractType parseType()
     {
         AbstractType type = null;
-        if (curToken.getKind() == CvaKind.BOOLEAN)
+        // 放map只能反射, 不放了还是;
+        switch (curToken.getKind())
         {
-            type = new CvaBoolean();
-            advance();
+            case BYTE:
+            {
+                type = new CvaBtye();
+                break;
+            }
+            case CHAR:
+            {
+                type = new CvaChar();
+                break;
+            }
+            case SHORT:
+            {
+                type = new CvaShort();
+                break;
+            }
+            case INT:
+            {
+                type = new CvaInt();
+                break;
+            }
+            case LONG:
+            {
+                type = new CvaLong();
+            }
+            case FLOAT:
+            {
+                type = new CvaFloat();
+                break;
+            }
+            case DOUBLE:
+            {
+                type = new CvaDouble();
+                break;
+            }
+            case BOOLEAN:
+            {
+                type = new CvaBoolean();
+                break;
+            }
+            case STRING:
+            {
+                type = new CvaString();
+                break;
+            }
+            case IDENTIFIER:
+            {
+                // 应该是type;
+                type = new CvaClassType(curToken.getLiteral());
+                break;
+            }
+            default:
+            {
+                errorLog(curToken.getLineNum(),
+                        "type",
+                        String.valueOf(curToken));
+                // 不需要break打断虚拟机了已经;
+            }
         }
-        else if (curToken.getKind() == CvaKind.INT)
-        {
-            type = new CvaInt();
-            advance();
-        }
-        else if (curToken.getKind() == CvaKind.IDENTIFIER)
-        {
-            // 应该是type;
-            type = new CvaClassType(curToken.getLiteral());
-            advance();
-        }
-        else
-        {
-            errorLog();
-        }
+        advance();
         return type;
     }
 
@@ -570,29 +601,30 @@ public final class Parser
      */
     private LinkedList<AbstractDeclaration> parseFormalList()
     {
-        LinkedList<AbstractDeclaration> decs = new LinkedList<>();
+        LinkedList<AbstractDeclaration> declList = new LinkedList<>();
         if (CvaKind.isType(curToken.getKind()))
         {
             // 这里非常坑. 必须要先parser;
             // parse的副作用是推一个token, 所以给new decl传参的时候先后顺序换了会导致意想不到的bug;
+            // 保存上一个token的type, 拿取下一个token的literal;
             AbstractType type = parseType();
-            decs.addLast(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), type));
+            declList.addLast(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), type));
             eatToken(CvaKind.IDENTIFIER);
             while (curToken.getKind() == CvaKind.COMMA)
             {
                 advance();
                 AbstractType argType = parseType();
-                decs.addLast(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), argType));
+                declList.addLast(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), argType));
                 eatToken(CvaKind.IDENTIFIER);
             }
         }
         else
         {
             errorLog(curToken.getLineNum(),
-                    "type in formal list",
+                    "type in func formal args list",
                     String.valueOf(curToken.getKind()));
         }
-        return decs;
+        return declList;
     }
 
     /**
@@ -783,35 +815,53 @@ public final class Parser
      * @TODO 目前是eat, 以后要传入;
      * 应返回参数List;
      */
-    private void parseMainArgs()
+    private AbstractDeclaration parseMainArgs()
     {
-//        List<AbstractDeclaration> decs = new ArrayList<>();
-//        if (CvaKind.isType(curToken.getKind()))
-//        {
-//            // 这里非常坑. 必须要先parser;
-//            // parse的副作用是推一个token, 所以给new decl传参的时候先后顺序换了会导致意想不到的bug;
-//            AbstractType type = parseType();
-//            decs.add(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), type));
-//            eatToken(CvaKind.IDENTIFIER);
-//            while (curToken.getKind() == CvaKind.COMMA)
-//            {
-//                advance();
-//                AbstractType argType = parseType();
-//                decs.add(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), argType));
-//                eatToken(CvaKind.IDENTIFIER);
-//            }
-//        }
-//        else
-//        {
-//            errorLog(curToken.getLineNum(),
-//                    "type in formal list",
-//                    String.valueOf(curToken.getKind()));
-//        }
-//        return decs;
+        AbstractDeclaration cmdArgsDecl = null;
+        if (CvaKind.isType(curToken.getKind()))
+        {
+            // 这里非常坑. 必须要先parser;
+            // parse的副作用是推一个token, 所以给new decl传参的时候先后顺序换了会导致意想不到的bug;
+            AbstractType type = parseType();
+            if (!(type instanceof CvaString))
+            {
+                errorLog(curToken.getLineNum(),
+                        "Sting[] args in main func",
+                        String.valueOf(type));
+            }
+            eatToken(CvaKind.OPEN_BRACKETS);
+            eatToken(CvaKind.CLOSE_BRACKETS);
+            cmdArgsDecl = new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), type);
+            eatToken(CvaKind.IDENTIFIER);
+        }
+        else
+        {
+            errorLog(curToken.getLineNum(),
+                    "String[] in main formal args list",
+                    String.valueOf(curToken.getKind()));
+        }
+        return cmdArgsDecl;
     }
 
     private void parseCall()
     {
 
+    }
+
+    private AbstractStatement handleWriteOp()
+    {
+        // 目前 echo expr 实现还稍麻烦, 后面再想法;
+        int lineNum = curToken.getLineNum();
+        eatToken(CvaKind.WRITE);
+        // 解析多种write;
+//        switch (curToken.getKind())
+//        {
+//
+//        }
+        eatToken(CvaKind.OPEN_PAREN);
+        AbstractExpression exp = parseExp();
+        eatToken(CvaKind.CLOSE_PAREN);
+        eatToken(CvaKind.SEMI);
+        return new CvaWriteOperation(lineNum, exp);
     }
 }

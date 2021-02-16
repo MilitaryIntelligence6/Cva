@@ -8,8 +8,6 @@
 package cn.misection.cvac.codegen.bst;
 
 
-import cn.misection.cvac.codegen.bst.bstatement.*;
-
 final class Operator
 {
     /**

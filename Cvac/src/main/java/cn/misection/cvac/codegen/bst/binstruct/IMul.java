@@ -1,4 +1,4 @@
-package cn.misection.cvac.codegen.bst.bstatement;
+package cn.misection.cvac.codegen.bst.binstruct;
 
 /**
  * @author Military Intelligence 6 root

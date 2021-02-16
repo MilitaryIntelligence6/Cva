@@ -32,7 +32,7 @@ public enum CvaKind
     /**
      * ;
      */
-    SEMI,
+    SEMI(";"),
 
     /**
      * :
@@ -159,6 +159,13 @@ public enum CvaKind
     CLASS("class"),
 
     /**
+     * ENUM DEFINE
+     */
+    ENUM("enum"),
+
+    STRUCT("struct"),
+
+    /**
      * {
      */
     OPEN_CURLY_BRACE("{"),
@@ -236,13 +243,6 @@ public enum CvaKind
     CONTINUE("continue"),
 
     GOTO("goto"),
-
-    /**
-     * ENUM DEFINE
-     */
-    ENUM("enum"),
-
-    STRUCT("struct"),
 
     TYPE_DEF("typedef"),
 
@@ -584,7 +584,8 @@ public enum CvaKind
 
     public static boolean isReferenceType(CvaKind kind)
     {
-        return kind == CLASS || kind == STRUCT;
+        return kind.ordinal() >= STRING.ordinal()
+                && kind.ordinal() <= STRUCT.ordinal();
     }
 
     public static boolean isType(CvaKind kind)

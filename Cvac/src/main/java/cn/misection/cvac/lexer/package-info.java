@@ -7,6 +7,9 @@
  */
 package cn.misection.cvac.lexer;
 
+import cn.misection.cvac.ast.type.AbstractType;
+import cn.misection.cvac.ast.type.CvaInt;
+
 import java.util.HashMap;
 
 /**
@@ -20,6 +23,7 @@ final class LexerConstPool
 
     private LexerConstPool() {}
 }
+
 
 // 可惜了双检锁单例模式;
 //final class CvaTokenMap extends HashMap<String, CvaKind>

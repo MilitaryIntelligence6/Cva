@@ -1,5 +1,5 @@
 // This is the entry point of the program
-int main()
+int main(String[] args)
 {
     echo(new Test().Compute(10));   // just a print statement
 }

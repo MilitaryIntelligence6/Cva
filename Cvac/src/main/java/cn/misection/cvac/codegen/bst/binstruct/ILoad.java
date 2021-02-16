@@ -1,17 +1,17 @@
-package cn.misection.cvac.codegen.bst.bstatement;
+package cn.misection.cvac.codegen.bst.binstruct;
 
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
- * @ClassName IStore
+ * @ClassName ILoad
  * @Description TODO
- * @CreateTime 2021年02月16日 00:57:00
+ * @CreateTime 2021年02月16日 00:52:00
  */
-public final class IStore extends BaseStatement
+public final class ILoad extends BaseStatement
 {
     private int index;
 
-    public IStore(int index)
+    public ILoad(int index)
     {
         this.index = index;
     }

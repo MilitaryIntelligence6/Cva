@@ -1,6 +1,6 @@
 package cn.misection.cvac.codegen.bst.bentry;
 
-import cn.misection.cvac.codegen.bst.bstatement.BaseStatement;
+import cn.misection.cvac.codegen.bst.binstruct.BaseStatement;
 
 import java.util.List;
 

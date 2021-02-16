@@ -32,7 +32,7 @@ public class Lexer
         int c = this.queueStream.poll();
 
         // skip all kinds of blanks
-        while (c == ' ' || c == '\t' || c == '\r' || c == '\n')
+        while (Character.isWhitespace(c))
         {
             if ('\n' == c)
             {
@@ -98,35 +98,41 @@ public class Lexer
                 }
             case '=':
                 return new CvaToken(CvaKind.ASSIGN, lineNum);
-            case ':':
-                return new CvaToken(CvaKind.COLON, lineNum);
-            case ',':
-                return new CvaToken(CvaKind.COMMA, lineNum);
-            case '.':
-                return new CvaToken(CvaKind.DOT, lineNum);
-            case '{':
-                return new CvaToken(CvaKind.OPEN_CURLY_BRACE, lineNum);
-            case '(':
-                return new CvaToken(CvaKind.OPEN_PAREN, lineNum);
+//            case ':':
+//                return new CvaToken(CvaKind.COLON, lineNum);
+//            case ',':
+//                return new CvaToken(CvaKind.COMMA, lineNum);
+//            case '.':
+//                return new CvaToken(CvaKind.DOT, lineNum);
             case '<':
                 return new CvaToken(CvaKind.LESS_THAN, lineNum);
-            case '!':
-                return new CvaToken(CvaKind.NEGATE, lineNum);
-            case '}':
-                return new CvaToken(CvaKind.CLOSE_CURLY_BRACE, lineNum);
-            case ')':
-                return new CvaToken(CvaKind.CLOSE_PAREN, lineNum);
-            case ';':
-                return new CvaToken(CvaKind.SEMI, lineNum);
+//            case '>':
+//                return new CvaToken(CvaKind.MORE_THAN, lineNum);
+//            case '!':
+//                return new CvaToken(CvaKind.NEGATE, lineNum);
+//            case '{':
+//                return new CvaToken(CvaKind.OPEN_CURLY_BRACE, lineNum);
+//            case '}':
+//                return new CvaToken(CvaKind.CLOSE_CURLY_BRACE, lineNum);
+//            case '(':
+//                return new CvaToken(CvaKind.OPEN_PAREN, lineNum);
+//            case ')':
+//                return new CvaToken(CvaKind.CLOSE_PAREN, lineNum);
+//            case ';':
+//                return new CvaToken(CvaKind.SEMI, lineNum);
             default:
             {
+                // 先看c是否是非前缀字符, 这里是 int, 必须先转成char看在不在表中;
+                if (CvaKind.containsKind(String.valueOf((char) c)))
+                {
+                    return new CvaToken(CvaKind.selectReverse(String.valueOf((char) c)), lineNum);
+                }
                 StringBuilder builder = new StringBuilder();
                 builder.append((char) c);
                 while (true)
                 {
                     c = queueStream.peek();
-                    if (c != -1 && c != ' ' && c != '\t'
-                            && c != '\n' && c != '\r'
+                    if (c != -1 && !Character.isWhitespace(c)
                             && !isSpecialCharacter(c))
                     {
                         builder.append((char) c);
@@ -154,7 +160,7 @@ public class Lexer
                     }
                     else
                     {
-                        System.out.printf("This is an illegal identifier at line %d%n", lineNum);
+                        System.err.printf("This is an illegal identifier at line %d%n", lineNum);
                         System.exit(1);
                         return null;
                     }
@@ -166,7 +172,8 @@ public class Lexer
     private static boolean isSpecialCharacter(int c)
     {
         return '+' == c || '&' == c || '=' == c || ',' == c || '.' == c
-                || '{' == c || '(' == c || '<' == c || '!' == c
+                || '{' == c || '(' == c || '<' == c || c == '>'
+                || '!' == c || c == '[' || c == ']'
                 || '}' == c || ')' == c || ';' == c || ':' == c
                 || '-' == c || '*' == c;
     }
