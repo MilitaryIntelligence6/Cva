@@ -1,4 +1,4 @@
-package cn.misection.cvac.codegen.bst.statement;
+package cn.misection.cvac.codegen.bst.bstatement;
 
 import cn.misection.cvac.codegen.bst.btype.BaseType;
 

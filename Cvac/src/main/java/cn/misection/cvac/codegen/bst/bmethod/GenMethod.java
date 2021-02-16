@@ -1,7 +1,8 @@
 package cn.misection.cvac.codegen.bst.bmethod;
 
 import cn.misection.cvac.codegen.bst.bdecl.BaseDeclaration;
-import cn.misection.cvac.codegen.bst.statement.BaseStatement;
+import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
+import cn.misection.cvac.codegen.bst.bstatement.BaseStatement;
 import cn.misection.cvac.codegen.bst.btype.BaseType;
 
 import java.util.List;
@@ -29,9 +30,9 @@ public class GenMethod extends BaseMethod
      */
     private String classId;
 
-    private List<BaseDeclaration> formalList;
+    private List<GenDeclaration> formalList;
 
-    private List<BaseDeclaration> localList;
+    private List<GenDeclaration> localList;
 
     private List<BaseStatement> statementList;
 
@@ -54,8 +55,8 @@ public class GenMethod extends BaseMethod
             String literal,
             BaseType retType,
             String classId,
-            List<BaseDeclaration> formalList,
-            List<BaseDeclaration> localList,
+            List<GenDeclaration> formalList,
+            List<GenDeclaration> localList,
             List<BaseStatement> statementList,
             int retExpr,
             int index
@@ -82,16 +83,6 @@ public class GenMethod extends BaseMethod
     }
 
 
-    public List<BaseDeclaration> getFormalList()
-    {
-        return formalList;
-    }
-
-    public List<BaseDeclaration> getLocalList()
-    {
-        return localList;
-    }
-
     public List<BaseStatement> getStatementList()
     {
         return statementList;
@@ -107,18 +98,58 @@ public class GenMethod extends BaseMethod
         this.retType = retType;
     }
 
-    public void setFormalList(List<BaseDeclaration> formalList)
+    public void setStatementList(List<BaseStatement> statementList)
+    {
+        this.statementList = statementList;
+    }
+
+    public String getClassId()
+    {
+        return classId;
+    }
+
+    public void setClassId(String classId)
+    {
+        this.classId = classId;
+    }
+
+    public List<GenDeclaration> getFormalList()
+    {
+        return formalList;
+    }
+
+    public void setFormalList(List<GenDeclaration> formalList)
     {
         this.formalList = formalList;
     }
 
-    public void setLocalList(List<BaseDeclaration> localList)
+    public List<GenDeclaration> getLocalList()
+    {
+        return localList;
+    }
+
+    public void setLocalList(List<GenDeclaration> localList)
     {
         this.localList = localList;
     }
 
-    public void setStatementList(List<BaseStatement> statementList)
+    public int getIndex()
     {
-        this.statementList = statementList;
+        return index;
+    }
+
+    public void setIndex(int index)
+    {
+        this.index = index;
+    }
+
+    public int getRetExpr()
+    {
+        return retExpr;
+    }
+
+    public void setRetExpr(int retExpr)
+    {
+        this.retExpr = retExpr;
     }
 }

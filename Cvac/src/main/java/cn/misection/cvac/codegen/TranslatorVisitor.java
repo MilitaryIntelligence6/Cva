@@ -5,14 +5,22 @@ import cn.misection.cvac.ast.clas.*;
 import cn.misection.cvac.ast.decl.*;
 import cn.misection.cvac.ast.entry.*;
 import cn.misection.cvac.ast.expr.*;
-import cn.misection.cvac.ast.method.*;
-import cn.misection.cvac.ast.program.*;
+import cn.misection.cvac.ast.method.CvaMethod;
+import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.*;
 
-import cn.misection.cvac.codegen.bst.CodeGenAst;
-import cn.misection.cvac.codegen.bst.CodeGenAst.*;
 import cn.misection.cvac.codegen.bst.Label;
+import cn.misection.cvac.codegen.bst.bclas.GenClass;
+import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
+import cn.misection.cvac.codegen.bst.bentry.GenEntry;
+import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
+import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
+import cn.misection.cvac.codegen.bst.bstatement.BaseStatement;
+import cn.misection.cvac.codegen.bst.bstatement.*;
+import cn.misection.cvac.codegen.bst.btype.BaseType;
+import cn.misection.cvac.codegen.bst.btype.GenClassType;
+import cn.misection.cvac.codegen.bst.btype.GenInt;
 
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -27,13 +35,14 @@ public class TranslatorVisitor implements IVisitor
     private int index;
 
     private Hashtable<String, Integer> indexTable;
-    private Type.T type;
-    private Dec.GenDeclaration dec;
-    private List<Stm.T> stms;
-    private Method.GenMethod method;
-    private CodeGenAst.Class.GenClass classs;
-    private MainClass.GenEntry mainClass;
-    private Program.GenProgram prog;
+    
+    private BaseType type;
+    private GenDeclaration dec;
+    private List<BaseStatement> statementList;
+    private GenMethod method;
+    private GenClass classs;
+    private GenEntry mainClass;
+    private GenProgram prog;
 
     public TranslatorVisitor()
     {
@@ -41,7 +50,7 @@ public class TranslatorVisitor implements IVisitor
         this.indexTable = null;
         this.setType(null);
         this.setDec(null);
-        this.setStms(new LinkedList<>());
+        this.setStatementList(new LinkedList<>());
         this.setMethod(null);
         this.setClassId(null);
         this.setMainClass(null);
@@ -49,34 +58,34 @@ public class TranslatorVisitor implements IVisitor
         this.setProg(null);
     }
 
-    private void emit(Stm.T s)
+    private void emit(BaseStatement s)
     {
-        this.getStms().add(s);
+        this.getStatementList().add(s);
     }
 
     @Override
     public void visit(CvaBoolean t)
     {
-        this.setType(new Type.GenInt());
+        this.setType(new GenInt());
     }
 
     @Override
     public void visit(CvaClassType t)
     {
-        this.setType(new Type.ClassType(t.getLiteral()));
+        this.setType(new GenClassType(t.getLiteral()));
     }
 
     @Override
     public void visit(CvaInt t)
     {
-        this.setType(new Type.GenInt());
+        this.setType(new GenInt());
     }
 
     @Override
     public void visit(CvaDeclaration d)
     {
         this.visit(d.getType());
-        this.setDec(new Dec.GenDeclaration(
+        this.setDec(new GenDeclaration(
                 d.getLiteral(),
                 this.getType()));
         if (this.indexTable != null) // if it is field
@@ -90,7 +99,7 @@ public class TranslatorVisitor implements IVisitor
     {
         this.visit(e.getLeft());
         this.visit(e.getRight());
-        emit(new Stm.IAdd());
+        emit(new IAdd());
     }
 
     @Override
@@ -99,16 +108,16 @@ public class TranslatorVisitor implements IVisitor
         Label f = new Label();
         Label r = new Label();
         this.visit(e.getLeft());
-        emit(new Stm.Ldc(1));
-        emit(new Stm.IFicmplt(f));
+        emit(new Ldc(1));
+        emit(new IFicmplt(f));
         this.visit(e.getRight());
-        emit(new Stm.Ldc(1));
-        emit(new Stm.IFicmplt(f));
-        emit(new Stm.Ldc(1));
-        emit(new Stm.Goto(r));
-        emit(new Stm.LabelJ(f));
-        emit(new Stm.Ldc(0));
-        emit(new Stm.LabelJ(r));
+        emit(new Ldc(1));
+        emit(new IFicmplt(f));
+        emit(new Ldc(1));
+        emit(new Goto(r));
+        emit(new LabelJ(f));
+        emit(new Ldc(0));
+        emit(new LabelJ(r));
     }
 
     @Override
@@ -117,20 +126,20 @@ public class TranslatorVisitor implements IVisitor
         this.visit(e.getExpr());
         e.getArgs().forEach(this::visit);
         this.visit(e.getRetType());
-        Type.T rt = this.getType();
-        List<Type.T> at = new LinkedList<>();
+        BaseType rt = this.getType();
+        List<BaseType> at = new LinkedList<>();
         e.getArgTypeList().forEach(a ->
         {
             this.visit(a);
             at.add(this.getType());
         });
-        emit(new Stm.InvokeVirtual(e.getLiteral(), e.getType(), at, rt));
+        emit(new InvokeVirtual(e.getLiteral(), e.getType(), at, rt));
     }
 
     @Override
     public void visit(CvaFalseExpr e)
     {
-        emit(new Stm.Ldc(0));
+        emit(new Ldc(0));
     }
 
     @Override
@@ -138,9 +147,9 @@ public class TranslatorVisitor implements IVisitor
     {
         if (e.isField())
         {
-            emit(new Stm.ALoad(0));
+            emit(new ALoad(0));
             AbstractType type = e.getType();
-            emit(new Stm.GetField(String.format("%s/%s", this.getClassId(), e.getLiteral()),
+            emit(new GetField(String.format("%s/%s", this.getClassId(), e.getLiteral()),
                     type instanceof CvaClassType ?
                             (String.format("L%s;", ((CvaClassType) type).getLiteral()))
                             : "I"));
@@ -150,11 +159,11 @@ public class TranslatorVisitor implements IVisitor
             int index = this.indexTable.get(e.getLiteral());
             if (e.getType() instanceof CvaClassType)
             {
-                emit(new Stm.ALoad(index));
+                emit(new ALoad(index));
             }
             else
             {
-                emit(new Stm.ILoad(index));
+                emit(new ILoad(index));
             }
         }
     }
@@ -166,18 +175,18 @@ public class TranslatorVisitor implements IVisitor
         Label r = new Label();
         this.visit(e.getLeft());
         this.visit(e.getRight());
-        emit(new Stm.IFicmplt(t));
-        emit(new Stm.Ldc(0));
-        emit(new Stm.Goto(r));
-        emit(new Stm.LabelJ(t));
-        emit(new Stm.Ldc(1));
-        emit(new Stm.LabelJ(r));
+        emit(new IFicmplt(t));
+        emit(new Ldc(0));
+        emit(new Goto(r));
+        emit(new LabelJ(t));
+        emit(new Ldc(1));
+        emit(new LabelJ(r));
     }
 
     @Override
     public void visit(CvaNewExpr e)
     {
-        emit(new Stm.New(e.getLiteral()));
+        emit(new New(e.getLiteral()));
     }
 
     @Override
@@ -186,19 +195,19 @@ public class TranslatorVisitor implements IVisitor
         Label f = new Label();
         Label r = new Label();
         this.visit(e.getExpr());
-        emit(new Stm.Ldc(1));
-        emit(new Stm.IFicmplt(f));
-        emit(new Stm.Ldc(1));
-        emit(new Stm.Goto(r));
-        emit(new Stm.LabelJ(f));
-        emit(new Stm.Ldc(0));
-        emit(new Stm.LabelJ(r));
+        emit(new Ldc(1));
+        emit(new IFicmplt(f));
+        emit(new Ldc(1));
+        emit(new Goto(r));
+        emit(new LabelJ(f));
+        emit(new Ldc(0));
+        emit(new LabelJ(r));
     }
 
     @Override
     public void visit(CvaNumberInt e)
     {
-        emit(new Stm.Ldc(e.getValue()));
+        emit(new Ldc(e.getValue()));
     }
 
     @Override
@@ -206,13 +215,13 @@ public class TranslatorVisitor implements IVisitor
     {
         this.visit(e.getLeft());
         this.visit(e.getRight());
-        emit(new Stm.ISub());
+        emit(new ISub());
     }
 
     @Override
     public void visit(CvaThisExpr e)
     {
-        emit(new Stm.ALoad(0));
+        emit(new ALoad(0));
     }
 
     @Override
@@ -220,13 +229,13 @@ public class TranslatorVisitor implements IVisitor
     {
         this.visit(e.getLeft());
         this.visit(e.getRight());
-        emit(new Stm.IMul());
+        emit(new IMul());
     }
 
     @Override
     public void visit(CvaTrueExpr e)
     {
-        emit(new Stm.Ldc(1));
+        emit(new Ldc(1));
     }
 
     @Override
@@ -238,18 +247,18 @@ public class TranslatorVisitor implements IVisitor
             this.visit(s.getExpr());
             if (s.getType() instanceof CvaClassType)
             {
-                emit(new Stm.AStore(index));
+                emit(new AStore(index));
             }
             else
             {
-                emit(new Stm.IStore(index));
+                emit(new IStore(index));
             }
         }
         catch (NullPointerException e)
         {
-            emit(new Stm.ALoad(0));
+            emit(new ALoad(0));
             this.visit(s.getExpr());
-            emit(new Stm.PutField(String.format("%s/%s", this.getClassId(), s.getLiteral()),
+            emit(new PutField(String.format("%s/%s", this.getClassId(), s.getLiteral()),
                     s.getType() instanceof CvaClassType ?
                             (String.format("L%s;", ((CvaClassType) s.getType()).getLiteral()))
                             : "I"));
@@ -268,20 +277,20 @@ public class TranslatorVisitor implements IVisitor
         Label l = new Label();
         Label r = new Label();
         this.visit(s.getCondition());
-        emit(new Stm.Ldc(1));
-        emit(new Stm.IFicmplt(l));
+        emit(new Ldc(1));
+        emit(new IFicmplt(l));
         this.visit(s.getThenStatement());
-        emit(new Stm.Goto(r));
-        emit(new Stm.LabelJ(l));
+        emit(new Goto(r));
+        emit(new LabelJ(l));
         this.visit(s.getElseStatement());
-        emit(new Stm.LabelJ(r));
+        emit(new LabelJ(r));
     }
 
     @Override
     public void visit(CvaWriteOperation s)
     {
         this.visit(s.getExpr());
-        emit(new Stm.Write());
+        emit(new Write());
     }
 
     @Override
@@ -289,13 +298,13 @@ public class TranslatorVisitor implements IVisitor
     {
         Label con = new Label();
         Label end = new Label();
-        emit(new Stm.LabelJ(con));
+        emit(new LabelJ(con));
         this.visit(s.getCondition());
-        emit(new Stm.Ldc(1));
-        emit(new Stm.IFicmplt(end));
+        emit(new Ldc(1));
+        emit(new IFicmplt(end));
         this.visit(s.getBody());
-        emit(new Stm.Goto(con));
-        emit(new Stm.LabelJ(end));
+        emit(new Goto(con));
+        emit(new LabelJ(end));
     }
 
     @Override
@@ -304,42 +313,43 @@ public class TranslatorVisitor implements IVisitor
         this.index = 1;
         this.indexTable = new Hashtable<>();
         this.visit(cvaMethod.getRetType());
-        Type.T theRetType = this.getType();
+        BaseType theRetType = this.getType();
 
-        List<Dec.GenDeclaration> formalList = new LinkedList<>();
+        List<GenDeclaration> formalList = new LinkedList<>();
         cvaMethod.getFormalList().forEach(f ->
         {
             this.visit(f);
             formalList.add(this.getDec());
         });
 
-        List<Dec.GenDeclaration> localList = new LinkedList<>();
+        List<GenDeclaration> localList = new LinkedList<>();
         cvaMethod.getLocalList().forEach(l ->
         {
             this.visit(l);
             localList.add(this.getDec());
         });
-        this.setStms(new LinkedList<>());
+        this.setStatementList(new LinkedList<>());
         cvaMethod.getStatementList().forEach(this::visit);
 
         this.visit(cvaMethod.getRetExpr());
 
         if (cvaMethod.getRetType() instanceof CvaClassType)
         {
-            emit(new Stm.AReturn());
+            emit(new AReturn());
         }
         else
         {
-            emit(new Stm.IReturn());
+            emit(new IReturn());
         }
 
-        this.setMethod(new Method.GenMethod(
+        this.setMethod(
+                new GenMethod(
                 cvaMethod.getLiteral(),
                 theRetType,
                 this.getClassId(),
                 formalList,
                 localList,
-                this.getStms(),
+                this.getStatementList(),
                 0,
                 this.index));
     }
@@ -348,41 +358,49 @@ public class TranslatorVisitor implements IVisitor
     public void visit(CvaClass cvaClass)
     {
         this.setClassId(cvaClass.getLiteral());
-        List<Dec.GenDeclaration> fieldList = new LinkedList<>();
+        List<GenDeclaration> fieldList = new LinkedList<>();
         cvaClass.getFieldList().forEach(f ->
         {
             this.visit(f);
             fieldList.add(this.getDec());
         });
-        List<Method.GenMethod> methodList = new LinkedList<>();
+        List<GenMethod> methodList = new LinkedList<>();
         cvaClass.getMethodList().forEach(m ->
         {
             this.visit(m);
             methodList.add(this.getMethod());
         });
-        this.setClasss(new CodeGenAst.Class.GenClass(
-                cvaClass.getLiteral(), cvaClass.getParent(), fieldList, methodList));
+        this.setClasss(
+                new GenClass(
+                cvaClass.getLiteral(),
+                cvaClass.getParent(),
+                fieldList,
+                        methodList
+                ));
     }
 
     @Override
     public void visit(CvaEntry c)
     {
         this.visit(c.getStatement());
-        this.setMainClass(new MainClass.GenEntry(c.getLiteral(), this.getStms()));
-        this.setStms(new LinkedList<>());
+        this.setMainClass(new GenEntry(c.getLiteral(), this.getStatementList()));
+        this.setStatementList(new LinkedList<>());
     }
 
     @Override
     public void visit(CvaProgram p)
     {
         this.visit(p.getEntry());
-        List<CodeGenAst.Class.GenClass> classList = new LinkedList<>();
+        List<GenClass> classList = new LinkedList<>();
         p.getClassList().forEach(c ->
         {
             this.visit(c);
             classList.add(this.getClasss());
         });
-        this.setProg(new Program.GenProgram(this.getMainClass(), classList));
+        this.setProg(
+                new GenProgram(
+                        this.getMainClass(),
+                        classList));
     }
 
     public String getClassId()
@@ -395,72 +413,72 @@ public class TranslatorVisitor implements IVisitor
         this.classId = classId;
     }
 
-    public Type.T getType()
+    public BaseType getType()
     {
         return type;
     }
 
-    public void setType(Type.T type)
+    public void setType(BaseType type)
     {
         this.type = type;
     }
 
-    public Dec.GenDeclaration getDec()
+    public GenDeclaration getDec()
     {
         return dec;
     }
 
-    public void setDec(Dec.GenDeclaration dec)
+    public void setDec(GenDeclaration dec)
     {
         this.dec = dec;
     }
 
-    public List<Stm.T> getStms()
+    public List<BaseStatement> getStatementList()
     {
-        return stms;
+        return statementList;
     }
 
-    public void setStms(List<Stm.T> stms)
+    public void setStatementList(List<BaseStatement> statementList)
     {
-        this.stms = stms;
+        this.statementList = statementList;
     }
 
-    public Method.GenMethod getMethod()
+    public GenMethod getMethod()
     {
         return method;
     }
 
-    public void setMethod(Method.GenMethod method)
+    public void setMethod(GenMethod method)
     {
         this.method = method;
     }
 
-    public CodeGenAst.Class.GenClass getClasss()
+    public GenClass getClasss()
     {
         return classs;
     }
 
-    public void setClasss(CodeGenAst.Class.GenClass classs)
+    public void setClasss(GenClass classs)
     {
         this.classs = classs;
     }
 
-    public MainClass.GenEntry getMainClass()
+    public GenEntry getMainClass()
     {
         return mainClass;
     }
 
-    public void setMainClass(MainClass.GenEntry mainClass)
+    public void setMainClass(GenEntry mainClass)
     {
         this.mainClass = mainClass;
     }
 
-    public Program.GenProgram getProg()
+    public GenProgram getProg()
     {
         return prog;
     }
 
-    public void setProg(Program.GenProgram prog)
+    public void setProg(GenProgram prog)
     {
         this.prog = prog;
     }

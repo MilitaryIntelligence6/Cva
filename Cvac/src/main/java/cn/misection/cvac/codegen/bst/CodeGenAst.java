@@ -15,11 +15,11 @@ public class CodeGenAst
         {
         }
 
-        public static class ClassType extends T
+        public static class GenClassType extends T
         {
             private String literal;
 
-            public ClassType(String literal)
+            public GenClassType(String literal)
             {
                 this.setLiteral(literal);
             }

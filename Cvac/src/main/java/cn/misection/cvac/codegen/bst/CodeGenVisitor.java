@@ -1,107 +1,158 @@
 package cn.misection.cvac.codegen.bst;
 
+import cn.misection.cvac.codegen.bst.bclas.GenClass;
+import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
+import cn.misection.cvac.codegen.bst.bentry.GenEntry;
+import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
+import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
+import cn.misection.cvac.codegen.bst.bstatement.*;
+import cn.misection.cvac.codegen.bst.btype.BaseType;
+import cn.misection.cvac.codegen.bst.btype.GenClassType;
+import cn.misection.cvac.codegen.bst.btype.GenInt;
+
 /**
  * Created by Mengxu on 2017/1/17.
  */
 public interface CodeGenVisitor
 {
     // Type
-    default void visit(CodeGenAst.Type.T t)
+    default void visit(BaseType t)
     {
-        if (t instanceof CodeGenAst.Type.ClassType)
-            this.visit(((CodeGenAst.Type.ClassType) t));
-        else this.visit(((CodeGenAst.Type.GenInt) t));
+        if (t instanceof GenClassType)
+        {
+            this.visit(((GenClassType) t));
+        }
+        else
+        {
+            this.visit(((GenInt) t));
+        }
     }
 
-    void visit(CodeGenAst.Type.ClassType t);
+    void visit(GenClassType t);
 
-    void visit(CodeGenAst.Type.GenInt t);
+    void visit(GenInt t);
 
     // Dec
-    void visit(CodeGenAst.Dec.GenDeclaration d);
+    void visit(GenDeclaration d);
 
     // Stm
-    default void visit(CodeGenAst.Stm.T s)
+    default void visit(BaseStatement s)
     {
-        if (s instanceof CodeGenAst.Stm.ALoad)
-            this.visit(((CodeGenAst.Stm.ALoad) s));
-        else if (s instanceof CodeGenAst.Stm.AReturn)
-            this.visit(((CodeGenAst.Stm.AReturn) s));
-        else if (s instanceof CodeGenAst.Stm.AStore)
-            this.visit(((CodeGenAst.Stm.AStore) s));
-        else if (s instanceof CodeGenAst.Stm.Goto)
-            this.visit(((CodeGenAst.Stm.Goto) s));
-        else if (s instanceof CodeGenAst.Stm.GetField)
-            this.visit(((CodeGenAst.Stm.GetField) s));
-        else if (s instanceof CodeGenAst.Stm.IAdd)
-            this.visit(((CodeGenAst.Stm.IAdd) s));
-        else if (s instanceof CodeGenAst.Stm.IFicmplt)
-            this.visit(((CodeGenAst.Stm.IFicmplt) s));
-        else if (s instanceof CodeGenAst.Stm.ILoad)
-            this.visit(((CodeGenAst.Stm.ILoad) s));
-        else if (s instanceof CodeGenAst.Stm.IMul)
-            this.visit(((CodeGenAst.Stm.IMul) s));
-        else if (s instanceof CodeGenAst.Stm.InvokeVirtual)
-            this.visit(((CodeGenAst.Stm.InvokeVirtual) s));
-        else if (s instanceof CodeGenAst.Stm.IReturn)
-            this.visit(((CodeGenAst.Stm.IReturn) s));
-        else if (s instanceof CodeGenAst.Stm.IStore)
-            this.visit(((CodeGenAst.Stm.IStore) s));
-        else if (s instanceof CodeGenAst.Stm.ISub)
-            this.visit(((CodeGenAst.Stm.ISub) s));
-        else if (s instanceof CodeGenAst.Stm.LabelJ)
-            this.visit(((CodeGenAst.Stm.LabelJ) s));
-        else if (s instanceof CodeGenAst.Stm.Ldc)
-            this.visit(((CodeGenAst.Stm.Ldc) s));
-        else if (s instanceof CodeGenAst.Stm.New)
-            this.visit(((CodeGenAst.Stm.New) s));
-        else if (s instanceof CodeGenAst.Stm.Write)
-            this.visit(((CodeGenAst.Stm.Write) s));
+        if (s instanceof ALoad)
+        {
+            this.visit(((ALoad) s));
+        }
+        else if (s instanceof AReturn)
+        {
+            this.visit(((AReturn) s));
+        }
+        else if (s instanceof AStore)
+        {
+            this.visit(((AStore) s));
+        }
+        else if (s instanceof Goto)
+        {
+            this.visit(((Goto) s));
+        }
+        else if (s instanceof GetField)
+        {
+            this.visit(((GetField) s));
+        }
+        else if (s instanceof IAdd)
+        {
+            this.visit(((IAdd) s));
+        }
+        else if (s instanceof IFicmplt)
+        {
+            this.visit(((IFicmplt) s));
+        }
+        else if (s instanceof ILoad)
+        {
+            this.visit(((ILoad) s));
+        }
+        else if (s instanceof IMul)
+        {
+            this.visit(((IMul) s));
+        }
+        else if (s instanceof InvokeVirtual)
+        {
+            this.visit(((InvokeVirtual) s));
+        }
+        else if (s instanceof IReturn)
+        {
+            this.visit(((IReturn) s));
+        }
+        else if (s instanceof IStore)
+        {
+            this.visit(((IStore) s));
+        }
+        else if (s instanceof ISub)
+        {
+            this.visit(((ISub) s));
+        }
+        else if (s instanceof LabelJ)
+        {
+            this.visit(((LabelJ) s));
+        }
+        else if (s instanceof Ldc)
+        {
+            this.visit(((Ldc) s));
+        }
+        else if (s instanceof New)
+        {
+            this.visit(((New) s));
+        }
+        else if (s instanceof Write)
+        {
+            this.visit(((Write) s));
+        }
         else // if (s instanceof Ast.Stm.Putfield)
-            this.visit(((CodeGenAst.Stm.PutField) s));
+        {
+            this.visit(((PutField) s));
+        }
     }
 
-    void visit(CodeGenAst.Stm.ALoad s);
+    void visit(ALoad s);
 
-    void visit(CodeGenAst.Stm.AReturn s);
+    void visit(AReturn s);
 
-    void visit(CodeGenAst.Stm.AStore s);
+    void visit(AStore s);
 
-    void visit(CodeGenAst.Stm.Goto s);
+    void visit(Goto s);
 
-    void visit(CodeGenAst.Stm.GetField s);
+    void visit(GetField s);
 
-    void visit(CodeGenAst.Stm.IAdd s);
+    void visit(IAdd s);
 
-    void visit(CodeGenAst.Stm.IFicmplt s);
+    void visit(IFicmplt s);
 
-    void visit(CodeGenAst.Stm.ILoad s);
+    void visit(ILoad s);
 
-    void visit(CodeGenAst.Stm.IMul s);
+    void visit(IMul s);
 
-    void visit(CodeGenAst.Stm.InvokeVirtual s);
+    void visit(InvokeVirtual s);
 
-    void visit(CodeGenAst.Stm.IReturn s);
+    void visit(IReturn s);
 
-    void visit(CodeGenAst.Stm.IStore s);
+    void visit(IStore s);
 
-    void visit(CodeGenAst.Stm.ISub s);
+    void visit(ISub s);
 
-    void visit(CodeGenAst.Stm.LabelJ s);
+    void visit(LabelJ s);
 
-    void visit(CodeGenAst.Stm.Ldc s);
+    void visit(Ldc s);
 
-    void visit(CodeGenAst.Stm.New s);
+    void visit(New s);
 
-    void visit(CodeGenAst.Stm.Write s);
+    void visit(Write s);
 
-    void visit(CodeGenAst.Stm.PutField s);
+    void visit(PutField s);
 
-    void visit(CodeGenAst.Method.GenMethod m);
+    void visit(GenMethod m);
 
-    void visit(CodeGenAst.MainClass.GenEntry c);
+    void visit(GenEntry c);
 
-    void visit(CodeGenAst.Class.GenClass c);
+    void visit(GenClass c);
 
-    void visit(CodeGenAst.Program.GenProgram p);
+    void visit(GenProgram p);
 }

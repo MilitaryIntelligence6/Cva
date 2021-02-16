@@ -1,17 +1,17 @@
-package cn.misection.cvac.codegen.bst.statement;
+package cn.misection.cvac.codegen.bst.bstatement;
 
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
- * @ClassName AStore
- * @Description TODO
- * @CreateTime 2021年02月16日 00:47:00
+ * @ClassName Aload
+ * @Description load 引用类型的指令;
+ * @CreateTime 2021年02月16日 00:43:00
  */
-public class AStore extends BaseStatement
+public class ALoad extends BaseStatement
 {
     private int index;
 
-    public AStore(int index)
+    public ALoad(int index)
     {
         this.index = index;
     }

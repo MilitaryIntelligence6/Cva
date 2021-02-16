@@ -4,6 +4,7 @@ import cn.misection.cvac.ast.program.AbstractProgram;
 import cn.misection.cvac.codegen.ByteCodeGenerator;
 import cn.misection.cvac.codegen.TranslatorVisitor;
 import cn.misection.cvac.codegen.bst.CodeGenAst;
+import cn.misection.cvac.codegen.bst.bclas.GenClass;
 import cn.misection.cvac.config.Macro;
 import cn.misection.cvac.constant.ConstPool;
 import cn.misection.cvac.lexer.BufferedQueueHandler;
@@ -86,7 +87,7 @@ public class CvaCompiler
         // ascii instructions to binary file
         jasmin.Main.main(new String[] {ilPath});
 
-        for (CodeGenAst.Class.GenClass cla : translator.getProg().getClassList())
+        for (GenClass cla : translator.getProg().getClassList())
         {
             String filePath = String.format("%s.il", cla.getLiteral());
             jasmin.Main.main(new String[] {filePath});

@@ -1,7 +1,9 @@
 package cn.misection.cvac.codegen.bst.bclas;
 
 import cn.misection.cvac.codegen.bst.bdecl.BaseDeclaration;
+import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
 import cn.misection.cvac.codegen.bst.bmethod.BaseMethod;
+import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
 
 import java.util.List;
 
@@ -18,11 +20,11 @@ public class GenClass extends BaseClass
 
     private String parent;
 
-    private List<BaseDeclaration> fieldList;
+    private List<GenDeclaration> fieldList;
 
-    private List<BaseMethod> methodList;
+    private List<GenMethod> methodList;
 
-    public GenClass(String literal, String parent, List<BaseDeclaration> fieldList, List<BaseMethod> methodList)
+    public GenClass(String literal, String parent, List<GenDeclaration> fieldList, List<GenMethod> methodList)
     {
         this.literal = literal;
         this.parent = parent;
@@ -35,18 +37,38 @@ public class GenClass extends BaseClass
         return literal;
     }
 
+    public void setLiteral(String literal)
+    {
+        this.literal = literal;
+    }
+
     public String getParent()
     {
         return parent;
     }
 
-    public List<BaseDeclaration> getFieldList()
+    public void setParent(String parent)
+    {
+        this.parent = parent;
+    }
+
+    public List<GenDeclaration> getFieldList()
     {
         return fieldList;
     }
 
-    public List<BaseMethod> getMethodList()
+    public void setFieldList(List<GenDeclaration> fieldList)
+    {
+        this.fieldList = fieldList;
+    }
+
+    public List<GenMethod> getMethodList()
     {
         return methodList;
+    }
+
+    public void setMethodList(List<GenMethod> methodList)
+    {
+        this.methodList = methodList;
     }
 }

@@ -1,7 +1,9 @@
 package cn.misection.cvac.codegen.bst.bprogram;
 
 import cn.misection.cvac.codegen.bst.bclas.BaseClass;
+import cn.misection.cvac.codegen.bst.bclas.GenClass;
 import cn.misection.cvac.codegen.bst.bentry.BaseEntry;
+import cn.misection.cvac.codegen.bst.bentry.GenEntry;
 
 import java.util.List;
 
@@ -14,8 +16,8 @@ import java.util.List;
  */
 public class GenProgram extends BaseProgram
 {
-    public GenProgram(BaseEntry entry, List<BaseClass> classQueue)
+    public GenProgram(GenEntry entry, List<GenClass> classList)
     {
-        super(entry, classQueue);
+        super(entry, classList);
     }
 }

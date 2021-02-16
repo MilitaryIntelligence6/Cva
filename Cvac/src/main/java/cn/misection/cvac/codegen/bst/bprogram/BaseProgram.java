@@ -1,7 +1,8 @@
 package cn.misection.cvac.codegen.bst.bprogram;
 
-import cn.misection.cvac.codegen.bst.bclas.BaseClass;
+import cn.misection.cvac.codegen.bst.bclas.GenClass;
 import cn.misection.cvac.codegen.bst.bentry.BaseEntry;
+import cn.misection.cvac.codegen.bst.bentry.GenEntry;
 
 import java.util.List;
 
@@ -14,32 +15,32 @@ import java.util.List;
  */
 public abstract class BaseProgram implements IProgram
 {
-    protected BaseEntry entry;
+    protected GenEntry entry;
 
-    protected List<BaseClass> classList;
+    protected List<GenClass> classList;
 
-    protected BaseProgram(BaseEntry entry, List<BaseClass> classList)
+    protected BaseProgram(GenEntry entry, List<GenClass> classList)
     {
         this.entry = entry;
         this.classList = classList;
     }
 
-    public BaseEntry getEntry()
+    public GenEntry getEntry()
     {
         return entry;
     }
 
-    public List<BaseClass> getClassList()
-    {
-        return classList;
-    }
-
-    public void setEntry(BaseEntry entry)
+    public void setEntry(GenEntry entry)
     {
         this.entry = entry;
     }
 
-    public void setClassList(List<BaseClass> classList)
+    public List<GenClass> getClassList()
+    {
+        return classList;
+    }
+
+    public void setClassList(List<GenClass> classList)
     {
         this.classList = classList;
     }

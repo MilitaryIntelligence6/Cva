@@ -1,8 +1,18 @@
 package cn.misection.cvac.codegen;
 
-import cn.misection.cvac.codegen.bst.CodeGenAst;
-import cn.misection.cvac.codegen.bst.CodeGenVisitor;
+//import cn.misection.cvac.codegen.bst.CodeGenAst;
 
+import cn.misection.cvac.codegen.bst.CodeGenVisitor;
+import cn.misection.cvac.codegen.bst.bclas.GenClass;
+import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
+import cn.misection.cvac.codegen.bst.bentry.GenEntry;
+import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
+import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
+import cn.misection.cvac.codegen.bst.bstatement.*;
+import cn.misection.cvac.codegen.bst.btype.GenClassType;
+import cn.misection.cvac.codegen.bst.btype.GenInt;
+
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -11,23 +21,29 @@ import java.io.IOException;
  */
 public class ByteCodeGenerator implements CodeGenVisitor
 {
-    private java.io.BufferedWriter writer;
-
-    private void writeln(String s)
-    {
-        write(String.format("%s\n", s));
-    }
+    private BufferedWriter writer;
 
     private void write(String s)
     {
         try
         {
             this.writer.write(s);
-        } catch (IOException e)
+        }
+        catch (IOException e)
         {
             e.printStackTrace();
             System.exit(1);
         }
+    }
+
+    private void writeln(String s)
+    {
+        write(String.format("%s\n", s));
+    }
+
+    private void writef(String format, Object... args)
+    {
+        write(String.format(format, args));
     }
 
     private void iwriteln(String s)
@@ -36,79 +52,79 @@ public class ByteCodeGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(CodeGenAst.Type.ClassType t)
+    public void visit(GenClassType t)
     {
         this.write(String.format("L%s;", t.getLiteral()));
     }
 
     @Override
-    public void visit(CodeGenAst.Type.GenInt t)
+    public void visit(GenInt t)
     {
         this.write("I");
     }
 
     @Override
-    public void visit(CodeGenAst.Dec.GenDeclaration d)
+    public void visit(GenDeclaration d)
     {
         this.writeln(";Error: you are accessing the dec single instance.");
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.ALoad s)
+    public void visit(ALoad s)
     {
         this.iwriteln(String.format("aload %d", s.getIndex()));
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.AReturn s)
+    public void visit(AReturn s)
     {
         this.iwriteln("areturn");
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.AStore s)
+    public void visit(AStore s)
     {
         this.iwriteln(String.format("astore %d", s.getIndex()));
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.Goto s)
+    public void visit(Goto s)
     {
         this.iwriteln(String.format("goto %s", s.getLabel().toString()));
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.GetField s)
+    public void visit(GetField s)
     {
-        this.iwriteln(String.format("getfield %s %s", s.getFieldSpec(), s.descriptor));
+        this.iwriteln(String.format("getfield %s %s", s.getFieldSpec(), s.getDescriptor()));
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.IAdd s)
+    public void visit(IAdd s)
     {
         this.iwriteln("iadd");
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.IFicmplt s)
+    public void visit(IFicmplt s)
     {
         this.iwriteln(String.format("if_icmplt %s", s.getLabel().toString()));
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.ILoad s)
+    public void visit(ILoad s)
     {
         this.iwriteln(String.format("iload %d", s.getIndex()));
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.IMul s)
+    public void visit(IMul s)
     {
         this.iwriteln("imul");
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.InvokeVirtual s)
+    public void visit(InvokeVirtual s)
     {
         this.write(String.format("    invokevirtual %s/%s(", s.getC(), s.getF()));
         s.getArgTypeList().forEach(this::visit);
@@ -118,45 +134,45 @@ public class ByteCodeGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.IReturn s)
+    public void visit(IReturn s)
     {
         this.iwriteln("ireturn");
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.IStore s)
+    public void visit(IStore s)
     {
         this.iwriteln(String.format("istore %d", s.getIndex()));
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.ISub s)
+    public void visit(ISub s)
     {
         this.iwriteln("isub");
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.LabelJ s)
+    public void visit(LabelJ s)
     {
         this.writeln(String.format("%s:", s.getLabel().toString()));
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.Ldc s)
+    public void visit(Ldc s)
     {
         this.iwriteln(String.format("ldc %d", s.getInteg()));
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.New s)
+    public void visit(New s)
     {
-        this.iwriteln(String.format("new %s", s.getClas()));
+        this.iwriteln(String.format("new %s", s.getClazz()));
         this.iwriteln("dup");
-        this.iwriteln(String.format("invokespecial %s/<init>()V", s.getClas()));
+        this.iwriteln(String.format("invokespecial %s/<init>()V", s.getClazz()));
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.Write s)
+    public void visit(Write s)
     {
         this.iwriteln("getstatic java/lang/System/out Ljava/io/PrintStream;");
         this.iwriteln("swap");
@@ -165,13 +181,13 @@ public class ByteCodeGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(CodeGenAst.Stm.PutField s)
+    public void visit(PutField s)
     {
-        this.iwriteln(String.format("putfield %s %s", s.getFieldSpec(), s.descriptor));
+        this.iwriteln(String.format("putfield %s %s", s.getFieldSpec(), s.getDescriptor()));
     }
 
     @Override
-    public void visit(CodeGenAst.Method.GenMethod m)
+    public void visit(GenMethod m)
     {
         this.write(String.format(".method public %s(", m.getLiteral()));
         m.getFormalList().forEach(f -> this.visit(f.getType()));
@@ -186,14 +202,15 @@ public class ByteCodeGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(CodeGenAst.Class.GenClass c)
+    public void visit(GenClass c)
     {
         try
         {
             // FIXME 路劲;
             this.writer = new java.io.BufferedWriter(new java.io.OutputStreamWriter(
                     new java.io.FileOutputStream(String.format("%s.il", c.getLiteral()))));
-        } catch (FileNotFoundException e)
+        }
+        catch (FileNotFoundException e)
         {
             e.printStackTrace();
             System.exit(1);
@@ -204,8 +221,13 @@ public class ByteCodeGenerator implements CodeGenVisitor
 
         this.writeln(String.format(".class public %s", c.getLiteral()));
         if (c.getParent() == null)
+        {
             this.writeln(".super java/lang/Object");
-        else this.writeln(String.format(".super %s", c.getParent()));
+        }
+        else
+        {
+            this.writeln(String.format(".super %s", c.getParent()));
+        }
 
         c.getFieldList().forEach(f ->
         {
@@ -217,8 +239,13 @@ public class ByteCodeGenerator implements CodeGenVisitor
         this.writeln(".method public <init>()V");
         this.iwriteln("aload 0");
         if (c.getParent() == null)
+        {
             this.iwriteln("invokespecial java/lang/Object/<init>()V");
-        else this.iwriteln(String.format("invokespecial %s/<init>()V", c.getParent()));
+        }
+        else
+        {
+            this.iwriteln(String.format("invokespecial %s/<init>()V", c.getParent()));
+        }
         this.iwriteln("return");
         this.writeln(".end method");
         c.getMethodList().forEach(this::visit);
@@ -226,7 +253,8 @@ public class ByteCodeGenerator implements CodeGenVisitor
         try
         {
             this.writer.close();
-        } catch (IOException e)
+        }
+        catch (IOException e)
         {
             e.printStackTrace();
             System.exit(1);
@@ -234,13 +262,14 @@ public class ByteCodeGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(CodeGenAst.MainClass.GenEntry c)
+    public void visit(GenEntry c)
     {
         try
         {
             this.writer = new java.io.BufferedWriter(new java.io.OutputStreamWriter(
                     new java.io.FileOutputStream(String.format("%s.il", c.getLiteral()))));
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
             System.exit(1);
@@ -261,7 +290,8 @@ public class ByteCodeGenerator implements CodeGenVisitor
         try
         {
             this.writer.close();
-        } catch (IOException e)
+        }
+        catch (IOException e)
         {
             e.printStackTrace();
             System.exit(1);
@@ -269,7 +299,7 @@ public class ByteCodeGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(CodeGenAst.Program.GenProgram p)
+    public void visit(GenProgram p)
     {
         this.visit(p.getEntry());
         p.getClassList().forEach(this::visit);
