@@ -19,14 +19,15 @@ import cn.misection.cvac.lexer.CvaToken;
 import cn.misection.cvac.lexer.IBufferedQueue;
 import cn.misection.cvac.lexer.Lexer;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
 /**
- * Created by MI6 root 1/11.
+ * @author MI6 root
  */
-public class Parser
+public final class Parser
 {
     private Lexer lexer;
     private CvaToken curToken;
@@ -36,14 +37,14 @@ public class Parser
      */
     private boolean valDeclFlag;
     private boolean markingFlag;
-    private Queue<CvaToken> markedTokens;
+    private Queue<CvaToken> markedTokenQueue;
 
     public Parser(IBufferedQueue queueStream)
     {
         lexer = new Lexer(queueStream);
         curToken = lexer.nextToken();
         markingFlag = false;
-        markedTokens = new LinkedList<>();
+        markedTokenQueue = new LinkedList<>();
     }
 
     /**
@@ -54,11 +55,11 @@ public class Parser
         if (markingFlag)
         {
             curToken = lexer.nextToken();
-            markedTokens.offer(curToken);
+            markedTokenQueue.offer(curToken);
         }
-        else if (!markedTokens.isEmpty())
+        else if (!markedTokenQueue.isEmpty())
         {
-            curToken = markedTokens.poll();
+            curToken = markedTokenQueue.poll();
         }
         else
         {
@@ -72,7 +73,7 @@ public class Parser
     private void mark()
     {
         markingFlag = true;
-        markedTokens.offer(curToken);
+        markedTokenQueue.offer(curToken);
     }
 
     /**
@@ -81,7 +82,7 @@ public class Parser
     private void deMark()
     {
         markingFlag = false;
-        markedTokens.clear();
+        markedTokenQueue.clear();
     }
 
     /**
@@ -96,24 +97,30 @@ public class Parser
     private void eatToken(CvaKind kind)
     {
         // FIXME, 写成 遇到EOF就走, 尾巴上那个-1暂时还没解决;
-        if (kind == curToken.getKind())// || kind == CvaKind.EOF)
+//        if (kind == curToken.getKind())// || kind == CvaKind.EOF)
+        if (kind == curToken.getKind())
         {
             advance();
         }
         else
         {
-            System.err.printf("Line %d :Expects: %s, but got: %s%n",
-                    curToken.getLineNum(),
-                    kind.toString(),
-                    curToken.getKind().toString());
-            System.exit(1);
+            errorLog(curToken.getLineNum(),
+                    String.valueOf(kind),
+                    String.valueOf(curToken.getKind()));
         }
     }
 
-    private void error()
+    private void errorLog()
     {
         System.out.printf("Syntax error at line %s compilation aborting...\n%n",
-                curToken != null ? curToken.getLineNum() : "unknow");
+                curToken != null ? curToken.getLineNum() : "unknown");
+        System.exit(1);
+    }
+
+    private void errorLog(int lineNum, String expected, String got)
+    {
+        System.err.printf("Line %d :Expects: %s, but got: %s%n",
+                lineNum, expected, got);
         System.exit(1);
     }
 
@@ -128,22 +135,22 @@ public class Parser
      */
     private LinkedList<AbstractExpression> parseExpList()
     {
-        LinkedList<AbstractExpression> explist = new LinkedList<>();
+        LinkedList<AbstractExpression> expList = new LinkedList<>();
         if (curToken.getKind() == CvaKind.CLOSE_PAREN)
         {
-            return explist;
+            return expList;
         }
         AbstractExpression tem = parseExp();
         tem.setLineNum(curToken.getLineNum());
-        explist.addLast(tem);
+        expList.addLast(tem);
         while (curToken.getKind() == CvaKind.COMMA)
         {
             advance();
             tem = parseExp();
             tem.setLineNum(curToken.getLineNum());
-            explist.add(tem);
+            expList.add(tem);
         }
-        return explist;
+        return expList;
     }
 
     /**
@@ -157,7 +164,7 @@ public class Parser
      *
      * @return
      */
-    private AbstractExpression parseAtomExp()
+    private AbstractExpression parseAtomExpr()
     {
         AbstractExpression exp;
         switch (curToken.getKind())
@@ -197,7 +204,7 @@ public class Parser
                 eatToken(CvaKind.CLOSE_PAREN);
                 return exp;
             default:
-                error();
+                errorLog();
                 return null;
         }
     }
@@ -210,7 +217,7 @@ public class Parser
      */
     private AbstractExpression parseNotExp()
     {
-        AbstractExpression expr = parseAtomExp();
+        AbstractExpression expr = parseAtomExpr();
         while (curToken.getKind() == CvaKind.DOT)
         {
             advance();
@@ -346,7 +353,7 @@ public class Parser
         {
             eatToken(CvaKind.OPEN_CURLY_BRACE);
             int lineNum = curToken.getLineNum();
-            stm = new CvaBlock(lineNum, parseStatements());
+            stm = new CvaBlock(lineNum, parseStatementList());
             eatToken(CvaKind.CLOSE_CURLY_BRACE);
         }
         else if (curToken.getKind() == CvaKind.IF)
@@ -393,7 +400,7 @@ public class Parser
         }
         else
         {
-            error();
+            errorLog();
         }
 
         return stm;
@@ -405,17 +412,31 @@ public class Parser
      *
      * @return
      */
-    private LinkedList<AbstractStatement> parseStatements()
+    private LinkedList<AbstractStatement> parseStatementList()
     {
-        LinkedList<AbstractStatement> stms = new LinkedList<>();
-        while (curToken.getKind() == CvaKind.OPEN_CURLY_BRACE || curToken.getKind() == CvaKind.IF
-                || curToken.getKind() == CvaKind.WHILE || curToken.getKind() == CvaKind.IDENTIFIER
-                || curToken.getKind() == CvaKind.WRITE)
+        LinkedList<AbstractStatement> statementList = new LinkedList<>();
+        while (true)
         {
-            stms.addLast(parseStatement());
+            switch (curToken.getKind())
+            {
+                case OPEN_CURLY_BRACE:
+                case IF:
+                case WHILE:
+                case IDENTIFIER:
+                case WRITE:
+                {
+                    statementList.addLast(parseStatement());
+                    continue;
+                }
+                default:
+                {
+                    break;
+                }
+            }
+            // 走到这里就会break掉;
+            break;
         }
-
-        return stms;
+        return statementList;
     }
 
     /**
@@ -446,7 +467,7 @@ public class Parser
         }
         else
         {
-            error();
+            errorLog();
         }
         return type;
     }
@@ -488,13 +509,13 @@ public class Parser
             }
             else
             {
-                error();
+                errorLog();
                 return null;
             }
         }
         else
         {
-            error();
+            errorLog();
             return null;
         }
     }
@@ -535,30 +556,26 @@ public class Parser
     private LinkedList<AbstractDeclaration> parseFormalList()
     {
         LinkedList<AbstractDeclaration> decs = new LinkedList<>();
-        switch (curToken.getKind())
+        if (CvaKind.isType(curToken.getKind()))
         {
-            case INT:
-            case BOOLEAN:
-            case IDENTIFIER:
+            // 这里非常坑. 必须要先parser;
+            // parse的副作用是推一个token, 所以给new decl传参的时候先后顺序换了会导致意想不到的bug;
+            AbstractType type = parseType();
+            decs.addLast(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), type));
+            eatToken(CvaKind.IDENTIFIER);
+            while (curToken.getKind() == CvaKind.COMMA)
             {
-                // 这里非常坑. 必须要先parser;
-                // parse的副作用是推一个token, 所以给new decl传参的时候先后顺序换了会导致意想不到的bug;
-                AbstractType type = parseType();
-                decs.addLast(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), type));
+                advance();
+                AbstractType argType = parseType();
+                decs.addLast(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), argType));
                 eatToken(CvaKind.IDENTIFIER);
-                while (curToken.getKind() == CvaKind.COMMA)
-                {
-                    advance();
-                    AbstractType argType = parseType();
-                    decs.addLast(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), argType));
-                    eatToken(CvaKind.IDENTIFIER);
-                }
-                break;
             }
-            default:
-            {
-                break;
-            }
+        }
+        else
+        {
+            errorLog(curToken.getLineNum(),
+                    "type in formal list",
+                    String.valueOf(curToken.getKind()));
         }
         return decs;
     }
@@ -571,22 +588,33 @@ public class Parser
      */
     private AbstractMethod parseMethod()
     {
+        // 第一个是返回值;
         AbstractType retType = parseType();
+        // 解析函数名;
         String literal = curToken.getLiteral();
+        // 吃掉函数名和开小括号;
         eatToken(CvaKind.IDENTIFIER);
         eatToken(CvaKind.OPEN_PAREN);
-        LinkedList<AbstractDeclaration> formalList = parseFormalList();
+        // 解析形参List;
+        List<AbstractDeclaration> formalList = parseFormalList();
+        // 解析完毕吃掉小括号;
         eatToken(CvaKind.CLOSE_PAREN);
+        // 吃掉大括号;
         eatToken(CvaKind.OPEN_CURLY_BRACE);
-        LinkedList<AbstractDeclaration> varDecs = parseVarDecls();
-        LinkedList<AbstractStatement> stms = parseStatements();
+        List<AbstractDeclaration> varDecs = parseVarDecls();
+        List<AbstractStatement> statementList = parseStatementList();
         eatToken(CvaKind.RETURN);
         AbstractExpression retExp = parseExp();
         eatToken(CvaKind.SEMI);
         eatToken(CvaKind.CLOSE_CURLY_BRACE);
 
-        return new CvaMethod(literal,
-                retType, retExp, formalList, varDecs, stms);
+        return new CvaMethod(
+                literal,
+                retType,
+                retExp,
+                formalList,
+                varDecs,
+                statementList);
     }
 
     /**
@@ -597,15 +625,15 @@ public class Parser
      */
     private LinkedList<AbstractMethod> parseMethodDecls()
     {
-        LinkedList<AbstractMethod> methods = new LinkedList<>();
+        LinkedList<AbstractMethod> methodList = new LinkedList<>();
         while (curToken.getKind() == CvaKind.IDENTIFIER ||
                 curToken.getKind() == CvaKind.INT ||
                 curToken.getKind() == CvaKind.BOOLEAN)
         {
-            methods.addLast(parseMethod());
+            methodList.addLast(parseMethod());
         }
 
-        return methods;
+        return methodList;
     }
 
     /**
@@ -667,9 +695,15 @@ public class Parser
         String literal = curToken.getLiteral();
         eatToken(CvaKind.IDENTIFIER);
         eatToken(CvaKind.OPEN_CURLY_BRACE);
-        eatToken(CvaKind.VOID);
+
+        // TODO 现在没用到. 以后要检查;
+        CvaKind mainType = parseMainRetType();
+
         eatToken(CvaKind.MAIN);
         eatToken(CvaKind.OPEN_PAREN);
+
+        parseMainArgs();
+
         eatToken(CvaKind.CLOSE_PAREN);
         eatToken(CvaKind.OPEN_CURLY_BRACE);
         // 拓展到可以吃多个statement;
@@ -695,5 +729,55 @@ public class Parser
     public CvaProgram parse()
     {
         return parseProgram();
+    }
+
+    /**
+     * @TODO 目前是eat, 以后要检查返回值;
+     */
+    private CvaKind parseMainRetType()
+    {
+        // kind 能保存之前的kind;
+        CvaKind curKind = curToken.getKind();
+        if (CvaKind.isType(curKind))
+        {
+            eatToken(curKind);
+        }
+        else
+        {
+            errorLog(curToken.getLineNum(),
+                    "type in main func decl",
+                    String.valueOf(curKind));
+        }
+        return curKind;
+    }
+
+    /**
+     * @TODO 目前是eat, 以后要传入;
+     */
+    private void parseMainArgs()
+    {
+//        List<AbstractDeclaration> decs = new ArrayList<>();
+//        if (CvaKind.isType(curToken.getKind()))
+//        {
+//            // 这里非常坑. 必须要先parser;
+//            // parse的副作用是推一个token, 所以给new decl传参的时候先后顺序换了会导致意想不到的bug;
+//            AbstractType type = parseType();
+//            decs.add(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), type));
+//            eatToken(CvaKind.IDENTIFIER);
+//            while (curToken.getKind() == CvaKind.COMMA)
+//            {
+//                advance();
+//                AbstractType argType = parseType();
+//                decs.add(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), argType));
+//                eatToken(CvaKind.IDENTIFIER);
+//            }
+//        }
+//        else
+//        {
+//            errorLog(curToken.getLineNum(),
+//                    "type in formal list",
+//                    String.valueOf(curToken.getKind()));
+//        }
+//        return decs;
     }
 }

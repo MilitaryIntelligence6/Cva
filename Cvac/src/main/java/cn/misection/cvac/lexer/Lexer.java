@@ -14,6 +14,8 @@ public class Lexer
 
     private int lineNum;
 
+    private CvaTokenMap tokenMap = CvaTokenMap.getInstance();
+
     public Lexer(IBufferedQueue queueStream)
     {
         this.queueStream = queueStream;
@@ -69,7 +71,7 @@ public class Lexer
                 }
             }
         }
-
+        // 把单目符给抽象出来;
         switch (c)
         {
             case -1:
@@ -121,8 +123,8 @@ public class Lexer
                 return new CvaToken(CvaKind.SEMI, lineNum);
             default:
             {
-                StringBuilder sb = new StringBuilder();
-                sb.append((char) c);
+                StringBuilder builder = new StringBuilder();
+                builder.append((char) c);
                 while (true)
                 {
                     c = queueStream.peek();
@@ -130,7 +132,7 @@ public class Lexer
                             && c != '\n' && c != '\r'
                             && !isSpecialCharacter(c))
                     {
-                        sb.append((char) c);
+                        builder.append((char) c);
                         this.queueStream.poll();
                     }
                     else
@@ -138,55 +140,26 @@ public class Lexer
                         break;
                     }
                 }
-                switch (sb.toString())
+                String literal = builder.toString();
+                if (tokenMap.containsKey(literal))
                 {
-                    case "boolean":
-                        return new CvaToken(CvaKind.BOOLEAN, lineNum);
-                    case "class":
-                        return new CvaToken(CvaKind.CLASS, lineNum);
-                    case "else":
-                        return new CvaToken(CvaKind.ELSE, lineNum);
-                    case "false":
-                        return new CvaToken(CvaKind.FALSE, lineNum);
-                    case "if":
-                        return new CvaToken(CvaKind.IF, lineNum);
-                    case "int":
-                        return new CvaToken(CvaKind.INT, lineNum);
-                    case "main":
-                        return new CvaToken(CvaKind.MAIN, lineNum);
-                    case "new":
-                        return new CvaToken(CvaKind.NEW, lineNum);
-                    // TODO 删掉对print的兼容;
-                    case "print":
-                    case "printf":
-                    case "echo":
-                        return new CvaToken(CvaKind.WRITE, lineNum);
-                    case "return":
-                        return new CvaToken(CvaKind.RETURN, lineNum);
-                    case "this":
-                        return new CvaToken(CvaKind.THIS, lineNum);
-                    case "true":
-                        return new CvaToken(CvaKind.TRUE, lineNum);
-                    case "void":
-                        return new CvaToken(CvaKind.VOID, lineNum);
-                    case "while":
-                        return new CvaToken(CvaKind.WHILE, lineNum);
-                    default:
+                    return new CvaToken(tokenMap.get(literal), lineNum);
+                }
+                else
+                {
+                    if (isNumber(literal))
                     {
-                        if (isNumber(sb.toString()))
-                        {
-                            return new CvaToken(CvaKind.NUMBER, lineNum, sb.toString());
-                        }
-                        else if (isIdentifier(sb.toString()))
-                        {
-                            return new CvaToken(CvaKind.IDENTIFIER, lineNum, sb.toString());
-                        }
-                        else
-                        {
-                            System.out.printf("This is an illegal identifier at line %d%n", lineNum);
-                            System.exit(1);
-                            return null;
-                        }
+                        return new CvaToken(CvaKind.NUMBER, lineNum, builder.toString());
+                    }
+                    else if (isIdentifier(literal))
+                    {
+                        return new CvaToken(CvaKind.IDENTIFIER, lineNum, builder.toString());
+                    }
+                    else
+                    {
+                        System.out.printf("This is an illegal identifier at line %d%n", lineNum);
+                        System.exit(1);
+                        return null;
                     }
                 }
             }

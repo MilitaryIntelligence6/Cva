@@ -22,7 +22,7 @@ func echoPath() {
  */
 func echoExePath() {
 	path, err := exec.LookPath(os.Args[0])
-	fmt.Printf("exe path is %s", path)
+	fmt.Printf("exe path is %s\n", path)
 	if err != nil {
 		fmt.Printf("catch error %s", err)
 	}

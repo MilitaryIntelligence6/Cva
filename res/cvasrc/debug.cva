@@ -1,9 +1,10 @@
 class TestMain
 {
     // This is the entry point of the program
-    void main()
+    int main()
     {
-        print(new Test().Compute(10));   // just a print statement
+        echo(new Test().Compute(10));   // just a print statement;
+        //echo(1);
     }
 }
 

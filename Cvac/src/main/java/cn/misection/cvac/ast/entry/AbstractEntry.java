@@ -7,10 +7,13 @@ import cn.misection.cvac.ast.statement.AbstractStatement;
  * @version 1.0.0
  * @ClassName CvaMain
  * @Description main 方法入口;
+ * @TODO main方法要传入命令行参数!
+ * @TODO main方法要支持多条statement;
  * @CreateTime 2021年02月14日 17:54:00
  */
 public abstract class AbstractEntry implements IEntry
 {
+
     protected String literal;
 
     protected AbstractStatement statement;

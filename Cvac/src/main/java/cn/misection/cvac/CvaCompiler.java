@@ -17,7 +17,7 @@ import java.io.*;
 /**
  * Created by MI6 root 1/4.
  */
-public class CvaCompiler
+public final class CvaCompiler
 {
     private static final String ORDINARY = "-o";
 

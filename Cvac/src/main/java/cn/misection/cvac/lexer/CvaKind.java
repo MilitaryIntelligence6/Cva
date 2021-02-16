@@ -1,5 +1,7 @@
 package cn.misection.cvac.lexer;
 
+import javax.tools.Diagnostic;
+
 public enum CvaKind
 {
     /**
@@ -12,21 +14,10 @@ public enum CvaKind
      */
     AND_AND,
 
-
     /**
      * =
      */
     ASSIGN,
-
-    /**
-     * boolean
-     */
-    BOOLEAN,
-
-    /**
-     * class
-     */
-    CLASS,
 
     /**
      * :
@@ -69,9 +60,48 @@ public enum CvaKind
     ELSE,
 
     /**
+     * byte;
+     */
+    BYTE,
+
+    /**
+     * short;
+     */
+    SHORT,
+
+    /**
+     * char
+     */
+    CHAR,
+
+    /**
      * int
      */
     INT,
+
+    /**
+     * long;
+     */
+    LONG,
+
+    FLOAT,
+
+    DOUBLE,
+
+    /**
+     * boolean
+     */
+    BOOLEAN,
+
+    /**
+     * 指针;
+     */
+    POINTER,
+
+    /**
+     * class
+     */
+    CLASS,
 
     /**
      * {
@@ -327,9 +357,6 @@ public enum CvaKind
 
     STRUCT,
 
-    OPEN_PARENTHESES,
-
-    CLOSE_PARENTHESES,
 
     /**
      * 左右括号?;
@@ -338,9 +365,6 @@ public enum CvaKind
 
     CLOSE_BRACKETS,
 
-    OPEN_CURLY_BRACES,
-
-    CLOSE_CURLY_BRACES,
 
     STRING,
 
@@ -480,8 +504,6 @@ public enum CvaKind
      * SIGN;
      */
 
-    SEMICOLON,
-
     WHITE_SPACE,
 
     EQUALS_FACT_ASSIGN,
@@ -490,6 +512,21 @@ public enum CvaKind
 
     UNKNOWN_TOKEN,
     // end ternimal;
-
     ;
+
+    public static boolean isBasicType(CvaKind kind)
+    {
+        return kind.ordinal() >= CvaKind.BYTE.ordinal()
+                && kind.ordinal() <= CvaKind.POINTER.ordinal();
+    }
+
+    public static boolean isReferenceType(CvaKind kind)
+    {
+        return kind == CLASS || kind == STRUCT;
+    }
+
+    public static boolean isType(CvaKind kind)
+    {
+        return isBasicType(kind) || isReferenceType(kind);
+    }
 }
