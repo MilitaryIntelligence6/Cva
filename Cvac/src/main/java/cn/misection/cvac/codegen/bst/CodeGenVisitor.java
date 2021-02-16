@@ -38,77 +38,104 @@ public interface CodeGenVisitor
     // Stm
     default void visit(BaseStatement s)
     {
-        if (s instanceof ALoad)
+        switch (s.getClass().getSimpleName())
         {
-            this.visit(((ALoad) s));
-        }
-        else if (s instanceof AReturn)
-        {
-            this.visit(((AReturn) s));
-        }
-        else if (s instanceof AStore)
-        {
-            this.visit(((AStore) s));
-        }
-        else if (s instanceof Goto)
-        {
-            this.visit(((Goto) s));
-        }
-        else if (s instanceof GetField)
-        {
-            this.visit(((GetField) s));
-        }
-        else if (s instanceof IAdd)
-        {
-            this.visit(((IAdd) s));
-        }
-        else if (s instanceof IFicmplt)
-        {
-            this.visit(((IFicmplt) s));
-        }
-        else if (s instanceof ILoad)
-        {
-            this.visit(((ILoad) s));
-        }
-        else if (s instanceof IMul)
-        {
-            this.visit(((IMul) s));
-        }
-        else if (s instanceof InvokeVirtual)
-        {
-            this.visit(((InvokeVirtual) s));
-        }
-        else if (s instanceof IReturn)
-        {
-            this.visit(((IReturn) s));
-        }
-        else if (s instanceof IStore)
-        {
-            this.visit(((IStore) s));
-        }
-        else if (s instanceof ISub)
-        {
-            this.visit(((ISub) s));
-        }
-        else if (s instanceof LabelJ)
-        {
-            this.visit(((LabelJ) s));
-        }
-        else if (s instanceof Ldc)
-        {
-            this.visit(((Ldc) s));
-        }
-        else if (s instanceof New)
-        {
-            this.visit(((New) s));
-        }
-        else if (s instanceof Write)
-        {
-            this.visit(((Write) s));
-        }
-        else // if (s instanceof Ast.Stm.Putfield)
-        {
-            this.visit(((PutField) s));
+            case Operator.ALOAD:
+            {
+                visit((ALoad) s);
+                break;
+            }
+            case Operator.ARETURN:
+            {
+                visit((AReturn) s);
+                break;
+            }
+            case Operator.ASTORE:
+            {
+                visit((AStore) s);
+                break;
+            }
+            case Operator.GOTO:
+            {
+                visit((Goto) s);
+                break;
+            }
+            case Operator.GETFIELD:
+            {
+                visit((GetField) s);
+                break;
+            }
+            case Operator.IADD:
+            {
+                visit((IAdd) s);
+                break;
+            }
+            case Operator.IFICMPLT:
+            {
+                visit((IFicmplt) s);
+                break;
+            }
+            case Operator.ILOAD:
+            {
+                visit((ILoad) s);
+                break;
+            }
+            case Operator.IMUL:
+            {
+                visit((IMul) s);
+                break;
+            }
+            case Operator.INVOKEVIRTUAL:
+            {
+                visit((InvokeVirtual) s);
+                break;
+            }
+            case Operator.IRETURN:
+            {
+                visit((IReturn) s);
+                break;
+            }
+            case Operator.ISTORE:
+            {
+                visit((IStore) s);
+                break;
+            }
+            case Operator.ISUB:
+            {
+                visit((ISub) s);
+                break;
+            }
+            case Operator.LABELJ:
+            {
+                visit((LabelJ) s);
+                break;
+            }
+            case Operator.LDC:
+            {
+                visit((Ldc) s);
+                break;
+            }
+            case Operator.NEW:
+            {
+                visit((New) s);
+                break;
+            }
+            case Operator.WRITE:
+            {
+                visit((Write) s);
+                break;
+            }
+            case Operator.PUT_FIELD:
+            {
+                visit((PutField) s);
+                break;
+            }
+            default:
+            {
+                System.err.println("unknown operator");
+                break;
+            }
+
         }
     }
 

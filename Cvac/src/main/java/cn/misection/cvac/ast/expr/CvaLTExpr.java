@@ -8,7 +8,7 @@ package cn.misection.cvac.ast.expr;
  * @TODO 这是啥;
  * @CreateTime 2021年02月14日 19:22:00
  */
-public class CvaLTExpr extends AbstractExpression
+public final class CvaLTExpr extends AbstractExpression
 {
     private AbstractExpression left;
 

@@ -12,7 +12,7 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:57:00
  */
-public class CvaClass extends AbstractClass
+public final class CvaClass extends AbstractClass
 {
     private String literal;
 

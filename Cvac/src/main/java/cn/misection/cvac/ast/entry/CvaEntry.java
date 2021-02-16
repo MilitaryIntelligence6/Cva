@@ -9,7 +9,7 @@ import cn.misection.cvac.ast.statement.AbstractStatement;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:27:00
  */
-public class CvaEntry extends AbstractEntry
+public final class CvaEntry extends AbstractEntry
 {
     public CvaEntry(String literal, AbstractStatement statement)
     {

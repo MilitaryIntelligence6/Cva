@@ -11,7 +11,7 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:56:00
  */
-public class CvaCallExpr extends AbstractExpression
+public final class CvaCallExpr extends AbstractExpression
 {
     private String literal;
 

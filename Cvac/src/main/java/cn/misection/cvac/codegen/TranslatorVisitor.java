@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * Created by Mengxu on 2017/1/17.
  */
-public class TranslatorVisitor implements IVisitor
+public final class TranslatorVisitor implements IVisitor
 {
     private String classId;
     private int index;

@@ -6,7 +6,6 @@ import cn.misection.cvac.ast.decl.*;
 import cn.misection.cvac.ast.entry.*;
 import cn.misection.cvac.ast.expr.*;
 import cn.misection.cvac.ast.method.*;
-import cn.misection.cvac.ast.*;
 import cn.misection.cvac.ast.program.AbstractProgram;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
@@ -20,17 +19,28 @@ public interface IVisitor
     // Type
     default void visit(AbstractType t)
     {
-        if (t instanceof CvaBoolean)
+        switch (t.getClass().getSimpleName())
         {
-            this.visit(((CvaBoolean) t));
-        }
-        else if (t instanceof CvaClassType)
-        {
-            this.visit(((CvaClassType) t));
-        }
-        else if (t instanceof CvaInt)
-        {
-            this.visit(((CvaInt) t));
+            case CvaType.CVABOOLEAN:
+            {
+                visit((CvaBoolean) t);
+                break;
+            }
+            case CvaType.CVACLASSTYPE:
+            {
+                visit((CvaClassType) t);
+                break;
+            }
+            case CvaType.CVAINT:
+            {
+                visit((CvaInt) t);
+                break;
+            }
+            default:
+            {
+                System.err.println("unknown type");
+                break;
+            }
         }
     }
 
@@ -51,57 +61,78 @@ public interface IVisitor
     // Exp
     default void visit(AbstractExpression e)
     {
-        if (e instanceof CvaAddExpr)
+        switch (e.getClass().getSimpleName())
         {
-            this.visit(((CvaAddExpr) e));
-        }
-        else if (e instanceof CvaAndAndExpr)
-        {
-            this.visit(((CvaAndAndExpr) e));
-        }
-        else if (e instanceof CvaCallExpr)
-        {
-            this.visit(((CvaCallExpr) e));
-        }
-        else if (e instanceof CvaFalseExpr)
-        {
-            this.visit(((CvaFalseExpr) e));
-        }
-        else if (e instanceof CvaIdentifier)
-        {
-            this.visit(((CvaIdentifier) e));
-        }
-        else if (e instanceof CvaLTExpr)
-        {
-            this.visit(((CvaLTExpr) e));
-        }
-        else if (e instanceof CvaNewExpr)
-        {
-            this.visit(((CvaNewExpr) e));
-        }
-        else if (e instanceof CvaNegateExpr)
-        {
-            this.visit(((CvaNegateExpr) e));
-        }
-        else if (e instanceof CvaNumberInt)
-        {
-            this.visit(((CvaNumberInt) e));
-        }
-        else if (e instanceof CvaSubExpr)
-        {
-            this.visit(((CvaSubExpr) e));
-        }
-        else if (e instanceof CvaThisExpr)
-        {
-            this.visit(((CvaThisExpr) e));
-        }
-        else if (e instanceof CvaMuliExpr)
-        {
-            this.visit(((CvaMuliExpr) e));
-        }
-        else // if (e instanceof Ast.Exp.True)
-        {
-            this.visit(((CvaTrueExpr) e));
+            case CvaExpr.CVAADDEXPR:
+            {
+                visit((CvaAddExpr) e);
+                break;
+            }
+            case CvaExpr.CVAANDANDEXPR:
+            {
+                visit((CvaAndAndExpr) e);
+                break;
+            }
+            case CvaExpr.CVACALLEXPR:
+            {
+                visit((CvaCallExpr) e);
+                break;
+            }
+            case CvaExpr.CVAFALSEEXPR:
+            {
+                visit((CvaFalseExpr) e);
+                break;
+            }
+            case CvaExpr.CVAIDENTIFIER:
+            {
+                visit((CvaIdentifier) e);
+                break;
+            }
+            case CvaExpr.CVALTEXPR:
+            {
+                visit((CvaLTExpr) e);
+                break;
+            }
+            case CvaExpr.CVANEWEXPR:
+            {
+                visit((CvaNewExpr) e);
+                break;
+            }
+            case CvaExpr.CVANEGATEEXPR:
+            {
+                visit((CvaNegateExpr) e);
+                break;
+            }
+            case CvaExpr.CVANUMBERINT:
+            {
+                visit((CvaNumberInt) e);
+                break;
+            }
+            case CvaExpr.CVASUBEXPR:
+            {
+                visit((CvaSubExpr) e);
+                break;
+            }
+            case CvaExpr.CVATHISEXPR:
+            {
+                visit((CvaThisExpr) e);
+                break;
+            }
+            case CvaExpr.CVAMULIEXPR:
+            {
+                visit((CvaMuliExpr) e);
+                break;
+            }
+            case CvaExpr.CVATRUEEXPR:
+            {
+                visit((CvaTrueExpr) e);
+                break;
+            }
+            default:
+            {
+                System.err.println("unknown expr");
+                break;
+            }
         }
     }
 
@@ -134,25 +165,38 @@ public interface IVisitor
     // Stm
     default void visit(AbstractStatement s)
     {
-        if (s instanceof CvaAssign)
+        switch (s.getClass().getSimpleName())
         {
-            this.visit(((CvaAssign) s));
-        }
-        else if (s instanceof CvaBlock)
-        {
-            this.visit(((CvaBlock) s));
-        }
-        else if (s instanceof CvaIfStatement)
-        {
-            this.visit(((CvaIfStatement) s));
-        }
-        else if (s instanceof CvaWriteOperation)
-        {
-            this.visit(((CvaWriteOperation) s));
-        }
-        else // if (s instanceof Ast.While)
-        {
-            this.visit(((CvaWhileStatement) s));
+            case CvaStatement.CVAASSIGN:
+            {
+                visit((CvaAssign) s);
+                break;
+            }
+            case CvaStatement.CVABLOCK:
+            {
+                visit((CvaBlock) s);
+                break;
+            }
+            case CvaStatement.CVAIFSTATEMENT:
+            {
+                visit((CvaIfStatement) s);
+                break;
+            }
+            case CvaStatement.CVAWRITEOPERATION:
+            {
+                visit((CvaWriteOperation) s);
+                break;
+            }
+            case CvaStatement.CVA_WHILE_STATEMENT:
+            {
+                visit((CvaWhileStatement) s);
+                break;
+            }
+            default:
+            {
+                System.err.println("unknown statement");
+                break;
+            }
         }
     }
 

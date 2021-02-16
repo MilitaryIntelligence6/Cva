@@ -9,7 +9,7 @@ import cn.misection.cvac.ast.type.AbstractType;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:54:00
  */
-public class CvaDeclaration extends AbstractDeclaration
+public final class CvaDeclaration extends AbstractDeclaration
 {
     private String literal;
 

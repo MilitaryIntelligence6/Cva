@@ -14,7 +14,7 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 20:02:00
  */
-public class CvaMethod extends AbstractMethod
+public final class CvaMethod extends AbstractMethod
 {
     private String literal;
 
