@@ -1,6 +1,8 @@
 package cn.misection.cvac.lexer;
 
-import javax.tools.Diagnostic;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
 public enum CvaKind
 {
@@ -9,6 +11,46 @@ public enum CvaKind
      */
     ADD,
 
+
+    /**
+     * -
+     */
+    SUB,
+
+    /**
+     * *
+     */
+    STAR,
+
+    DIV_OPERATOR,
+
+    /**
+     * 加的求余;
+     */
+    REMAINDER_OPERATOR,
+
+    /**
+     * ;
+     */
+    SEMI,
+
+    /**
+     * :
+     * 以后可能有 :: ;
+     */
+    COLON(":"),
+
+    /**
+     * 新加的;
+     */
+    OR_OR,
+
+    AND,
+
+    OR,
+
+    XOR,
+
     /**
      * &&
      */
@@ -16,143 +58,195 @@ public enum CvaKind
 
     /**
      * =
+     * 是前缀字符, 不能初始化之;
      */
     ASSIGN,
 
     /**
-     * :
-     */
-    COLON,
-
-    /**
-     * ,
-     */
-    COMMA,
-
-    /**
-     * .
-     */
-    DOT,
-
-    /**
-     * true
-     */
-    TRUE,
-
-    /**
-     * false
-     */
-    FALSE,
-
-    /**
-     * Identifier
-     */
-    IDENTIFIER,
-
-    /**
-     * if
-     */
-    IF,
-
-    /**
-     * else
-     */
-    ELSE,
-
-    /**
-     * void
-     */
-    VOID,
-
-    /**
-     * byte;
-     */
-    BYTE,
-
-    /**
-     * short;
-     */
-    SHORT,
-
-    /**
-     * char
-     */
-    CHAR,
-
-    /**
-     * int
-     */
-    INT,
-
-    /**
-     * long;
-     */
-    LONG,
-
-    FLOAT,
-
-    DOUBLE,
-
-    /**
-     * boolean
-     */
-    BOOLEAN,
-
-    /**
-     * 指针;
-     */
-    POINTER,
-
-    /**
-     * String 不是基本类型, 但应是CvaDK内置类, 暂时不标记为class只有;
-     */
-    STRING,
-
-    /**
-     * class
-     */
-    CLASS,
-
-
-    /**
-     * {
-     */
-    OPEN_CURLY_BRACE,
-
-    /**
-     * }
-     */
-    CLOSE_CURLY_BRACE,
-
-    /**
-     * (
-     */
-    OPEN_PAREN,
-
-    /**
-     * )
-     */
-    CLOSE_PAREN,
-
-    /**
      * <
+     * 多元符号, 不能初始化;
      */
     LESS_THAN,
 
     /**
+     * >
+     */
+    MORE_THAN,
+
+    QUEST("?"),
+    /**
+     * ,
+     */
+    COMMA(","),
+
+    /**
+     * .
+     */
+    DOT("."),
+
+    /**
+     * true
+     */
+    TRUE("true"),
+
+    /**
+     * false
+     */
+    FALSE("false"),
+
+    /**
+     * if
+     */
+    IF("if"),
+
+    /**
+     * else
+     */
+    ELSE("else"),
+
+    /**
+     * void
+     */
+    VOID("void"),
+
+    /**
+     * byte;
+     */
+    BYTE("byte"),
+
+    /**
+     * short;
+     */
+    SHORT("short"),
+
+    /**
+     * char
+     */
+    CHAR("char"),
+
+    /**
+     * int
+     */
+    INT("int"),
+
+    /**
+     * long;
+     */
+    LONG("long"),
+
+    FLOAT("float"),
+
+    DOUBLE("double"),
+
+    /**
+     * boolean
+     */
+    BOOLEAN("boolean"),
+
+    /**
+     * 指针;
+     */
+    POINTER("pointer"),
+
+    /**
+     * String 不是基本类型, 但应是CvaDK内置类, 暂时不标记为class只有;
+     */
+    STRING("String"),
+
+    /**
+     * class
+     */
+    CLASS("class"),
+
+    /**
+     * {
+     */
+    OPEN_CURLY_BRACE("{"),
+
+    /**
+     * }
+     */
+    CLOSE_CURLY_BRACE("}"),
+
+    /**
+     * 左右括号;
+     */
+    OPEN_BRACKETS("["),
+
+    CLOSE_BRACKETS("]"),
+
+    /**
+     * (
+     */
+    OPEN_PAREN("("),
+
+    /**
+     * )
+     */
+    CLOSE_PAREN(")"),
+
+
+    /**
      * main
      */
-    MAIN,
+    MAIN("main"),
 
     /**
      * new
      */
-    NEW,
+    NEW("new"),
 
     /**
      * !
      */
-    NEGATE,
+    NEGATE("!"),
+
+    /**
+     * return
+     */
+    RETURN("return"),
+
+    /**
+     * call;
+     */
+    CALL("call"),
+
+    /**
+     * this
+     */
+    THIS("this"),
+
+    FOR("for"),
+
+    /**
+     * while
+     */
+    WHILE("while"),
+
+    SWITCH("switch"),
+
+    CASE("switch"),
+
+    DEFAULT("default"),
+
+    BREAK("break"),
+
+    DO("do"),
+
+    CONTINUE("continue"),
+
+    GOTO("goto"),
+
+    /**
+     * ENUM DEFINE
+     */
+    ENUM("enum"),
+
+    STRUCT("struct"),
+
+    TYPE_DEF("typedef"),
+
+//    SHARP_DEFINE("#define"),
 
     /**
      * Integer literal
@@ -162,42 +256,12 @@ public enum CvaKind
     /**
      * print, we just treat it as a key word
      */
-    WRITE,
+    WRITE("printf"),
 
     /**
-     * return
+     * Identifier
      */
-    RETURN,
-
-    /**
-     * ;
-     */
-    SEMI,
-
-    /**
-     * -
-     */
-    SUB,
-
-    /**
-     * call;
-     */
-    CALL,
-
-    /**
-     * this
-     */
-    THIS,
-
-    /**
-     * *
-     */
-    STAR,
-
-    /**
-     * while
-     */
-    WHILE,
+    IDENTIFIER,
 
     /**
      * End of file
@@ -228,7 +292,6 @@ public enum CvaKind
 
     SPECIFIERS,
 
-    TYPE_OR_CLASS,
 
     /**
      * 新加的;
@@ -361,30 +424,6 @@ public enum CvaKind
 
     TYPE,
 
-    STRUCT,
-
-    /**
-     * 左右括号?;
-     */
-    OPEN_BRACKETS,
-
-    CLOSE_BRACKETS,
-
-    QUEST,
-
-    RELOP_FACT_EQUALS,
-
-    /**
-     * 新加的;
-     */
-    OR_OR,
-
-    AND,
-
-    OR,
-
-    XOR,
-
     EQUALS_OPERATOR,
 
     /**
@@ -399,16 +438,6 @@ public enum CvaKind
 
     RIGHT_SHIFT_OPERATOR,
 
-    DIV_OPERATOR,
-
-    /**
-     * 加的求余;
-     */
-    REMAINDER_OPERATOR,
-
-    PLUS_OPERATOR,
-
-    MINUS_OPERATOR,
 
     /*
      * 乘法, 原来无, 由于要和指针混淆, 所以暂时难以处理;
@@ -481,27 +510,6 @@ public enum CvaKind
      */
     REMAINDER_ASSIGN,
 
-    SWITCH,
-
-    CASE,
-
-    DEFAULT,
-
-    BREAK,
-
-    FOR,
-
-    DO,
-
-    CONTINUE,
-
-    GOTO,
-
-    /**
-     * ENUM DEFINE
-     */
-    ENUM,
-
     /**
      * SIGN;
      */
@@ -515,6 +523,58 @@ public enum CvaKind
     UNKNOWN_TOKEN,
     // end ternimal;
     ;
+
+    private String kindLiteral;
+
+    CvaKind(String kindLiteral)
+    {
+        this.kindLiteral = kindLiteral;
+    }
+
+    CvaKind()
+    {
+
+    }
+
+    public String getKindLiteral()
+    {
+        return kindLiteral;
+    }
+
+    private static final Map<String, CvaKind> lookup = new HashMap<>();
+
+    static
+    {
+        for (CvaKind kind : EnumSet.allOf(CvaKind.class))
+        {
+            if (kind.kindLiteral != null)
+            {
+                lookup.put(kind.kindLiteral, kind);
+            }
+        }
+
+        /**
+         * 除了默认之外, 还有一些本来多义词;
+         * @TODO 后面应该将他们分离;
+         */
+        // printf 已经写入了;
+        lookup.put("echo", CvaKind.WRITE);
+        lookup.put("echof", CvaKind.WRITE);
+        lookup.put("echoln", CvaKind.WRITE);
+
+        lookup.put("println", CvaKind.WRITE);
+    }
+
+    public static boolean containsKind(String literal)
+    {
+        return lookup.containsKey(literal);
+    }
+
+    public static CvaKind selectReverse(String literal)
+    {
+        // 可能出null;
+        return lookup.get(literal);
+    }
 
     public static boolean isBasicType(CvaKind kind)
     {

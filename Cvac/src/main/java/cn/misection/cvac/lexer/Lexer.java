@@ -2,6 +2,8 @@ package cn.misection.cvac.lexer;
 
 import cn.misection.cvac.config.Macro;
 
+import java.util.Map;
+
 /**
  * Created by MI6 root 1/6.
  */
@@ -13,8 +15,6 @@ public class Lexer
     private IBufferedQueue queueStream;
 
     private int lineNum;
-
-    private CvaTokenMap tokenMap = CvaTokenMap.getInstance();
 
     public Lexer(IBufferedQueue queueStream)
     {
@@ -63,9 +63,6 @@ public class Lexer
                     break;
                 }
                 default:
-//                System.out.println("Comment should begin with \"//\"");
-//                System.out.printf("Error is found at line %d%n", lineNum);
-//                System.exit(1);
                 {
                     return new CvaToken(CvaKind.DIV_OPERATOR, lineNum);
                 }
@@ -141,9 +138,9 @@ public class Lexer
                     }
                 }
                 String literal = builder.toString();
-                if (tokenMap.containsKey(literal))
+                if (CvaKind.containsKind(literal))
                 {
-                    return new CvaToken(tokenMap.get(literal), lineNum);
+                    return new CvaToken(CvaKind.selectReverse(literal), lineNum);
                 }
                 else
                 {
