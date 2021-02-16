@@ -7,7 +7,7 @@ import cn.misection.cvac.ast.type.AbstractType;
 import java.util.Hashtable;
 
 /**
- * Created by Mengxu on 2017/1/13.
+ * Created by MI6 root 1/13.
  */
 public class ClassTable
 {

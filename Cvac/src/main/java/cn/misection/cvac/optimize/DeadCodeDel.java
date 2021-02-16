@@ -14,7 +14,7 @@ import cn.misection.cvac.ast.type.*;
 import java.util.HashSet;
 
 /**
- * Created by Mengxu on 2017/1/27.
+ * Created by MI6 root 1/27.
  */
 public class DeadCodeDel implements IVisitor, Optimizable
 {

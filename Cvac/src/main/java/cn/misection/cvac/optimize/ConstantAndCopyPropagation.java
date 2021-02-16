@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Mengxu on 2017/1/28.
+ * Created by MI6 root 1/28.
  */
 public class ConstantAndCopyPropagation implements IVisitor, Optimizable
 {

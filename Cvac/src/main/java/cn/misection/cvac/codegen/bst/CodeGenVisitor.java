@@ -11,7 +11,7 @@ import cn.misection.cvac.codegen.bst.btype.GenClassType;
 import cn.misection.cvac.codegen.bst.btype.GenInt;
 
 /**
- * Created by Mengxu on 2017/1/17.
+ * Created by MI6 root 1/17.
  */
 public interface CodeGenVisitor
 {

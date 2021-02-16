@@ -14,7 +14,7 @@ import cn.misection.cvac.ast.type.*;
 import java.util.LinkedList;
 
 /**
- * Created by Mengxu on 2017/1/25.
+ * Created by MI6 root 1/25.
  */
 public class UnReachableDel implements IVisitor, Optimizable
 {

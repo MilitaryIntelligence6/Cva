@@ -1,8 +1,6 @@
 package cn.misection.cvac.codegen.bst.bclas;
 
-import cn.misection.cvac.codegen.bst.bdecl.BaseDeclaration;
 import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
-import cn.misection.cvac.codegen.bst.bmethod.BaseMethod;
 import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
 
 import java.util.List;

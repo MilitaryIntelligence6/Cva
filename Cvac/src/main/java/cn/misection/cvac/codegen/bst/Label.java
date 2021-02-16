@@ -1,7 +1,7 @@
 package cn.misection.cvac.codegen.bst;
 
 /**
- * Created by Mengxu on 2017/1/17.
+ * Created by MI6 root 1/17.
  */
 public class Label
 {

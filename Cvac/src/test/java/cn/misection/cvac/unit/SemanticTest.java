@@ -9,7 +9,7 @@ import cn.misection.cvac.semantic.SemanticVisitor;
 import java.io.*;
 
 /**
- * Created by Mengxu on 2017/1/14.
+ * Created by MI6 root 1/14.
  */
 public class SemanticTest
 {

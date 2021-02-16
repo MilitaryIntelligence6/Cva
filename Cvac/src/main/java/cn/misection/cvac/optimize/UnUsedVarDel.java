@@ -15,7 +15,7 @@ import cn.misection.cvac.ast.type.CvaInt;
 import java.util.Hashtable;
 
 /**
- * Created by Mengxu on 2017/1/24.
+ * Created by MI6 root 1/24.
  */
 public class UnUsedVarDel implements IVisitor, Optimizable
 {

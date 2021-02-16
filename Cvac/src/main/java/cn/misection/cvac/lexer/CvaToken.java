@@ -1,7 +1,7 @@
 package cn.misection.cvac.lexer;
 
 /**
- * Created by Mengxu on 2017/1/6.
+ * Created by MI6 root 1/6.
  */
 public class CvaToken
 {

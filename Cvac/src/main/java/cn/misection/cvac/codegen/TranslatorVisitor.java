@@ -27,7 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by Mengxu on 2017/1/17.
+ * Created by MI6 root 1/17.
  */
 public final class TranslatorVisitor implements IVisitor
 {

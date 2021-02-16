@@ -14,7 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by Mengxu on 2017/1/23.
+ * Created by MI6 root 1/23.
  */
 public class ConstantFolder implements IVisitor, Optimizable
 {

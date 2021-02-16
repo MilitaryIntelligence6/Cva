@@ -4,7 +4,7 @@ import cn.misection.cvac.ast.program.AbstractProgram;
 import cn.misection.cvac.ast.program.CvaProgram;
 
 /**
- * Created by Mengxu on 2017/1/31.
+ * Created by MI6 root 1/31.
  */
 public class Optimizer
 {

@@ -12,7 +12,7 @@ import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.*;
 
 /**
- * Created by Mengxu on 2017/1/7.
+ * Created by MI6 root 1/7.
  */
 public interface IVisitor
 {
