@@ -1,15 +1,14 @@
+// This is the entry point of the program
 
 call cva.native.io.*;
 call cva.std.console.*;
 
-class TestMain
+int main(String[] args)
 {
-    // This is the entry point of the program
-    void main(String[] args)
-    {
-        printf(new Test().Compute(10));   // just a print statement
-    }
+    echo(new Test().Compute(10));   // just a print statement
+    // return 0;
 }
+
 
 class Test
 {

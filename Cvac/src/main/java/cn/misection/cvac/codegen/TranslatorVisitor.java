@@ -38,9 +38,9 @@ public final class TranslatorVisitor implements IVisitor
     private GenDeclaration dec;
     private List<BaseStatement> statementList;
     private GenMethod method;
-    private GenClass classs;
+    private GenClass clazz;
     private GenEntry mainClass;
-    private GenProgram prog;
+    private GenProgram program;
 
     public TranslatorVisitor()
     {
@@ -52,8 +52,8 @@ public final class TranslatorVisitor implements IVisitor
         this.setMethod(null);
         this.setClassId(null);
         this.setMainClass(null);
-        this.setClasss(null);
-        this.setProg(null);
+        this.setClazz(null);
+        this.setProgram(null);
     }
 
     private void emit(BaseStatement s)
@@ -368,7 +368,7 @@ public final class TranslatorVisitor implements IVisitor
             this.visit(m);
             methodList.add(this.getMethod());
         });
-        this.setClasss(
+        this.setClazz(
                 new GenClass(
                 cvaClass.getLiteral(),
                 cvaClass.getParent(),
@@ -393,9 +393,9 @@ public final class TranslatorVisitor implements IVisitor
         p.getClassList().forEach(c ->
         {
             this.visit(c);
-            classList.add(this.getClasss());
+            classList.add(this.getClazz());
         });
-        this.setProg(
+        this.setProgram(
                 new GenProgram(
                         this.getMainClass(),
                         classList));
@@ -451,14 +451,14 @@ public final class TranslatorVisitor implements IVisitor
         this.method = method;
     }
 
-    public GenClass getClasss()
+    public GenClass getClazz()
     {
-        return classs;
+        return clazz;
     }
 
-    public void setClasss(GenClass classs)
+    public void setClazz(GenClass clazz)
     {
-        this.classs = classs;
+        this.clazz = clazz;
     }
 
     public GenEntry getMainClass()
@@ -471,13 +471,13 @@ public final class TranslatorVisitor implements IVisitor
         this.mainClass = mainClass;
     }
 
-    public GenProgram getProg()
+    public GenProgram getProgram()
     {
-        return prog;
+        return program;
     }
 
-    public void setProg(GenProgram prog)
+    public void setProgram(GenProgram program)
     {
-        this.prog = prog;
+        this.program = program;
     }
 }

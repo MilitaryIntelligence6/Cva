@@ -5,7 +5,6 @@ import cn.misection.cvac.ast.type.AbstractType;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * Created by MI6 root 1/13.
  */

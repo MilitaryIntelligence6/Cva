@@ -37,6 +37,11 @@ public final class CvaCompiler
 
     private static final String COMPILE_TO_IL = "-i";
 
+    /**
+     * 用户选择;
+     */
+    private static boolean optimizeFlag = true;
+
     public static void main(String[] args)
     {
         logBanner();
@@ -50,36 +55,57 @@ public final class CvaCompiler
             fName = DebugMacro.DEBUG_FILE;
         }
         IBufferedQueue fStream = readStream(fName);
-        geneCode(fStream);
+        AbstractProgram program = grammarAnalysis(fStream);
+        geneCode(program);
     }
 
-    private static void geneCode(IBufferedQueue fStream)
+    private static void geneCode(AbstractProgram program)
     {
-        Parser parser = new Parser(fStream);
-        AbstractProgram program = parser.parse();
-
-        doCheck(program);
-
-        Optimizer optimizer = new Optimizer();
-        optimizer.optimize(program);
-
+        if (optimizeFlag)
+        {
+            optimize(program);
+        }
+        System.out.println("start intermediate code gene");
         TranslatorVisitor translator = new TranslatorVisitor();
         translator.visit(program);
 
         IntermLangGenerator generator = new IntermLangGenerator();
-        generator.visit(translator.getProg());
+        generator.visit(translator.getProgram());
+        System.out.println("finish intermediate code gene\n");
 
         doMkDIrs();
+
+        System.out.println("start gene .class file\n");
+
         // 现在是从il读到文件中而不是先创建il, il步骤在前, 需要设定一个全局;
-        String ilPath = String.format("%s.il", translator.getProg().getEntry().getLiteral());
+        String ilPath = String.format("%s.il", translator.getProgram().getEntry().getLiteral());
         // ascii instructions to binary file
         jasmin.Main.main(new String[] {ilPath});
 
-        for (GenClass cla : translator.getProg().getClassList())
+        for (GenClass cla : translator.getProgram().getClassList())
         {
             String filePath = String.format("%s.il", cla.getLiteral());
             jasmin.Main.main(new String[] {filePath});
         }
+        System.out.println("\nwell down!");
+    }
+
+    private static AbstractProgram grammarAnalysis(IBufferedQueue fStream)
+    {
+        System.out.println("\nstart grammar analysis");
+        Parser parser = new Parser(fStream);
+        AbstractProgram program = parser.parse();
+        doCheck(program);
+        System.out.println("finish grammar analysis\n");
+        return program;
+    }
+
+    private static void optimize(AbstractProgram program)
+    {
+        System.out.println("start optimize");
+        Optimizer optimizer = new Optimizer();
+        optimizer.optimize(program);
+        System.out.println("finish optimize\n");
     }
 
     private static void doCheck(AbstractProgram program)
