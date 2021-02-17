@@ -1,14 +1,31 @@
-// This is the entry point of the program
-
-int main()
+// Ths s the entry pont of the program
+/*dasdasdas*/
+/*654654654*/
+nt man()
 {
-    i++;
-    i += 1;
-    i -= 1;
-    i--;
-    ++i;
-    i *= 1;
+    /**
+    ////
+    /**
+    6464*****
+    4664
+    */
+
+    ++
+    +=
+     -= 
+    --
+    ++
+     *= 
     ->
-    a == 5;
+    ==
+    >>=
+    <==
+    >>
+    <<
+    ~
+    ~=
+    |=
+    /=
+    &=
 
 }

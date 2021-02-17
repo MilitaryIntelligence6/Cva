@@ -12,6 +12,8 @@ public final class Lexer
 
     private int lineNum;
 
+    private boolean inString;
+
     public Lexer(IBufferedQueue stream)
     {
         this.stream = stream;
@@ -48,34 +50,6 @@ public final class Lexer
             }
             ch = this.stream.poll();
         }
-
-        // deal with comments
-        if (ch == '/')
-        {
-            char nextCh = stream.peek();
-            switch (nextCh)
-            {
-                case '/':
-                {
-                    while (nextCh != LexerConstPool.NEW_LINE)
-                    {
-                        nextCh = this.stream.poll();
-                    }
-                    lineNum++;
-                    // tail recursion;
-                    return lex();
-                }
-                case '*':
-                {
-                    // TODO Block comment;
-                    break;
-                }
-                default:
-                {
-                    return new CvaToken(CvaKind.DIV_OPERATOR, lineNum);
-                }
-            }
-        }
         // 把单目符给抽象出来;
         switch (ch)
         {
@@ -89,35 +63,29 @@ public final class Lexer
                 return handleStar();
             case '&':
                 return handleAnd();
+            case '|':
+                return handleOr();
             case '=':
                 return handleEqual();
             case '<':
                 return handleLessThan();
             case '>':
                 return handleMoreThan();
-//            case ':':
-//                return new CvaToken(CvaKind.COLON, lineNum);
-//            case ',':
-//                return new CvaToken(CvaKind.COMMA, lineNum);
-//            case '.':
-//                return new CvaToken(CvaKind.DOT, lineNum);
-
-//            case '!':
-//                return new CvaToken(CvaKind.NEGATE, lineNum);
-//            case '{':
-//                return new CvaToken(CvaKind.OPEN_CURLY_BRACE, lineNum);
-//            case '}':
-//                return new CvaToken(CvaKind.CLOSE_CURLY_BRACE, lineNum);
-//            case '(':
-//                return new CvaToken(CvaKind.OPEN_PAREN, lineNum);
-//            case ')':
-//                return new CvaToken(CvaKind.CLOSE_PAREN, lineNum);
-//            case ';':
-//                return new CvaToken(CvaKind.SEMI, lineNum);
-
+            case '^':
+                return handleXOr();
+            case '~':
+                return handleBitNegate();
+            case '/':
+                return handleSlash();
+            case '%':
+                return handlePercent();
             /// 需要注意转义只应该在字符串中出现!;
-            case '\\':
-                return handleEscape();
+//            case '\'':
+//                return handleApostrophe();
+//            case '"':
+//
+//            case '\\':
+//                return handleEscape();
             default:
             {
                 // 先看c是否是非前缀字符, 这里是 int, 必须先转成char看在不在表中;
@@ -197,8 +165,8 @@ public final class Lexer
 
 
     /**
-     * @TODO 转义处理;
      * @return
+     * @TODO 转义处理;
      */
     private CvaToken handleEscape()
     {
@@ -348,14 +316,33 @@ public final class Lexer
 
     private CvaToken handleSlash()
     {
-        if (stream.hasNext()
-                && stream.peek() == '=')
+        if (stream.hasNext())
         {
-            stream.poll();
-            return new CvaToken(CvaKind.DIV_ASSIGN, lineNum);
+            switch (stream.peek())
+            {
+                case '/':
+                {
+                    handleLineComment();
+                    break;
+                }
+                case '*':
+                {
+                    handleBlockComment();
+                    break;
+                }
+                case '=':
+                {
+                    stream.poll();
+                    return new CvaToken(CvaKind.DIV_ASSIGN, lineNum);
+                }
+                default:
+                {
+                    return new CvaToken(CvaKind.DIV, lineNum);
+                }
+            }
         }
-
-        return new CvaToken(CvaKind.DIV_OPERATOR, lineNum);
+        // 说明是注释, 继续执行;
+        return lex();
     }
 
     private CvaToken handlePercent()
@@ -367,7 +354,7 @@ public final class Lexer
             return new CvaToken(CvaKind.REMAINDER_ASSIGN, lineNum);
         }
 
-        return new CvaToken(CvaKind.REMAINDER_OPERATOR, lineNum);
+        return new CvaToken(CvaKind.REMAINDER, lineNum);
     }
 
     private CvaToken handleBitNegate()
@@ -376,10 +363,10 @@ public final class Lexer
                 && stream.peek() == '=')
         {
             stream.poll();
-            return new CvaToken(CvaKind.BIT_NEGATE_OPERATOR, lineNum);
+            return new CvaToken(CvaKind.BIT_NEGATE_ASSIGN, lineNum);
         }
 
-        return new CvaToken(CvaKind.BIT_NEGATE_OPERATOR, lineNum);
+        return new CvaToken(CvaKind.BIT_NEGATE, lineNum);
     }
 
     private CvaToken handleMoreThan()
@@ -426,7 +413,6 @@ public final class Lexer
                     // TODO 看不懂???;
                     return new CvaToken(CvaKind.LESS_OR_EQUALS, lineNum);
                 }
-
                 case '<':
                 {
                     if (stream.hasNext(2)
@@ -446,6 +432,59 @@ public final class Lexer
             }
         }
         return new CvaToken(CvaKind.LESS_THAN, lineNum);
+    }
+
+
+    private void handleLineComment()
+    {
+        char commentChar;
+        while (true)
+        {
+            if ((commentChar = stream.poll()) == LexerConstPool.NEW_LINE)
+            {
+                break;
+            }
+//                        if (MacroConfig.DEBUG)
+//                        {
+//                            System.out.printf("remove %s\n", commentChar);
+//                        }
+        }
+        lineNum++;
+    }
+
+    private void handleBlockComment()
+    {
+        // 推掉*;
+        stream.poll();
+        while (true)
+        {
+            // switch case 内部引进了 break, 所以不用goto跳不出去;
+            // 还是就if, 虽然丑一点, 判定也多一点;
+            switch (stream.poll())
+            {
+                case '*':
+                {
+                    if (stream.peek() == '/')
+                    {
+                        // 结束了;
+                        stream.poll();
+                        break;
+                    }
+                    continue;
+                }
+                case LexerConstPool.NEW_LINE:
+                {
+                    lineNum++;
+                    continue;
+                }
+                default:
+                {
+                    // 这里用 continue 来中断switch继续while true;
+                    continue;
+                }
+            }
+            break;
+        }
     }
 
 //    private CvaToken handleQuotationMarks()

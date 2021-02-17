@@ -21,12 +21,12 @@ public enum CvaKind
      */
     STAR,
 
-    DIV_OPERATOR,
+    DIV,
 
     /**
      * 加的求余;
      */
-    REMAINDER_OPERATOR,
+    REMAINDER,
 
     /**
      * ;
@@ -439,7 +439,7 @@ public enum CvaKind
     /**
      * 新加的求反;
      */
-    BIT_NEGATE_OPERATOR,
+    BIT_NEGATE,
 
     /**
      * 加了左右;
