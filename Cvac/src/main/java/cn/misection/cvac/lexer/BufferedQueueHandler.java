@@ -36,8 +36,8 @@ public final class BufferedQueueHandler
             buffer.append(line).append(LexerConstPool.NEW_LINE);
         }
         // 改进完毕, 只需要装载一个EOF了, 必须装载至少一个,
-        //因为StringBuffer跟文件流不一样;
-        // 这样才能模拟文件流;
+        //因为StringBuffer跟文件流不一样, 不会有EOF;
+        // 加上才能模拟文件流;
         buffer.append(LexerConstPool.EOF);
         this.close();
     }
@@ -50,10 +50,11 @@ public final class BufferedQueueHandler
     }
 
     @Override
-    public char peek(int num)
+    public char peek(int advance)
     {
         // TODO 判空不要在这里, 影响效率, 放到后面lexer中;
-        return num >= buffer.length() ? 0 : buffer.charAt(num);
+        // 这里由于poll掉了, 所以要-1;
+        return buffer.length() < advance ? 0 : buffer.charAt(advance - 1);
     }
 
     @Override
@@ -65,11 +66,24 @@ public final class BufferedQueueHandler
     }
 
     @Override
-    public String poll(int num)
+    public String poll(int advance)
     {
-        String polled = buffer.substring(0, num);
-        buffer.delete(0, num);
+        String polled = buffer.substring(0, advance);
+        buffer.delete(0, advance);
         return polled;
+    }
+
+    @Override
+    public boolean hasNext()
+    {
+        // 当前已经poll掉了, 如果 == 1, 是EOF, 所以至少2;
+        return buffer.length() > 1;
+    }
+
+    @Override
+    public boolean hasNext(int advance)
+    {
+        return buffer.length() > advance;
     }
 
     @Override

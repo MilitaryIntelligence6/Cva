@@ -290,7 +290,7 @@ public final class Parser
      *
      * @return
      */
-    private AbstractExpression parseAddSubExp()
+    private AbstractExpression parseAddSubExpr()
     {
         AbstractExpression tem = parseTimesExp();
         AbstractExpression exp = tem;
@@ -312,12 +312,12 @@ public final class Parser
      */
     private AbstractExpression parseLTExp()
     {
-        AbstractExpression exp = parseAddSubExp();
+        AbstractExpression exp = parseAddSubExpr();
         while (curToken.getKind() == CvaKind.ADD || curToken.getKind() == CvaKind.SUB)
         {
             boolean addFlag = curToken.getKind() == CvaKind.ADD;
             advance();
-            AbstractExpression tem = parseAddSubExp();
+            AbstractExpression tem = parseAddSubExpr();
             exp = addFlag ?
                     new CvaAddExpr(exp.getLineNum(), exp, tem)
                     : tem instanceof CvaNumberInt
@@ -762,6 +762,7 @@ public final class Parser
      */
     private CvaProgram parseProgram()
     {
+        parsePackage();
         parseCallStatement();
         CvaEntry entry = parseEntry();
         List<AbstractClass> classList = parseClassDecls();
@@ -836,8 +837,57 @@ public final class Parser
         return cmdArgsDecl;
     }
 
+    private void parsePackage()
+    {
+        if (curToken.getKind() == CvaKind.PACKAGE)
+        {
+            eatToken(CvaKind.PACKAGE);
+            CvaKind memKind = curToken.getKind();
+            eatToken(CvaKind.IDENTIFIER);
+            while (true)
+            {
+                switch (curToken.getKind())
+                {
+                    case DOT:
+                    {
+                        if (memKind != CvaKind.IDENTIFIER)
+                        {
+                            errorLog();
+                        }
+                        memKind = CvaKind.DOT;
+                        eatToken(CvaKind.DOT);
+                        continue;
+                    }
+                    case IDENTIFIER:
+                    {
+                        if (memKind != CvaKind.DOT)
+                        {
+                            errorLog();
+                        }
+                        memKind = CvaKind.IDENTIFIER;
+                        eatToken(CvaKind.IDENTIFIER);
+                        continue;
+                    }
+                    case SEMI:
+                    {
+                        eatToken(CvaKind.SEMI);
+                        break;
+                    }
+                    default:
+                    {
+                        errorLog("pkg name or dot or star",
+                                curToken);
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+    }
+
     private void parseCallStatement()
     {
+        // call 是多条, 所以在这里用;
         while (curToken.getKind() == CvaKind.CALL)
         {
             parseSingleCall();

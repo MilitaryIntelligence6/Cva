@@ -1,5 +1,6 @@
 package cn.misection.cvac.lexer;
 
+import cn.misection.cvac.config.DebugMacro;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -121,7 +122,7 @@ try {
         }
         else
         {
-            fname = "res/cvasrc/debug.cva";
+            fname = DebugMacro.DEBUG_FILE;
         }
 
         IBufferedQueue fstream = null;

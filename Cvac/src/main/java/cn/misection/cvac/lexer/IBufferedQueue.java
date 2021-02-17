@@ -17,10 +17,10 @@ public interface IBufferedQueue
 
     /**
      * 查看队伍中某一个, 0开始;
-     * @param num 0开始的位置
+     * @param advance 0开始的位置
      * @return 查看的元素;
      */
-    char peek(int num);
+    char peek(int advance);
 
     /**
      * 头出队一个;
@@ -34,6 +34,19 @@ public interface IBufferedQueue
      * @return char构成的string;
      */
     String poll(int num);
+
+    /**
+     * 是否有下一个;
+     * @return
+     */
+    boolean hasNext();
+
+    /**
+     * 是否有后n个;
+     * @param advance
+     * @return
+     */
+    boolean hasNext(int advance);
 
     /**
      * 是否空;

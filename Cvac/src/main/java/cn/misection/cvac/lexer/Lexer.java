@@ -1,7 +1,5 @@
 package cn.misection.cvac.lexer;
 
-import cn.misection.cvac.config.Macro;
-
 /**
  * Created by MI6 root 1/6.
  */
@@ -82,32 +80,21 @@ public final class Lexer
         switch (ch)
         {
             case LexerConstPool.EOF:
-            {
                 return new CvaToken(CvaKind.EOF, lineNum);
-            }
             case '+':
-                return new CvaToken(CvaKind.ADD, lineNum);
+                return handlePlus();
             case '-':
-                return new CvaToken(CvaKind.SUB, lineNum);
+                return handleMinus();
             case '*':
-                return new CvaToken(CvaKind.STAR, lineNum);
+                return handleStar();
             case '&':
-                ch = this.stream.poll();
-                if ('&' == ch)
-                {
-                    return new CvaToken(CvaKind.AND_AND, lineNum);
-                }
-                else
-                {
-                    System.out.printf("Expect two &, but only got one at line %d%n", lineNum);
-                    System.exit(1);
-                }
+                return handleAnd();
             case '=':
-                return new CvaToken(CvaKind.ASSIGN, lineNum);
+                return handleEqual();
             case '<':
-                return new CvaToken(CvaKind.LESS_THAN, lineNum);
+                return handleLessThan();
             case '>':
-                return new CvaToken(CvaKind.MORE_THAN, lineNum);
+                return handleMoreThan();
 //            case ':':
 //                return new CvaToken(CvaKind.COLON, lineNum);
 //            case ',':
@@ -209,8 +196,284 @@ public final class Lexer
     }
 
 
+    /**
+     * @TODO 转义处理;
+     * @return
+     */
     private CvaToken handleEscape()
     {
         return null;
     }
+
+    private CvaToken handlePlus()
+    {
+        if (stream.hasNext())
+        {
+            switch (stream.peek())
+            {
+                case '+':
+                {
+                    // 截取两个;
+                    stream.poll();
+                    return new CvaToken(CvaKind.INCREMENT, lineNum);
+                }
+                case '=':
+                {
+                    stream.poll();
+                    return new CvaToken(CvaKind.ADD_ASSIGN, lineNum);
+                }
+                default:
+                {
+                    break;
+                }
+            }
+        }
+        return new CvaToken(CvaKind.ADD, lineNum);
+    }
+
+    private CvaToken handleMinus()
+    {
+        if (stream.hasNext())
+        {
+            switch (stream.peek())
+            {
+                case '>':
+                {
+                    stream.poll();
+                    return new CvaToken(CvaKind.ARROW, lineNum);
+                }
+                case '-':
+                {
+                    stream.poll();
+                    return new CvaToken(CvaKind.DECREMENT, lineNum);
+                }
+                case '=':
+                {
+                    stream.poll();
+                    return new CvaToken(CvaKind.SUB_ASSIGN, lineNum);
+                }
+                default:
+                {
+                    // 说明应该不是以上几种;
+                    break;
+                }
+            }
+        }
+        return new CvaToken(CvaKind.SUB, lineNum);
+    }
+
+    private CvaToken handleStar()
+    {
+        if (stream.hasNext() && stream.peek() == '=')
+        {
+            stream.poll();
+            return new CvaToken(CvaKind.MULTIPLY_ASSIGN, lineNum);
+        }
+        return new CvaToken(CvaKind.STAR, lineNum);
+    }
+
+    private CvaToken handleEqual()
+    {
+        if (stream.hasNext() && stream.peek() == '=')
+        {
+            stream.poll();
+            return new CvaToken(CvaKind.EQUALS, lineNum);
+        }
+        return new CvaToken(CvaKind.ASSIGN, lineNum);
+    }
+
+    private CvaToken handleAnd()
+    {
+        if (stream.hasNext())
+        {
+            switch (stream.peek())
+            {
+                case '&':
+                {
+                    stream.poll();
+                    return new CvaToken(CvaKind.AND_AND, lineNum);
+                }
+                case '=':
+                {
+                    stream.poll();
+                    return new CvaToken(CvaKind.AND_ASSIGN, lineNum);
+                }
+                default:
+                {
+                    break;
+                }
+            }
+        }
+
+        return new CvaToken(CvaKind.AND, lineNum);
+    }
+
+    private CvaToken handleOr()
+    {
+        if (stream.hasNext())
+        {
+            switch (stream.peek())
+            {
+                case '|':
+                {
+                    stream.poll();
+                    return new CvaToken(CvaKind.OR_OR, lineNum);
+                }
+                case '=':
+                {
+                    stream.poll();
+                    return new CvaToken(CvaKind.OR_ASSIGN, lineNum);
+                }
+                default:
+                {
+                    break;
+                }
+            }
+        }
+
+        return new CvaToken(CvaKind.OR, lineNum);
+    }
+
+    private CvaToken handleXOr()
+    {
+        if (stream.hasNext()
+                && stream.peek() == '=')
+        {
+            stream.poll();
+            return new CvaToken(CvaKind.XOR_ASSIGN, lineNum);
+        }
+
+        return new CvaToken(CvaKind.XOR, lineNum);
+    }
+
+    private CvaToken handleSlash()
+    {
+        if (stream.hasNext()
+                && stream.peek() == '=')
+        {
+            stream.poll();
+            return new CvaToken(CvaKind.DIV_ASSIGN, lineNum);
+        }
+
+        return new CvaToken(CvaKind.DIV_OPERATOR, lineNum);
+    }
+
+    private CvaToken handlePercent()
+    {
+        if (stream.hasNext()
+                && stream.peek() == '=')
+        {
+            stream.poll();
+            return new CvaToken(CvaKind.REMAINDER_ASSIGN, lineNum);
+        }
+
+        return new CvaToken(CvaKind.REMAINDER_OPERATOR, lineNum);
+    }
+
+    private CvaToken handleBitNegate()
+    {
+        if (stream.hasNext()
+                && stream.peek() == '=')
+        {
+            stream.poll();
+            return new CvaToken(CvaKind.BIT_NEGATE_OPERATOR, lineNum);
+        }
+
+        return new CvaToken(CvaKind.BIT_NEGATE_OPERATOR, lineNum);
+    }
+
+    private CvaToken handleMoreThan()
+    {
+        if (stream.hasNext())
+        {
+            switch (stream.peek())
+            {
+                case '=':
+                {
+                    stream.poll();
+                    // TODO 看不懂???;
+                    return new CvaToken(CvaKind.MORE_OR_EQUALS, lineNum);
+                }
+                case '>':
+                {
+                    if (stream.hasNext(2)
+                            && stream.peek(2) == '=')
+                    {
+                        stream.poll(2);
+                        return new CvaToken(CvaKind.RIGHT_SHIFT_ASSIGN, lineNum);
+                    }
+                    stream.poll();
+                    return new CvaToken(CvaKind.RIGHT_SHIFT, lineNum);
+                }
+                default:
+                {
+                    return new CvaToken(CvaKind.MORE_THAN, lineNum);
+                }
+            }
+        }
+        return new CvaToken(CvaKind.MORE_THAN, lineNum);
+    }
+
+    private CvaToken handleLessThan()
+    {
+        if (stream.hasNext())
+        {
+            switch (stream.peek())
+            {
+                case '=':
+                {
+                    stream.poll();
+                    // TODO 看不懂???;
+                    return new CvaToken(CvaKind.LESS_OR_EQUALS, lineNum);
+                }
+
+                case '<':
+                {
+                    if (stream.hasNext(2)
+                            && stream.peek(2) == '=')
+                    {
+                        stream.poll(2);
+                        return new CvaToken(CvaKind.LEFT_SHIFT_ASSIGN, lineNum);
+                    }
+                    stream.poll();
+                    return new CvaToken(CvaKind.LEFT_SHIFT, lineNum);
+                }
+                default:
+                {
+                    // TODO 为啥?;
+                    return new CvaToken(CvaKind.LESS_THAN, lineNum);
+                }
+            }
+        }
+        return new CvaToken(CvaKind.LESS_THAN, lineNum);
+    }
+
+//    private CvaToken handleQuotationMarks()
+//    {
+//        // 全局 index 不仅仅在循环中;
+//        // TODO 转义字符都出现在字符串里, 这里应该处理;
+//        readIndex++;
+//        int begin = readIndex;
+//        while (readIndex < charQueue.length())
+//        {
+//            if (charQueue.charAt(readIndex) != '"')
+//            {
+//                literalLength++;
+//            }
+//            else
+//            {
+//                break;
+//            }
+//            readIndex++;
+//        }
+//        if (readIndex > charQueue.length())
+//        {
+//            System.err.println("Missing the ending quotation mark!");
+//            System.exit(1);
+//        }
+//        literal = charQueue.substring(begin, literalLength + 1);
+//        // 2 是引号长度;
+//        pollChar(literalLength + 2);
+//        return new CvaToken(CvaKind.STRING, lineNum);
+//    }
 }

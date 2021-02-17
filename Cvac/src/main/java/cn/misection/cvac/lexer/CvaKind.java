@@ -11,7 +11,6 @@ public enum CvaKind
      */
     ADD,
 
-
     /**
      * -
      */
@@ -72,6 +71,16 @@ public enum CvaKind
      * >
      */
     MORE_THAN,
+
+    /**
+     * <=
+     */
+    LESS_OR_EQUALS,
+
+    /**
+     * >=
+     */
+    MORE_OR_EQUALS,
 
     QUEST("?"),
     /**
@@ -169,6 +178,8 @@ public enum CvaKind
      * 继承符;
      */
     EXTENDS("extends"),
+
+    PACKAGE("pkg"),
 
     /**
      * {
@@ -423,7 +434,7 @@ public enum CvaKind
 
     TYPE,
 
-    EQUALS_OPERATOR,
+    EQUALS,
 
     /**
      * 新加的求反;
@@ -433,9 +444,9 @@ public enum CvaKind
     /**
      * 加了左右;
      */
-    LEFT_SHIFT_OPERATOR,
+    LEFT_SHIFT,
 
-    RIGHT_SHIFT_OPERATOR,
+    RIGHT_SHIFT,
 
 
     /*
@@ -453,11 +464,11 @@ public enum CvaKind
      */
     DIV_ASSIGN,
 
-    INCREMENT_OPERATOR,
+    INCREMENT,
 
-    DECREMENT_OPERATOR,
+    DECREMENT,
 
-    STRUCT_OPERATOR,
+    ARROW,
 
     /*
      * 加入的 += -= &= |= ~= >>= <<= !求反
@@ -470,12 +481,12 @@ public enum CvaKind
     /**
      * +=;
      */
-    PLUS_ASSIGN,
+    ADD_ASSIGN,
 
     /**
      * -=;
      */
-    MINUS_ASSIGN,
+    SUB_ASSIGN,
 
     /**
      * &=
@@ -514,8 +525,6 @@ public enum CvaKind
      */
 
     WHITE_SPACE,
-
-    EQUALS_FACT_ASSIGN,
 
     T_TYPE,
 
