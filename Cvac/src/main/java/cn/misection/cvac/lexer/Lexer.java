@@ -28,30 +28,8 @@ public final class Lexer
     private CvaToken lex()
     {
         char ch = this.stream.poll();
-
         // skip all kinds of blanks
-        while (Character.isWhitespace(ch))
-        {
-            switch (ch)
-            {
-                case LexerConstPool.NEW_LINE:
-                {
-                    lineNum++;
-                    break;
-                }
-                case LexerConstPool.EOF:
-                {
-                    return new CvaToken(CvaKind.EOF, lineNum);
-                }
-                default:
-                {
-                    break;
-                }
-            }
-            ch = this.stream.poll();
-        }
-//        handleWhiteSpace();
-        // 把单目符给抽象出来;
+        ch = handleWhiteSpace(ch);
         switch (ch)
         {
             case LexerConstPool.EOF:
@@ -493,6 +471,30 @@ public final class Lexer
         }
     }
 
+    private char handleWhiteSpace(char ch)
+    {
+        while (Character.isWhitespace(ch))
+        {
+            switch (ch)
+            {
+                case LexerConstPool.NEW_LINE:
+                {
+                    lineNum++;
+                    break;
+                }
+                case LexerConstPool.EOF:
+                {
+                    return LexerConstPool.EOF;
+                }
+                default:
+                {
+                    break;
+                }
+            }
+            ch = this.stream.poll();
+        }
+        return ch;
+    }
 //    private CvaToken handleQuotationMarks()
 //    {
 //        // 全局 index 不仅仅在循环中;
