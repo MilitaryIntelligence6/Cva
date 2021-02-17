@@ -143,7 +143,7 @@ public final class ConstantFolder
     }
 
     @Override
-    public void visit(CvaLTExpr e)
+    public void visit(CvaLessThanExpr e)
     {
         this.visit(e.getLeft());
         if (isConstant())
@@ -159,7 +159,7 @@ public final class ConstantFolder
             }
             else
             {
-                this.lastExp = new CvaLTExpr(
+                this.lastExp = new CvaLessThanExpr(
                         this.lastExp.getLineNum(),
                         temLeft,
                         this.lastExp);

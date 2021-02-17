@@ -266,7 +266,7 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaLTExpr e)
+    public void visit(CvaLessThanExpr e)
     {
         this.visit(e.getLeft());
         AbstractType lefty = this.type;

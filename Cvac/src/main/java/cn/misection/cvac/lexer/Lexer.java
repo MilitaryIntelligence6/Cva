@@ -181,7 +181,7 @@ public final class Lexer
         }
     }
 
-    private static boolean isSpecialCharacter(int c)
+    private static boolean isSpecialCharacter(char c)
     {
         return '+' == c || '&' == c || '=' == c || ',' == c || '.' == c
                 || '{' == c || '(' == c || '<' == c || c == '>'

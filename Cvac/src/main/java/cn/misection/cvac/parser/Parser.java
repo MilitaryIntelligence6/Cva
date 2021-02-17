@@ -26,7 +26,7 @@ import java.util.Queue;
  */
 public final class Parser
 {
-    private Lexer lexer;
+    private final Lexer lexer;
 
     private CvaToken curToken;
 
@@ -329,7 +329,7 @@ public final class Parser
         {
             advance();
             AbstractExpression tem = parseLTExp();
-            exp = new CvaLTExpr(exp.getLineNum(), exp, tem);
+            exp = new CvaLessThanExpr(exp.getLineNum(), exp, tem);
         }
         return exp;
     }

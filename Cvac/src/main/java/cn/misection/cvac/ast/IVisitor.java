@@ -21,17 +21,17 @@ public interface IVisitor
     {
         switch (t.getClass().getSimpleName())
         {
-            case CvaType.CVABOOLEAN:
+            case CvaType.CVA_BOOLEAN:
             {
                 visit((CvaBoolean) t);
                 break;
             }
-            case CvaType.CVACLASSTYPE:
+            case CvaType.CVA_CLASS_TYPE:
             {
                 visit((CvaClassType) t);
                 break;
             }
-            case CvaType.CVAINT:
+            case CvaType.CVA_INT:
             {
                 visit((CvaInt) t);
                 break;
@@ -66,67 +66,67 @@ public interface IVisitor
     {
         switch (e.getClass().getSimpleName())
         {
-            case CvaExpr.CVAADDEXPR:
+            case CvaExpr.CVA_ADD_EXPR:
             {
                 visit((CvaAddExpr) e);
                 break;
             }
-            case CvaExpr.CVAANDANDEXPR:
+            case CvaExpr.CVA_AND_AND_EXPR:
             {
                 visit((CvaAndAndExpr) e);
                 break;
             }
-            case CvaExpr.CVACALLEXPR:
+            case CvaExpr.CVA_CALL_EXPR:
             {
                 visit((CvaCallExpr) e);
                 break;
             }
-            case CvaExpr.CVAFALSEEXPR:
+            case CvaExpr.CVA_FALSE_EXPR:
             {
                 visit((CvaFalseExpr) e);
                 break;
             }
-            case CvaExpr.CVAIDENTIFIER:
+            case CvaExpr.CVA_IDENTIFIER:
             {
                 visit((CvaIdentifier) e);
                 break;
             }
-            case CvaExpr.CVALTEXPR:
+            case CvaExpr.CVA_LESS_THAN_EXPR:
             {
-                visit((CvaLTExpr) e);
+                visit((CvaLessThanExpr) e);
                 break;
             }
-            case CvaExpr.CVANEWEXPR:
+            case CvaExpr.CVA_NEW_EXPR:
             {
                 visit((CvaNewExpr) e);
                 break;
             }
-            case CvaExpr.CVANEGATEEXPR:
+            case CvaExpr.CVA_NEGATE_EXPR:
             {
                 visit((CvaNegateExpr) e);
                 break;
             }
-            case CvaExpr.CVANUMBERINT:
+            case CvaExpr.CVA_NUMBER_INT:
             {
                 visit((CvaNumberInt) e);
                 break;
             }
-            case CvaExpr.CVASUBEXPR:
+            case CvaExpr.CVA_SUB_EXPR:
             {
                 visit((CvaSubExpr) e);
                 break;
             }
-            case CvaExpr.CVATHISEXPR:
+            case CvaExpr.CVA_THIS_EXPR:
             {
                 visit((CvaThisExpr) e);
                 break;
             }
-            case CvaExpr.CVAMULIEXPR:
+            case CvaExpr.CVA_MULI_EXPR:
             {
                 visit((CvaMuliExpr) e);
                 break;
             }
-            case CvaExpr.CVATRUEEXPR:
+            case CvaExpr.CVA_TRUE_EXPR:
             {
                 visit((CvaTrueExpr) e);
                 break;
@@ -149,7 +149,7 @@ public interface IVisitor
 
     void visit(CvaIdentifier e);
 
-    void visit(CvaLTExpr e);
+    void visit(CvaLessThanExpr e);
 
     void visit(CvaNewExpr e);
 

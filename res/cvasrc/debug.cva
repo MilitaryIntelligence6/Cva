@@ -1,11 +1,12 @@
 // This is the entry point of the program
 
 call cva.native.io.*;
-call cva.console.std.*;
+call cva.std.console.*;
 
 int main(String[] args)
 {
     echo(new Test().Compute(10));   // just a print statement
+    // return 0;
 }
 
 

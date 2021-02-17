@@ -169,7 +169,7 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaLTExpr e)
+    public void visit(CvaLessThanExpr e)
     {
         Label t = new Label();
         Label r = new Label();
