@@ -22,9 +22,7 @@ import cn.misection.cvac.codegen.bst.btype.BaseType;
 import cn.misection.cvac.codegen.bst.btype.GenClassType;
 import cn.misection.cvac.codegen.bst.btype.GenInt;
 
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by MI6 root 1/17.
@@ -34,7 +32,7 @@ public final class TranslatorVisitor implements IVisitor
     private String classId;
     private int index;
 
-    private Hashtable<String, Integer> indexTable;
+    private Map<String, Integer> indexTable;
     
     private BaseType type;
     private GenDeclaration dec;
@@ -311,7 +309,7 @@ public final class TranslatorVisitor implements IVisitor
     public void visit(CvaMethod cvaMethod)
     {
         this.index = 1;
-        this.indexTable = new Hashtable<>();
+        this.indexTable = new HashMap<>();
         this.visit(cvaMethod.getRetType());
         BaseType theRetType = this.getType();
 

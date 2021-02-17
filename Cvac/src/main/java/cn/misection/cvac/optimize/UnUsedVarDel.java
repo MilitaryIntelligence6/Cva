@@ -12,7 +12,8 @@ import cn.misection.cvac.ast.type.CvaBoolean;
 import cn.misection.cvac.ast.type.CvaClassType;
 import cn.misection.cvac.ast.type.CvaInt;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by MI6 root 1/24.
@@ -20,8 +21,8 @@ import java.util.Hashtable;
 public final class UnUsedVarDel
         implements IVisitor, Optimizable
 {
-    private Hashtable<String, CvaDeclaration> unUsedLocals;
-    private Hashtable<String, CvaDeclaration> unUsedArgs;
+    private Map<String, CvaDeclaration> unUsedLocals;
+    private Map<String, CvaDeclaration> unUsedArgs;
     private boolean isOptimizing;
     public boolean givesWarning;
 
@@ -168,14 +169,14 @@ public final class UnUsedVarDel
     @Override
     public void visit(CvaMethod m)
     {
-        this.unUsedLocals = new Hashtable<>();
+        this.unUsedLocals = new HashMap<>();
         m.getLocalList().forEach(local ->
         {
             CvaDeclaration l = (CvaDeclaration) local;
             this.unUsedLocals.put(l.getLiteral(), l);
         });
 
-        this.unUsedArgs = new Hashtable<>();
+        this.unUsedArgs = new HashMap<>();
         m.getFormalList().forEach(formal ->
         {
             CvaDeclaration f = (CvaDeclaration) formal;

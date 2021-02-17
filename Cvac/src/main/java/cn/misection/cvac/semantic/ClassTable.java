@@ -1,21 +1,21 @@
 package cn.misection.cvac.semantic;
 
-//import cn.misection.cvac.ast.FrontAst;
-
 import cn.misection.cvac.ast.type.AbstractType;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * Created by MI6 root 1/13.
  */
 public final class ClassTable
 {
-    private Hashtable<String, ClassBinding> table;
+    private Map<String, ClassBinding> table;
 
     public ClassTable()
     {
-        this.table = new Hashtable<>();
+        this.table = new HashMap<>();
     }
 
     public void putClassBinding(String c, ClassBinding cb)

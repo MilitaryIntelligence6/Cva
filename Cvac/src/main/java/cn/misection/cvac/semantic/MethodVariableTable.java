@@ -6,19 +6,20 @@ import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.decl.CvaDeclaration;
 import cn.misection.cvac.ast.type.AbstractType;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by MI6 root 1/13.
  */
 public final class MethodVariableTable
 {
-    private Hashtable<String, AbstractType> table;
+    private Map<String, AbstractType> table;
 
     public MethodVariableTable()
     {
-        this.table = new Hashtable<>();
+        this.table = new HashMap<>();
     }
 
     public void put(List<AbstractDeclaration> formalList,

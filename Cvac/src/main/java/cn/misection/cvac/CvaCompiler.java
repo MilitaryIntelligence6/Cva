@@ -98,9 +98,9 @@ public final class CvaCompiler
     {
         if (args.length == 0)
         {
-            System.out.printf("Hello, this is Cva compiler! \n" +
+            System.out.printf("\nHello, welcome to  Cva compiler! \n" +
                     "Please input the file name which you want to compile\n" +
-                    "cvac version %s", VersionMacro.VERSION);
+                    "Cvac version %s\n", VersionMacro.VERSION);
             System.exit(0);
         }
         return args[0];
