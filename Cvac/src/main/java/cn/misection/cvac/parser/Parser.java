@@ -37,7 +37,7 @@ public final class Parser
 
     private boolean markingFlag;
 
-    private Queue<CvaToken> markedTokenQueue;
+    private final Queue<CvaToken> markedTokenQueue;
 
 
     public Parser(IBufferedQueue queueStream)
@@ -111,7 +111,7 @@ public final class Parser
         else
         {
             errorLog(String.valueOf(kind),
-                    String.valueOf(curToken.getKind()));
+                    curToken.getKind());
         }
     }
 
@@ -120,7 +120,7 @@ public final class Parser
         if (curToken.getKind() != CvaKind.EOF)
         {
             errorLog("end of file",
-                    String.valueOf(curToken));
+                    curToken);
         }
     }
 
@@ -128,6 +128,20 @@ public final class Parser
     {
         System.err.printf("Syntax error at line %s compilation aborting...\n%n",
                 curToken != null ? curToken.getLineNum() : "unknown");
+        System.exit(1);
+    }
+
+    private void errorLog(String expected, CvaToken got)
+    {
+        System.err.printf("Line %d: Expects: %s, but got: %s which literal is %s%n",
+                curToken.getLineNum(), expected, got.getKind(), got.getLiteral());
+        System.exit(1);
+    }
+
+    private void errorLog(String expected, CvaKind got)
+    {
+        System.err.printf("Line %d: Expects: %s, but got: %s%n",
+                curToken.getLineNum(), expected, got);
         System.exit(1);
     }
 
@@ -520,7 +534,7 @@ public final class Parser
             default:
             {
                 errorLog("type",
-                        String.valueOf(curToken));
+                        curToken);
                 // 不需要break打断虚拟机了已经;
             }
         }
@@ -631,7 +645,7 @@ public final class Parser
         else
         {
             errorLog("type in func formal args list",
-                    String.valueOf(curToken.getKind()));
+                    curToken.getKind());
         }
         return declList;
     }
@@ -774,7 +788,7 @@ public final class Parser
      */
     private CvaProgram parseProgram()
     {
-        parseAllCallPkg();
+        parseCallStatement();
         CvaEntry entry = parseEntry();
         List<AbstractClass> classList = parseClassDecls();
         eatEof();
@@ -795,7 +809,7 @@ public final class Parser
         else
         {
             errorLog("type in main func decl",
-                    String.valueOf(curKind));
+                    curKind);
         }
         return curKind;
     }
@@ -843,20 +857,20 @@ public final class Parser
         else
         {
             errorLog("String[] in main formal args list",
-                    String.valueOf(curToken.getKind()));
+                    curToken.getKind());
         }
         return cmdArgsDecl;
     }
 
-    private void parseAllCallPkg()
+    private void parseCallStatement()
     {
         while (curToken.getKind() == CvaKind.CALL)
         {
-            parseCallKeyword();
+            parseSingleCall();
         }
     }
 
-    private void parseCallKeyword()
+    private void parseSingleCall()
     {
         eatToken(CvaKind.CALL);
         parseCallPkg();
@@ -911,7 +925,7 @@ public final class Parser
                 default:
                 {
                     errorLog("pkg name or dot or star",
-                            String.valueOf(curToken));
+                            curToken);
                     break;
                 }
             }
