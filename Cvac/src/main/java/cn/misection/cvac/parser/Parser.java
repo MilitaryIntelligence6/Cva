@@ -195,43 +195,43 @@ public final class Parser
      */
     private AbstractExpression parseAtomExpr()
     {
-        AbstractExpression exp;
+        AbstractExpression expr;
         switch (curToken.getKind())
         {
             case OPEN_PAREN:
                 advance();
-                exp = parseExp();
-                exp.setLineNum(curToken.getLineNum());
+                expr = parseExp();
+                expr.setLineNum(curToken.getLineNum());
                 //advance();
                 eatToken(CvaKind.CLOSE_PAREN);
-                return exp;
+                return expr;
             case NUMBER:
-                exp = new CvaNumberInt(curToken.getLineNum(), Integer.parseInt(curToken.getLiteral()));
+                expr = new CvaNumberInt(curToken.getLineNum(), Integer.parseInt(curToken.getLiteral()));
                 advance();
-                return exp;
+                return expr;
             case TRUE:
-                exp = new CvaTrueExpr(curToken.getLineNum());
+                expr = new CvaTrueExpr(curToken.getLineNum());
                 advance();
-                return exp;
+                return expr;
             case FALSE:
-                exp = new CvaFalseExpr(curToken.getLineNum());
+                expr = new CvaFalseExpr(curToken.getLineNum());
                 advance();
-                return exp;
+                return expr;
             case THIS:
-                exp = new CvaThisExpr(curToken.getLineNum());
+                expr = new CvaThisExpr(curToken.getLineNum());
                 advance();
-                return exp;
+                return expr;
             case IDENTIFIER:
-                exp = new CvaIdentifier(curToken.getLineNum(), curToken.getLiteral());
+                expr = new CvaIdentifier(curToken.getLineNum(), curToken.getLiteral());
                 advance();
-                return exp;
+                return expr;
             case NEW:
                 advance();
-                exp = new CvaNewExpr(curToken.getLineNum(), curToken.getLiteral());
+                expr = new CvaNewExpr(curToken.getLineNum(), curToken.getLiteral());
                 advance();
                 eatToken(CvaKind.OPEN_PAREN);
                 eatToken(CvaKind.CLOSE_PAREN);
-                return exp;
+                return expr;
             default:
                 errorLog();
                 return null;
@@ -873,11 +873,6 @@ public final class Parser
     private void parseSingleCall()
     {
         eatToken(CvaKind.CALL);
-        parseCallPkg();
-    }
-
-    private void parseCallPkg()
-    {
         // 规定至少一个pkg., 因为本包内不需要call;
         // 第一个必为 id;
         CvaKind memKind = curToken.getKind();
