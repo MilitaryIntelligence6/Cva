@@ -97,12 +97,12 @@ public enum CvaKind
     /**
      * if
      */
-    IF("if"),
+    IF_STATEMENT("if"),
 
     /**
      * else
      */
-    ELSE("else"),
+    ELSE_STATEMENT("else"),
 
     /**
      * void
@@ -166,6 +166,11 @@ public enum CvaKind
     STRUCT("struct"),
 
     /**
+     * 继承符;
+     */
+    EXTENDS("extends"),
+
+    /**
      * {
      */
     OPEN_CURLY_BRACE("{"),
@@ -223,12 +228,12 @@ public enum CvaKind
      */
     THIS("this"),
 
-    FOR("for"),
+    FOR_STATEMENT("for"),
 
     /**
      * while
      */
-    WHILE("while"),
+    WHILE_STATEMENT("while"),
 
     SWITCH("switch"),
 
@@ -397,12 +402,6 @@ public enum CvaKind
     END_OPT_EXPR,
 
     TARGET,
-
-    ELSE_STATEMENT,
-
-    IF_STATEMENT,
-
-    IF_ELSE_STATEMENT,
 
     /**
      *

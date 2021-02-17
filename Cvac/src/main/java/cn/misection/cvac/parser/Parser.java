@@ -377,40 +377,19 @@ public final class Parser
      */
     private AbstractStatement parseStatement()
     {
-        AbstractStatement statement = null;
         switch (curToken.getKind())
         {
             case OPEN_CURLY_BRACE:
             {
-                eatToken(CvaKind.OPEN_CURLY_BRACE);
-                int lineNum = curToken.getLineNum();
-                statement = new CvaBlock(lineNum, parseStatementList());
-                eatToken(CvaKind.CLOSE_CURLY_BRACE);
-                break;
+                return handleOpenCurly();
             }
-            case IF:
+            case IF_STATEMENT:
             {
-                int lineNum = curToken.getLineNum();
-                eatToken(CvaKind.IF);
-                eatToken(CvaKind.OPEN_PAREN);
-                AbstractExpression condition = parseExp();
-                eatToken(CvaKind.CLOSE_PAREN);
-                AbstractStatement thenStm = parseStatement();
-                eatToken(CvaKind.ELSE);
-                AbstractStatement elseStm = parseStatement();
-                statement = new CvaIfStatement(lineNum, condition, thenStm, elseStm);
-                break;
+                return handleIf();
             }
-            case WHILE:
+            case WHILE_STATEMENT:
             {
-                int lineNum = curToken.getLineNum();
-                eatToken(CvaKind.WHILE);
-                eatToken(CvaKind.OPEN_PAREN);
-                AbstractExpression condition = parseExp();
-                eatToken(CvaKind.CLOSE_PAREN);
-                AbstractStatement body = parseStatement();
-                statement = new CvaWhileStatement(lineNum, condition, body);
-                break;
+                return handleWhile();
             }
             case WRITE:
             {
@@ -418,21 +397,15 @@ public final class Parser
             }
             case IDENTIFIER:
             {
-                String literal = curToken.getLiteral();
-                int lineNum = curToken.getLineNum();
-                eatToken(CvaKind.IDENTIFIER);
-                eatToken(CvaKind.ASSIGN);
-                AbstractExpression exp = parseExp();
-                eatToken(CvaKind.SEMI);
-                statement = new CvaAssign(lineNum, literal, exp);
-                break;
+                return handleIdentifier();
             }
             default:
             {
                 errorLog();
             }
         }
-        return statement;
+        // 做成抛错;
+        return null;
     }
 
     /**
@@ -449,8 +422,8 @@ public final class Parser
             switch (curToken.getKind())
             {
                 case OPEN_CURLY_BRACE:
-                case IF:
-                case WHILE:
+                case IF_STATEMENT:
+                case WHILE_STATEMENT:
                 case IDENTIFIER:
                 case WRITE:
                 {
@@ -538,6 +511,7 @@ public final class Parser
                 // 不需要break打断虚拟机了已经;
             }
         }
+        // 因为有advance所以不能直接return;
         advance();
         return type;
     }
@@ -942,5 +916,53 @@ public final class Parser
         eatToken(CvaKind.CLOSE_PAREN);
         eatToken(CvaKind.SEMI);
         return new CvaWriteOperation(lineNum, exp);
+    }
+
+    /**
+     * @TODO 嵌套判定有无else之类;
+     * @return
+     */
+    private AbstractStatement handleIf()
+    {
+        int lineNum = curToken.getLineNum();
+        eatToken(CvaKind.IF_STATEMENT);
+        eatToken(CvaKind.OPEN_PAREN);
+        AbstractExpression condition = parseExp();
+        eatToken(CvaKind.CLOSE_PAREN);
+        AbstractStatement thenStm = parseStatement();
+        eatToken(CvaKind.ELSE_STATEMENT);
+        AbstractStatement elseStm = parseStatement();
+        return new CvaIfStatement(lineNum, condition, thenStm, elseStm);
+    }
+
+    private AbstractStatement handleWhile()
+    {
+        int lineNum = curToken.getLineNum();
+        eatToken(CvaKind.WHILE_STATEMENT);
+        eatToken(CvaKind.OPEN_PAREN);
+        AbstractExpression condition = parseExp();
+        eatToken(CvaKind.CLOSE_PAREN);
+        AbstractStatement body = parseStatement();
+        return new CvaWhileStatement(lineNum, condition, body);
+    }
+
+    private AbstractStatement handleIdentifier()
+    {
+        String literal = curToken.getLiteral();
+        int lineNum = curToken.getLineNum();
+        eatToken(CvaKind.IDENTIFIER);
+        eatToken(CvaKind.ASSIGN);
+        AbstractExpression expr = parseExp();
+        eatToken(CvaKind.SEMI);
+        return new CvaAssign(lineNum, literal, expr);
+    }
+
+    private AbstractStatement handleOpenCurly()
+    {
+        eatToken(CvaKind.OPEN_CURLY_BRACE);
+        int lineNum = curToken.getLineNum();
+        AbstractStatement statement = new CvaBlock(lineNum, parseStatementList());
+        eatToken(CvaKind.CLOSE_CURLY_BRACE);
+        return statement;
     }
 }

@@ -4,7 +4,9 @@ import cn.misection.cvac.ast.program.AbstractProgram;
 import cn.misection.cvac.codegen.IntermLangGenerator;
 import cn.misection.cvac.codegen.TranslatorVisitor;
 import cn.misection.cvac.codegen.bst.bclas.GenClass;
+import cn.misection.cvac.config.DebugMacro;
 import cn.misection.cvac.config.Macro;
+import cn.misection.cvac.config.VersionMacro;
 import cn.misection.cvac.constant.PublicConstPool;
 import cn.misection.cvac.lexer.BufferedQueueHandler;
 import cn.misection.cvac.lexer.IBufferedQueue;
@@ -35,30 +37,17 @@ public final class CvaCompiler
 
     private static final String COMPILE_TO_IL = "-i";
 
-    public static final String VERSION_INFO = "1.0.0";
-
-    private static final int NORMAL_EXIT_STATUS = 0;
-
-    private static final int ERROR_EXIT_STATUS = 1;
-
-    private static final String DEBUG_FILE = "res/cvasrc/debug.cva";
-
-    private static final String DEBUG_IL_DIR = "debug/il";
-
-    private static final String DEBUG_CLASS_DIR = "debug/classes";
-
-
     public static void main(String[] args)
     {
         logBanner();
         String fName = null;
-        if (Macro.RELEASE)
+        if (Macro.RELEASE_WINDOWS)
         {
             fName = release(args);
         }
         if (Macro.DEBUG)
         {
-            fName = DEBUG_FILE;
+            fName = DebugMacro.DEBUG_FILE;
         }
         IBufferedQueue fStream = readStream(fName);
         geneCode(fStream);
@@ -101,7 +90,7 @@ public final class CvaCompiler
         if (!checker.isOK())
         {
             System.err.println("ERROE: check failed");
-            System.exit(ERROR_EXIT_STATUS);
+            System.exit(1);
         }
     }
 
@@ -111,8 +100,8 @@ public final class CvaCompiler
         {
             System.out.printf("Hello, this is Cva compiler! \n" +
                     "Please input the file name which you want to compile\n" +
-                    "cvac version %s", VERSION_INFO);
-            System.exit(NORMAL_EXIT_STATUS);
+                    "cvac version %s", VersionMacro.VERSION);
+            System.exit(0);
         }
         return args[0];
     }
@@ -125,7 +114,7 @@ public final class CvaCompiler
             if (dir.isFile())
             {
                 System.err.println("ERROR: 当前路径下存在同名文件, 请清除后再编译!");
-                System.exit(ERROR_EXIT_STATUS);
+                System.exit(1);
             }
             return true;
         }
@@ -137,13 +126,13 @@ public final class CvaCompiler
 
     private static void doMkDIrs()
     {
-        if (!mkDirs(DEBUG_CLASS_DIR))
+        if (!mkDirs(DebugMacro.DEBUG_CLASS_DIR))
         {
-            System.err.printf("mkdir %s failed!\n", DEBUG_CLASS_DIR);
+            System.err.printf("mkdir %s failed!\n", DebugMacro.DEBUG_CLASS_DIR);
         }
-        if (!mkDirs(DEBUG_IL_DIR))
+        if (!mkDirs(DebugMacro.DEBUG_IL_DIR))
         {
-            System.err.printf("mkdir %s failed\n", DEBUG_IL_DIR);
+            System.err.printf("mkdir %s failed\n", DebugMacro.DEBUG_IL_DIR);
         }
     }
 
@@ -168,7 +157,24 @@ public final class CvaCompiler
 
     private static void logBanner()
     {
-        System.out.println(PublicConstPool.BANNER);
+        if (Macro.DEBUG || Macro.RELEASE_LINUX)
+        {
+            System.out.println(PublicConstPool.BANNER);
+        }
+        if (Macro.RELEASE_WINDOWS)
+        {
+            String BANNER_GBK = null;
+            try
+            {
+                BANNER_GBK = new String(PublicConstPool.BANNER.getBytes(),
+                        "GBK");
+            }
+            catch (UnsupportedEncodingException e)
+            {
+                e.printStackTrace();
+            }
+            System.out.println(BANNER_GBK);
+        }
     }
 
     private static IBufferedQueue readStream(String fName)
@@ -180,8 +186,8 @@ public final class CvaCompiler
         }
         catch (IOException e)
         {
-            System.out.printf("Cannot find the file: %s%n", fName);
-            System.exit(ERROR_EXIT_STATUS);
+            System.err.printf("Cannot find the file: %s%n", fName);
+            System.exit(1);
         }
         // 不可达;
         return null;

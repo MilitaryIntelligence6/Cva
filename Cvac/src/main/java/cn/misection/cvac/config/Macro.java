@@ -9,7 +9,9 @@ package cn.misection.cvac.config;
  */
 public final class Macro
 {
-    public static final boolean RELEASE = false;
+    public static final boolean RELEASE_WINDOWS = false;
+
+    public static final boolean RELEASE_LINUX = false;
 
     public static final boolean DEBUG = true;
 }

@@ -52,7 +52,7 @@ public final class SemanticVisitor implements IVisitor
     private void errorLog(int lineNum, String msg)
     {
         this.isOk = false;
-        System.out.printf("Error: Line %d %s%n", lineNum, msg);
+        System.err.printf("Error: Line %d %s%n", lineNum, msg);
     }
 
     private boolean isMatch(AbstractType target, AbstractType cur)
