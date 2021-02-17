@@ -9,27 +9,27 @@ import java.util.Hashtable;
 /**
  * Created by MI6 root 1/13.
  */
-public class ClassBinding
+public final class ClassBinding
 {
     /**
      * // null for non-existing base class
      */
-    public String base;
+    public String parent;
     public Hashtable<String, AbstractType> fields;
     public Hashtable<String, MethodType> methods;
 
-    public ClassBinding(String base)
+    public ClassBinding(String parent)
     {
-        this.base = base;
+        this.parent = parent;
         this.fields = new Hashtable<>();
         this.methods = new Hashtable<>();
     }
 
-    public ClassBinding(String base,
+    public ClassBinding(String parent,
                         Hashtable<String, AbstractType> fields,
                         Hashtable<String, MethodType> methods)
     {
-        this.base = base;
+        this.parent = parent;
         this.fields = fields;
         this.methods = methods;
     }

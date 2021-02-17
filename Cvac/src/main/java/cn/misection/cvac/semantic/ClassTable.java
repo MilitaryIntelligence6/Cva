@@ -9,7 +9,7 @@ import java.util.Hashtable;
 /**
  * Created by MI6 root 1/13.
  */
-public class ClassTable
+public final class ClassTable
 {
     private Hashtable<String, ClassBinding> table;
 
@@ -52,12 +52,12 @@ public class ClassTable
         AbstractType type = cb.fields.get(literal);
         while (type == null)
         {
-            if (cb.base == null)
+            if (cb.parent == null)
             {
                 return type;
             }
 
-            cb = this.table.get(cb.base);
+            cb = this.table.get(cb.parent);
             type = cb.fields.get(literal);
         }
         return type;
@@ -69,12 +69,12 @@ public class ClassTable
         MethodType type = cb.methods.get(literal);
         while (type == null)
         {
-            if (cb.base == null)
+            if (cb.parent == null)
             {
                 return type;
             }
 
-            cb = this.table.get(cb.base);
+            cb = this.table.get(cb.parent);
             type = cb.methods.get(literal);
         }
         return type;

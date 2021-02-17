@@ -128,9 +128,9 @@ public final class Lexer
 //            case ';':
 //                return new CvaToken(CvaKind.SEMI, lineNum);
 
+            /// 需要注意转义只应该在字符串中出现!;
             case '\\':
                 return handleEscape();
-
             default:
             {
                 // 先看c是否是非前缀字符, 这里是 int, 必须先转成char看在不在表中;

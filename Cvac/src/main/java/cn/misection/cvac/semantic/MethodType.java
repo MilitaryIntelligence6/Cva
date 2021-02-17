@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by MI6 root 1/13.
  */
-public class MethodType
+public final class MethodType
 {
     private AbstractType retType;
     private List<AbstractDeclaration> argsType;

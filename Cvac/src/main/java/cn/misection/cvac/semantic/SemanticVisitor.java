@@ -18,7 +18,7 @@ import java.util.LinkedList;
  * Created by MI6 root 1/13.
  * 语义分析;
  */
-public class SemanticVisitor implements IVisitor
+public final class SemanticVisitor implements IVisitor
 {
     private ClassTable classTable;
     private MethodVariableTable methodVarTable;
@@ -68,7 +68,7 @@ public class SemanticVisitor implements IVisitor
             boolean flag = tarName.equals(curName);
             while (curName != null && !flag)
             {
-                curName = classTable.getClassBinding(curName).base;
+                curName = classTable.getClassBinding(curName).parent;
                 flag = tarName.equals(curName);
             }
             return flag;
@@ -230,7 +230,7 @@ public class SemanticVisitor implements IVisitor
         while (type == null && className != null)
         {
             type = this.classTable.getFieldType(className, e.getLiteral());
-            className = this.classTable.getClassBinding(className).base;
+            className = this.classTable.getClassBinding(className).parent;
         }
 
         if (this.curMthLocals.contains(e.getLiteral()))

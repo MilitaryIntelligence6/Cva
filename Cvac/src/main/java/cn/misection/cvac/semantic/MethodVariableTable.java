@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by MI6 root 1/13.
  */
-public class MethodVariableTable
+public final class MethodVariableTable
 {
     private Hashtable<String, AbstractType> table;
 
