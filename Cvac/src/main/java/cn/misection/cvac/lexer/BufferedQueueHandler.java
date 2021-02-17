@@ -35,8 +35,10 @@ public final class BufferedQueueHandler
         {
             buffer.append(line).append(LexerConstPool.NEW_LINE);
         }
-        // 简单粗暴的双重保险就能防止溢出了..;
-        buffer.append(LexerConstPool.EOF).append(LexerConstPool.EOF);
+        // 改进完毕, 只需要装载一个EOF了, 必须装载至少一个,
+        //因为StringBuffer跟文件流不一样;
+        // 这样才能模拟文件流;
+        buffer.append(LexerConstPool.EOF);
         this.close();
     }
 

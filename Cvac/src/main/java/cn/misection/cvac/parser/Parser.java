@@ -115,6 +115,15 @@ public final class Parser
         }
     }
 
+    private void eatEof()
+    {
+        if (curToken.getKind() != CvaKind.EOF)
+        {
+            errorLog("end of file",
+                    String.valueOf(curToken));
+        }
+    }
+
     private void errorLog()
     {
         System.err.printf("Syntax error at line %s compilation aborting...\n%n",
@@ -716,13 +725,12 @@ public final class Parser
      */
     private LinkedList<AbstractClass> parseClassDecls()
     {
-        LinkedList<AbstractClass> classes = new LinkedList<>();
+        LinkedList<AbstractClass> classList = new LinkedList<>();
         while (curToken.getKind() == CvaKind.CLASS)
         {
-            classes.addLast(parseClassDecl());
+            classList.addLast(parseClassDecl());
         }
-
-        return classes;
+        return classList;
     }
 
     /**
@@ -767,10 +775,10 @@ public final class Parser
     private CvaProgram parseProgram()
     {
         parseAllCallPkg();
-        CvaEntry main = parseEntry();
-        List<AbstractClass> classes = parseClassDecls();
-        eatToken(CvaKind.EOF);
-        return new CvaProgram(main, classes);
+        CvaEntry entry = parseEntry();
+        List<AbstractClass> classList = parseClassDecls();
+        eatEof();
+        return new CvaProgram(entry, classList);
     }
 
     /**

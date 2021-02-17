@@ -2,8 +2,6 @@ package cn.misection.cvac.lexer;
 
 import cn.misection.cvac.config.Macro;
 
-import java.util.Map;
-
 /**
  * Created by MI6 root 1/6.
  */
@@ -12,13 +10,13 @@ public final class Lexer
     /**
      * input stream of the file;
      */
-    private IBufferedQueue queueStream;
+    private final IBufferedQueue stream;
 
     private int lineNum;
 
-    public Lexer(IBufferedQueue queueStream)
+    public Lexer(IBufferedQueue stream)
     {
-        this.queueStream = queueStream;
+        this.stream = stream;
         this.lineNum = 1;
     }
 
@@ -29,7 +27,7 @@ public final class Lexer
 
     private CvaToken lex()
     {
-        char ch = this.queueStream.poll();
+        char ch = this.stream.poll();
 
         // skip all kinds of blanks
         while (Character.isWhitespace(ch))
@@ -50,20 +48,20 @@ public final class Lexer
                     break;
                 }
             }
-            ch = this.queueStream.poll();
+            ch = this.stream.poll();
         }
 
         // deal with comments
         if (ch == '/')
         {
-            char nextCh = queueStream.peek();
+            char nextCh = stream.peek();
             switch (nextCh)
             {
                 case '/':
                 {
                     while (nextCh != LexerConstPool.NEW_LINE)
                     {
-                        nextCh = this.queueStream.poll();
+                        nextCh = this.stream.poll();
                     }
                     lineNum++;
                     // tail recursion;
@@ -85,10 +83,6 @@ public final class Lexer
         {
             case LexerConstPool.EOF:
             {
-                if (Macro.DEBUG)
-                {
-                    System.err.println("bug place");
-                }
                 return new CvaToken(CvaKind.EOF, lineNum);
             }
             case '+':
@@ -98,7 +92,7 @@ public final class Lexer
             case '*':
                 return new CvaToken(CvaKind.STAR, lineNum);
             case '&':
-                ch = this.queueStream.poll();
+                ch = this.stream.poll();
                 if ('&' == ch)
                 {
                     return new CvaToken(CvaKind.AND_AND, lineNum);
@@ -110,16 +104,17 @@ public final class Lexer
                 }
             case '=':
                 return new CvaToken(CvaKind.ASSIGN, lineNum);
+            case '<':
+                return new CvaToken(CvaKind.LESS_THAN, lineNum);
+            case '>':
+                return new CvaToken(CvaKind.MORE_THAN, lineNum);
 //            case ':':
 //                return new CvaToken(CvaKind.COLON, lineNum);
 //            case ',':
 //                return new CvaToken(CvaKind.COMMA, lineNum);
 //            case '.':
 //                return new CvaToken(CvaKind.DOT, lineNum);
-            case '<':
-                return new CvaToken(CvaKind.LESS_THAN, lineNum);
-//            case '>':
-//                return new CvaToken(CvaKind.MORE_THAN, lineNum);
+
 //            case '!':
 //                return new CvaToken(CvaKind.NEGATE, lineNum);
 //            case '{':
@@ -132,6 +127,10 @@ public final class Lexer
 //                return new CvaToken(CvaKind.CLOSE_PAREN, lineNum);
 //            case ';':
 //                return new CvaToken(CvaKind.SEMI, lineNum);
+
+            case '\\':
+                return handleEscape();
+
             default:
             {
                 // 先看c是否是非前缀字符, 这里是 int, 必须先转成char看在不在表中;
@@ -143,13 +142,13 @@ public final class Lexer
                 builder.append(ch);
                 while (true)
                 {
-                    ch = queueStream.peek();
+                    ch = stream.peek();
                     if (ch != LexerConstPool.EOF
                             && !Character.isWhitespace(ch)
                             && !isSpecialCharacter(ch))
                     {
                         builder.append(ch);
-                        this.queueStream.poll();
+                        this.stream.poll();
                     }
                     else
                     {
@@ -209,4 +208,9 @@ public final class Lexer
         return Character.isAlphabetic(str.charAt(0));
     }
 
+
+    private CvaToken handleEscape()
+    {
+        return null;
+    }
 }

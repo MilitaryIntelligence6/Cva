@@ -1,7 +1,7 @@
 // This is the entry point of the program
 
-call cva.native.io;
-call cva.console.io;
+call cva.native.io.*;
+call cva.console.std.*;
 
 int main(String[] args)
 {

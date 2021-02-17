@@ -11,9 +11,9 @@ import cn.misection.cvac.ast.type.AbstractType;
  */
 public final class CvaDeclaration extends AbstractDeclaration
 {
-    private String literal;
+    private final String literal;
 
-    private AbstractType type;
+    private final AbstractType type;
 
     public CvaDeclaration(int lineNum, String literal, AbstractType type)
     {

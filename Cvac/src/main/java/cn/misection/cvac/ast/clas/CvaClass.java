@@ -14,13 +14,13 @@ import java.util.List;
  */
 public final class CvaClass extends AbstractClass
 {
-    private String literal;
+    private final String literal;
 
-    private String parent;
+    private final String parent;
 
-    private List<AbstractDeclaration> fieldList;
+    private final List<AbstractDeclaration> fieldList;
 
-    private List<AbstractMethod> methodList;
+    private final List<AbstractMethod> methodList;
 
     public CvaClass(String literal, String parent, List<AbstractDeclaration> fieldList, List<AbstractMethod> methodList)
     {
