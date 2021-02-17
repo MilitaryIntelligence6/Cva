@@ -50,6 +50,7 @@ public final class Lexer
             }
             ch = this.stream.poll();
         }
+//        handleWhiteSpace();
         // 把单目符给抽象出来;
         switch (ch)
         {
@@ -83,56 +84,11 @@ public final class Lexer
 //            case '\'':
 //                return handleApostrophe();
 //            case '"':
-//
-//            case '\\':
-//                return handleEscape();
+//                return handleDoubleQuotes();
+            case '\\':
+                return handleEscape();
             default:
-            {
-                // 先看c是否是非前缀字符, 这里是 int, 必须先转成char看在不在表中;
-                if (CvaKind.containsKind(String.valueOf(ch)))
-                {
-                    return new CvaToken(CvaKind.selectReverse(String.valueOf(ch)), lineNum);
-                }
-                StringBuilder builder = new StringBuilder();
-                builder.append(ch);
-                while (true)
-                {
-                    ch = stream.peek();
-                    if (ch != LexerConstPool.EOF
-                            && !Character.isWhitespace(ch)
-                            && !isSpecialCharacter(ch))
-                    {
-                        builder.append(ch);
-                        this.stream.poll();
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                String literal = builder.toString();
-                if (CvaKind.containsKind(literal))
-                {
-                    return new CvaToken(CvaKind.selectReverse(literal), lineNum);
-                }
-                else
-                {
-                    if (isNumber(literal))
-                    {
-                        return new CvaToken(CvaKind.NUMBER, lineNum, builder.toString());
-                    }
-                    else if (isIdentifier(literal))
-                    {
-                        return new CvaToken(CvaKind.IDENTIFIER, lineNum, builder.toString());
-                    }
-                    else
-                    {
-                        System.err.printf("This is an illegal identifier at line %d%n", lineNum);
-                        System.exit(1);
-                        return null;
-                    }
-                }
-            }
+                return handleNorPrefOrIdOrNum(ch);
         }
     }
 
@@ -434,6 +390,56 @@ public final class Lexer
         return new CvaToken(CvaKind.LESS_THAN, lineNum);
     }
 
+    private CvaToken handleNorPrefOrIdOrNum(char ch)
+    {
+        // 先看c是否是非前缀字符, 这里是 int, 必须先转成char看在不在表中;
+        if (CvaKind.containsKind(String.valueOf(ch)))
+        {
+            return new CvaToken(CvaKind.selectReverse(String.valueOf(ch)), lineNum);
+        }
+        StringBuilder builder = new StringBuilder();
+        builder.append(ch);
+        while (true)
+        {
+            ch = stream.peek();
+            if (ch != LexerConstPool.EOF
+                    && !Character.isWhitespace(ch)
+                    && !isSpecialCharacter(ch))
+            {
+                builder.append(ch);
+                this.stream.poll();
+                continue;
+            }
+            break;
+        }
+        String literal = builder.toString();
+        // 关键字;
+        if (CvaKind.containsKind(literal))
+        {
+            return new CvaToken(CvaKind.selectReverse(literal), lineNum);
+        }
+        else
+        {
+            if (isNumber(literal))
+            {
+//                if (isInt())
+//                {
+//
+//                }
+                return new CvaToken(CvaKind.NUMBER, lineNum, builder.toString());
+            }
+            else if (isIdentifier(literal))
+            {
+                return new CvaToken(CvaKind.IDENTIFIER, lineNum, builder.toString());
+            }
+            else
+            {
+                System.err.printf("This is an illegal identifier at line %d%n", lineNum);
+                System.exit(1);
+                return null;
+            }
+        }
+    }
 
     private void handleLineComment()
     {
