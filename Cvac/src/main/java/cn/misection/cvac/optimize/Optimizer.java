@@ -6,7 +6,7 @@ import cn.misection.cvac.ast.program.CvaProgram;
 /**
  * Created by MI6 root 1/31.
  */
-public class Optimizer
+public final class Optimizer
 {
     public void optimize(AbstractProgram cvaProgram)
     {

@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Created by MI6 root 1/6.
  */
-public class Lexer
+public final class Lexer
 {
     /**
      * input stream of the file;
@@ -29,12 +29,12 @@ public class Lexer
 
     private CvaToken lex()
     {
-        char c = this.queueStream.poll();
+        char ch = this.queueStream.poll();
 
         // skip all kinds of blanks
-        while (Character.isWhitespace(c))
+        while (Character.isWhitespace(ch))
         {
-            switch (c)
+            switch (ch)
             {
                 case LexerConstPool.NEW_LINE:
                 {
@@ -50,20 +50,20 @@ public class Lexer
                     break;
                 }
             }
-            c = this.queueStream.poll();
+            ch = this.queueStream.poll();
         }
 
         // deal with comments
-        if (c == '/')
+        if (ch == '/')
         {
-            char nextCh = (char) queueStream.peek();
+            char nextCh = queueStream.peek();
             switch (nextCh)
             {
                 case '/':
                 {
                     while (nextCh != LexerConstPool.NEW_LINE)
                     {
-                        nextCh = (char) this.queueStream.poll();
+                        nextCh = this.queueStream.poll();
                     }
                     lineNum++;
                     // tail recursion;
@@ -81,7 +81,7 @@ public class Lexer
             }
         }
         // 把单目符给抽象出来;
-        switch (c)
+        switch (ch)
         {
             case LexerConstPool.EOF:
             {
@@ -98,8 +98,8 @@ public class Lexer
             case '*':
                 return new CvaToken(CvaKind.STAR, lineNum);
             case '&':
-                c = this.queueStream.poll();
-                if ('&' == c)
+                ch = this.queueStream.poll();
+                if ('&' == ch)
                 {
                     return new CvaToken(CvaKind.AND_AND, lineNum);
                 }
@@ -135,20 +135,20 @@ public class Lexer
             default:
             {
                 // 先看c是否是非前缀字符, 这里是 int, 必须先转成char看在不在表中;
-                if (CvaKind.containsKind(String.valueOf(c)))
+                if (CvaKind.containsKind(String.valueOf(ch)))
                 {
-                    return new CvaToken(CvaKind.selectReverse(String.valueOf(c)), lineNum);
+                    return new CvaToken(CvaKind.selectReverse(String.valueOf(ch)), lineNum);
                 }
                 StringBuilder builder = new StringBuilder();
-                builder.append((char) c);
+                builder.append(ch);
                 while (true)
                 {
-                    c = queueStream.peek();
-                    if (c != LexerConstPool.EOF
-                            && !Character.isWhitespace(c)
-                            && !isSpecialCharacter(c))
+                    ch = queueStream.peek();
+                    if (ch != LexerConstPool.EOF
+                            && !Character.isWhitespace(ch)
+                            && !isSpecialCharacter(ch))
                     {
-                        builder.append((char) c);
+                        builder.append(ch);
                         this.queueStream.poll();
                     }
                     else

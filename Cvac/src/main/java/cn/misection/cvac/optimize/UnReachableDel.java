@@ -16,7 +16,8 @@ import java.util.LinkedList;
 /**
  * Created by MI6 root 1/25.
  */
-public class UnReachableDel implements IVisitor, Optimizable
+public final class UnReachableDel
+        implements IVisitor, Optimizable
 {
     private AbstractStatement curStm;
     private boolean isOptimizing;

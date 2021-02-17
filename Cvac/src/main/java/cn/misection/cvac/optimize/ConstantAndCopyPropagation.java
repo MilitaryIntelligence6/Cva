@@ -17,7 +17,8 @@ import java.util.Map;
 /**
  * Created by MI6 root 1/28.
  */
-public class ConstantAndCopyPropagation implements IVisitor, Optimizable
+public final class ConstantAndCopyPropagation
+        implements IVisitor, Optimizable
 {
     /**
      * // constant or copy in current method;

@@ -16,7 +16,8 @@ import java.util.List;
 /**
  * Created by MI6 root 1/23.
  */
-public class ConstantFolder implements IVisitor, Optimizable
+public final class ConstantFolder
+        implements IVisitor, Optimizable
 {
     private AbstractExpression lastExp;
     private boolean isOptimizing;

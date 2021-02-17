@@ -17,7 +17,8 @@ import java.util.Hashtable;
 /**
  * Created by MI6 root 1/24.
  */
-public class UnUsedVarDel implements IVisitor, Optimizable
+public final class UnUsedVarDel
+        implements IVisitor, Optimizable
 {
     private Hashtable<String, CvaDeclaration> unUsedLocals;
     private Hashtable<String, CvaDeclaration> unUsedArgs;

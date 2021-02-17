@@ -16,7 +16,8 @@ import java.util.HashSet;
 /**
  * Created by MI6 root 1/27.
  */
-public class DeadCodeDel implements IVisitor, Optimizable
+public final class DeadCodeDel
+        implements IVisitor, Optimizable
 {
     private HashSet<String> curFields;  // the fields of current class
     private HashSet<String> localVars;  // the local variables and formals in current method

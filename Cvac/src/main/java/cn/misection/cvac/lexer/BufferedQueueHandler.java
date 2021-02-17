@@ -12,7 +12,8 @@ import java.io.Reader;
  * @TODO 后面把int改回char;
  * @CreateTime 2021年02月14日 14:10:00
  */
-public class BufferedQueueHandler extends BufferedReader implements IBufferedQueue
+public final class BufferedQueueHandler
+        extends BufferedReader implements IBufferedQueue
 {
     private final StringBuffer buffer = new StringBuffer();
 
