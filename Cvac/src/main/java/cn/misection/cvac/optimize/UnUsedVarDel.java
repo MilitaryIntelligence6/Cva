@@ -150,7 +150,10 @@ public final class UnUsedVarDel
     {
         this.visit(s.getCondition());
         this.visit(s.getThenStatement());
-        this.visit(s.getElseStatement());
+        if (s.getElseStatement() != null)
+        {
+            this.visit(s.getElseStatement());
+        }
     }
 
     @Override

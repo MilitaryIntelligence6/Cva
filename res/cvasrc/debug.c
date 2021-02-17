@@ -19,10 +19,7 @@ class Test
         {
             total = 1;
         }
-        else
-        {
-            total = num * (this.Compute(num-1));
-        }
+        total = 2;
         return total;
     }
 }

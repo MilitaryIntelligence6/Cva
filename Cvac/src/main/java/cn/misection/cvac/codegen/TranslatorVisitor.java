@@ -280,7 +280,10 @@ public final class TranslatorVisitor implements IVisitor
         this.visit(s.getThenStatement());
         emit(new Goto(r));
         emit(new LabelJ(l));
-        this.visit(s.getElseStatement());
+        if (s.getElseStatement() != null)
+        {
+            this.visit(s.getElseStatement());
+        }
         emit(new LabelJ(r));
     }
 

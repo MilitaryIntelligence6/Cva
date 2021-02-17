@@ -289,7 +289,10 @@ public final class ConstantFolder
         this.visit(s.getCondition());
         s.setCondition(this.lastExp);
         this.visit(s.getThenStatement());
-        this.visit(s.getElseStatement());
+        if (s.getElseStatement() != null)
+        {
+            this.visit(s.getElseStatement());
+        }
     }
 
     @Override

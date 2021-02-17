@@ -178,7 +178,10 @@ public final class DeadCodeDel
         HashSet<String> tehLeftLiveness = this.localLiveness;
 
         this.localLiveness = temOriginal;
-        this.visit(s.getElseStatement());
+        if (s.getElseStatement() != null)
+        {
+            this.visit(s.getElseStatement());
+        }
         if (this.shouldDel)
         {
             s.setElseStatement(null);

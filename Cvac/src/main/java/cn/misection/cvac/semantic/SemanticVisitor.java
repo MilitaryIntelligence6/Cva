@@ -419,7 +419,10 @@ public final class SemanticVisitor implements IVisitor
         }
 
         this.visit(s.getThenStatement());
-        this.visit(s.getElseStatement());
+        if (s.getElseStatement() != null)
+        {
+            this.visit(s.getElseStatement());
+        }
     }
 
     @Override

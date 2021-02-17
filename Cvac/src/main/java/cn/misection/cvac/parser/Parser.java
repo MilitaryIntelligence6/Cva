@@ -919,8 +919,8 @@ public final class Parser
     }
 
     /**
-     * @TODO 嵌套判定有无else之类;
      * @return
+     * @TODO 嵌套判定有无else之类;
      */
     private AbstractStatement handleIf()
     {
@@ -930,9 +930,24 @@ public final class Parser
         AbstractExpression condition = parseExp();
         eatToken(CvaKind.CLOSE_PAREN);
         AbstractStatement thenStm = parseStatement();
+        switch (curToken.getKind())
+        {
+            case ELSE_STATEMENT:
+            {
+                AbstractStatement elseStm = handleElse();
+                return new CvaIfStatement(lineNum, condition, thenStm, elseStm);
+            }
+            default:
+            {
+                return new CvaIfStatement(lineNum, condition, thenStm);
+            }
+        }
+    }
+
+    private AbstractStatement handleElse()
+    {
         eatToken(CvaKind.ELSE_STATEMENT);
-        AbstractStatement elseStm = parseStatement();
-        return new CvaIfStatement(lineNum, condition, thenStm, elseStm);
+        return parseStatement();
     }
 
     private AbstractStatement handleWhile()

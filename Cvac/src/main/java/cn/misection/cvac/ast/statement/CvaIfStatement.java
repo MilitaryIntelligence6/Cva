@@ -17,12 +17,26 @@ public final class CvaIfStatement extends AbstractStatement
 
     private AbstractStatement elseStatement;
 
-    public CvaIfStatement(int lineNum, AbstractExpression condition, AbstractStatement thenStatement, AbstractStatement elseStatement)
+    public CvaIfStatement(int lineNum,
+                          AbstractExpression condition,
+                          AbstractStatement thenStatement,
+                          AbstractStatement elseStatement)
     {
         super(lineNum);
         this.condition = condition;
         this.thenStatement = thenStatement;
         this.elseStatement = elseStatement;
+    }
+
+    public CvaIfStatement(int lineNum,
+                          AbstractExpression condition,
+                          AbstractStatement thenStatement)
+    {
+        super(lineNum);
+        this.condition = condition;
+        this.thenStatement = thenStatement;
+        // FIXME 可能空指针;
+        this.elseStatement = null;
     }
 
     public AbstractExpression getCondition()
