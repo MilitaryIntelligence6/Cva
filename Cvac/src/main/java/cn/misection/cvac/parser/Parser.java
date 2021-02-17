@@ -903,7 +903,6 @@ public final class Parser
                         errorLog();
                     }
                     memKind = CvaKind.IDENTIFIER;
-                    memKind = CvaKind.IDENTIFIER;
                     eatToken(CvaKind.IDENTIFIER);
                     continue;
                 }
