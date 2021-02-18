@@ -83,7 +83,7 @@ public final class UnReachableDel
     }
 
     @Override
-    public void visit(CvaNumberInt e)
+    public void visit(CvaNumberIntExpr e)
     {
     }
 

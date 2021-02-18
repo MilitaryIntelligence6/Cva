@@ -104,7 +104,7 @@ public final class UnUsedVarDel
     }
 
     @Override
-    public void visit(CvaNumberInt e)
+    public void visit(CvaNumberIntExpr e)
     {
     }
 

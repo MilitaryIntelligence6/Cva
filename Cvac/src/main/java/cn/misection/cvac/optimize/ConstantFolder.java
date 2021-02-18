@@ -29,7 +29,7 @@ public final class ConstantFolder
 
     private boolean isConstant(AbstractExpression exp)
     {
-        return exp instanceof CvaNumberInt
+        return exp instanceof CvaNumberIntExpr
                 || exp instanceof CvaTrueExpr
                 || exp instanceof CvaFalseExpr;
     }
@@ -60,13 +60,13 @@ public final class ConstantFolder
         this.visit(e.getLeft());
         if (isConstant())
         {
-            CvaNumberInt temLeft = (CvaNumberInt) this.lastExp;
+            CvaNumberIntExpr temLeft = (CvaNumberIntExpr) this.lastExp;
             this.visit(e.getRight());
             if (isConstant())
             {
                 this.isOptimizing = true;
-                this.lastExp = new CvaNumberInt(
-                        temLeft.getValue() + ((CvaNumberInt) this.lastExp).getValue(),
+                this.lastExp = new CvaNumberIntExpr(
+                        temLeft.getValue() + ((CvaNumberIntExpr) this.lastExp).getValue(),
                         this.lastExp.getLineNum());
             }
             else
@@ -148,12 +148,12 @@ public final class ConstantFolder
         this.visit(e.getLeft());
         if (isConstant())
         {
-            CvaNumberInt temLeft = (CvaNumberInt) this.lastExp;
+            CvaNumberIntExpr temLeft = (CvaNumberIntExpr) this.lastExp;
             this.visit(e.getRight());
             if (isConstant())
             {
                 this.isOptimizing = true;
-                this.lastExp = temLeft.getValue() < ((CvaNumberInt) this.lastExp).getValue()
+                this.lastExp = temLeft.getValue() < ((CvaNumberIntExpr) this.lastExp).getValue()
                         ? new CvaTrueExpr(this.lastExp.getLineNum())
                         : new CvaFalseExpr(this.lastExp.getLineNum());
             }
@@ -195,7 +195,7 @@ public final class ConstantFolder
     }
 
     @Override
-    public void visit(CvaNumberInt e)
+    public void visit(CvaNumberIntExpr e)
     {
         this.lastExp = e;
     }
@@ -206,13 +206,13 @@ public final class ConstantFolder
         this.visit(e.getLeft());
         if (isConstant())
         {
-            CvaNumberInt temLeft = (CvaNumberInt) this.lastExp;
+            CvaNumberIntExpr temLeft = (CvaNumberIntExpr) this.lastExp;
             this.visit(e.getRight());
             if (isConstant())
             {
                 this.isOptimizing = true;
-                this.lastExp = new CvaNumberInt(
-                        temLeft.getValue() - ((CvaNumberInt) this.lastExp).getValue(),
+                this.lastExp = new CvaNumberIntExpr(
+                        temLeft.getValue() - ((CvaNumberIntExpr) this.lastExp).getValue(),
                         this.lastExp.getLineNum());
             }
             else
@@ -241,13 +241,13 @@ public final class ConstantFolder
         this.visit(e.getLeft());
         if (isConstant())
         {
-            CvaNumberInt temLeft = (CvaNumberInt) this.lastExp;
+            CvaNumberIntExpr temLeft = (CvaNumberIntExpr) this.lastExp;
             this.visit(e.getRight());
             if (isConstant())
             {
                 this.isOptimizing = true;
-                this.lastExp = new CvaNumberInt(
-                        temLeft.getValue() * ((CvaNumberInt) this.lastExp).getValue(),
+                this.lastExp = new CvaNumberIntExpr(
+                        temLeft.getValue() * ((CvaNumberIntExpr) this.lastExp).getValue(),
                         this.lastExp.getLineNum());
             }
             else

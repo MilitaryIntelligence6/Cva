@@ -113,6 +113,10 @@ public enum CvaKind
      */
     ELSE_STATEMENT("else"),
 
+    STATIC("static"),
+
+    NULL("null"),
+
     /**
      * void
      */

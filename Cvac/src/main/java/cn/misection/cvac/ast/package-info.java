@@ -79,7 +79,7 @@ final class CvaExpr
     /**
      * CvaNumberInt
      */
-    public static final String CVA_NUMBER_INT = "CvaNumberInt";
+    public static final String CVA_NUMBER_INT = "CvaNumberIntExpr";
 
     /**
      * CvaSubExpr

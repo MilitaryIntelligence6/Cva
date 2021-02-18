@@ -199,45 +199,63 @@ public final class Parser
         switch (curToken.getKind())
         {
             case OPEN_PAREN:
+            {
                 advance();
                 expr = parseExpr();
                 expr.setLineNum(curToken.getLineNum());
                 //advance();
                 eatToken(CvaKind.CLOSE_PAREN);
                 return expr;
+            }
             case NUMBER:
-                expr = new CvaNumberInt(curToken.getLineNum(), Integer.parseInt(curToken.getLiteral()));
+            {
+                expr = new CvaNumberIntExpr(curToken.getLineNum(), Integer.parseInt(curToken.getLiteral()));
                 advance();
                 return expr;
+            }
             case STRING:
             {
-                break;
+                expr = new CvaStringExpr(curToken.getLineNum(), curToken.getLiteral());
+                advance();
+                return expr;
             }
             case TRUE:
+            {
                 expr = new CvaTrueExpr(curToken.getLineNum());
                 advance();
                 return expr;
+            }
             case FALSE:
+            {
                 expr = new CvaFalseExpr(curToken.getLineNum());
                 advance();
                 return expr;
+            }
             case THIS:
+            {
                 expr = new CvaThisExpr(curToken.getLineNum());
                 advance();
                 return expr;
+            }
             case IDENTIFIER:
+            {
                 expr = new CvaIdentifier(curToken.getLineNum(), curToken.getLiteral());
                 advance();
                 return expr;
+            }
             case NEW:
+            {
                 advance();
                 expr = new CvaNewExpr(curToken.getLineNum(), curToken.getLiteral());
                 advance();
                 eatToken(CvaKind.OPEN_PAREN);
                 eatToken(CvaKind.CLOSE_PAREN);
                 return expr;
+            }
             default:
+            {
                 errorLog();
+            }
         }
         return null;
     }
@@ -324,11 +342,11 @@ public final class Parser
             AbstractExpression tem = parseAddSubExpr();
             exp = addFlag ?
                     new CvaAddExpr(exp.getLineNum(), exp, tem)
-                    : tem instanceof CvaNumberInt
+                    : tem instanceof CvaNumberIntExpr
                     ? new CvaAddExpr(tem.getLineNum(),
                     exp,
-                    new CvaNumberInt(tem.getLineNum(),
-                            -((CvaNumberInt) tem).getValue()))
+                    new CvaNumberIntExpr(tem.getLineNum(),
+                            -((CvaNumberIntExpr) tem).getValue()))
                     : new CvaSubExpr(exp.getLineNum(), exp, tem);
         }
         return exp;

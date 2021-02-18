@@ -321,7 +321,7 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaNumberInt e)
+    public void visit(CvaNumberIntExpr e)
     {
         this.type = new CvaInt();
     }

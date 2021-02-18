@@ -108,7 +108,7 @@ public interface IVisitor
             }
             case CvaExpr.CVA_NUMBER_INT:
             {
-                visit((CvaNumberInt) e);
+                visit((CvaNumberIntExpr) e);
                 break;
             }
             case CvaExpr.CVA_SUB_EXPR:
@@ -155,7 +155,7 @@ public interface IVisitor
 
     void visit(CvaNegateExpr e);
 
-    void visit(CvaNumberInt e);
+    void visit(CvaNumberIntExpr e);
 
     void visit(CvaSubExpr e);
 
