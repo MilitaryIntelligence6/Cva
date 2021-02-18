@@ -22,6 +22,7 @@ import cn.misection.cvac.codegen.bst.btype.refer.GenStringType;
 import cn.misection.cvac.codegen.bst.instruction.*;
 
 import cn.misection.cvac.constant.CvaExprClassName;
+import cn.misection.cvac.constant.WriteILPool;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -307,53 +308,31 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaWriteStatement writeSta)
     {
+        byte mode = writeSta.getWriteMode();
         AbstractExpression expr = writeSta.getExpr();
         visit(expr);
         switch (expr.getClass().getSimpleName())
         {
             case CvaExprClassName.CVA_NUMBER_INT_EXPR:
             {
-                emit(new WriteInstruction());
+                emit(new WriteInstruction(mode, WriteILPool.WRITE_INT));
                 break;
             }
             case CvaExprClassName.CVA_STRING_EXPR:
             {
+                emit(new WriteInstruction(mode, WriteILPool.WRITE_STRING));
                 break;
             }
             case CvaExprClassName.CVA_IDENTIFIER_EXPR:
             {
-                switch (((CvaIdentifierExpr) expr).getType().toString())
-                {
-                    case CvaIntType.TYPE_LITERAL:
-                    {
-                        emit(new WriteInstruction());
-                        break;
-                    }
-                    case CvaStringType.TYPE_LITERAL:
-                    {
-                        break;
-                    }
-                }
+                byte type = parseEmitTypeCode(((CvaIdentifierExpr) expr).getType().toString());
+                emit(new WriteInstruction(mode, type));
                 break;
             }
             case CvaExprClassName.CVA_CALL_EXPR:
             {
-                switch (((CvaCallExpr) expr).getRetType().toString())
-                {
-                    case CvaIntType.TYPE_LITERAL:
-                    {
-                        emit(new WriteInstruction());
-                        break;
-                    }
-                    case CvaStringType.TYPE_LITERAL:
-                    {
-                        break;
-                    }
-                    default:
-                    {
-                        break;
-                    }
-                }
+                byte type = parseEmitTypeCode(((CvaCallExpr) expr).getRetType().toString());
+                emit(new WriteInstruction(mode, type));
                 break;
             }
             default:
@@ -367,6 +346,29 @@ public final class TranslatorVisitor implements IVisitor
             }
         }
     }
+
+    private byte parseEmitTypeCode(String typeString)
+    {
+        switch (typeString)
+        {
+            case CvaIntType.TYPE_LITERAL:
+            {
+                return WriteILPool.WRITE_INT;
+            }
+            case CvaStringType.TYPE_LITERAL:
+            {
+                return WriteILPool.WRITE_STRING;
+            }
+            default:
+            {
+                // todo;
+                break;
+            }
+        }
+        return -1;
+    }
+
+
 
     @Override
     public void visit(CvaWhileStatement s)

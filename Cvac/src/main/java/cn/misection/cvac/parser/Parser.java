@@ -12,6 +12,7 @@ import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.*;
 import cn.misection.cvac.constant.TokenConstPool;
+import cn.misection.cvac.constant.WriteILPool;
 import cn.misection.cvac.lexer.CvaKind;
 import cn.misection.cvac.lexer.CvaToken;
 import cn.misection.cvac.lexer.IBufferedQueue;
@@ -416,7 +417,15 @@ public final class Parser
             }
             case WRITE:
             {
-                return handleWriteOp();
+                return handleWriteOp(WriteILPool.CONSOLE_WRITE);
+            }
+            case WRITE_LINE:
+            {
+                return handleWriteOp(WriteILPool.CONSOLE_WRITELN);
+            }
+            case WRITE_FORMAT:
+            {
+                return handleWriteOp(WriteILPool.CONSOLE_WRITE_FORMAT);
             }
             case IDENTIFIER:
             {
@@ -974,21 +983,18 @@ public final class Parser
         }
     }
 
-    private AbstractStatement handleWriteOp()
+    private AbstractStatement handleWriteOp(byte writeMode)
     {
         // 目前 echo expr 实现还稍麻烦, 后面再想法;
         int lineNum = curToken.getLineNum();
-        eatToken(CvaKind.WRITE);
-        // 解析多种write;
-//        switch (curToken.getKind())
-//        {
-//
-//        }
+        // 一定是write;
+        eatToken(curToken.getKind());
+        // TODO 解析不带括号的echo;
         eatToken(CvaKind.OPEN_PAREN);
         AbstractExpression expr = parseExpr();
         eatToken(CvaKind.CLOSE_PAREN);
         eatToken(CvaKind.SEMI);
-        return new CvaWriteStatement(lineNum, expr);
+        return new CvaWriteStatement(lineNum, expr, writeMode);
     }
 
     /**

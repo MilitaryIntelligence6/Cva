@@ -9,6 +9,25 @@ package cn.misection.cvac.constant;
  */
 public final class WriteILPool
 {
+    /**
+     * 控制台打印选项;
+     */
+    public static final byte CONSOLE_WRITE = 0;
+
+    public static final byte CONSOLE_WRITELN = 1;
+
+    public static final byte CONSOLE_WRITE_FORMAT = 2;
+
+    public static final byte WRITE_STRING = 0;
+
+    public static final byte WRITE_INT = 1;
+
+    public static final byte WRITE_BOOLEAN = 2;
+
+    /*
+     * end 控制台打印选项;
+     */
+
     public static final String NEW_LINE_S = "\n";
 
     public static final char NEW_LINE_CH = '\n';

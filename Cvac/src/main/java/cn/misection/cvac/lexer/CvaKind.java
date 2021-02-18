@@ -284,10 +284,10 @@ public enum CvaKind
      * write, we just treat it as a key word
      */
     WRITE("echo"),
-//
-//    WRITE_LINE("println"),
-//
-//    WRITE_F("printf"),
+
+    WRITE_LINE("println"),
+
+    WRITE_FORMAT("printf"),
 
     /**
      * Identifier
@@ -581,10 +581,10 @@ public enum CvaKind
          * @TODO 后面应该将他们分离;
          */
         // printf 已经写入了;
-        lookup.put("printf", CvaKind.WRITE);
+//        lookup.put("printf", CvaKind.WRITE);
 //        lookup.put("echof", CvaKind.WRITE);
 //        lookup.put("echoln", CvaKind.WRITE);
-        lookup.put("println", CvaKind.WRITE);
+//        lookup.put("println", CvaKind.WRITE);
     }
 
     public static boolean containsKind(String literal)

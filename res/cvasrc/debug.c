@@ -16,7 +16,7 @@ int main(string[] args)
 {
 //    printf("hello, string");
 //    printf(1);
-    printf(new Test().Compute(10));   // just a print statement
+    println(new Test().Compute(10));   // just a print statement
     // return 0;
 //    echo("hello, string");
 }
@@ -43,12 +43,14 @@ class Test
         }
         if (num < 7)
         {
-            println(999);
+//            println(999);
+            echo(999);
         }
         i = num;
         while (i < 5)
         {
-            println(888);
+//            println(888);
+            echo(888);
             i = i + 1;
         }
         return total;

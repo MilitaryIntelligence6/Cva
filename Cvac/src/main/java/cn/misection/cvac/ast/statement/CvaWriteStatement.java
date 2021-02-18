@@ -1,7 +1,7 @@
 package cn.misection.cvac.ast.statement;
 
 import cn.misection.cvac.ast.expr.AbstractExpression;
-import cn.misection.cvac.codegen.bst.btype.BaseType;
+import cn.misection.cvac.constant.WriteILPool;
 
 /**
  * @author Military Intelligence 6 root
@@ -12,25 +12,22 @@ import cn.misection.cvac.codegen.bst.btype.BaseType;
  */
 public final class CvaWriteStatement extends AbstractStatement
 {
-    public static final byte WRITE = 0;
-
-    public static final byte WRITELN = 1;
-
-    public static final byte WRITE_FORMAT = 2;
-
-    private byte writelnMode;
-
-    private BaseType writeType;
-
     private AbstractExpression expr;
 
-    public CvaWriteStatement(int lineNum, AbstractExpression expr)
+    private byte writeMode;
+
+    /**
+     * FIXME ,后面尽量早确定;
+     * expr 的type;
+     */
+//    private AbstractType writeType;
+
+    public CvaWriteStatement(int lineNum, AbstractExpression expr, byte writeMode)
     {
         super(lineNum);
         this.expr = expr;
+        this.writeMode = writeMode;
     }
-
-
 
     public AbstractExpression getExpr()
     {
@@ -40,5 +37,15 @@ public final class CvaWriteStatement extends AbstractStatement
     public void setExpr(AbstractExpression expr)
     {
         this.expr = expr;
+    }
+
+    public byte getWriteMode()
+    {
+        return writeMode;
+    }
+
+    public void setWriteMode(byte writeMode)
+    {
+        this.writeMode = writeMode;
     }
 }

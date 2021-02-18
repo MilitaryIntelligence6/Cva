@@ -11,29 +11,36 @@ import cn.misection.cvac.codegen.bst.btype.BaseType;
  */
 public final class WriteInstruction extends BaseInstruction
 {
-    public static final byte WRITE = 0;
+    private byte writeMode;
 
-    public static final byte WRITELN = 1;
+    /**
+     * expr的type, 尽量早确定, 不然判定很丑, 判定时确定传入也行;
+     */
+    private byte writeType;
 
-    public static final byte WRITE_FORMAT = 2;
-
-    private byte writelnMode;
-
-    private BaseType writeType;
-
-    public WriteInstruction()
+    public WriteInstruction(byte writeMode, byte writeType)
     {
-
-    }
-
-    public WriteInstruction(byte writelnMode, BaseType writeType)
-    {
-        this.writelnMode = writelnMode;
+        this.writeMode = writeMode;
         this.writeType = writeType;
     }
 
-    public static class Builder
+    public byte getWriteMode()
     {
+        return writeMode;
+    }
 
+    public void setWriteMode(byte writeMode)
+    {
+        this.writeMode = writeMode;
+    }
+
+    public byte getWriteType()
+    {
+        return writeType;
+    }
+
+    public void setWriteType(byte writeType)
+    {
+        this.writeType = writeType;
     }
 }
