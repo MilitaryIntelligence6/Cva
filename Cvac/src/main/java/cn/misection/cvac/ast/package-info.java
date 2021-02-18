@@ -26,6 +26,8 @@ final class CvaType
      * CvaInt
      */
     public static final String CVA_INT = "CvaInt";
+
+    public static final String CVA_STRING = "CvaString";
 }
 
 

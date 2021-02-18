@@ -60,24 +60,19 @@ public final class ConstantAndCopyPropagation
     }
 
     @Override
-    public void visit(CvaBoolean t)
-    {
-    }
+    public void visit(CvaBoolean t) {}
 
     @Override
-    public void visit(CvaClassType t)
-    {
-    }
+    public void visit(CvaClassType t) {}
 
     @Override
-    public void visit(CvaInt t)
-    {
-    }
+    public void visit(CvaInt t) {}
 
     @Override
-    public void visit(CvaDeclaration d)
-    {
-    }
+    public void visit(CvaString type) {}
+
+    @Override
+    public void visit(CvaDeclaration d) {}
 
     @Override
     public void visit(CvaAddExpr e)

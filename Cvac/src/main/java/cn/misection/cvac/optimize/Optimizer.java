@@ -1,7 +1,6 @@
 package cn.misection.cvac.optimize;
 
 import cn.misection.cvac.ast.program.AbstractProgram;
-import cn.misection.cvac.ast.program.CvaProgram;
 
 /**
  * Created by MI6 root 1/31.
@@ -10,7 +9,7 @@ public final class Optimizer
 {
     public void optimize(AbstractProgram cvaProgram)
     {
-        UnUsedVarDel varDeler = new UnUsedVarDel();
+        UnUsedVarDecl varDeler = new UnUsedVarDecl();
         varDeler.givesWarning = true;
         ConstantFolder folder = new ConstantFolder();
         UnReachableDel deler = new UnReachableDel();

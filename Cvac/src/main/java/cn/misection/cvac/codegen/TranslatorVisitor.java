@@ -16,6 +16,7 @@ import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
 import cn.misection.cvac.codegen.bst.bentry.GenEntry;
 import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
 import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
+import cn.misection.cvac.codegen.bst.btype.refer.GenString;
 import cn.misection.cvac.codegen.bst.instruction.BaseInstruction;
 import cn.misection.cvac.codegen.bst.instruction.*;
 import cn.misection.cvac.codegen.bst.btype.BaseType;
@@ -26,6 +27,7 @@ import java.util.*;
 
 /**
  * Created by MI6 root 1/17.
+ * @Description 将编译器前端翻译给后端;
  */
 public final class TranslatorVisitor implements IVisitor
 {
@@ -44,16 +46,15 @@ public final class TranslatorVisitor implements IVisitor
 
     public TranslatorVisitor()
     {
-        this.setClassId(null);
+        this.classId = null;
         this.indexTable = null;
-        this.setType(null);
-        this.setDec(null);
-        this.setStatementList(new LinkedList<>());
-        this.setMethod(null);
-        this.setClassId(null);
-        this.setMainClass(null);
-        this.setClazz(null);
-        this.setProgram(null);
+        this.type = null;
+        this.dec = null;
+        this.statementList = new LinkedList<>();
+        this.method = null;
+        this.mainClass = null;
+        this.clazz = null;
+        this.program = null;
     }
 
     private void emit(BaseInstruction s)
@@ -62,53 +63,59 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaBoolean t)
+    public void visit(CvaBoolean type)
     {
-        this.setType(new GenInt());
+        setType(new GenInt());
     }
 
     @Override
-    public void visit(CvaClassType t)
+    public void visit(CvaClassType type)
     {
-        this.setType(new GenClassType(t.getLiteral()));
+        setType(new GenClassType(type.getLiteral()));
     }
 
     @Override
-    public void visit(CvaInt t)
+    public void visit(CvaInt type)
     {
-        this.setType(new GenInt());
+        setType(new GenInt());
     }
 
     @Override
-    public void visit(CvaDeclaration d)
+    public void visit(CvaString type)
     {
-        this.visit(d.getType());
-        this.setDec(new GenDeclaration(
-                d.getLiteral(),
+        setType(new GenString());
+    }
+
+    @Override
+    public void visit(CvaDeclaration decl)
+    {
+        visit(decl.getType());
+        setDec(new GenDeclaration(
+                decl.getLiteral(),
                 this.getType()));
         if (this.indexTable != null) // if it is field
         {
-            this.indexTable.put(d.getLiteral(), index++);
+            this.indexTable.put(decl.getLiteral(), index++);
         }
     }
 
     @Override
     public void visit(CvaAddExpr e)
     {
-        this.visit(e.getLeft());
-        this.visit(e.getRight());
+        visit(e.getLeft());
+        visit(e.getRight());
         emit(new IAdd());
     }
 
     @Override
-    public void visit(CvaAndAndExpr e)
+    public void visit(CvaAndAndExpr expr)
     {
         Label f = new Label();
         Label r = new Label();
-        this.visit(e.getLeft());
+        visit(expr.getLeft());
         emit(new Ldc(1));
         emit(new IFicmplt(f));
-        this.visit(e.getRight());
+        visit(expr.getRight());
         emit(new Ldc(1));
         emit(new IFicmplt(f));
         emit(new Ldc(1));
@@ -121,14 +128,14 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaCallExpr e)
     {
-        this.visit(e.getExpr());
+        visit(e.getExpr());
         e.getArgs().forEach(this::visit);
-        this.visit(e.getRetType());
+        visit(e.getRetType());
         BaseType rt = this.getType();
         List<BaseType> at = new LinkedList<>();
         e.getArgTypeList().forEach(a ->
         {
-            this.visit(a);
+            visit(a);
             at.add(this.getType());
         });
         emit(new InvokeVirtual(e.getLiteral(), e.getType(), at, rt));
@@ -171,8 +178,8 @@ public final class TranslatorVisitor implements IVisitor
     {
         Label t = new Label();
         Label r = new Label();
-        this.visit(e.getLeft());
-        this.visit(e.getRight());
+        visit(e.getLeft());
+        visit(e.getRight());
         emit(new IFicmplt(t));
         emit(new Ldc(0));
         emit(new Goto(r));
@@ -192,7 +199,7 @@ public final class TranslatorVisitor implements IVisitor
     {
         Label f = new Label();
         Label r = new Label();
-        this.visit(e.getExpr());
+        visit(e.getExpr());
         emit(new Ldc(1));
         emit(new IFicmplt(f));
         emit(new Ldc(1));
@@ -211,8 +218,8 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaSubExpr e)
     {
-        this.visit(e.getLeft());
-        this.visit(e.getRight());
+        visit(e.getLeft());
+        visit(e.getRight());
         emit(new ISub());
     }
 
@@ -225,8 +232,8 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaMuliExpr e)
     {
-        this.visit(e.getLeft());
-        this.visit(e.getRight());
+        visit(e.getLeft());
+        visit(e.getRight());
         emit(new IMul());
     }
 
@@ -242,7 +249,7 @@ public final class TranslatorVisitor implements IVisitor
         try
         {
             int index = this.indexTable.get(s.getLiteral());
-            this.visit(s.getExpr());
+            visit(s.getExpr());
             if (s.getType() instanceof CvaClassType)
             {
                 emit(new AStore(index));
@@ -255,7 +262,7 @@ public final class TranslatorVisitor implements IVisitor
         catch (NullPointerException e)
         {
             emit(new ALoad(0));
-            this.visit(s.getExpr());
+            visit(s.getExpr());
             emit(new PutField(String.format("%s/%s", this.getClassId(), s.getLiteral()),
                     s.getType() instanceof CvaClassType ?
                             (String.format("L%s;", ((CvaClassType) s.getType()).getLiteral()))
@@ -274,15 +281,15 @@ public final class TranslatorVisitor implements IVisitor
     {
         Label l = new Label();
         Label r = new Label();
-        this.visit(s.getCondition());
+        visit(s.getCondition());
         emit(new Ldc(1));
         emit(new IFicmplt(l));
-        this.visit(s.getThenStatement());
+        visit(s.getThenStatement());
         emit(new Goto(r));
         emit(new LabelJ(l));
         if (s.getElseStatement() != null)
         {
-            this.visit(s.getElseStatement());
+            visit(s.getElseStatement());
         }
         emit(new LabelJ(r));
     }
@@ -290,7 +297,7 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaWriteOperation s)
     {
-        this.visit(s.getExpr());
+        visit(s.getExpr());
         emit(new WriteInt());
     }
 
@@ -300,10 +307,10 @@ public final class TranslatorVisitor implements IVisitor
         Label con = new Label();
         Label end = new Label();
         emit(new LabelJ(con));
-        this.visit(s.getCondition());
+        visit(s.getCondition());
         emit(new Ldc(1));
         emit(new IFicmplt(end));
-        this.visit(s.getBody());
+        visit(s.getBody());
         emit(new Goto(con));
         emit(new LabelJ(end));
     }
@@ -313,26 +320,26 @@ public final class TranslatorVisitor implements IVisitor
     {
         this.index = 1;
         this.indexTable = new HashMap<>();
-        this.visit(cvaMethod.getRetType());
+        visit(cvaMethod.getRetType());
         BaseType theRetType = this.getType();
 
         List<GenDeclaration> formalList = new LinkedList<>();
         cvaMethod.getFormalList().forEach(f ->
         {
-            this.visit(f);
+            visit(f);
             formalList.add(this.getDec());
         });
 
         List<GenDeclaration> localList = new LinkedList<>();
         cvaMethod.getLocalList().forEach(l ->
         {
-            this.visit(l);
+            visit(l);
             localList.add(this.getDec());
         });
-        this.setStatementList(new LinkedList<>());
+        setStatementList(new LinkedList<>());
         cvaMethod.getStatementList().forEach(this::visit);
 
-        this.visit(cvaMethod.getRetExpr());
+        visit(cvaMethod.getRetExpr());
 
         if (cvaMethod.getRetType() instanceof CvaClassType)
         {
@@ -343,7 +350,7 @@ public final class TranslatorVisitor implements IVisitor
             emit(new IReturn());
         }
 
-        this.setMethod(
+        setMethod(
                 new GenMethod(
                 cvaMethod.getLiteral(),
                 theRetType,
@@ -358,20 +365,20 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaClass cvaClass)
     {
-        this.setClassId(cvaClass.getLiteral());
+        setClassId(cvaClass.getLiteral());
         List<GenDeclaration> fieldList = new LinkedList<>();
         cvaClass.getFieldList().forEach(f ->
         {
-            this.visit(f);
+            visit(f);
             fieldList.add(this.getDec());
         });
         List<GenMethod> methodList = new LinkedList<>();
         cvaClass.getMethodList().forEach(m ->
         {
-            this.visit(m);
+            visit(m);
             methodList.add(this.getMethod());
         });
-        this.setClazz(
+        setClazz(
                 new GenClass(
                 cvaClass.getLiteral(),
                 cvaClass.getParent(),
@@ -383,22 +390,22 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaEntry c)
     {
-        this.visit(c.getStatement());
-        this.setMainClass(new GenEntry(c.getLiteral(), this.getStatementList()));
-        this.setStatementList(new LinkedList<>());
+        visit(c.getStatement());
+        setMainClass(new GenEntry(c.getLiteral(), this.getStatementList()));
+        setStatementList(new LinkedList<>());
     }
 
     @Override
     public void visit(CvaProgram p)
     {
-        this.visit(p.getEntry());
+        visit(p.getEntry());
         List<GenClass> classList = new LinkedList<>();
         p.getClassList().forEach(c ->
         {
-            this.visit(c);
+            visit(c);
             classList.add(this.getClazz());
         });
-        this.setProgram(
+        setProgram(
                 new GenProgram(
                         this.getMainClass(),
                         classList));

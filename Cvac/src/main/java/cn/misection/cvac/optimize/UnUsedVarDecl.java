@@ -11,6 +11,7 @@ import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.CvaBoolean;
 import cn.misection.cvac.ast.type.CvaClassType;
 import cn.misection.cvac.ast.type.CvaInt;
+import cn.misection.cvac.ast.type.CvaString;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +19,7 @@ import java.util.Map;
 /**
  * Created by MI6 root 1/24.
  */
-public final class UnUsedVarDel
+public final class UnUsedVarDecl
         implements IVisitor, Optimizable
 {
     private Map<String, CvaDeclaration> unUsedLocals;
@@ -27,24 +28,19 @@ public final class UnUsedVarDel
     public boolean givesWarning;
 
     @Override
-    public void visit(CvaBoolean t)
-    {
-    }
+    public void visit(CvaBoolean t) {}
 
     @Override
-    public void visit(CvaClassType t)
-    {
-    }
+    public void visit(CvaClassType t) {}
 
     @Override
-    public void visit(CvaInt t)
-    {
-    }
+    public void visit(CvaInt t) {}
 
     @Override
-    public void visit(CvaDeclaration d)
-    {
-    }
+    public void visit(CvaString type) {}
+
+    @Override
+    public void visit(CvaDeclaration d) {}
 
     @Override
     public void visit(CvaAddExpr e)
@@ -68,9 +64,7 @@ public final class UnUsedVarDel
     }
 
     @Override
-    public void visit(CvaFalseExpr e)
-    {
-    }
+    public void visit(CvaFalseExpr e) {}
 
     @Override
     public void visit(CvaIdentifier e)
@@ -93,9 +87,7 @@ public final class UnUsedVarDel
     }
 
     @Override
-    public void visit(CvaNewExpr e)
-    {
-    }
+    public void visit(CvaNewExpr e) {}
 
     @Override
     public void visit(CvaNegateExpr e)
@@ -104,9 +96,7 @@ public final class UnUsedVarDel
     }
 
     @Override
-    public void visit(CvaNumberIntExpr e)
-    {
-    }
+    public void visit(CvaNumberIntExpr e) {}
 
     @Override
     public void visit(CvaSubExpr e)
@@ -116,9 +106,7 @@ public final class UnUsedVarDel
     }
 
     @Override
-    public void visit(CvaThisExpr e)
-    {
-    }
+    public void visit(CvaThisExpr e) {}
 
     @Override
     public void visit(CvaMuliExpr e)
@@ -128,9 +116,7 @@ public final class UnUsedVarDel
     }
 
     @Override
-    public void visit(CvaTrueExpr e)
-    {
-    }
+    public void visit(CvaTrueExpr e) {}
 
     @Override
     public void visit(CvaAssign s)

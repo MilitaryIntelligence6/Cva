@@ -105,7 +105,7 @@ public interface CodeGenVisitor
                 visit((ISub) s);
                 break;
             }
-            case Operator.LABELJ:
+            case Operator.LABEL_J:
             {
                 visit((LabelJ) s);
                 break;

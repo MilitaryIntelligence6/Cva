@@ -23,89 +23,58 @@ public final class UnReachableDel
     private boolean isOptimizing;
 
     @Override
-    public void visit(CvaBoolean t)
-    {
-    }
+    public void visit(CvaBoolean t) {}
 
     @Override
-    public void visit(CvaClassType t)
-    {
-    }
+    public void visit(CvaClassType t) {}
 
     @Override
-    public void visit(CvaInt t)
-    {
-    }
+    public void visit(CvaInt t) {}
 
     @Override
-    public void visit(CvaDeclaration d)
-    {
-    }
+    public void visit(CvaString type) {}
 
     @Override
-    public void visit(CvaAddExpr e)
-    {
-    }
+    public void visit(CvaDeclaration d) {}
 
     @Override
-    public void visit(CvaAndAndExpr e)
-    {
-    }
+    public void visit(CvaAddExpr e) {}
 
     @Override
-    public void visit(CvaCallExpr e)
-    {
-    }
+    public void visit(CvaAndAndExpr e) {}
 
     @Override
-    public void visit(CvaFalseExpr e)
-    {
-    }
+    public void visit(CvaCallExpr e) {}
 
     @Override
-    public void visit(CvaIdentifier e)
-    {
-    }
+    public void visit(CvaFalseExpr e) {}
 
     @Override
-    public void visit(CvaLessThanExpr e)
-    {
-    }
+    public void visit(CvaIdentifier e) {}
 
     @Override
-    public void visit(CvaNewExpr e)
-    {
-    }
+    public void visit(CvaLessThanExpr e) {}
 
     @Override
-    public void visit(CvaNegateExpr e)
-    {
-    }
+    public void visit(CvaNewExpr e) {}
 
     @Override
-    public void visit(CvaNumberIntExpr e)
-    {
-    }
+    public void visit(CvaNegateExpr e) {}
 
     @Override
-    public void visit(CvaSubExpr e)
-    {
-    }
+    public void visit(CvaNumberIntExpr e) {}
 
     @Override
-    public void visit(CvaThisExpr e)
-    {
-    }
+    public void visit(CvaSubExpr e) {}
 
     @Override
-    public void visit(CvaMuliExpr e)
-    {
-    }
+    public void visit(CvaThisExpr e) {}
 
     @Override
-    public void visit(CvaTrueExpr e)
-    {
-    }
+    public void visit(CvaMuliExpr e) {}
+
+    @Override
+    public void visit(CvaTrueExpr e) {}
 
     @Override
     public void visit(CvaAssign s)

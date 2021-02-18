@@ -20,7 +20,8 @@ public final class GenMethod extends BaseMethod
     private BaseType retType;
 
     /**
-     * @deprecated
+     * deprecated
+     *  只是该属性在后端不被需要;
      */
 //    private AbstractExpression retExpr;
 

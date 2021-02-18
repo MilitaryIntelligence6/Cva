@@ -36,6 +36,11 @@ public interface IVisitor
                 visit((CvaInt) t);
                 break;
             }
+            case CvaType.CVA_STRING:
+            {
+                visit((CvaString) t);
+                break;
+            }
             default:
             {
                 System.err.println("unknown type");
@@ -49,6 +54,8 @@ public interface IVisitor
     void visit(CvaClassType t);
 
     void visit(CvaInt t);
+
+    void visit(CvaString type);
 
     // Dec
     default void visit(AbstractDeclaration d)

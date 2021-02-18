@@ -78,7 +78,7 @@ final class Operator
     /**
      * LabelJ
      */
-    public static final String LABELJ = "LabelJ";
+    public static final String LABEL_J = "LabelJ";
 
     /**
      * Ldc
@@ -99,5 +99,4 @@ final class Operator
      * PutField
      */
     public static final String PUT_FIELD = "PutField";
-
 }
