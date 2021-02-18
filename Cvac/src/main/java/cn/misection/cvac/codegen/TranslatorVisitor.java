@@ -21,6 +21,8 @@ import cn.misection.cvac.codegen.bst.btype.refer.GenClassType;
 import cn.misection.cvac.codegen.bst.btype.refer.GenStringType;
 import cn.misection.cvac.codegen.bst.instruction.*;
 
+import cn.misection.cvac.constant.CvaExprClassName;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -306,6 +308,22 @@ public final class TranslatorVisitor implements IVisitor
     public void visit(CvaWriteOperation s)
     {
         visit(s.getExpr());
+//        switch (s.getExpr().getClass().getSimpleName())
+//        {
+//            case CvaExprClassName.CVA_NUMBER_INT_EXPR:
+//            {
+//                emit(new WriteInt());
+//                break;
+//            }
+//            case CvaExprClassName.CVA_STRING_EXPR:
+//            {
+//                break;
+//            }
+//            default:
+//            {
+//                break;
+//            }
+//        }
         emit(new WriteInt());
     }
 

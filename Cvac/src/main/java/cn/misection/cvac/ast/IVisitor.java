@@ -10,6 +10,7 @@ import cn.misection.cvac.ast.program.AbstractProgram;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.*;
+import cn.misection.cvac.constant.CvaExprClassName;
 
 /**
  * Created by MI6 root 1/7.
