@@ -87,7 +87,7 @@ public final class CvaCompiler
             String filePath = String.format("%s.il", cla.getLiteral());
             jasmin.Main.main(new String[] {filePath});
         }
-        System.out.println("\nwell down!");
+        System.out.println("\nwell down!\n");
     }
 
     private static AbstractProgram grammarAnalysis(IBufferedQueue fStream)

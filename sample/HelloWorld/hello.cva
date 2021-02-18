@@ -1,0 +1,13 @@
+pkg cn.misection.cva.foo;
+
+call cva.native.io.*;
+call cva.std.console.*;
+/**
+ * 原生string导入;
+ */
+call cva.lang.type.String;
+
+int main(string[] args)
+{
+    println("Hello, CvaWorld");
+}
