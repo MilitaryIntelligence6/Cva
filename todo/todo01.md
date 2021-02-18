@@ -1,3 +1,5 @@
+
+```java
 // This is the entry point of the program
 
 pkg cn.misection.cva.test;
@@ -50,11 +52,45 @@ class Test
         while (i < 5)
         {
             println(888);
-//            echo("hello, string");
+            echo("hello, string");
 //            echo(888);
             i = i + 1;
         }
-        println("hello, string");
+//        println("hello, string");
         return total;
     }
 }
+```
+会错误的打印成
+```text
+999
+888
+888888
+888888
+888888
+888888
+8881
+999
+888
+888888
+888888
+888888
+8882
+999
+888
+888888
+888888
+8883
+999
+888
+888888
+8884
+999
+888
+888999
+999
+3628800
+```
+888冒出来的地方应该是Hello, String;
+
+println放在其他地方就还好;

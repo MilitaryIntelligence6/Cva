@@ -1,3 +1,4 @@
+```java
 // This is the entry point of the program
 
 pkg cn.misection.cva.test;
@@ -12,6 +13,7 @@ call cva.lang.type.String;
 /**
  * block comm;
  */
+// 这是一个 super test;
 int main(string[] args)
 {
 //    println("hello, string");
@@ -58,3 +60,47 @@ class Test
         return total;
     }
 }
+```
+
+---
+- result
+```text
+999
+888
+888
+888
+888
+888
+hello, string
+1
+999
+888
+888
+888
+888
+hello, string
+2
+999
+888
+888
+888
+hello, string
+3
+999
+888
+888
+hello, string
+4
+999
+888
+hello, string
+999
+hello, string
+999
+hello, string
+hello, string
+hello, string
+hello, string
+hello, string
+3628800
+```
