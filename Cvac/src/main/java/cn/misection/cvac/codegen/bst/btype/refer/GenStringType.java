@@ -13,9 +13,7 @@ public final class GenStringType extends BaseReferenceType
 
     private static final String LITERAL = "java/lang/String";
 
-    public GenStringType()
-    {
-    }
+    public GenStringType() {}
 
     @Override
     public String toString()
