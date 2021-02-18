@@ -118,15 +118,15 @@ public final class TranslatorVisitor implements IVisitor
         Label f = new Label();
         Label r = new Label();
         visit(expr.getLeft());
-        emit(new Ldc(1));
+        emit(new ILdc(1));
         emit(new IFicmplt(f));
         visit(expr.getRight());
-        emit(new Ldc(1));
+        emit(new ILdc(1));
         emit(new IFicmplt(f));
-        emit(new Ldc(1));
+        emit(new ILdc(1));
         emit(new Goto(r));
         emit(new LabelJ(f));
-        emit(new Ldc(0));
+        emit(new ILdc(0));
         emit(new LabelJ(r));
     }
 
@@ -149,7 +149,7 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaFalseExpr e)
     {
-        emit(new Ldc(0));
+        emit(new ILdc(0));
     }
 
     @Override
@@ -186,10 +186,10 @@ public final class TranslatorVisitor implements IVisitor
         visit(e.getLeft());
         visit(e.getRight());
         emit(new IFicmplt(t));
-        emit(new Ldc(0));
+        emit(new ILdc(0));
         emit(new Goto(r));
         emit(new LabelJ(t));
-        emit(new Ldc(1));
+        emit(new ILdc(1));
         emit(new LabelJ(r));
     }
 
@@ -205,19 +205,19 @@ public final class TranslatorVisitor implements IVisitor
         Label f = new Label();
         Label r = new Label();
         visit(e.getExpr());
-        emit(new Ldc(1));
+        emit(new ILdc(1));
         emit(new IFicmplt(f));
-        emit(new Ldc(1));
+        emit(new ILdc(1));
         emit(new Goto(r));
         emit(new LabelJ(f));
-        emit(new Ldc(0));
+        emit(new ILdc(0));
         emit(new LabelJ(r));
     }
 
     @Override
     public void visit(CvaNumberIntExpr e)
     {
-        emit(new Ldc(e.getValue()));
+        emit(new ILdc(e.getValue()));
     }
 
     @Override
@@ -251,7 +251,7 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaTrueExpr e)
     {
-        emit(new Ldc(1));
+        emit(new ILdc(1));
     }
 
     @Override
@@ -293,7 +293,7 @@ public final class TranslatorVisitor implements IVisitor
         Label l = new Label();
         Label r = new Label();
         visit(s.getCondition());
-        emit(new Ldc(1));
+        emit(new ILdc(1));
         emit(new IFicmplt(l));
         visit(s.getThenStatement());
         emit(new Goto(r));
@@ -377,7 +377,7 @@ public final class TranslatorVisitor implements IVisitor
         Label end = new Label();
         emit(new LabelJ(con));
         visit(s.getCondition());
-        emit(new Ldc(1));
+        emit(new ILdc(1));
         emit(new IFicmplt(end));
         visit(s.getBody());
         emit(new Goto(con));

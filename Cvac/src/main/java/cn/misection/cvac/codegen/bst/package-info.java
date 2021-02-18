@@ -83,7 +83,7 @@ final class Operator
     /**
      * Ldc
      */
-    public static final String LDC = "Ldc";
+    public static final String ILDC = "ILdc";
 
     /**
      * New
