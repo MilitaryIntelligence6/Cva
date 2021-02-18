@@ -9,9 +9,7 @@ package cn.misection.cvac.ast.type;
  */
 public abstract class AbstractType implements IType
 {
-    public AbstractType()
-    {
-    }
+    public AbstractType() {}
 
     /**
      * 转string;

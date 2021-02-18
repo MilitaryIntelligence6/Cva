@@ -7,9 +7,11 @@ package cn.misection.cvac.ast.type;
  * @Description TODO
  * @CreateTime 2021年02月16日 16:15:00
  */
-public class CvaPointerType extends AbstractUnsafe
+public final class CvaPointerType extends AbstractUnsafe
 {
     public static final String TYPE_LITERAL = "@pointer";
+
+    public CvaPointerType() {}
 
     @Override
     public String toString()

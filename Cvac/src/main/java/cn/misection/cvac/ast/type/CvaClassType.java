@@ -7,7 +7,7 @@ package cn.misection.cvac.ast.type;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:45:00
  */
-public class CvaClassType extends AbstractType
+public final class CvaClassType extends AbstractType
 {
     public static final String TYPE_LITERAL = "@class";
 

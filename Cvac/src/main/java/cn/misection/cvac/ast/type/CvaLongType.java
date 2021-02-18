@@ -7,13 +7,11 @@ package cn.misection.cvac.ast.type;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:46:00
  */
-public class CvaLongType extends AbstractType
+public final class CvaLongType extends AbstractType
 {
     public static final String TYPE_LITERAL = "@long";
 
-    public CvaLongType()
-    {
-    }
+    public CvaLongType() {}
 
     @Override
     public String toString()
