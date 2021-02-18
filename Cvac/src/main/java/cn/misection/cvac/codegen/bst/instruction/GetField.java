@@ -1,19 +1,19 @@
-package cn.misection.cvac.codegen.bst.binstruct;
+package cn.misection.cvac.codegen.bst.instruction;
 
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
- * @ClassName PutField
+ * @ClassName GetField
  * @Description TODO
- * @CreateTime 2021年02月16日 01:01:00
+ * @CreateTime 2021年02月16日 00:49:00
  */
-public final class PutField extends BaseInstruction
+public final class GetField extends BaseInstruction
 {
     private String fieldSpec;
 
     private String descriptor;
 
-    public PutField(String fieldSpec, String descriptor)
+    public GetField(String fieldSpec, String descriptor)
     {
         this.fieldSpec = fieldSpec;
         this.descriptor = descriptor;

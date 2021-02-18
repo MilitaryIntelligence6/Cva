@@ -1,19 +1,19 @@
-package cn.misection.cvac.codegen.bst.binstruct;
+package cn.misection.cvac.codegen.bst.instruction;
 
 import cn.misection.cvac.codegen.bst.Label;
 
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
- * @ClassName LabelJ
+ * @ClassName Goto
  * @Description TODO
- * @CreateTime 2021年02月16日 00:58:00
+ * @CreateTime 2021年02月16日 00:48:00
  */
-public final class LabelJ extends BaseInstruction
+public final class Goto extends BaseInstruction
 {
     private Label label;
 
-    public LabelJ(Label label)
+    public Goto(Label label)
     {
         this.label = label;
     }

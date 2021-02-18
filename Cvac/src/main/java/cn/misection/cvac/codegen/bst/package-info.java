@@ -93,7 +93,7 @@ final class Operator
     /**
      * Write
      */
-    public static final String WRITE = "WriteInstr";
+    public static final String WRITE_INT = "WriteInt";
 
     /**
      * PutField

@@ -1,4 +1,4 @@
-package cn.misection.cvac.codegen.bst.binstruct;
+package cn.misection.cvac.codegen.bst.instruction;
 
 import cn.misection.cvac.codegen.bst.btype.BaseType;
 

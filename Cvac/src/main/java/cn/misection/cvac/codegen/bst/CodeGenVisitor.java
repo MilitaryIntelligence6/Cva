@@ -5,12 +5,10 @@ import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
 import cn.misection.cvac.codegen.bst.bentry.GenEntry;
 import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
 import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
-import cn.misection.cvac.codegen.bst.binstruct.*;
+import cn.misection.cvac.codegen.bst.instruction.*;
 import cn.misection.cvac.codegen.bst.btype.BaseType;
 import cn.misection.cvac.codegen.bst.btype.basic.BaseBasicType;
 import cn.misection.cvac.codegen.bst.btype.refer.BaseReferenceType;
-import cn.misection.cvac.codegen.bst.btype.refer.GenClassType;
-import cn.misection.cvac.codegen.bst.btype.basic.GenInt;
 
 /**
  * Created by MI6 root 1/17.
@@ -122,9 +120,9 @@ public interface CodeGenVisitor
                 visit((New) s);
                 break;
             }
-            case Operator.WRITE:
+            case Operator.WRITE_INT:
             {
-                visit((WriteInstr) s);
+                visit((WriteInt) s);
                 break;
             }
             case Operator.PUT_FIELD:
@@ -172,7 +170,7 @@ public interface CodeGenVisitor
 
     void visit(New s);
 
-    void visit(WriteInstr s);
+    void visit(WriteInt s);
 
     void visit(PutField s);
 

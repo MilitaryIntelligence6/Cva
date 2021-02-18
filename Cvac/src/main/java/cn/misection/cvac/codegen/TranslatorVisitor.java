@@ -16,8 +16,8 @@ import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
 import cn.misection.cvac.codegen.bst.bentry.GenEntry;
 import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
 import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
-import cn.misection.cvac.codegen.bst.binstruct.BaseInstruction;
-import cn.misection.cvac.codegen.bst.binstruct.*;
+import cn.misection.cvac.codegen.bst.instruction.BaseInstruction;
+import cn.misection.cvac.codegen.bst.instruction.*;
 import cn.misection.cvac.codegen.bst.btype.BaseType;
 import cn.misection.cvac.codegen.bst.btype.refer.GenClassType;
 import cn.misection.cvac.codegen.bst.btype.basic.GenInt;
@@ -291,7 +291,7 @@ public final class TranslatorVisitor implements IVisitor
     public void visit(CvaWriteOperation s)
     {
         this.visit(s.getExpr());
-        emit(new WriteInstr());
+        emit(new WriteInt());
     }
 
     @Override

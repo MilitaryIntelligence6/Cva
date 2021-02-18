@@ -1,17 +1,17 @@
-package cn.misection.cvac.codegen.bst.binstruct;
+package cn.misection.cvac.codegen.bst.instruction;
 
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
- * @ClassName AStore
+ * @ClassName IStore
  * @Description TODO
- * @CreateTime 2021年02月16日 00:47:00
+ * @CreateTime 2021年02月16日 00:57:00
  */
-public final class AStore extends BaseInstruction
+public final class IStore extends BaseInstruction
 {
     private int index;
 
-    public AStore(int index)
+    public IStore(int index)
     {
         this.index = index;
     }

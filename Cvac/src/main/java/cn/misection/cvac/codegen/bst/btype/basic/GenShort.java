@@ -9,7 +9,7 @@ import cn.misection.cvac.codegen.bst.btype.BaseType;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:46:00
  */
-public final class GenShort extends BaseType
+public final class GenShort extends BaseBasicType
 {
     public GenShort()
     {
@@ -19,5 +19,11 @@ public final class GenShort extends BaseType
     public String toString()
     {
         return "@short";
+    }
+
+    @Override
+    public String requireInstruct()
+    {
+        return null;
     }
 }

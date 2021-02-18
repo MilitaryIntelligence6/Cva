@@ -1,4 +1,4 @@
-package cn.misection.cvac.codegen.bst.binstruct;
+package cn.misection.cvac.codegen.bst.instruction;
 
 /**
  * @author Military Intelligence 6 root
@@ -7,6 +7,6 @@ package cn.misection.cvac.codegen.bst.binstruct;
  * @Description TODO
  * @CreateTime 2021年02月16日 01:00:00
  */
-public final class WriteInstr extends BaseInstruction
+public final class WriteInt extends BaseInstruction
 {
 }

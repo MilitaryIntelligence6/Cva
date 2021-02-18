@@ -6,7 +6,7 @@ import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
 import cn.misection.cvac.codegen.bst.bentry.GenEntry;
 import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
 import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
-import cn.misection.cvac.codegen.bst.binstruct.*;
+import cn.misection.cvac.codegen.bst.instruction.*;
 import cn.misection.cvac.codegen.bst.btype.basic.BaseBasicType;
 import cn.misection.cvac.codegen.bst.btype.refer.BaseReferenceType;
 import cn.misection.cvac.constant.WriteILPool;
@@ -86,13 +86,13 @@ public final class IntermLangGenerator implements CodeGenVisitor
     @Override
     public void visit(BaseBasicType t)
     {
-        this.write(t.requireInstruct());
+        write(t.requireInstruct());
     }
 
     @Override
     public void visit(GenDeclaration d)
     {
-        this.writeln(";Error: you are accessing the dec single instance.");
+        writeln(";Error: you are accessing the dec single instance.");
     }
 
     @Override
@@ -104,7 +104,7 @@ public final class IntermLangGenerator implements CodeGenVisitor
     @Override
     public void visit(AReturn s)
     {
-        this.iwriteLine("areturn");
+        iwriteLine("areturn");
     }
 
     @Override
@@ -128,7 +128,7 @@ public final class IntermLangGenerator implements CodeGenVisitor
     @Override
     public void visit(IAdd s)
     {
-        this.iwriteLine("iadd");
+        iwriteLine("iadd");
     }
 
     @Override
@@ -146,7 +146,7 @@ public final class IntermLangGenerator implements CodeGenVisitor
     @Override
     public void visit(IMul s)
     {
-        this.iwriteLine("imul");
+        iwriteLine("imul");
     }
 
     @Override
@@ -154,15 +154,15 @@ public final class IntermLangGenerator implements CodeGenVisitor
     {
         writef("    invokevirtual %s/%s(", s.getC(), s.getF());
         s.getArgTypeList().forEach(this::visit);
-        this.write(")");
-        this.visit(s.getRetType());
+        write(")");
+        visit(s.getRetType());
         writeln();
     }
 
     @Override
     public void visit(IReturn s)
     {
-        this.iwriteLine("ireturn");
+        iwriteLine("ireturn");
     }
 
     @Override
@@ -174,7 +174,7 @@ public final class IntermLangGenerator implements CodeGenVisitor
     @Override
     public void visit(ISub s)
     {
-        this.iwriteLine("isub");
+        iwriteLine("isub");
     }
 
     @Override
@@ -193,17 +193,17 @@ public final class IntermLangGenerator implements CodeGenVisitor
     public void visit(New s)
     {
         iwritefln("new %s", s.getClazz());
-        this.iwriteLine("dup");
+        iwriteLine("dup");
         iwritefln("invokespecial %s/<init>()V", s.getClazz());
     }
 
     @Override
-    public void visit(WriteInstr s)
+    public void visit(WriteInt s)
     {
-        this.iwriteLine("getstatic java/lang/System/out Ljava/io/PrintStream;");
-        this.iwriteLine("swap");
+        iwriteLine("getstatic java/lang/System/out Ljava/io/PrintStream;");
+        iwriteLine("swap");
         // TODO 封装常量字段, 同时把println变成print;
-        this.iwriteLine("invokevirtual java/io/PrintStream/println(I)V");
+        iwriteLine("invokevirtual java/io/PrintStream/println(I)V");
     }
 
     /**
@@ -240,7 +240,7 @@ public final class IntermLangGenerator implements CodeGenVisitor
     public void visit(GenMethod method)
     {
         writef(".method public %s(", method.getLiteral());
-        method.getFormalList().forEach(f -> this.visit(f.getType()));
+        method.getFormalList().forEach(f -> visit(f.getType()));
         write(")");
         visit(method.getRetType());
         writeln();
@@ -258,7 +258,7 @@ public final class IntermLangGenerator implements CodeGenVisitor
         writef(".class public %s\n", c.getLiteral());
         if (c.getParent() == null)
         {
-            this.writeln(".super java/lang/Object");
+            writeln(".super java/lang/Object");
         }
         else
         {
@@ -268,25 +268,25 @@ public final class IntermLangGenerator implements CodeGenVisitor
         c.getFieldList().forEach(f ->
         {
             writef(".field public %s ", f.getLiteral());
-            this.visit(f.getType());
+            visit(f.getType());
             writeln();
         });
 
-        this.writeln(".method public <init>()V");
-        this.iwriteLine("aload 0");
+        writeln(".method public <init>()V");
+        iwriteLine("aload 0");
         if (c.getParent() == null)
         {
-            this.iwriteLine("invokespecial java/lang/Object/<init>()V");
+            iwriteLine("invokespecial java/lang/Object/<init>()V");
         }
         else
         {
             iwritefln("invokespecial %s/<init>()V", c.getParent());
         }
-        this.iwriteLine("return");
-        this.writeln(".end method");
+        iwriteLine("return");
+        writeln(".end method");
         c.getMethodList().forEach(this::visit);
 
-        writeAndDestroy();
+        saveAndReinit();
     }
 
     @Override
@@ -295,21 +295,21 @@ public final class IntermLangGenerator implements CodeGenVisitor
         initWriter(String.format("%s.il", entry.getLiteral()));
 
         writef(".class public %s\n", entry.getLiteral());
-        this.writeln(".super java/lang/Object");
-        this.writeln(".method public static main([Ljava/lang/String;)V");
-        this.writef(".limit stack %d\n", StackConst.MAX_STACK_DEPTH);
-        this.writeln(".limit locals 2");
+        writeln(".super java/lang/Object");
+        writeln(".method public static main([Ljava/lang/String;)V");
+        writef(".limit stack %d\n", StackConst.MAX_STACK_DEPTH);
+        writeln(".limit locals 2");
         entry.getStatementList().forEach(this::visit);
-        this.iwriteLine("return");
-        this.writeln(".end method");
+        iwriteLine("return");
+        writeln(".end method");
 
-        writeAndDestroy();
+        saveAndReinit();
     }
 
     @Override
     public void visit(GenProgram program)
     {
-        this.visit(program.getEntry());
+        visit(program.getEntry());
         program.getClassList().forEach(this::visit);
     }
 
@@ -319,7 +319,7 @@ public final class IntermLangGenerator implements CodeGenVisitor
         try
         {
             // FIXME 路劲;
-            this.writer = new BufferedWriter(new OutputStreamWriter(
+            writer = new BufferedWriter(new OutputStreamWriter(
                     new FileOutputStream(path)));
         }
         catch (FileNotFoundException e)
@@ -327,17 +327,17 @@ public final class IntermLangGenerator implements CodeGenVisitor
             e.printStackTrace();
             System.exit(1);
         }
-        this.writeln("; This file is automatically generated by the compiler");
-        this.writeln("; Do Not Modify!\n");
+        writeln("; This file is automatically generated by the compiler");
+        writeln("; Do Not Modify!\n");
     }
 
-    private void writeAndDestroy()
+    private void saveAndReinit()
     {
         try
         {
-            this.writer.write(String.valueOf(buffer));
+            writer.write(String.valueOf(buffer));
             clearBuffer();
-            this.writer.close();
+            writer.close();
         }
         catch (IOException e)
         {
