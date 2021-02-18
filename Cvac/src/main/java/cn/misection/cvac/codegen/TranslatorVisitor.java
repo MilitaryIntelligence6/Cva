@@ -223,7 +223,8 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaStringExpr expr)
     {
-        // FIXME
+        // FIXME;
+        emit(new SLdc(String.format("\"%s\"", expr.getLiteral())));
     }
 
     @Override
