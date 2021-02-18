@@ -9,9 +9,9 @@ import cn.misection.cvac.codegen.bst.btype.BaseType;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:45:00
  */
-public final class GenDouble extends BaseBasicType
+public final class GenDoubleType extends BaseBasicType
 {
-    public GenDouble()
+    public GenDoubleType()
     {
     }
 

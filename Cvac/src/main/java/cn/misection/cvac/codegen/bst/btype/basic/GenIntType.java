@@ -1,29 +1,30 @@
 package cn.misection.cvac.codegen.bst.btype.basic;
 
-import cn.misection.cvac.codegen.bst.btype.BaseType;
-
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
- * @ClassName CvaLong
+ * @ClassName CvaInt
  * @Description TODO
- * @CreateTime 2021年02月14日 19:46:00
+ * @CreateTime 2021年02月14日 19:44:00
  */
-public final class GenLong extends BaseBasicType
+public final class GenIntType extends BaseBasicType
 {
-    public GenLong()
+    /**
+     * 后端没有boolean, 都是int;
+     */
+    public GenIntType()
     {
     }
 
     @Override
     public String toString()
     {
-        return "@long";
+        return "@int";
     }
 
     @Override
     public String requireInstruct()
     {
-        return null;
+        return "I";
     }
 }

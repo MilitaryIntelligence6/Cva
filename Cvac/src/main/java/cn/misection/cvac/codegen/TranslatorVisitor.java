@@ -16,9 +16,9 @@ import cn.misection.cvac.codegen.bst.bentry.GenEntry;
 import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
 import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
 import cn.misection.cvac.codegen.bst.btype.BaseType;
-import cn.misection.cvac.codegen.bst.btype.basic.GenInt;
+import cn.misection.cvac.codegen.bst.btype.basic.GenIntType;
 import cn.misection.cvac.codegen.bst.btype.refer.GenClassType;
-import cn.misection.cvac.codegen.bst.btype.refer.GenString;
+import cn.misection.cvac.codegen.bst.btype.refer.GenStringType;
 import cn.misection.cvac.codegen.bst.instruction.*;
 
 import java.util.HashMap;
@@ -67,7 +67,7 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaBooleanType type)
     {
-        setType(new GenInt());
+        setType(new GenIntType());
     }
 
     @Override
@@ -79,13 +79,13 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaIntType type)
     {
-        setType(new GenInt());
+        setType(new GenIntType());
     }
 
     @Override
     public void visit(CvaStringType type)
     {
-        setType(new GenString());
+        setType(new GenStringType());
     }
 
     @Override

@@ -9,7 +9,7 @@ import cn.misection.cvac.codegen.bst.btype.BaseType;
  * @Description TODO
  * @CreateTime 2021年02月16日 20:13:00
  */
-public final class GenVoid extends BaseBasicType
+public final class GenVoidType extends BaseBasicType
 {
     @Override
     public String toString()

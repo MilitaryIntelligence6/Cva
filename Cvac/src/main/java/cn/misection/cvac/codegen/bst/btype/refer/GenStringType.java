@@ -7,11 +7,11 @@ package cn.misection.cvac.codegen.bst.btype.refer;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:46:00
  */
-public final class GenString extends BaseReferenceType
+public final class GenStringType extends BaseReferenceType
 {
     private final String literal = "java/lang/String";
 
-    public GenString()
+    public GenStringType()
     {
     }
 
