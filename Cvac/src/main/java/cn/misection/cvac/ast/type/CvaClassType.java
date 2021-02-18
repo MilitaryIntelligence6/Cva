@@ -9,6 +9,8 @@ package cn.misection.cvac.ast.type;
  */
 public class CvaClassType extends AbstractType
 {
+    public static final String TYPE_LITERAL = "@class";
+
     private String literal;
 
     public CvaClassType(String literal)

@@ -11,9 +11,7 @@ import cn.misection.cvac.codegen.bst.btype.BaseType;
  */
 public final class GenCharType extends BaseBasicType
 {
-    public GenCharType()
-    {
-    }
+    public GenCharType() {}
 
     @Override
     public String toString()
@@ -22,7 +20,7 @@ public final class GenCharType extends BaseBasicType
     }
 
     @Override
-    public String requireInstruct()
+    public String instruction()
     {
         return null;
     }

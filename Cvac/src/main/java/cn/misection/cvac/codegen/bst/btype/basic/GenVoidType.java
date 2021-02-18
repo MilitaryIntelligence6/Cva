@@ -1,7 +1,5 @@
 package cn.misection.cvac.codegen.bst.btype.basic;
 
-import cn.misection.cvac.codegen.bst.btype.BaseType;
-
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
@@ -11,6 +9,8 @@ import cn.misection.cvac.codegen.bst.btype.BaseType;
  */
 public final class GenVoidType extends BaseBasicType
 {
+    public GenVoidType() {}
+
     @Override
     public String toString()
     {
@@ -18,7 +18,7 @@ public final class GenVoidType extends BaseBasicType
     }
 
     @Override
-    public String requireInstruct()
+    public String instruction()
     {
         return null;
     }

@@ -15,6 +15,7 @@ call cva.lang.type.String;
 int main(string[] args)
 {
 //    printf("hello, string");
+//    printf(1);
     printf(new Test().Compute(10));   // just a print statement
     // return 0;
 //    echo("hello, string");

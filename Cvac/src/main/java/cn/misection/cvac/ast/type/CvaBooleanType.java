@@ -9,6 +9,8 @@ package cn.misection.cvac.ast.type;
  */
 public class CvaBooleanType extends AbstractType
 {
+    public static final String TYPE_LITERAL = "@boolean";
+
     public CvaBooleanType()
     {
     }
@@ -16,6 +18,6 @@ public class CvaBooleanType extends AbstractType
     @Override
     public String toString()
     {
-        return "@boolean";
+        return TYPE_LITERAL;
     }
 }

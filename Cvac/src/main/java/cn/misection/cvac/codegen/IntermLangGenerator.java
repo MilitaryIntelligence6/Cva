@@ -80,13 +80,13 @@ public final class IntermLangGenerator implements CodeGenVisitor
     @Override
     public void visit(BaseReferenceType t)
     {
-        writef("L%s;", t.getLiteral());
+        writef("L%s;", t.literal());
     }
 
     @Override
     public void visit(BaseBasicType t)
     {
-        write(t.requireInstruct());
+        write(t.instruction());
     }
 
     @Override

@@ -9,4 +9,11 @@ package cn.misection.cvac.ast.type;
  */
 public class CvaPointerType extends AbstractUnsafe
 {
+    public static final String TYPE_LITERAL = "@pointer";
+
+    @Override
+    public String toString()
+    {
+        return TYPE_LITERAL;
+    }
 }

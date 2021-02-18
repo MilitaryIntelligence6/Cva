@@ -9,6 +9,8 @@ package cn.misection.cvac.ast.type;
  */
 public class CvaStringType extends AbstractType
 {
+    public static final String TYPE_LITERAL = "@string";
+
     public CvaStringType()
     {
     }
@@ -16,6 +18,6 @@ public class CvaStringType extends AbstractType
     @Override
     public String toString()
     {
-        return "@String";
+        return TYPE_LITERAL;
     }
 }

@@ -9,6 +9,9 @@ package cn.misection.cvac.ast.type;
  */
 public class CvaBtyeType extends AbstractType
 {
+    public static final String TYPE_LITERAL = "@byte";
+
+
     public CvaBtyeType()
     {
     }
@@ -16,6 +19,6 @@ public class CvaBtyeType extends AbstractType
     @Override
     public String toString()
     {
-        return "@byte";
+        return TYPE_LITERAL;
     }
 }

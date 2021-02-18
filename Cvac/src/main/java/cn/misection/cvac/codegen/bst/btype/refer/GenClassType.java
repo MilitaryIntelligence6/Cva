@@ -24,7 +24,7 @@ public final class GenClassType extends BaseReferenceType
         return String.format("@class:%s", literal);
     }
 
-    public String getLiteral()
+    public String literal()
     {
         return literal;
     }

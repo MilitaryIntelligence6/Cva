@@ -305,10 +305,11 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaWriteOperation s)
+    public void visit(CvaWriteOperation writeOp)
     {
-        visit(s.getExpr());
-//        switch (s.getExpr().getClass().getSimpleName())
+        AbstractExpression expr = writeOp.getExpr();
+        visit(expr);
+//        switch (expr.getClass().getSimpleName())
 //        {
 //            case CvaExprClassName.CVA_NUMBER_INT_EXPR:
 //            {
@@ -317,6 +318,26 @@ public final class TranslatorVisitor implements IVisitor
 //            }
 //            case CvaExprClassName.CVA_STRING_EXPR:
 //            {
+//                break;
+//            }
+//            case CvaExprClassName.CVA_CALL_EXPR:
+//            {
+//                switch (((CvaCallExpr) expr).getRetType().toString())
+//                {
+//                    case CvaIntType.TYPE_LITERAL:
+//                    {
+//                        emit(new WriteInt());
+//                        break;
+//                    }
+//                    case CvaStringType.TYPE_LITERAL:
+//                    {
+//                        break;
+//                    }
+//                    default:
+//                    {
+//                        break;
+//                    }
+//                }
 //                break;
 //            }
 //            default:

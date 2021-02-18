@@ -15,5 +15,5 @@ public abstract class BaseBasicType extends BaseType
      * 获取指令
      * @return
      */
-    public abstract String requireInstruct();
+    public abstract String instruction();
 }

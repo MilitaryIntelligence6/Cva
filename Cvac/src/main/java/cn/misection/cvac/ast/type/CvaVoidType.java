@@ -9,9 +9,13 @@ package cn.misection.cvac.ast.type;
  */
 public class CvaVoidType extends AbstractType
 {
+    public static final String TYPE_LITERAL = "@void";
+
+    public CvaVoidType() {}
+
     @Override
     public String toString()
     {
-        return "@void";
+        return TYPE_LITERAL;
     }
 }

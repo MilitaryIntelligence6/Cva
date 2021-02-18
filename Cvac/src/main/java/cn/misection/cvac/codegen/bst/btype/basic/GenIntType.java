@@ -12,9 +12,7 @@ public final class GenIntType extends BaseBasicType
     /**
      * 后端没有boolean, 都是int;
      */
-    public GenIntType()
-    {
-    }
+    public GenIntType() {}
 
     @Override
     public String toString()
@@ -23,7 +21,7 @@ public final class GenIntType extends BaseBasicType
     }
 
     @Override
-    public String requireInstruct()
+    public String instruction()
     {
         return "I";
     }

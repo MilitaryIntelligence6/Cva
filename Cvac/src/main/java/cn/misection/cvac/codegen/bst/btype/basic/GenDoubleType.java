@@ -11,9 +11,7 @@ import cn.misection.cvac.codegen.bst.btype.BaseType;
  */
 public final class GenDoubleType extends BaseBasicType
 {
-    public GenDoubleType()
-    {
-    }
+    public GenDoubleType() {}
 
     @Override
     public String toString()
@@ -22,7 +20,7 @@ public final class GenDoubleType extends BaseBasicType
     }
 
     @Override
-    public String requireInstruct()
+    public String instruction()
     {
         return null;
     }

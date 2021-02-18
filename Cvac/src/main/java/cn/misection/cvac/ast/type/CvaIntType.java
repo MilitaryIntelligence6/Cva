@@ -9,13 +9,13 @@ package cn.misection.cvac.ast.type;
  */
 public class CvaIntType extends AbstractType
 {
-    public CvaIntType()
-    {
-    }
+    public static final String TYPE_LITERAL = "@int";
+
+    public CvaIntType() {}
 
     @Override
     public String toString()
     {
-        return "@int";
+        return TYPE_LITERAL;
     }
 }
