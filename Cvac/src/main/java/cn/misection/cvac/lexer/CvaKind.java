@@ -164,7 +164,7 @@ public enum CvaKind
     /**
      * String 不是基本类型, 但应是CvaDK内置类, 暂时不标记为class只有;
      */
-    STRING("String"),
+    STRING("string"),
 
     /**
      * class
@@ -184,6 +184,10 @@ public enum CvaKind
     EXTENDS("extends"),
 
     PACKAGE("pkg"),
+
+    /*
+     * non-prefix char;
+     */
 
     /**
      * {
@@ -273,10 +277,17 @@ public enum CvaKind
      */
     NUMBER,
 
-    /**
-     * print, we just treat it as a key word
+    /*
+     * 由于暂时没有完善native包机制;
      */
-    WRITE("printf"),
+    /**
+     * write, we just treat it as a key word
+     */
+    WRITE("echo"),
+//
+//    WRITE_LINE("println"),
+//
+//    WRITE_F("printf"),
 
     /**
      * Identifier
@@ -570,10 +581,9 @@ public enum CvaKind
          * @TODO 后面应该将他们分离;
          */
         // printf 已经写入了;
-        lookup.put("echo", CvaKind.WRITE);
-        lookup.put("echof", CvaKind.WRITE);
-        lookup.put("echoln", CvaKind.WRITE);
-
+        lookup.put("printf", CvaKind.WRITE);
+//        lookup.put("echof", CvaKind.WRITE);
+//        lookup.put("echoln", CvaKind.WRITE);
         lookup.put("println", CvaKind.WRITE);
     }
 

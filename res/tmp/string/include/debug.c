@@ -4,15 +4,12 @@ pkg cn.misection.cva.test;
 
 call cva.native.io.*;
 call cva.std.console.*;
-/**
- * 原生string导入;
- */
 call cva.lang.type.String;
 
 /**
  * block comm;
  */
-int main(string[] args)
+int main(String[] args)
 {
     printf(new Test().Compute(10));   // just a print statement
     // return 0;
@@ -46,7 +43,7 @@ class Test
         i = num;
         while (i < 5)
         {
-            println(888);
+            echoln(888);
             i = i + 1;
         }
         return total;
