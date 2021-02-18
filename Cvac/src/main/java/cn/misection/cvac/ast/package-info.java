@@ -47,16 +47,6 @@ final class CvaExpr
     public static final String CVA_CALL_EXPR = "CvaCallExpr";
 
     /**
-     * true
-     */
-    public static final String CVA_TRUE_EXPR = "CvaTrueExpr";
-
-    /**
-     * CvaFalseExpr
-     */
-    public static final String CVA_FALSE_EXPR = "CvaFalseExpr";
-
-    /**
      * CvaIdentifier
      */
     public static final String CVA_IDENTIFIER = "CvaIdentifier";
@@ -77,11 +67,6 @@ final class CvaExpr
     public static final String CVA_NEGATE_EXPR = "CvaNegateExpr";
 
     /**
-     * CvaNumberInt
-     */
-    public static final String CVA_NUMBER_INT = "CvaNumberIntExpr";
-
-    /**
      * CvaSubExpr
      */
     public static final String CVA_SUB_EXPR = "CvaSubExpr";
@@ -95,6 +80,27 @@ final class CvaExpr
      * CvaMuliExpr
      */
     public static final String CVA_MULI_EXPR = "CvaMuliExpr";
+
+    /**
+     * true
+     */
+    public static final String CVA_TRUE_EXPR = "CvaTrueExpr";
+
+    /**
+     * CvaFalseExpr
+     */
+    public static final String CVA_FALSE_EXPR = "CvaFalseExpr";
+
+    /**
+     * CvaNumberIntExpr
+     */
+    public static final String CVA_NUMBER_INT_EXPR = "CvaNumberIntExpr";
+
+    /**
+     * string;
+     */
+    public static final String CVA_STRING_EXPR = "CvaStringExpr";
+
 }
 
 final class CvaStatement

@@ -106,7 +106,7 @@ public interface IVisitor
                 visit((CvaNegateExpr) e);
                 break;
             }
-            case CvaExpr.CVA_NUMBER_INT:
+            case CvaExpr.CVA_NUMBER_INT_EXPR:
             {
                 visit((CvaNumberIntExpr) e);
                 break;
