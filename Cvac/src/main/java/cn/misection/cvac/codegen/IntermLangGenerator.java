@@ -7,8 +7,8 @@ import cn.misection.cvac.codegen.bst.bentry.GenEntry;
 import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
 import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
 import cn.misection.cvac.codegen.bst.binstruct.*;
-import cn.misection.cvac.codegen.bst.btype.GenClassType;
-import cn.misection.cvac.codegen.bst.btype.GenInt;
+import cn.misection.cvac.codegen.bst.btype.basic.BaseBasicType;
+import cn.misection.cvac.codegen.bst.btype.refer.BaseReferenceType;
 import cn.misection.cvac.constant.WriteILPool;
 
 import java.io.*;
@@ -78,15 +78,15 @@ public final class IntermLangGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(GenClassType t)
+    public void visit(BaseReferenceType t)
     {
         writef("L%s;", t.getLiteral());
     }
 
     @Override
-    public void visit(GenInt t)
+    public void visit(BaseBasicType t)
     {
-        this.write("I");
+        this.write(t.requireInstruct());
     }
 
     @Override
@@ -205,6 +205,30 @@ public final class IntermLangGenerator implements CodeGenVisitor
         // TODO 封装常量字段, 同时把println变成print;
         this.iwriteLine("invokevirtual java/io/PrintStream/println(I)V");
     }
+
+    /**
+     * string 打印指令;
+     * @param s
+     */
+//    private void printString(String s) {
+//        if (s.length() == 0) {
+//            return;
+//        }
+//
+//        ProgramGenerator generator = ProgramGenerator.getInstance();
+//        generator.emit(Instruction.GETSTATIC, "java/lang/System/out Ljava/io/PrintStream;");
+//        generator.emit(Instruction.LDC, "\"" + s + "\"");
+//        String printMethod = "java/io/PrintStream/print(Ljava/lang/String;)V";
+//        generator.emit(Instruction.INVOKEVIRTUAL, printMethod);
+//    }
+//
+//    private void printInteger(int posInList) {
+//        ProgramGenerator generator = ProgramGenerator.getInstance();
+//        generator.emit(Instruction.GETSTATIC, "java/lang/System/out Ljava/io/PrintStream;");
+//        generator.emit(Instruction.ILOAD, "" + posInList);
+//        String printMethod = "java/io/PrintStream/print(I)V";
+//        generator.emit(Instruction.INVOKEVIRTUAL, printMethod);
+//    }
 
     @Override
     public void visit(PutField s)

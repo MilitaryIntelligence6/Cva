@@ -1,4 +1,4 @@
-package cn.misection.cvac.codegen.bst.btype;
+package cn.misection.cvac.codegen.bst.btype.refer;
 
 /**
  * @author Military Intelligence 6 root
@@ -7,8 +7,10 @@ package cn.misection.cvac.codegen.bst.btype;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:46:00
  */
-public final class GenString extends BaseType
+public final class GenString extends BaseReferenceType
 {
+    private final String literal = "java/lang/String";
+
     public GenString()
     {
     }
@@ -17,5 +19,11 @@ public final class GenString extends BaseType
     public String toString()
     {
         return "@String";
+    }
+
+    @Override
+    public String getLiteral()
+    {
+        return literal;
     }
 }

@@ -19,8 +19,8 @@ import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
 import cn.misection.cvac.codegen.bst.binstruct.BaseInstruction;
 import cn.misection.cvac.codegen.bst.binstruct.*;
 import cn.misection.cvac.codegen.bst.btype.BaseType;
-import cn.misection.cvac.codegen.bst.btype.GenClassType;
-import cn.misection.cvac.codegen.bst.btype.GenInt;
+import cn.misection.cvac.codegen.bst.btype.refer.GenClassType;
+import cn.misection.cvac.codegen.bst.btype.basic.GenInt;
 
 import java.util.*;
 

@@ -7,8 +7,10 @@ import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
 import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
 import cn.misection.cvac.codegen.bst.binstruct.*;
 import cn.misection.cvac.codegen.bst.btype.BaseType;
-import cn.misection.cvac.codegen.bst.btype.GenClassType;
-import cn.misection.cvac.codegen.bst.btype.GenInt;
+import cn.misection.cvac.codegen.bst.btype.basic.BaseBasicType;
+import cn.misection.cvac.codegen.bst.btype.refer.BaseReferenceType;
+import cn.misection.cvac.codegen.bst.btype.refer.GenClassType;
+import cn.misection.cvac.codegen.bst.btype.basic.GenInt;
 
 /**
  * Created by MI6 root 1/17.
@@ -18,19 +20,19 @@ public interface CodeGenVisitor
     // Type
     default void visit(BaseType t)
     {
-        if (t instanceof GenClassType)
+        if (t instanceof BaseReferenceType)
         {
-            this.visit(((GenClassType) t));
+            this.visit(((BaseReferenceType) t));
         }
         else
         {
-            this.visit(((GenInt) t));
+            this.visit(((BaseBasicType) t));
         }
     }
 
-    void visit(GenClassType t);
+    void visit(BaseReferenceType t);
 
-    void visit(GenInt t);
+    void visit(BaseBasicType t);
 
     // Dec
     void visit(GenDeclaration d);
