@@ -99,6 +99,12 @@ public final class UnUsedVarDecl
     public void visit(CvaNumberIntExpr e) {}
 
     @Override
+    public void visit(CvaStringExpr expr)
+    {
+        // FIXME
+    }
+
+    @Override
     public void visit(CvaSubExpr e)
     {
         this.visit(e.getLeft());

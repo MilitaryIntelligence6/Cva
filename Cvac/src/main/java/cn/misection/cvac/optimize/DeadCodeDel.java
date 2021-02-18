@@ -97,8 +97,12 @@ public final class DeadCodeDel
     }
 
     @Override
-    public void visit(CvaNumberIntExpr e)
+    public void visit(CvaNumberIntExpr e) {}
+
+    @Override
+    public void visit(CvaStringExpr expr)
     {
+        // FIXME
     }
 
     @Override

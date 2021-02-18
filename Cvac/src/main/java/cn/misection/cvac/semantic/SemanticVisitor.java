@@ -322,6 +322,12 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
+    public void visit(CvaStringExpr expr)
+    {
+        this.type = new CvaStringType();
+    }
+
+    @Override
     public void visit(CvaSubExpr e)
     {
         this.visit(e.getLeft());

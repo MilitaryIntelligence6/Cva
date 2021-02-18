@@ -218,6 +218,12 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
+    public void visit(CvaStringExpr expr)
+    {
+        // FIXME
+    }
+
+    @Override
     public void visit(CvaSubExpr e)
     {
         visit(e.getLeft());

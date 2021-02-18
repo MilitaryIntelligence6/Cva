@@ -184,6 +184,12 @@ public final class ConstantAndCopyPropagation
     }
 
     @Override
+    public void visit(CvaStringExpr expr)
+    {
+        // FIXME
+    }
+
+    @Override
     public void visit(CvaSubExpr e)
     {
         this.visit(e.getLeft());

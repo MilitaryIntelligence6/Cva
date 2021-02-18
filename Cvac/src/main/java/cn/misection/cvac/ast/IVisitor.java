@@ -118,6 +118,11 @@ public interface IVisitor
                 visit((CvaNumberIntExpr) e);
                 break;
             }
+            case CvaExprClassName.CVA_STRING_EXPR:
+            {
+                visit((CvaStringExpr) e);
+                break;
+            }
             case CvaExprClassName.CVA_SUB_EXPR:
             {
                 visit((CvaSubExpr) e);
@@ -163,6 +168,8 @@ public interface IVisitor
     void visit(CvaNegateExpr e);
 
     void visit(CvaNumberIntExpr e);
+
+    void visit(CvaStringExpr expr);
 
     void visit(CvaSubExpr e);
 

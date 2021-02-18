@@ -65,6 +65,9 @@ public final class UnReachableDel
     public void visit(CvaNumberIntExpr e) {}
 
     @Override
+    public void visit(CvaStringExpr expr) {}
+
+    @Override
     public void visit(CvaSubExpr e) {}
 
     @Override
