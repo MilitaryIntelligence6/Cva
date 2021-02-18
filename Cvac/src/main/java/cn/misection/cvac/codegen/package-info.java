@@ -8,6 +8,11 @@
 package cn.misection.cvac.codegen;
 
 
+import cn.misection.cvac.codegen.bst.btype.refer.GenStringType;
+import cn.misection.cvac.constant.WriteILPool;
+
+import java.util.HashMap;
+
 final class StackConst
 {
     /**
@@ -19,4 +24,69 @@ final class StackConst
      * 禁止构造;
      */
     private StackConst() {}
+}
+
+class WriteModeMap extends HashMap<Byte, String>
+{
+    private static WriteModeMap instance = null;
+
+    private WriteModeMap()
+    {
+        init();
+    }
+
+    public static WriteModeMap getInstance()
+    {
+        if (instance == null)
+        {
+            synchronized (WriteModeMap.class)
+            {
+                if (instance == null)
+                {
+                    instance = new WriteModeMap();
+                }
+            }
+        }
+        return instance;
+    }
+
+    private void init()
+    {
+        this.put(WriteILPool.CONSOLE_WRITE, "print");
+        this.put(WriteILPool.CONSOLE_WRITELN, "println");
+        this.put(WriteILPool.CONSOLE_WRITE_FORMAT, "printf");
+    }
+}
+
+
+class WriteTypeMap extends HashMap<Byte, String>
+{
+    private static WriteTypeMap instance = null;
+
+    private WriteTypeMap()
+    {
+        init();
+    }
+
+    public static WriteTypeMap getInstance()
+    {
+        if (instance == null)
+        {
+            synchronized (WriteTypeMap.class)
+            {
+                if (instance == null)
+                {
+                    instance = new WriteTypeMap();
+                }
+            }
+        }
+        return instance;
+    }
+
+    private void init()
+    {
+        this.put(WriteILPool.WRITE_INT, "I");
+        this.put(WriteILPool.WRITE_STRING, String.format("L%s", GenStringType.FULL_LITERAL));
+//        this.put(WriteILPool.WRITE_BOOLEAN, GenStringType.FULL_LITERAL);
+    }
 }

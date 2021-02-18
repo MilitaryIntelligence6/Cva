@@ -9,9 +9,9 @@ package cn.misection.cvac.codegen.bst.btype.refer;
  */
 public final class GenStringType extends BaseReferenceType
 {
-    public static final String TYPE_LITERAL = "@byte";
+    public static final String TYPE_LITERAL = "@string";
 
-    private static final String LITERAL = "java/lang/String";
+    public static final String FULL_LITERAL = "java/lang/String";
 
     public GenStringType() {}
 
@@ -24,6 +24,6 @@ public final class GenStringType extends BaseReferenceType
     @Override
     public String literal()
     {
-        return LITERAL;
+        return FULL_LITERAL;
     }
 }

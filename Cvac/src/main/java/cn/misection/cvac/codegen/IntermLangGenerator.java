@@ -24,6 +24,10 @@ public final class IntermLangGenerator implements CodeGenVisitor
 
     private final StringBuffer buffer = new StringBuffer();
 
+    private WriteTypeMap writeTypeMap = WriteTypeMap.getInstance();
+
+    private WriteModeMap writeModeMap = WriteModeMap.getInstance();
+
 
     private void write(String s)
     {
@@ -152,7 +156,7 @@ public final class IntermLangGenerator implements CodeGenVisitor
     @Override
     public void visit(InvokeVirtual s)
     {
-        writef("    invokevirtual %s/%s(", s.getC(), s.getF());
+        iwritef("invokevirtual %s/%s(", s.getC(), s.getF());
         s.getArgTypeList().forEach(this::visit);
         write(")");
         visit(s.getRetType());
@@ -198,12 +202,14 @@ public final class IntermLangGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(WriteInstruction s)
+    public void visit(WriteInstruction inst)
     {
+        String mode = writeModeMap.get(inst.getWriteMode());
+        String type = writeTypeMap.get(inst.getWriteType());
         iwriteLine("getstatic java/lang/System/out Ljava/io/PrintStream;");
         iwriteLine("swap");
         // TODO 封装常量字段, 同时把println变成print;
-        iwriteLine("invokevirtual java/io/PrintStream/println(I)V");
+        iwritefln("invokevirtual java/io/PrintStream/%s(%s)V", mode, type);
     }
 
     /**

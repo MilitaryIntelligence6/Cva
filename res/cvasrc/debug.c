@@ -35,7 +35,7 @@ class Test
         else if (num < 5)
         {
             total = num * (this.Compute(num-1));
-            echo(num);
+            println(num);
         }
         else
         {
