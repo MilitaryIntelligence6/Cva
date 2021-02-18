@@ -169,13 +169,13 @@ public final class Parser
         {
             return expList;
         }
-        AbstractExpression tem = parseExp();
+        AbstractExpression tem = parseExpr();
         tem.setLineNum(curToken.getLineNum());
         expList.addLast(tem);
         while (curToken.getKind() == CvaKind.COMMA)
         {
             advance();
-            tem = parseExp();
+            tem = parseExpr();
             tem.setLineNum(curToken.getLineNum());
             expList.add(tem);
         }
@@ -200,7 +200,7 @@ public final class Parser
         {
             case OPEN_PAREN:
                 advance();
-                expr = parseExp();
+                expr = parseExpr();
                 expr.setLineNum(curToken.getLineNum());
                 //advance();
                 eatToken(CvaKind.CLOSE_PAREN);
@@ -209,6 +209,10 @@ public final class Parser
                 expr = new CvaNumberInt(curToken.getLineNum(), Integer.parseInt(curToken.getLiteral()));
                 advance();
                 return expr;
+            case STRING:
+            {
+                break;
+            }
             case TRUE:
                 expr = new CvaTrueExpr(curToken.getLineNum());
                 advance();
@@ -234,8 +238,8 @@ public final class Parser
                 return expr;
             default:
                 errorLog();
-                return null;
         }
+        return null;
     }
 
     /**
@@ -244,7 +248,7 @@ public final class Parser
      *
      * @return
      */
-    private AbstractExpression parseNotExp()
+    private AbstractExpression parseNegateExpr()
     {
         AbstractExpression expr = parseAtomExpr();
         while (curToken.getKind() == CvaKind.DOT)
@@ -270,7 +274,7 @@ public final class Parser
      *
      * @return
      */
-    private AbstractExpression parseTimesExp()
+    private AbstractExpression parseMuliExpr()
     {
         int i = 0;
         while (curToken.getKind() == CvaKind.NEGATE)
@@ -278,7 +282,7 @@ public final class Parser
             advance();
             i++;
         }
-        AbstractExpression exp = parseNotExp();
+        AbstractExpression exp = parseNegateExpr();
         AbstractExpression tem = new CvaNegateExpr(
                 exp.getLineNum(), exp);
         return i % 2 == 0 ? exp : tem;
@@ -292,12 +296,12 @@ public final class Parser
      */
     private AbstractExpression parseAddSubExpr()
     {
-        AbstractExpression tem = parseTimesExp();
+        AbstractExpression tem = parseMuliExpr();
         AbstractExpression exp = tem;
         while (curToken.getKind() == CvaKind.STAR)
         {
             advance();
-            tem = parseTimesExp();
+            tem = parseMuliExpr();
             exp = new CvaMuliExpr(tem.getLineNum(), exp, tem);
         }
         return exp;
@@ -310,7 +314,7 @@ public final class Parser
      *
      * @return
      */
-    private AbstractExpression parseLTExp()
+    private AbstractExpression parseLessThanExpr()
     {
         AbstractExpression exp = parseAddSubExpr();
         while (curToken.getKind() == CvaKind.ADD || curToken.getKind() == CvaKind.SUB)
@@ -336,13 +340,13 @@ public final class Parser
      *
      * @return
      */
-    private AbstractExpression parseAndExp()
+    private AbstractExpression parseAndAndExpr()
     {
-        AbstractExpression exp = parseLTExp();
+        AbstractExpression exp = parseLessThanExpr();
         while (curToken.getKind() == CvaKind.LESS_THAN)
         {
             advance();
-            AbstractExpression tem = parseLTExp();
+            AbstractExpression tem = parseLessThanExpr();
             exp = new CvaLessThanExpr(exp.getLineNum(), exp, tem);
         }
         return exp;
@@ -354,13 +358,13 @@ public final class Parser
      *
      * @return
      */
-    private AbstractExpression parseExp()
+    private AbstractExpression parseExpr()
     {
-        AbstractExpression exp = parseAndExp();
+        AbstractExpression exp = parseAndAndExpr();
         while (curToken.getKind() == CvaKind.AND_AND)
         {
             advance();
-            AbstractExpression tem = parseAndExp();
+            AbstractExpression tem = parseAndAndExpr();
             exp = new CvaAndAndExpr(exp.getLineNum(), exp, tem);
         }
         return exp;
@@ -648,7 +652,7 @@ public final class Parser
         List<AbstractDeclaration> varDecs = parseVarDecls();
         List<AbstractStatement> statementList = parseStatementList();
         eatToken(CvaKind.RETURN);
-        AbstractExpression retExp = parseExp();
+        AbstractExpression retExp = parseExpr();
         eatToken(CvaKind.SEMI);
         eatToken(CvaKind.CLOSE_CURLY_BRACE);
 
@@ -962,7 +966,7 @@ public final class Parser
 //
 //        }
         eatToken(CvaKind.OPEN_PAREN);
-        AbstractExpression exp = parseExp();
+        AbstractExpression exp = parseExpr();
         eatToken(CvaKind.CLOSE_PAREN);
         eatToken(CvaKind.SEMI);
         return new CvaWriteOperation(lineNum, exp);
@@ -977,7 +981,7 @@ public final class Parser
         int lineNum = curToken.getLineNum();
         eatToken(CvaKind.IF_STATEMENT);
         eatToken(CvaKind.OPEN_PAREN);
-        AbstractExpression condition = parseExp();
+        AbstractExpression condition = parseExpr();
         eatToken(CvaKind.CLOSE_PAREN);
         AbstractStatement thenStm = parseStatement();
         switch (curToken.getKind())
@@ -1005,7 +1009,7 @@ public final class Parser
         int lineNum = curToken.getLineNum();
         eatToken(CvaKind.WHILE_STATEMENT);
         eatToken(CvaKind.OPEN_PAREN);
-        AbstractExpression condition = parseExp();
+        AbstractExpression condition = parseExpr();
         eatToken(CvaKind.CLOSE_PAREN);
         AbstractStatement body = parseStatement();
         return new CvaWhileStatement(lineNum, condition, body);
@@ -1017,7 +1021,7 @@ public final class Parser
         int lineNum = curToken.getLineNum();
         eatToken(CvaKind.IDENTIFIER);
         eatToken(CvaKind.ASSIGN);
-        AbstractExpression expr = parseExp();
+        AbstractExpression expr = parseExpr();
         eatToken(CvaKind.SEMI);
         return new CvaAssign(lineNum, literal, expr);
     }

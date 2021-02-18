@@ -12,6 +12,7 @@ int main(String[] args)
 {
     printf(new Test().Compute(10));   // just a print statement
     // return 0;
+//    echo("hello, string");
 }
 
 
