@@ -171,7 +171,7 @@ public final class IntermLangGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(Write s)
+    public void visit(WriteInstr s)
     {
         this.iwriteln("getstatic java/lang/System/out Ljava/io/PrintStream;");
         this.iwriteln("swap");

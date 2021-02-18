@@ -1,6 +1,6 @@
 package cn.misection.cvac.codegen.bst.bentry;
 
-import cn.misection.cvac.codegen.bst.binstruct.BaseStatement;
+import cn.misection.cvac.codegen.bst.binstruct.BaseInstruction;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public final class GenEntry extends BaseEntry
 {
     // FIXME
     // TODO 这里是有改动的, stms是list;
-    public GenEntry(String literal, List<BaseStatement> statementList)
+    public GenEntry(String literal, List<BaseInstruction> statementList)
     {
         super(literal, statementList);
     }

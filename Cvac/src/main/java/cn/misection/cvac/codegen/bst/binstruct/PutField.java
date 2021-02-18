@@ -7,7 +7,7 @@ package cn.misection.cvac.codegen.bst.binstruct;
  * @Description TODO
  * @CreateTime 2021年02月16日 01:01:00
  */
-public final class PutField extends BaseStatement
+public final class PutField extends BaseInstruction
 {
     private String fieldSpec;
 

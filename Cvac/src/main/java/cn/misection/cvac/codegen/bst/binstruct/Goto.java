@@ -9,7 +9,7 @@ import cn.misection.cvac.codegen.bst.Label;
  * @Description TODO
  * @CreateTime 2021年02月16日 00:48:00
  */
-public final class Goto extends BaseStatement
+public final class Goto extends BaseInstruction
 {
     private Label label;
 

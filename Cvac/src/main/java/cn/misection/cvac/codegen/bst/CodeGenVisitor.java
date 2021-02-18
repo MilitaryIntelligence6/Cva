@@ -36,7 +36,7 @@ public interface CodeGenVisitor
     void visit(GenDeclaration d);
 
     // Stm
-    default void visit(BaseStatement s)
+    default void visit(BaseInstruction s)
     {
         switch (s.getClass().getSimpleName())
         {
@@ -122,7 +122,7 @@ public interface CodeGenVisitor
             }
             case Operator.WRITE:
             {
-                visit((Write) s);
+                visit((WriteInstr) s);
                 break;
             }
             case Operator.PUT_FIELD:
@@ -170,7 +170,7 @@ public interface CodeGenVisitor
 
     void visit(New s);
 
-    void visit(Write s);
+    void visit(WriteInstr s);
 
     void visit(PutField s);
 

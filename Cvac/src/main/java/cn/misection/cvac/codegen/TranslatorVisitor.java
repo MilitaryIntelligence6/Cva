@@ -16,7 +16,7 @@ import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
 import cn.misection.cvac.codegen.bst.bentry.GenEntry;
 import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
 import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
-import cn.misection.cvac.codegen.bst.binstruct.BaseStatement;
+import cn.misection.cvac.codegen.bst.binstruct.BaseInstruction;
 import cn.misection.cvac.codegen.bst.binstruct.*;
 import cn.misection.cvac.codegen.bst.btype.BaseType;
 import cn.misection.cvac.codegen.bst.btype.GenClassType;
@@ -36,7 +36,7 @@ public final class TranslatorVisitor implements IVisitor
     
     private BaseType type;
     private GenDeclaration dec;
-    private List<BaseStatement> statementList;
+    private List<BaseInstruction> statementList;
     private GenMethod method;
     private GenClass clazz;
     private GenEntry mainClass;
@@ -56,7 +56,7 @@ public final class TranslatorVisitor implements IVisitor
         this.setProgram(null);
     }
 
-    private void emit(BaseStatement s)
+    private void emit(BaseInstruction s)
     {
         this.getStatementList().add(s);
     }
@@ -291,7 +291,7 @@ public final class TranslatorVisitor implements IVisitor
     public void visit(CvaWriteOperation s)
     {
         this.visit(s.getExpr());
-        emit(new Write());
+        emit(new WriteInstr());
     }
 
     @Override
@@ -434,12 +434,12 @@ public final class TranslatorVisitor implements IVisitor
         this.dec = dec;
     }
 
-    public List<BaseStatement> getStatementList()
+    public List<BaseInstruction> getStatementList()
     {
         return statementList;
     }
 
-    public void setStatementList(List<BaseStatement> statementList)
+    public void setStatementList(List<BaseInstruction> statementList)
     {
         this.statementList = statementList;
     }

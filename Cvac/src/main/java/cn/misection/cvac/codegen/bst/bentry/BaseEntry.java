@@ -1,6 +1,6 @@
 package cn.misection.cvac.codegen.bst.bentry;
 
-import cn.misection.cvac.codegen.bst.binstruct.BaseStatement;
+import cn.misection.cvac.codegen.bst.binstruct.BaseInstruction;
 
 import java.util.List;
 
@@ -15,9 +15,9 @@ public abstract class BaseEntry implements IEntry
 {
     protected String literal;
 
-    protected List<BaseStatement> statementList;
+    protected List<BaseInstruction> statementList;
 
-    protected BaseEntry(String literal, List<BaseStatement> statementList)
+    protected BaseEntry(String literal, List<BaseInstruction> statementList)
     {
         this.literal = literal;
         this.statementList = statementList;
@@ -28,7 +28,7 @@ public abstract class BaseEntry implements IEntry
         return literal;
     }
 
-    public List<BaseStatement> getStatementList()
+    public List<BaseInstruction> getStatementList()
     {
         return statementList;
     }
@@ -38,7 +38,7 @@ public abstract class BaseEntry implements IEntry
         this.literal = literal;
     }
 
-    public void setStatementList(List<BaseStatement> statementList)
+    public void setStatementList(List<BaseInstruction> statementList)
     {
         this.statementList = statementList;
     }

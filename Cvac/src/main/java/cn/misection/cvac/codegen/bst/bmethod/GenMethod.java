@@ -1,7 +1,7 @@
 package cn.misection.cvac.codegen.bst.bmethod;
 
 import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
-import cn.misection.cvac.codegen.bst.binstruct.BaseStatement;
+import cn.misection.cvac.codegen.bst.binstruct.BaseInstruction;
 import cn.misection.cvac.codegen.bst.btype.BaseType;
 
 import java.util.List;
@@ -33,7 +33,7 @@ public final class GenMethod extends BaseMethod
 
     private List<GenDeclaration> localList;
 
-    private List<BaseStatement> statementList;
+    private List<BaseInstruction> statementList;
 
     private int index;
 
@@ -56,7 +56,7 @@ public final class GenMethod extends BaseMethod
             String classId,
             List<GenDeclaration> formalList,
             List<GenDeclaration> localList,
-            List<BaseStatement> statementList,
+            List<BaseInstruction> statementList,
             int retExpr,
             int index
     )
@@ -82,7 +82,7 @@ public final class GenMethod extends BaseMethod
     }
 
 
-    public List<BaseStatement> getStatementList()
+    public List<BaseInstruction> getStatementList()
     {
         return statementList;
     }
@@ -97,7 +97,7 @@ public final class GenMethod extends BaseMethod
         this.retType = retType;
     }
 
-    public void setStatementList(List<BaseStatement> statementList)
+    public void setStatementList(List<BaseInstruction> statementList)
     {
         this.statementList = statementList;
     }

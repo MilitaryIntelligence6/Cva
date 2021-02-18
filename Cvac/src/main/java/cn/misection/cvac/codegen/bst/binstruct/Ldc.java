@@ -7,7 +7,7 @@ package cn.misection.cvac.codegen.bst.binstruct;
  * @Description TODO
  * @CreateTime 2021年02月16日 00:59:00
  */
-public final class Ldc extends BaseStatement
+public final class Ldc extends BaseInstruction
 {
     private int integ;
 

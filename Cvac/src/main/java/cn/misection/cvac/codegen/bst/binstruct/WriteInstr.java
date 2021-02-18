@@ -7,6 +7,6 @@ package cn.misection.cvac.codegen.bst.binstruct;
  * @Description TODO
  * @CreateTime 2021年02月16日 01:00:00
  */
-public final class Write extends BaseStatement
+public final class WriteInstr extends BaseInstruction
 {
 }
