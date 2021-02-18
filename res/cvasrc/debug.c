@@ -43,14 +43,14 @@ class Test
         }
         if (num < 7)
         {
-//            println(999);
-            echo(999);
+            println(999);
+//            echo(999);
         }
         i = num;
         while (i < 5)
         {
-//            println(888);
-            echo(888);
+            println(888);
+//            echo(888);
             i = i + 1;
         }
         return total;

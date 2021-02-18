@@ -458,6 +458,9 @@ public final class Parser
                 case WHILE_STATEMENT:
                 case IDENTIFIER:
                 case WRITE:
+                    // TODO 不优雅, 想办法改;
+                case WRITE_LINE:
+                case WRITE_FORMAT:
                 {
                     statementList.addLast(parseStatement());
                     continue;
