@@ -14,6 +14,7 @@ call cva.lang.type.String;
  */
 int main(string[] args)
 {
-    printf("hello, string!");   // just a print statement
+//    printf("hello, string!");   // just a print statement
+    printf("hello string!");
     // return 0;
 }

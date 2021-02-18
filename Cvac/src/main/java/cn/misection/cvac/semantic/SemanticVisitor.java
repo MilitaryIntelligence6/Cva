@@ -100,9 +100,9 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaAddExpr addExpr)
     {
-        this.visit(addExpr.getLeft());
+        visit(addExpr.getLeft());
         AbstractType lefty = this.type;
-        this.visit(addExpr.getRight());
+        visit(addExpr.getRight());
         if (!this.type.toString().equals(lefty.toString()))
         {
             errorLog(addExpr.getLineNum(),
@@ -121,9 +121,9 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaAndAndExpr e)
     {
-        this.visit(e.getLeft());
+        visit(e.getLeft());
         AbstractType lefty = this.type;
-        this.visit(e.getRight());
+        visit(e.getRight());
         if (!this.type.toString().equals(lefty.toString()))
         {
             errorLog(e.getLineNum(),
@@ -141,7 +141,7 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaCallExpr e)
     {
-        this.visit(e.getExpr());
+        visit(e.getExpr());
         CvaClassType expType = null;
 
         if (this.type instanceof CvaClassType)
@@ -166,11 +166,11 @@ public final class SemanticVisitor implements IVisitor
         LinkedList<AbstractType> argsty = new LinkedList<>();
         e.getArgs().forEach(arg ->
         {
-            this.visit(arg);
+            visit(arg);
             argsty.addLast(this.type);
         });
 
-        MethodType mty = this.classTable.getMethodType(expType.getLiteral(), e.getLiteral());
+        MethodType mty = classTable.getMethodType(expType.getLiteral(), e.getLiteral());
 
         if (mty == null)
         {
@@ -226,8 +226,8 @@ public final class SemanticVisitor implements IVisitor
         String className = currentClass;
         while (type == null && className != null)
         {
-            type = this.classTable.getFieldType(className, e.getLiteral());
-            className = this.classTable.getClassBinding(className).parent;
+            type = classTable.getFieldType(className, e.getLiteral());
+            className = classTable.getClassBinding(className).parent;
         }
 
         if (this.curMthLocals.contains(e.getLiteral()))
@@ -265,9 +265,9 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaLessThanExpr e)
     {
-        this.visit(e.getLeft());
+        visit(e.getLeft());
         AbstractType lefty = this.type;
-        this.visit(e.getRight());
+        visit(e.getRight());
         if (!this.type.toString().equals(lefty.toString()))
         {
             errorLog(e.getLineNum(),
@@ -284,7 +284,7 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaNewExpr e)
     {
-        if (this.classTable.getClassBinding(e.getLiteral()) != null)
+        if (classTable.getClassBinding(e.getLiteral()) != null)
         {
             this.type = new CvaClassType(e.getLiteral());
         }
@@ -307,7 +307,7 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaNegateExpr e)
     {
-        this.visit(e.getExpr());
+        visit(e.getExpr());
         if (!(type instanceof CvaBooleanType))
         {
             errorLog(e.getLineNum(), "the exp cannot calculate to a boolean.");
@@ -330,9 +330,9 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaSubExpr e)
     {
-        this.visit(e.getLeft());
+        visit(e.getLeft());
         AbstractType lefty = this.type;
-        this.visit(e.getRight());
+        visit(e.getRight());
         if (!this.type.toString().equals(lefty.toString()))
         {
             errorLog(e.getLineNum(),
@@ -355,9 +355,9 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaMuliExpr e)
     {
-        this.visit(e.getLeft());
+        visit(e.getLeft());
         AbstractType lefty = this.type;
-        this.visit(e.getRight());
+        visit(e.getRight());
         if (!this.type.toString().equals(lefty.toString()))
         {
             errorLog(e.getLineNum(),
@@ -380,7 +380,7 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaAssign s)
     {
-        this.visit(s.getExpr());
+        visit(s.getExpr());
         s.setType(this.type);
 
         if (this.curMthLocals.contains(s.getLiteral()))
@@ -389,7 +389,7 @@ public final class SemanticVisitor implements IVisitor
         }
 
         CvaIdentifier cvaIdentifier = new CvaIdentifier(s.getLineNum(), s.getLiteral());
-        this.visit(cvaIdentifier);
+        visit(cvaIdentifier);
         AbstractType idty = this.type;
         //if (!this.type.toString().equals(idty.toString()))
         if (!isMatch(idty, s.getType()))
@@ -409,37 +409,39 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaIfStatement s)
     {
-        this.visit(s.getCondition());
+        visit(s.getCondition());
         if (!(type instanceof CvaBooleanType))
         {
             errorLog(s.getCondition().getLineNum(),
                     "the condition's type should be a boolean.");
         }
 
-        this.visit(s.getThenStatement());
+        visit(s.getThenStatement());
         if (s.getElseStatement() != null)
         {
-            this.visit(s.getElseStatement());
+            visit(s.getElseStatement());
         }
     }
 
     @Override
     public void visit(CvaWriteOperation writeOp)
     {
-        this.visit(writeOp.getExpr());
+        visit(writeOp.getExpr());
 //        if (!this.type.toString().equals(new CvaInt().toString()))
-        if (!(this.type instanceof CvaIntType))
+        if (this.type instanceof CvaIntType
+                || type instanceof CvaStringType)
         {
-            errorLog(writeOp.getExpr().getLineNum(),
-                    String.format("the expression in write(\"printf()\" \"echo\" \"println\") " +
-                            "must be a integer or can be calculate to an integer."));
+            return;
         }
+        errorLog(writeOp.getExpr().getLineNum(),
+                String.format("the expression in write(\"printf()\" \"echo\" \"println\") " +
+                        "must be a string or an integer or can be calculate to an integer."));
     }
 
     @Override
     public void visit(CvaWhileStatement whileSta)
     {
-        this.visit(whileSta.getCondition());
+        visit(whileSta.getCondition());
 //        if (!this.type.toString().equals(new CvaBoolean().toString()))
         if (!(this.type instanceof CvaBooleanType))
         {
@@ -447,7 +449,7 @@ public final class SemanticVisitor implements IVisitor
                     "the condition's type should be a boolean.");
         }
 
-        this.visit(whileSta.getBody());
+        visit(whileSta.getBody());
     }
 
     @Override
@@ -462,7 +464,7 @@ public final class SemanticVisitor implements IVisitor
         cvaMethod.getLocalList().forEach(local ->
                 this.curMthLocals.add(((CvaDeclaration) local).getLiteral()));
         cvaMethod.getStatementList().forEach(this::visit);
-        this.visit(cvaMethod.getRetExpr());
+        visit(cvaMethod.getRetExpr());
         // if (!this.type.toString().equals(m.retType.toString()))
         if (!isMatch(cvaMethod.getRetType(), this.type))
         {
@@ -484,34 +486,34 @@ public final class SemanticVisitor implements IVisitor
     public void visit(CvaEntry c)
     {
         this.currentClass = c.getLiteral();
-        this.visit(c.getStatement());
+        visit(c.getStatement());
     }
 
     @Override
     public void visit(CvaProgram cvaProgram)
     {
         // put main class to class table
-        this.classTable.putClassBinding(((CvaEntry) cvaProgram.getEntry()).getLiteral(),
+        classTable.putClassBinding(((CvaEntry) cvaProgram.getEntry()).getLiteral(),
                 new ClassBinding(null));
 
         for (AbstractClass abstractClass : cvaProgram.getClassList())
         {
             CvaClass cla = ((CvaClass) abstractClass);
-            this.classTable.putClassBinding(cla.getLiteral(), new ClassBinding(cla.getParent()));
+            classTable.putClassBinding(cla.getLiteral(), new ClassBinding(cla.getParent()));
 
-            cla.getFieldList().forEach(field -> this.classTable.putFieldToClass(cla.getLiteral(),
+            cla.getFieldList().forEach(field -> classTable.putFieldToClass(cla.getLiteral(),
                     ((CvaDeclaration) field).getLiteral(),
                     ((CvaDeclaration) field).getType())
             );
 
-            cla.getMethodList().forEach(method -> this.classTable.putMethodToClass(cla.getLiteral(),
+            cla.getMethodList().forEach(method -> classTable.putMethodToClass(cla.getLiteral(),
                     ((CvaMethod) method).getLiteral(),
                     new MethodType(
                             ((CvaMethod) method).getRetType(),
                             ((CvaMethod) method).getFormalList()))
             );
         }
-        this.visit(cvaProgram.getEntry());
+        visit(cvaProgram.getEntry());
         cvaProgram.getClassList().forEach(this::visit);
     }
 }
