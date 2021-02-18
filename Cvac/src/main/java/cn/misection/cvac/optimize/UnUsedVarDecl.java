@@ -115,7 +115,7 @@ public final class UnUsedVarDecl
     public void visit(CvaThisExpr e) {}
 
     @Override
-    public void visit(CvaMuliExpr e)
+    public void visit(CvaMulExpr e)
     {
         this.visit(e.getLeft());
         this.visit(e.getRight());
@@ -125,14 +125,14 @@ public final class UnUsedVarDecl
     public void visit(CvaTrueExpr e) {}
 
     @Override
-    public void visit(CvaAssign s)
+    public void visit(CvaAssignStatement s)
     {
         this.visit(new CvaIdentifierExpr(s.getLineNum(), s.getLiteral()));
         this.visit(s.getExpr());
     }
 
     @Override
-    public void visit(CvaBlock s)
+    public void visit(CvaBlockStatement s)
     {
         s.getStatementList().forEach(this::visit);
     }
@@ -149,7 +149,7 @@ public final class UnUsedVarDecl
     }
 
     @Override
-    public void visit(CvaWriteOperation s)
+    public void visit(CvaWriteStatement s)
     {
         this.visit(s.getExpr());
     }

@@ -10,7 +10,7 @@ import cn.misection.cvac.ast.type.AbstractType;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:28:00
  */
-public final class CvaAssign extends AbstractStatement
+public final class CvaAssignStatement extends AbstractStatement
 {
     private String literal;
 
@@ -18,7 +18,7 @@ public final class CvaAssign extends AbstractStatement
 
     private AbstractType type;
 
-    public CvaAssign(int lineNum, String literal, AbstractExpression expr)
+    public CvaAssignStatement(int lineNum, String literal, AbstractExpression expr)
     {
         super(lineNum);
         this.literal = literal;

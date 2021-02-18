@@ -212,7 +212,7 @@ public final class ConstantAndCopyPropagation
     }
 
     @Override
-    public void visit(CvaMuliExpr e)
+    public void visit(CvaMulExpr e)
     {
         this.visit(e.getLeft());
         if (this.canChange)
@@ -235,7 +235,7 @@ public final class ConstantAndCopyPropagation
     }
 
     @Override
-    public void visit(CvaAssign s)
+    public void visit(CvaAssignStatement s)
     {
         if (this.inWhile)
         {
@@ -261,7 +261,7 @@ public final class ConstantAndCopyPropagation
     }
 
     @Override
-    public void visit(CvaBlock s)
+    public void visit(CvaBlockStatement s)
     {
         s.getStatementList().forEach(this::visit);
     }
@@ -295,7 +295,7 @@ public final class ConstantAndCopyPropagation
 
 
     @Override
-    public void visit(CvaWriteOperation s)
+    public void visit(CvaWriteStatement s)
     {
         if (this.inWhile)
         {

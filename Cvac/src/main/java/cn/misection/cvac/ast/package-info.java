@@ -36,12 +36,12 @@ final class CvaStatementClassName
     /**
      * CvaAssign
      */
-    public static final String CVA_ASSIGN = "CvaAssign";
+    public static final String CVA_ASSIGN_STATEMENT = "CvaAssignStatement";
 
     /**
      * CvaBlock
      */
-    public static final String CVA_BLOCK = "CvaBlock";
+    public static final String CVA_BLOCK_STATEMENT = "CvaBlockStatement";
 
     /**
      * CvaIfStatement
@@ -51,7 +51,7 @@ final class CvaStatementClassName
     /**
      * CvaWriteOperation
      */
-    public static final String CVA_WRITE_OPERATION = "CvaWriteOperation";
+    public static final String CVA_WRITE_STATEMENT = "CvaWriteStatement";
 
     /**
      * instanceo

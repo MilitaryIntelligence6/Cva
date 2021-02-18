@@ -7,13 +7,13 @@ package cn.misection.cvac.ast.expr;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:32:00
  */
-public final class CvaMuliExpr extends AbstractExpression
+public final class CvaMulExpr extends AbstractExpression
 {
     private AbstractExpression left;
 
     private AbstractExpression right;
 
-    public CvaMuliExpr(int lineNum, AbstractExpression left, AbstractExpression right)
+    public CvaMulExpr(int lineNum, AbstractExpression left, AbstractExpression right)
     {
         super(lineNum);
         this.left = left;

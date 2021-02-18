@@ -321,7 +321,7 @@ public final class Parser
         {
             advance();
             tem = parseMulExpr();
-            expr = new CvaMuliExpr(tem.getLineNum(), expr, tem);
+            expr = new CvaMulExpr(tem.getLineNum(), expr, tem);
         }
         return expr;
     }
@@ -988,7 +988,7 @@ public final class Parser
         AbstractExpression expr = parseExpr();
         eatToken(CvaKind.CLOSE_PAREN);
         eatToken(CvaKind.SEMI);
-        return new CvaWriteOperation(lineNum, expr);
+        return new CvaWriteStatement(lineNum, expr);
     }
 
     /**
@@ -1036,14 +1036,14 @@ public final class Parser
         eatToken(CvaKind.ASSIGN);
         AbstractExpression expr = parseExpr();
         eatToken(CvaKind.SEMI);
-        return new CvaAssign(lineNum, literal, expr);
+        return new CvaAssignStatement(lineNum, literal, expr);
     }
 
     private AbstractStatement handleOpenCurly()
     {
         eatToken(CvaKind.OPEN_CURLY_BRACE);
         int lineNum = curToken.getLineNum();
-        AbstractStatement statement = new CvaBlock(lineNum, parseStatementList());
+        AbstractStatement statement = new CvaBlockStatement(lineNum, parseStatementList());
         eatToken(CvaKind.CLOSE_CURLY_BRACE);
         return statement;
     }

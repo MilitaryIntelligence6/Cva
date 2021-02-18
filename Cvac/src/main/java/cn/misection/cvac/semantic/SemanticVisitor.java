@@ -353,7 +353,7 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaMuliExpr e)
+    public void visit(CvaMulExpr e)
     {
         visit(e.getLeft());
         AbstractType lefty = this.type;
@@ -378,7 +378,7 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaAssign s)
+    public void visit(CvaAssignStatement s)
     {
         visit(s.getExpr());
         s.setType(this.type);
@@ -401,7 +401,7 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaBlock s)
+    public void visit(CvaBlockStatement s)
     {
         s.getStatementList().forEach(this::visit);
     }
@@ -424,7 +424,7 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaWriteOperation writeOp)
+    public void visit(CvaWriteStatement writeOp)
     {
         visit(writeOp.getExpr());
 //        if (!this.type.toString().equals(new CvaInt().toString()))

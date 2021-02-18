@@ -120,9 +120,9 @@ public interface CodeGenVisitor
                 visit((New) s);
                 break;
             }
-            case Operator.WRITE_INT:
+            case Operator.WRITE_INSTRUCTION:
             {
-                visit((WriteInt) s);
+                visit((WriteInstruction) s);
                 break;
             }
             case Operator.PUT_FIELD:
@@ -170,7 +170,7 @@ public interface CodeGenVisitor
 
     void visit(New s);
 
-    void visit(WriteInt s);
+    void visit(WriteInstruction s);
 
     void visit(PutField s);
 

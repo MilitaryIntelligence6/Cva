@@ -74,19 +74,19 @@ public final class UnReachableDel
     public void visit(CvaThisExpr e) {}
 
     @Override
-    public void visit(CvaMuliExpr e) {}
+    public void visit(CvaMulExpr e) {}
 
     @Override
     public void visit(CvaTrueExpr e) {}
 
     @Override
-    public void visit(CvaAssign s)
+    public void visit(CvaAssignStatement s)
     {
         this.curStm = s;
     }
 
     @Override
-    public void visit(CvaBlock s)
+    public void visit(CvaBlockStatement s)
     {
         LinkedList<AbstractStatement> stmList = new LinkedList<>();
         s.getStatementList().forEach(stm ->
@@ -94,9 +94,9 @@ public final class UnReachableDel
             this.visit(stm);
             if (curStm != null)
             {
-                if (curStm instanceof CvaBlock)
+                if (curStm instanceof CvaBlockStatement)
                 {
-                    ((CvaBlock) curStm).getStatementList().forEach(stmList::add);
+                    ((CvaBlockStatement) curStm).getStatementList().forEach(stmList::add);
                 }
                 else
                 {
@@ -130,7 +130,7 @@ public final class UnReachableDel
     }
 
     @Override
-    public void visit(CvaWriteOperation s)
+    public void visit(CvaWriteStatement s)
     {
         this.curStm = s;
     }
@@ -165,9 +165,9 @@ public final class UnReachableDel
             this.visit(stm);
             if (this.curStm != null)
             {
-                if (this.curStm instanceof CvaBlock)
+                if (this.curStm instanceof CvaBlockStatement)
                 {
-                    ((CvaBlock) this.curStm).getStatementList().forEach(stmList::add);
+                    ((CvaBlockStatement) this.curStm).getStatementList().forEach(stmList::add);
                 }
                 else
                 {

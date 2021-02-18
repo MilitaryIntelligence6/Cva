@@ -134,9 +134,9 @@ public interface IVisitor
                 visit((CvaThisExpr) e);
                 break;
             }
-            case CvaExprClassName.CVA_MULI_EXPR:
+            case CvaExprClassName.CVA_MUL_EXPR:
             {
-                visit((CvaMuliExpr) e);
+                visit((CvaMulExpr) e);
                 break;
             }
             case CvaExprClassName.CVA_TRUE_EXPR:
@@ -176,7 +176,7 @@ public interface IVisitor
 
     void visit(CvaThisExpr e);
 
-    void visit(CvaMuliExpr e);
+    void visit(CvaMulExpr e);
 
     void visit(CvaTrueExpr e);
 
@@ -185,14 +185,14 @@ public interface IVisitor
     {
         switch (s.getClass().getSimpleName())
         {
-            case CvaStatementClassName.CVA_ASSIGN:
+            case CvaStatementClassName.CVA_ASSIGN_STATEMENT:
             {
-                visit((CvaAssign) s);
+                visit((CvaAssignStatement) s);
                 break;
             }
-            case CvaStatementClassName.CVA_BLOCK:
+            case CvaStatementClassName.CVA_BLOCK_STATEMENT:
             {
-                visit((CvaBlock) s);
+                visit((CvaBlockStatement) s);
                 break;
             }
             case CvaStatementClassName.CVA_IF_STATEMENT:
@@ -200,9 +200,9 @@ public interface IVisitor
                 visit((CvaIfStatement) s);
                 break;
             }
-            case CvaStatementClassName.CVA_WRITE_OPERATION:
+            case CvaStatementClassName.CVA_WRITE_STATEMENT:
             {
-                visit((CvaWriteOperation) s);
+                visit((CvaWriteStatement) s);
                 break;
             }
             case CvaStatementClassName.CVA_WHILE_STATEMENT:
@@ -218,13 +218,13 @@ public interface IVisitor
         }
     }
 
-    void visit(CvaAssign s);
+    void visit(CvaAssignStatement s);
 
-    void visit(CvaBlock s);
+    void visit(CvaBlockStatement s);
 
     void visit(CvaIfStatement s);
 
-    void visit(CvaWriteOperation s);
+    void visit(CvaWriteStatement s);
 
     void visit(CvaWhileStatement s);
 

@@ -57,7 +57,7 @@ public final class CvaExprClassName
     /**
      * CvaMuliExpr
      */
-    public static final String CVA_MULI_EXPR = "CvaMuliExpr";
+    public static final String CVA_MUL_EXPR = "CvaMulExpr";
 
     /**
      * true

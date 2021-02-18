@@ -240,7 +240,7 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaMuliExpr e)
+    public void visit(CvaMulExpr e)
     {
         visit(e.getLeft());
         visit(e.getRight());
@@ -254,7 +254,7 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaAssign s)
+    public void visit(CvaAssignStatement s)
     {
         try
         {
@@ -281,7 +281,7 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaBlock s)
+    public void visit(CvaBlockStatement s)
     {
         s.getStatementList().forEach(this::visit);
     }
@@ -305,15 +305,15 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaWriteOperation writeOp)
+    public void visit(CvaWriteStatement writeSta)
     {
-        AbstractExpression expr = writeOp.getExpr();
+        AbstractExpression expr = writeSta.getExpr();
         visit(expr);
         switch (expr.getClass().getSimpleName())
         {
             case CvaExprClassName.CVA_NUMBER_INT_EXPR:
             {
-                emit(new WriteInt());
+                emit(new WriteInstruction());
                 break;
             }
             case CvaExprClassName.CVA_STRING_EXPR:
@@ -326,7 +326,7 @@ public final class TranslatorVisitor implements IVisitor
                 {
                     case CvaIntType.TYPE_LITERAL:
                     {
-                        emit(new WriteInt());
+                        emit(new WriteInstruction());
                         break;
                     }
                     case CvaStringType.TYPE_LITERAL:
@@ -342,7 +342,7 @@ public final class TranslatorVisitor implements IVisitor
                 {
                     case CvaIntType.TYPE_LITERAL:
                     {
-                        emit(new WriteInt());
+                        emit(new WriteInstruction());
                         break;
                     }
                     case CvaStringType.TYPE_LITERAL:

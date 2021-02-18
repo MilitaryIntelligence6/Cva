@@ -237,7 +237,7 @@ public final class ConstantFolder
     }
 
     @Override
-    public void visit(CvaMuliExpr e)
+    public void visit(CvaMulExpr e)
     {
         this.visit(e.getLeft());
         if (isConstant())
@@ -253,7 +253,7 @@ public final class ConstantFolder
             }
             else
             {
-                this.lastExpr = new CvaMuliExpr(
+                this.lastExpr = new CvaMulExpr(
                         this.lastExpr.getLineNum(),
                         temLeft,
                         this.lastExpr);
@@ -272,14 +272,14 @@ public final class ConstantFolder
     }
 
     @Override
-    public void visit(CvaAssign s)
+    public void visit(CvaAssignStatement s)
     {
         this.visit(s.getExpr());
         s.setExpr(this.lastExpr);
     }
 
     @Override
-    public void visit(CvaBlock s)
+    public void visit(CvaBlockStatement s)
     {
         s.getStatementList().forEach(this::visit);
     }
@@ -297,7 +297,7 @@ public final class ConstantFolder
     }
 
     @Override
-    public void visit(CvaWriteOperation s)
+    public void visit(CvaWriteStatement s)
     {
         this.visit(s.getExpr());
         s.setExpr(this.lastExpr);

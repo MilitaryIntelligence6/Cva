@@ -10,11 +10,11 @@ import java.util.Queue;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:35:00
  */
-public final class CvaBlock extends AbstractStatement
+public final class CvaBlockStatement extends AbstractStatement
 {
     private List<AbstractStatement> statementList;
 
-    public CvaBlock(int lineNum, List<AbstractStatement> statementList)
+    public CvaBlockStatement(int lineNum, List<AbstractStatement> statementList)
     {
         super(lineNum);
         this.statementList = statementList;
