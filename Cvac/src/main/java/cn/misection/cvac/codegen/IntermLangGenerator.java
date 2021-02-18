@@ -252,20 +252,20 @@ public final class IntermLangGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(GenClass c)
+    public void visit(GenClass genClass)
     {
-        initWriter(String.format("%s.il", c.getLiteral()));
-        writef(".class public %s\n", c.getLiteral());
-        if (c.getParent() == null)
+        initWriter(String.format("%s.il", genClass.getLiteral()));
+        writef(".class public %s\n", genClass.getLiteral());
+        if (genClass.getParent() == null)
         {
             writeln(".super java/lang/Object");
         }
         else
         {
-            writef(".super %s\n", c.getParent());
+            writef(".super %s\n", genClass.getParent());
         }
 
-        c.getFieldList().forEach(f ->
+        genClass.getFieldList().forEach(f ->
         {
             writef(".field public %s ", f.getLiteral());
             visit(f.getType());
@@ -274,17 +274,17 @@ public final class IntermLangGenerator implements CodeGenVisitor
 
         writeln(".method public <init>()V");
         iwriteLine("aload 0");
-        if (c.getParent() == null)
+        if (genClass.getParent() == null)
         {
             iwriteLine("invokespecial java/lang/Object/<init>()V");
         }
         else
         {
-            iwritefln("invokespecial %s/<init>()V", c.getParent());
+            iwritefln("invokespecial %s/<init>()V", genClass.getParent());
         }
         iwriteLine("return");
         writeln(".end method");
-        c.getMethodList().forEach(this::visit);
+        genClass.getMethodList().forEach(this::visit);
 
         saveAndReinit();
     }

@@ -1,7 +1,5 @@
 package cn.misection.cvac.semantic;
 
-//import cn.misection.cvac.ast.FrontAst;
-
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.decl.CvaDeclaration;
 import cn.misection.cvac.ast.type.AbstractType;

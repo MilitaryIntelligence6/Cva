@@ -1,32 +1,34 @@
 package cn.misection.cvac.codegen;
 
 import cn.misection.cvac.ast.IVisitor;
-import cn.misection.cvac.ast.clas.*;
-import cn.misection.cvac.ast.decl.*;
-import cn.misection.cvac.ast.entry.*;
+import cn.misection.cvac.ast.clas.CvaClass;
+import cn.misection.cvac.ast.decl.CvaDeclaration;
+import cn.misection.cvac.ast.entry.CvaEntry;
 import cn.misection.cvac.ast.expr.*;
 import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.*;
-
 import cn.misection.cvac.codegen.bst.Label;
 import cn.misection.cvac.codegen.bst.bclas.GenClass;
 import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
 import cn.misection.cvac.codegen.bst.bentry.GenEntry;
 import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
 import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
-import cn.misection.cvac.codegen.bst.btype.refer.GenString;
-import cn.misection.cvac.codegen.bst.instruction.BaseInstruction;
-import cn.misection.cvac.codegen.bst.instruction.*;
 import cn.misection.cvac.codegen.bst.btype.BaseType;
-import cn.misection.cvac.codegen.bst.btype.refer.GenClassType;
 import cn.misection.cvac.codegen.bst.btype.basic.GenInt;
+import cn.misection.cvac.codegen.bst.btype.refer.GenClassType;
+import cn.misection.cvac.codegen.bst.btype.refer.GenString;
+import cn.misection.cvac.codegen.bst.instruction.*;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by MI6 root 1/17.
+ *
  * @Description 将编译器前端翻译给后端;
  */
 public final class TranslatorVisitor implements IVisitor
@@ -35,7 +37,7 @@ public final class TranslatorVisitor implements IVisitor
     private int index;
 
     private Map<String, Integer> indexTable;
-    
+
     private BaseType type;
     private GenDeclaration dec;
     private List<BaseInstruction> statementList;
@@ -352,14 +354,14 @@ public final class TranslatorVisitor implements IVisitor
 
         setMethod(
                 new GenMethod(
-                cvaMethod.getLiteral(),
-                theRetType,
-                this.getClassId(),
-                formalList,
-                localList,
-                this.getStatementList(),
-                0,
-                this.index));
+                        cvaMethod.getLiteral(),
+                        theRetType,
+                        this.getClassId(),
+                        formalList,
+                        localList,
+                        this.getStatementList(),
+                        0,
+                        this.index));
     }
 
     @Override
@@ -380,9 +382,9 @@ public final class TranslatorVisitor implements IVisitor
         });
         setClazz(
                 new GenClass(
-                cvaClass.getLiteral(),
-                cvaClass.getParent(),
-                fieldList,
+                        cvaClass.getLiteral(),
+                        cvaClass.getParent(),
+                        fieldList,
                         methodList
                 ));
     }

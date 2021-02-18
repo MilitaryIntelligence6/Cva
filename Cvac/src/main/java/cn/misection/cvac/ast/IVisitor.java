@@ -60,7 +60,7 @@ public interface IVisitor
     // Dec
     default void visit(AbstractDeclaration d)
     {
-        this.visit(((CvaDeclaration) d));
+        visit(((CvaDeclaration) d));
     }
 
     void visit(CvaDeclaration d);
@@ -223,7 +223,7 @@ public interface IVisitor
     // Method
     default void visit(AbstractMethod abstractMethod)
     {
-        this.visit(((CvaMethod) abstractMethod));
+        visit(((CvaMethod) abstractMethod));
     }
 
     void visit(CvaMethod cvaMethod);
@@ -231,14 +231,14 @@ public interface IVisitor
     // Class
     default void visit(AbstractClass abstractClass)
     {
-        this.visit(((CvaClass) abstractClass));
+        visit(((CvaClass) abstractClass));
     }
 
     void visit(CvaClass cvaClass);
 
     default void visit(AbstractEntry c)
     {
-        this.visit(((CvaEntry) c));
+        visit(((CvaEntry) c));
     }
 
     void visit(CvaEntry c);
@@ -246,7 +246,7 @@ public interface IVisitor
     // Program
     default void visit(AbstractProgram p)
     {
-        this.visit(((CvaProgram) p));
+        visit(((CvaProgram) p));
     }
 
     void visit(CvaProgram p);
