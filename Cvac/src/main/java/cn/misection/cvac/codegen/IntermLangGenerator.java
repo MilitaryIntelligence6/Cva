@@ -45,9 +45,26 @@ public final class IntermLangGenerator implements CodeGenVisitor
         write(String.format(format, args));
     }
 
+    /**
+     * iwrite 是write instruction 的意思;
+     * @param s
+     */
     private void iwriteln(String s)
     {
         write(String.format("    %s\n", s));
+    }
+    
+    private void iwritef(String format, Object... args)
+    {
+        write("    ");
+        write(String.format(format, args));
+    }
+
+    private void iwritelnf(String format, Object... args)
+    {
+        write("    ");
+        write(String.format(format, args));
+        writeln();
     }
 
     @Override
@@ -71,7 +88,7 @@ public final class IntermLangGenerator implements CodeGenVisitor
     @Override
     public void visit(ALoad s)
     {
-        this.iwriteln(String.format("aload %d", s.getIndex()));
+        iwritelnf("aload %d", s.getIndex());
     }
 
     @Override
@@ -83,19 +100,19 @@ public final class IntermLangGenerator implements CodeGenVisitor
     @Override
     public void visit(AStore s)
     {
-        this.iwriteln(String.format("astore %d", s.getIndex()));
+        iwritelnf("astore %d", s.getIndex());
     }
 
     @Override
     public void visit(Goto s)
     {
-        this.iwriteln(String.format("goto %s", s.getLabel().toString()));
+        iwritelnf("goto %s", s.getLabel().toString());
     }
 
     @Override
     public void visit(GetField s)
     {
-        this.iwriteln(String.format("getfield %s %s", s.getFieldSpec(), s.getDescriptor()));
+        iwritelnf("getfield %s %s", s.getFieldSpec(), s.getDescriptor());
     }
 
     @Override
@@ -107,13 +124,13 @@ public final class IntermLangGenerator implements CodeGenVisitor
     @Override
     public void visit(IFicmplt s)
     {
-        this.iwriteln(String.format("if_icmplt %s", s.getLabel().toString()));
+        iwritelnf("if_icmplt %s", s.getLabel().toString());
     }
 
     @Override
     public void visit(ILoad s)
     {
-        this.iwriteln(String.format("iload %d", s.getIndex()));
+        iwritelnf("iload %d", s.getIndex());
     }
 
     @Override
@@ -141,7 +158,7 @@ public final class IntermLangGenerator implements CodeGenVisitor
     @Override
     public void visit(IStore s)
     {
-        this.iwriteln(String.format("istore %d", s.getIndex()));
+        iwritelnf("istore %d", s.getIndex());
     }
 
     @Override
@@ -159,15 +176,15 @@ public final class IntermLangGenerator implements CodeGenVisitor
     @Override
     public void visit(Ldc s)
     {
-        this.iwriteln(String.format("ldc %d", s.getInteg()));
+        iwritelnf("ldc %d", s.getInteg());
     }
 
     @Override
     public void visit(New s)
     {
-        this.iwriteln(String.format("new %s", s.getClazz()));
+        iwritelnf("new %s", s.getClazz());
         this.iwriteln("dup");
-        this.iwriteln(String.format("invokespecial %s/<init>()V", s.getClazz()));
+        iwritelnf("invokespecial %s/<init>()V", s.getClazz());
     }
 
     @Override
@@ -182,7 +199,7 @@ public final class IntermLangGenerator implements CodeGenVisitor
     @Override
     public void visit(PutField s)
     {
-        this.iwriteln(String.format("putfield %s %s", s.getFieldSpec(), s.getDescriptor()));
+        iwritelnf("putfield %s %s", s.getFieldSpec(), s.getDescriptor());
     }
 
     @Override
@@ -229,7 +246,7 @@ public final class IntermLangGenerator implements CodeGenVisitor
         }
         else
         {
-            this.iwriteln(String.format("invokespecial %s/<init>()V", c.getParent()));
+            iwritelnf("invokespecial %s/<init>()V", c.getParent());
         }
         this.iwriteln("return");
         this.writeln(".end method");
