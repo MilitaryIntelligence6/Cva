@@ -81,16 +81,16 @@ public final class SemanticVisitor implements IVisitor
 
     // Type
     @Override
-    public void visit(CvaBoolean t) {}
+    public void visit(CvaBooleanType t) {}
 
     @Override
     public void visit(CvaClassType t) {}
 
     @Override
-    public void visit(CvaInt t) {}
+    public void visit(CvaIntType t) {}
 
     @Override
-    public void visit(CvaString type) {}
+    public void visit(CvaStringType type) {}
 
     // Dec
     @Override
@@ -110,12 +110,12 @@ public final class SemanticVisitor implements IVisitor
                             lefty.toString(), this.type.toString()));
         }
 //        else if (!new CvaInt().toString().equals(this.type.toString()))
-        else if (!(type instanceof CvaInt))
+        else if (!(type instanceof CvaIntType))
         {
             errorLog(addExpr.getLineNum(), " only integer numbers can be added.");
         }
 
-        this.type = new CvaInt();
+        this.type = new CvaIntType();
     }
 
     @Override
@@ -130,12 +130,12 @@ public final class SemanticVisitor implements IVisitor
                     String.format("and expression the type of left is %s, but the type of right is %s", lefty.toString(), this.type.toString()));
         }
 //        else if (!new CvaBoolean().toString().equals(this.type.toString()))
-        else if (!(type instanceof CvaBoolean))
+        else if (!(type instanceof CvaBooleanType))
         {
             errorLog(e.getLineNum(), " only integer numbers can be added.");
         }
 
-        this.type = new CvaBoolean();
+        this.type = new CvaBooleanType();
     }
 
     @Override
@@ -215,7 +215,7 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaFalseExpr e)
     {
-        this.type = new CvaBoolean();
+        this.type = new CvaBooleanType();
     }
 
     @Override
@@ -274,11 +274,11 @@ public final class SemanticVisitor implements IVisitor
                     String.format("compare expression the type of left is %s, but the type of right is %s",
                     lefty.toString(), this.type.toString()));
         }
-        else if (!(type instanceof CvaInt))
+        else if (!(type instanceof CvaIntType))
         {
             errorLog(e.getLineNum(), "only integer numbers can be compared.");
         }
-        this.type = new CvaBoolean();
+        this.type = new CvaBooleanType();
     }
 
     @Override
@@ -308,17 +308,17 @@ public final class SemanticVisitor implements IVisitor
     public void visit(CvaNegateExpr e)
     {
         this.visit(e.getExpr());
-        if (!(type instanceof CvaBoolean))
+        if (!(type instanceof CvaBooleanType))
         {
             errorLog(e.getLineNum(), "the exp cannot calculate to a boolean.");
         }
-        this.type = new CvaBoolean();
+        this.type = new CvaBooleanType();
     }
 
     @Override
     public void visit(CvaNumberIntExpr e)
     {
-        this.type = new CvaInt();
+        this.type = new CvaIntType();
     }
 
     @Override
@@ -333,11 +333,11 @@ public final class SemanticVisitor implements IVisitor
                     String.format("sub expression the type of left is %s, but the type of right is %s",
                     lefty.toString(), this.type.toString()));
         }
-        else if (!(type instanceof CvaInt))
+        else if (!(type instanceof CvaIntType))
         {
             errorLog(e.getLineNum(), " only integer numbers can be subbed.");
         }
-        this.type = new CvaInt();
+        this.type = new CvaIntType();
     }
 
     @Override
@@ -358,17 +358,17 @@ public final class SemanticVisitor implements IVisitor
                     String.format("times expression the type of left is %s, but the type of right is %s",
                             lefty.toString(), this.type.toString()));
         }
-        else if (!(type instanceof CvaInt))
+        else if (!(type instanceof CvaIntType))
         {
             errorLog(e.getLineNum(), "only integer numbers can be multiply.");
         }
-        this.type = new CvaInt();
+        this.type = new CvaIntType();
     }
 
     @Override
     public void visit(CvaTrueExpr e)
     {
-        this.type = new CvaBoolean();
+        this.type = new CvaBooleanType();
     }
 
     @Override
@@ -404,7 +404,7 @@ public final class SemanticVisitor implements IVisitor
     public void visit(CvaIfStatement s)
     {
         this.visit(s.getCondition());
-        if (!(type instanceof CvaBoolean))
+        if (!(type instanceof CvaBooleanType))
         {
             errorLog(s.getCondition().getLineNum(),
                     "the condition's type should be a boolean.");
@@ -422,7 +422,7 @@ public final class SemanticVisitor implements IVisitor
     {
         this.visit(writeOp.getExpr());
 //        if (!this.type.toString().equals(new CvaInt().toString()))
-        if (!(this.type instanceof CvaInt))
+        if (!(this.type instanceof CvaIntType))
         {
             errorLog(writeOp.getExpr().getLineNum(),
                     String.format("the expression in write(\"printf()\" \"echo\" \"println\") " +
@@ -435,7 +435,7 @@ public final class SemanticVisitor implements IVisitor
     {
         this.visit(whileSta.getCondition());
 //        if (!this.type.toString().equals(new CvaBoolean().toString()))
-        if (!(this.type instanceof CvaBoolean))
+        if (!(this.type instanceof CvaBooleanType))
         {
             errorLog(whileSta.getCondition().getLineNum(),
                     "the condition's type should be a boolean.");

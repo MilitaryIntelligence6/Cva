@@ -3,19 +3,19 @@ package cn.misection.cvac.ast.type;
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
- * @ClassName CvaFloat
+ * @ClassName CvaBoolean
  * @Description TODO
- * @CreateTime 2021年02月14日 19:46:00
+ * @CreateTime 2021年02月14日 19:41:00
  */
-public class CvaFloat extends AbstractType
+public class CvaBooleanType extends AbstractType
 {
-    public CvaFloat()
+    public CvaBooleanType()
     {
     }
 
     @Override
     public String toString()
     {
-        return "@float";
+        return "@boolean";
     }
 }

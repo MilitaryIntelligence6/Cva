@@ -7,11 +7,6 @@
  */
 package cn.misection.cvac.lexer;
 
-import cn.misection.cvac.ast.type.AbstractType;
-import cn.misection.cvac.ast.type.CvaInt;
-
-import java.util.HashMap;
-
 /**
  * 前端常量类;
  */

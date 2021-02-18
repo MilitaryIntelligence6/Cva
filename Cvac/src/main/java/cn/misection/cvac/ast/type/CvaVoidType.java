@@ -3,19 +3,15 @@ package cn.misection.cvac.ast.type;
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
- * @ClassName CvaString
+ * @ClassName CvaVoid
  * @Description TODO
- * @CreateTime 2021年02月14日 19:46:00
+ * @CreateTime 2021年02月16日 20:12:00
  */
-public class CvaString extends AbstractType
+public class CvaVoidType extends AbstractType
 {
-    public CvaString()
-    {
-    }
-
     @Override
     public String toString()
     {
-        return "@String";
+        return "@void";
     }
 }

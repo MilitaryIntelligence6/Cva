@@ -23,16 +23,16 @@ public final class UnReachableDel
     private boolean isOptimizing;
 
     @Override
-    public void visit(CvaBoolean t) {}
+    public void visit(CvaBooleanType t) {}
 
     @Override
     public void visit(CvaClassType t) {}
 
     @Override
-    public void visit(CvaInt t) {}
+    public void visit(CvaIntType t) {}
 
     @Override
-    public void visit(CvaString type) {}
+    public void visit(CvaStringType type) {}
 
     @Override
     public void visit(CvaDeclaration d) {}

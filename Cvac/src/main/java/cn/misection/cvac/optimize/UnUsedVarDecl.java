@@ -8,10 +8,10 @@ import cn.misection.cvac.ast.expr.*;
 import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
-import cn.misection.cvac.ast.type.CvaBoolean;
+import cn.misection.cvac.ast.type.CvaBooleanType;
 import cn.misection.cvac.ast.type.CvaClassType;
-import cn.misection.cvac.ast.type.CvaInt;
-import cn.misection.cvac.ast.type.CvaString;
+import cn.misection.cvac.ast.type.CvaIntType;
+import cn.misection.cvac.ast.type.CvaStringType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,16 +28,16 @@ public final class UnUsedVarDecl
     public boolean givesWarning;
 
     @Override
-    public void visit(CvaBoolean t) {}
+    public void visit(CvaBooleanType t) {}
 
     @Override
     public void visit(CvaClassType t) {}
 
     @Override
-    public void visit(CvaInt t) {}
+    public void visit(CvaIntType t) {}
 
     @Override
-    public void visit(CvaString type) {}
+    public void visit(CvaStringType type) {}
 
     @Override
     public void visit(CvaDeclaration d) {}

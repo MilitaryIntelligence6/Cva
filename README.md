@@ -27,3 +27,5 @@
 - CvaDK, 实现HashMap
 - CvaVM Cva虚拟机;
 - CvaIDE 
+
+- 把所ast type加后缀type不然要混淆; 

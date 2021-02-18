@@ -7,9 +7,9 @@ package cn.misection.cvac.ast.type;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:44:00
  */
-public class CvaInt extends AbstractType
+public class CvaIntType extends AbstractType
 {
-    public CvaInt()
+    public CvaIntType()
     {
     }
 

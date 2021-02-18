@@ -7,9 +7,9 @@ package cn.misection.cvac.ast.type;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:46:00
  */
-public class CvaChar extends AbstractType
+public class CvaCharType extends AbstractType
 {
-    public CvaChar()
+    public CvaCharType()
     {
     }
 

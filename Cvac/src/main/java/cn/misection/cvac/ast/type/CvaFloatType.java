@@ -3,19 +3,19 @@ package cn.misection.cvac.ast.type;
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
- * @ClassName CvaShort
+ * @ClassName CvaFloat
  * @Description TODO
  * @CreateTime 2021年02月14日 19:46:00
  */
-public class CvaShort extends AbstractType
+public class CvaFloatType extends AbstractType
 {
-    public CvaShort()
+    public CvaFloatType()
     {
     }
 
     @Override
     public String toString()
     {
-        return "@short";
+        return "@float";
     }
 }

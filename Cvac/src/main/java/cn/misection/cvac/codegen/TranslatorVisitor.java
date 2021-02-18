@@ -65,7 +65,7 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaBoolean type)
+    public void visit(CvaBooleanType type)
     {
         setType(new GenInt());
     }
@@ -77,13 +77,13 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaInt type)
+    public void visit(CvaIntType type)
     {
         setType(new GenInt());
     }
 
     @Override
-    public void visit(CvaString type)
+    public void visit(CvaStringType type)
     {
         setType(new GenString());
     }

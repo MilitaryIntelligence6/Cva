@@ -21,24 +21,24 @@ public interface IVisitor
     {
         switch (t.getClass().getSimpleName())
         {
-            case CvaType.CVA_BOOLEAN:
+            case CvaTypeClassName.CVA_BOOLEAN_TYPE:
             {
-                visit((CvaBoolean) t);
+                visit((CvaBooleanType) t);
                 break;
             }
-            case CvaType.CVA_CLASS_TYPE:
+            case CvaTypeClassName.CVA_CLASS_TYPE:
             {
                 visit((CvaClassType) t);
                 break;
             }
-            case CvaType.CVA_INT:
+            case CvaTypeClassName.CVA_INT_TYPE:
             {
-                visit((CvaInt) t);
+                visit((CvaIntType) t);
                 break;
             }
-            case CvaType.CVA_STRING:
+            case CvaTypeClassName.CVA_STRING_TYPE:
             {
-                visit((CvaString) t);
+                visit((CvaStringType) t);
                 break;
             }
             default:
@@ -49,13 +49,13 @@ public interface IVisitor
         }
     }
 
-    void visit(CvaBoolean t);
+    void visit(CvaBooleanType t);
 
     void visit(CvaClassType t);
 
-    void visit(CvaInt t);
+    void visit(CvaIntType t);
 
-    void visit(CvaString type);
+    void visit(CvaStringType type);
 
     // Dec
     default void visit(AbstractDeclaration d)
@@ -73,67 +73,67 @@ public interface IVisitor
     {
         switch (e.getClass().getSimpleName())
         {
-            case CvaExpr.CVA_ADD_EXPR:
+            case CvaExprClassName.CVA_ADD_EXPR:
             {
                 visit((CvaAddExpr) e);
                 break;
             }
-            case CvaExpr.CVA_AND_AND_EXPR:
+            case CvaExprClassName.CVA_AND_AND_EXPR:
             {
                 visit((CvaAndAndExpr) e);
                 break;
             }
-            case CvaExpr.CVA_CALL_EXPR:
+            case CvaExprClassName.CVA_CALL_EXPR:
             {
                 visit((CvaCallExpr) e);
                 break;
             }
-            case CvaExpr.CVA_FALSE_EXPR:
+            case CvaExprClassName.CVA_FALSE_EXPR:
             {
                 visit((CvaFalseExpr) e);
                 break;
             }
-            case CvaExpr.CVA_IDENTIFIER:
+            case CvaExprClassName.CVA_IDENTIFIER:
             {
                 visit((CvaIdentifier) e);
                 break;
             }
-            case CvaExpr.CVA_LESS_THAN_EXPR:
+            case CvaExprClassName.CVA_LESS_THAN_EXPR:
             {
                 visit((CvaLessThanExpr) e);
                 break;
             }
-            case CvaExpr.CVA_NEW_EXPR:
+            case CvaExprClassName.CVA_NEW_EXPR:
             {
                 visit((CvaNewExpr) e);
                 break;
             }
-            case CvaExpr.CVA_NEGATE_EXPR:
+            case CvaExprClassName.CVA_NEGATE_EXPR:
             {
                 visit((CvaNegateExpr) e);
                 break;
             }
-            case CvaExpr.CVA_NUMBER_INT_EXPR:
+            case CvaExprClassName.CVA_NUMBER_INT_EXPR:
             {
                 visit((CvaNumberIntExpr) e);
                 break;
             }
-            case CvaExpr.CVA_SUB_EXPR:
+            case CvaExprClassName.CVA_SUB_EXPR:
             {
                 visit((CvaSubExpr) e);
                 break;
             }
-            case CvaExpr.CVA_THIS_EXPR:
+            case CvaExprClassName.CVA_THIS_EXPR:
             {
                 visit((CvaThisExpr) e);
                 break;
             }
-            case CvaExpr.CVA_MULI_EXPR:
+            case CvaExprClassName.CVA_MULI_EXPR:
             {
                 visit((CvaMuliExpr) e);
                 break;
             }
-            case CvaExpr.CVA_TRUE_EXPR:
+            case CvaExprClassName.CVA_TRUE_EXPR:
             {
                 visit((CvaTrueExpr) e);
                 break;
@@ -177,27 +177,27 @@ public interface IVisitor
     {
         switch (s.getClass().getSimpleName())
         {
-            case CvaStatement.CVAASSIGN:
+            case CvaStatementClassName.CVA_ASSIGN:
             {
                 visit((CvaAssign) s);
                 break;
             }
-            case CvaStatement.CVABLOCK:
+            case CvaStatementClassName.CVA_BLOCK:
             {
                 visit((CvaBlock) s);
                 break;
             }
-            case CvaStatement.CVAIFSTATEMENT:
+            case CvaStatementClassName.CVA_IF_STATEMENT:
             {
                 visit((CvaIfStatement) s);
                 break;
             }
-            case CvaStatement.CVAWRITEOPERATION:
+            case CvaStatementClassName.CVA_WRITE_OPERATION:
             {
                 visit((CvaWriteOperation) s);
                 break;
             }
-            case CvaStatement.CVA_WHILE_STATEMENT:
+            case CvaStatementClassName.CVA_WHILE_STATEMENT:
             {
                 visit((CvaWhileStatement) s);
                 break;

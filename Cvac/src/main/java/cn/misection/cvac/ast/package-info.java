@@ -10,12 +10,12 @@
 package cn.misection.cvac.ast;
 
 
-final class CvaType
+final class CvaTypeClassName
 {
     /**
      * CvaBoolean;
      */
-    public static final String CVA_BOOLEAN = "CvaBoolean";
+    public static final String CVA_BOOLEAN_TYPE = "CvaBooleanType";
 
     /**
      * CvaClassType
@@ -25,13 +25,13 @@ final class CvaType
     /**
      * CvaInt
      */
-    public static final String CVA_INT = "CvaInt";
+    public static final String CVA_INT_TYPE = "CvaIntType";
 
-    public static final String CVA_STRING = "CvaString";
+    public static final String CVA_STRING_TYPE = "CvaStringType";
 }
 
 
-final class CvaExpr
+final class CvaExprClassName
 {
     /**
      * CvaAddExpr
@@ -105,27 +105,27 @@ final class CvaExpr
 
 }
 
-final class CvaStatement
+final class CvaStatementClassName
 {
     /**
      * CvaAssign
      */
-    public static final String CVAASSIGN = "CvaAssign";
+    public static final String CVA_ASSIGN = "CvaAssign";
 
     /**
      * CvaBlock
      */
-    public static final String CVABLOCK = "CvaBlock";
+    public static final String CVA_BLOCK = "CvaBlock";
 
     /**
      * CvaIfStatement
      */
-    public static final String CVAIFSTATEMENT = "CvaIfStatement";
+    public static final String CVA_IF_STATEMENT = "CvaIfStatement";
 
     /**
      * CvaWriteOperation
      */
-    public static final String CVAWRITEOPERATION = "CvaWriteOperation";
+    public static final String CVA_WRITE_OPERATION = "CvaWriteOperation";
 
     /**
      * instanceo

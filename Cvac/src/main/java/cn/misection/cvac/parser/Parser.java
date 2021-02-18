@@ -479,46 +479,46 @@ public final class Parser
         {
             case BYTE:
             {
-                type = new CvaBtye();
+                type = new CvaBtyeType();
                 break;
             }
             case CHAR:
             {
-                type = new CvaChar();
+                type = new CvaCharType();
                 break;
             }
             case SHORT:
             {
-                type = new CvaShort();
+                type = new CvaShortType();
                 break;
             }
             case INT:
             {
-                type = new CvaInt();
+                type = new CvaIntType();
                 break;
             }
             case LONG:
             {
-                type = new CvaLong();
+                type = new CvaLongType();
             }
             case FLOAT:
             {
-                type = new CvaFloat();
+                type = new CvaFloatType();
                 break;
             }
             case DOUBLE:
             {
-                type = new CvaDouble();
+                type = new CvaDoubleType();
                 break;
             }
             case BOOLEAN:
             {
-                type = new CvaBoolean();
+                type = new CvaBooleanType();
                 break;
             }
             case STRING:
             {
-                type = new CvaString();
+                type = new CvaStringType();
                 break;
             }
             case IDENTIFIER:
@@ -842,7 +842,7 @@ public final class Parser
             // 这里非常坑. 必须要先parser;
             // parse的副作用是推一个token, 所以给new decl传参的时候先后顺序换了会导致意想不到的bug;
             AbstractType type = parseType();
-            if (!(type instanceof CvaString))
+            if (!(type instanceof CvaStringType))
             {
                 errorLog("Sting[] args in main func",
                         String.valueOf(type));
