@@ -9,6 +9,8 @@ package cn.misection.cvac.codegen.bst.btype.refer;
  */
 public final class GenClassType extends BaseReferenceType
 {
+    public static final String TYPE_LITERAL = "@class";
+
     private String literal;
 
     public GenClassType(String literal)

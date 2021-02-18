@@ -11,11 +11,14 @@ import cn.misection.cvac.codegen.bst.btype.BaseType;
  */
 public final class GenLongType extends BaseBasicType
 {
+    public static final String TYPE_LITERAL = "@long";
+
     public GenLongType() {}
+
     @Override
     public String toString()
     {
-        return "@long";
+        return TYPE_LITERAL;
     }
 
     @Override

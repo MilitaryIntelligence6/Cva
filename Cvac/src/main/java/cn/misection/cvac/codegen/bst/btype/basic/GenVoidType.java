@@ -9,12 +9,14 @@ package cn.misection.cvac.codegen.bst.btype.basic;
  */
 public final class GenVoidType extends BaseBasicType
 {
+    public static final String TYPE_LITERAL = "@void";
+
     public GenVoidType() {}
 
     @Override
     public String toString()
     {
-        return "@void";
+        return TYPE_LITERAL;
     }
 
     @Override

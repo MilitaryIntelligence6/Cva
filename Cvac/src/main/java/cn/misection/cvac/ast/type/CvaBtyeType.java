@@ -11,10 +11,7 @@ public final class CvaBtyeType extends AbstractType
 {
     public static final String TYPE_LITERAL = "@byte";
 
-
-    public CvaBtyeType()
-    {
-    }
+    public CvaBtyeType() {}
 
     @Override
     public String toString()

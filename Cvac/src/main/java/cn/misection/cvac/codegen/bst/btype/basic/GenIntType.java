@@ -9,6 +9,8 @@ package cn.misection.cvac.codegen.bst.btype.basic;
  */
 public final class GenIntType extends BaseBasicType
 {
+    public static final String TYPE_LITERAL = "@int";
+
     /**
      * 后端没有boolean, 都是int;
      */
@@ -17,7 +19,7 @@ public final class GenIntType extends BaseBasicType
     @Override
     public String toString()
     {
-        return "@int";
+        return TYPE_LITERAL;
     }
 
     @Override

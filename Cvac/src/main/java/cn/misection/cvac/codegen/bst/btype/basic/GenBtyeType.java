@@ -11,12 +11,14 @@ import cn.misection.cvac.codegen.bst.btype.BaseType;
  */
 public final class GenBtyeType extends BaseBasicType
 {
+    public static final String TYPE_LITERAL = "@byte";
+
     public GenBtyeType() {}
 
     @Override
     public String toString()
     {
-        return "@byte";
+        return TYPE_LITERAL;
     }
 
     @Override

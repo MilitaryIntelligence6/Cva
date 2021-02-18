@@ -11,12 +11,14 @@ import cn.misection.cvac.codegen.bst.btype.BaseType;
  */
 public final class GenCharType extends BaseBasicType
 {
+    public static final String TYPE_LITERAL = "@char";
+
     public GenCharType() {}
 
     @Override
     public String toString()
     {
-        return "@char";
+        return TYPE_LITERAL;
     }
 
     @Override

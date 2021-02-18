@@ -11,12 +11,14 @@ import cn.misection.cvac.codegen.bst.btype.BaseType;
  */
 public final class GenFloatType extends BaseBasicType
 {
+    public static final String TYPE_LITERAL = "@float";
+
     public GenFloatType() {}
 
     @Override
     public String toString()
     {
-        return "@float";
+        return TYPE_LITERAL;
     }
 
     @Override
