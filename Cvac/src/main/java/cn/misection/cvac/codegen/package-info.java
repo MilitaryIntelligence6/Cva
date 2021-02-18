@@ -26,7 +26,7 @@ final class StackConst
     private StackConst() {}
 }
 
-class WriteModeMap extends HashMap<Byte, String>
+final class WriteModeMap extends HashMap<Byte, String>
 {
     private static WriteModeMap instance = null;
 
@@ -59,7 +59,7 @@ class WriteModeMap extends HashMap<Byte, String>
 }
 
 
-class WriteTypeMap extends HashMap<Byte, String>
+final class WriteTypeMap extends HashMap<Byte, String>
 {
     private static WriteTypeMap instance = null;
 
@@ -86,7 +86,7 @@ class WriteTypeMap extends HashMap<Byte, String>
     private void init()
     {
         this.put(WriteILPool.WRITE_INT, "I");
-        this.put(WriteILPool.WRITE_STRING, String.format("L%s", GenStringType.FULL_LITERAL));
+        this.put(WriteILPool.WRITE_STRING, String.format("L%s;", GenStringType.FULL_LITERAL));
 //        this.put(WriteILPool.WRITE_BOOLEAN, GenStringType.FULL_LITERAL);
     }
 }
