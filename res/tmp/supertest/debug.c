@@ -5,6 +5,9 @@ pkg cn.misection.cva.test;
 call cva.native.io.*;
 call cva.std.console.*;
 
+/**
+ * block comm;
+ */
 int main(String[] args)
 {
     printf(new Test().Compute(10));   // just a print statement

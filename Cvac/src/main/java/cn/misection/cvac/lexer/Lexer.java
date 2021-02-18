@@ -1,7 +1,7 @@
 package cn.misection.cvac.lexer;
 
 /**
- * Created by MI6 root 1/6.
+ * @author MI6 root;
  */
 public final class Lexer
 {
@@ -12,8 +12,6 @@ public final class Lexer
 
     private int lineNum;
 
-    private boolean inString;
-
     public Lexer(IBufferedQueue stream)
     {
         this.stream = stream;
@@ -23,6 +21,19 @@ public final class Lexer
     public CvaToken nextToken()
     {
         return lex();
+    }
+
+    private void errorLog()
+    {
+        System.err.printf("line %d: unknown error occur!", lineNum);
+        System.exit(1);
+    }
+
+    private void errorLog(String excepted, String got)
+    {
+        System.err.printf("line %d: Excepted: %s, but got %s",
+                lineNum, excepted, got);
+        System.exit(1);
     }
 
     private CvaToken lex()
@@ -58,25 +69,24 @@ public final class Lexer
                 return handleSlash();
             case '%':
                 return handlePercent();
-            /// 需要注意转义只应该在字符串中出现!;
-//            case '\'':
-//                return handleApostrophe();
-//            case '"':
-//                return handleDoubleQuotes();
-            case '\\':
-                return handleEscape();
+            case '\'':
+                return handleApostrophe();
+            case '"':
+                return handleDoubleQuotes();
             default:
                 return handleNorPrefOrIdOrNum(ch);
         }
     }
 
-    private static boolean isSpecialCharacter(char c)
+    private static boolean isSpecialCharacter(char ch)
     {
-        return '+' == c || '&' == c || '=' == c || ',' == c || '.' == c
-                || '{' == c || '(' == c || '<' == c || c == '>'
-                || '!' == c || c == '[' || c == ']'
-                || '}' == c || ')' == c || ';' == c || ':' == c
-                || '-' == c || '*' == c || c == LexerConstPool.EOF;
+        return CvaKind.containsKind(String.valueOf(ch))
+                ||'+' == ch || '-' == ch || '*' == ch || ch == '/'
+                || '&' == ch || ch == '|' || ch == '~' || ch == '^'
+                || '=' == ch || '<' == ch || ch == '>'
+                || ch == '%' || ch == '@' || ch == '#' || ch == '`'
+                || ch == '\\' || ch == '"' || ch == '\''
+                || ch == LexerConstPool.EOF;
     }
 
     private static boolean isNumber(String str)
@@ -95,16 +105,6 @@ public final class Lexer
     {
         // 只接受字母开头, 不接受下划线开头;
         return Character.isAlphabetic(str.charAt(0));
-    }
-
-
-    /**
-     * @return
-     * @TODO 转义处理;
-     */
-    private CvaToken handleEscape()
-    {
-        return null;
     }
 
     private CvaToken handlePlus()
@@ -380,6 +380,7 @@ public final class Lexer
         while (true)
         {
             ch = stream.peek();
+            // Cva命名容许_和$符号;
             if (ch != LexerConstPool.EOF
                     && !Character.isWhitespace(ch)
                     && !isSpecialCharacter(ch))
@@ -400,11 +401,12 @@ public final class Lexer
         {
             if (isNumber(literal))
             {
-//                if (isInt())
-//                {
-//
-//                }
-                return new CvaToken(CvaKind.NUMBER, lineNum, builder.toString());
+                // FIXME 自动机;
+                if (isInt(literal))
+                {
+                    // FIXME 联系后端改成 INT;
+                    return new CvaToken(CvaKind.NUMBER, lineNum, builder.toString());
+                }
             }
             else if (isIdentifier(literal))
             {
@@ -412,11 +414,129 @@ public final class Lexer
             }
             else
             {
-                System.err.printf("This is an illegal identifier at line %d%n", lineNum);
-                System.exit(1);
-                return null;
+                errorLog("identifier or number which can only include alphabet, number or _, $",
+                        "an illegal identifier with illegal char");
             }
         }
+        return null;
+    }
+
+    private CvaToken handleApostrophe()
+    {
+        char chch = stream.poll();
+        if (chch == '\\')
+        {
+            chch = handleEscape();
+        }
+        char eoc = stream.poll();
+        if (eoc != '\'')
+        {
+            errorLog("end of char which refer to '",
+                    String.valueOf(eoc));
+        }
+        return new CvaToken(CvaKind.CHAR, lineNum, String.valueOf(chch));
+    }
+
+    private CvaToken handleDoubleQuotes()
+    {
+        // 全局 index 不仅仅在循环中;
+        // TODO 转义字符都出现在字符串里, 这里应该处理;
+//        StringBuilder builder = new StringBuilder("\"");
+        StringBuilder builder = new StringBuilder();
+        // hasNext() 会屏蔽eof, 所以用true;
+        while (true)
+        {
+            char ch = stream.poll();
+            switch (ch)
+            {
+                case '"':
+                {
+//                    builder.append('"');
+                    break;
+                }
+                case '\\':
+                {
+                    char escapeCh = handleEscape();
+                    builder.append(escapeCh);
+                    continue;
+                }
+                case LexerConstPool.EOF:
+                {
+                    errorLog("string literal char or end of string '\"'",
+                            "EOF in error place");
+                    // 没用的break, 只是为了防止warning;
+                    break;
+                }
+                default:
+                {
+                    builder.append(ch);
+                    continue;
+                }
+            }
+            break;
+        }
+        String literal = String.valueOf(builder);
+        return new CvaToken(CvaKind.STRING, lineNum, literal);
+    }
+
+    private char handleWhiteSpace(char ch)
+    {
+        while (Character.isWhitespace(ch))
+        {
+            switch (ch)
+            {
+                case LexerConstPool.NEW_LINE:
+                {
+                    lineNum++;
+                    break;
+                }
+                case LexerConstPool.EOF:
+                {
+                    return LexerConstPool.EOF;
+                }
+                default:
+                {
+                    break;
+                }
+            }
+            ch = this.stream.poll();
+        }
+        return ch;
+    }
+
+    /**
+     * @return
+     * @TODO 转义处理;
+     */
+    private char handleEscape()
+    {
+        char escapeCh = stream.poll();
+        switch (escapeCh)
+        {
+            case 'r':
+            {
+                return '\r';
+            }
+            case 'n':
+            {
+                return '\n';
+            }
+            case 't':
+            {
+                return '\t';
+            }
+            case '"':
+            {
+                // FIXME, 应该拿\"还是"呢?;
+                return '"';
+            }
+            default:
+            {
+                errorLog("escape char only '\\n', '\\r', '\\t', '\\\"' supported!",
+                        String.valueOf(escapeCh));
+            }
+        }
+        return 0;
     }
 
     private void handleLineComment()
@@ -471,56 +591,9 @@ public final class Lexer
         }
     }
 
-    private char handleWhiteSpace(char ch)
+    private boolean isInt(String literal)
     {
-        while (Character.isWhitespace(ch))
-        {
-            switch (ch)
-            {
-                case LexerConstPool.NEW_LINE:
-                {
-                    lineNum++;
-                    break;
-                }
-                case LexerConstPool.EOF:
-                {
-                    return LexerConstPool.EOF;
-                }
-                default:
-                {
-                    break;
-                }
-            }
-            ch = this.stream.poll();
-        }
-        return ch;
+        // FIXME 修改;
+        return true;
     }
-//    private CvaToken handleQuotationMarks()
-//    {
-//        // 全局 index 不仅仅在循环中;
-//        // TODO 转义字符都出现在字符串里, 这里应该处理;
-//        readIndex++;
-//        int begin = readIndex;
-//        while (readIndex < charQueue.length())
-//        {
-//            if (charQueue.charAt(readIndex) != '"')
-//            {
-//                literalLength++;
-//            }
-//            else
-//            {
-//                break;
-//            }
-//            readIndex++;
-//        }
-//        if (readIndex > charQueue.length())
-//        {
-//            System.err.println("Missing the ending quotation mark!");
-//            System.exit(1);
-//        }
-//        literal = charQueue.substring(begin, literalLength + 1);
-//        // 2 是引号长度;
-//        pollChar(literalLength + 2);
-//        return new CvaToken(CvaKind.STRING, lineNum);
-//    }
 }
