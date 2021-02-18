@@ -50,7 +50,7 @@ public final class UnReachableDel
     public void visit(CvaFalseExpr e) {}
 
     @Override
-    public void visit(CvaIdentifier e) {}
+    public void visit(CvaIdentifierExpr e) {}
 
     @Override
     public void visit(CvaLessThanExpr e) {}

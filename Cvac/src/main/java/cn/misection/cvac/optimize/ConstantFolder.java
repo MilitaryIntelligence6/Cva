@@ -132,7 +132,7 @@ public final class ConstantFolder
     }
 
     @Override
-    public void visit(CvaIdentifier e)
+    public void visit(CvaIdentifierExpr e)
     {
         this.lastExpr = e;
     }

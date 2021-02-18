@@ -67,7 +67,7 @@ public final class UnUsedVarDecl
     public void visit(CvaFalseExpr e) {}
 
     @Override
-    public void visit(CvaIdentifier e)
+    public void visit(CvaIdentifierExpr e)
     {
         if (this.unUsedLocals.containsKey(e.getLiteral()))
         {
@@ -127,7 +127,7 @@ public final class UnUsedVarDecl
     @Override
     public void visit(CvaAssign s)
     {
-        this.visit(new CvaIdentifier(s.getLineNum(), s.getLiteral()));
+        this.visit(new CvaIdentifierExpr(s.getLineNum(), s.getLiteral()));
         this.visit(s.getExpr());
     }
 

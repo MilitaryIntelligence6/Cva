@@ -94,9 +94,9 @@ public interface IVisitor
                 visit((CvaFalseExpr) e);
                 break;
             }
-            case CvaExprClassName.CVA_IDENTIFIER:
+            case CvaExprClassName.CVA_IDENTIFIER_EXPR:
             {
-                visit((CvaIdentifier) e);
+                visit((CvaIdentifierExpr) e);
                 break;
             }
             case CvaExprClassName.CVA_LESS_THAN_EXPR:
@@ -160,7 +160,7 @@ public interface IVisitor
 
     void visit(CvaFalseExpr e);
 
-    void visit(CvaIdentifier e);
+    void visit(CvaIdentifierExpr e);
 
     void visit(CvaLessThanExpr e);
 

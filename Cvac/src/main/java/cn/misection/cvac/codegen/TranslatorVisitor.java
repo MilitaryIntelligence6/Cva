@@ -152,7 +152,7 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaIdentifier e)
+    public void visit(CvaIdentifierExpr e)
     {
         if (e.isField())
         {
@@ -309,43 +309,63 @@ public final class TranslatorVisitor implements IVisitor
     {
         AbstractExpression expr = writeOp.getExpr();
         visit(expr);
-//        switch (expr.getClass().getSimpleName())
-//        {
-//            case CvaExprClassName.CVA_NUMBER_INT_EXPR:
-//            {
+        switch (expr.getClass().getSimpleName())
+        {
+            case CvaExprClassName.CVA_NUMBER_INT_EXPR:
+            {
+                emit(new WriteInt());
+                break;
+            }
+            case CvaExprClassName.CVA_STRING_EXPR:
+            {
+                break;
+            }
+            case CvaExprClassName.CVA_IDENTIFIER_EXPR:
+            {
+                switch (((CvaIdentifierExpr) expr).getType().toString())
+                {
+                    case CvaIntType.TYPE_LITERAL:
+                    {
+                        emit(new WriteInt());
+                        break;
+                    }
+                    case CvaStringType.TYPE_LITERAL:
+                    {
+                        break;
+                    }
+                }
+                break;
+            }
+            case CvaExprClassName.CVA_CALL_EXPR:
+            {
+                switch (((CvaCallExpr) expr).getRetType().toString())
+                {
+                    case CvaIntType.TYPE_LITERAL:
+                    {
+                        emit(new WriteInt());
+                        break;
+                    }
+                    case CvaStringType.TYPE_LITERAL:
+                    {
+                        break;
+                    }
+                    default:
+                    {
+                        break;
+                    }
+                }
+                break;
+            }
+            default:
+            {
+                // FIXME, 断点打在这里debuge可以保证就是遗漏的情况;
+                // 因为检查过, 所以其实可以放心弄, 但是这里有一个情况没打印;
+                // 目前可能遇到的情况有 idexpr, callfuncexpr, numberintexpr;
+                // 注释掉这个可以应对可能的异常;
 //                emit(new WriteInt());
-//                break;
-//            }
-//            case CvaExprClassName.CVA_STRING_EXPR:
-//            {
-//                break;
-//            }
-//            case CvaExprClassName.CVA_CALL_EXPR:
-//            {
-//                switch (((CvaCallExpr) expr).getRetType().toString())
-//                {
-//                    case CvaIntType.TYPE_LITERAL:
-//                    {
-//                        emit(new WriteInt());
-//                        break;
-//                    }
-//                    case CvaStringType.TYPE_LITERAL:
-//                    {
-//                        break;
-//                    }
-//                    default:
-//                    {
-//                        break;
-//                    }
-//                }
-//                break;
-//            }
-//            default:
-//            {
-//                break;
-//            }
-//        }
-        emit(new WriteInt());
+                break;
+            }
+        }
     }
 
     @Override

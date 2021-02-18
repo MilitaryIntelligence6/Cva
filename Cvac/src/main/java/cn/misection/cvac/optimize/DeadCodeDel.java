@@ -70,7 +70,7 @@ public final class DeadCodeDel
     }
 
     @Override
-    public void visit(CvaIdentifier e)
+    public void visit(CvaIdentifierExpr e)
     {
         if (this.localVars.contains(e.getLiteral()))
         {

@@ -27,7 +27,7 @@ public final class CvaExprClassName
     /**
      * CvaIdentifier
      */
-    public static final String CVA_IDENTIFIER = "CvaIdentifier";
+    public static final String CVA_IDENTIFIER_EXPR = "CvaIdentifierExpr";
 
     /**
      * CvaLTExpr

@@ -219,7 +219,7 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaIdentifier e)
+    public void visit(CvaIdentifierExpr e)
     {
         AbstractType type = this.methodVarTable.get(e.getLiteral());
         boolean isField = type == null;
@@ -388,8 +388,8 @@ public final class SemanticVisitor implements IVisitor
             this.curMthLocals.remove(s.getLiteral());
         }
 
-        CvaIdentifier cvaIdentifier = new CvaIdentifier(s.getLineNum(), s.getLiteral());
-        visit(cvaIdentifier);
+        CvaIdentifierExpr cvaIdentifierExpr = new CvaIdentifierExpr(s.getLineNum(), s.getLiteral());
+        visit(cvaIdentifierExpr);
         AbstractType idty = this.type;
         //if (!this.type.toString().equals(idty.toString()))
         if (!isMatch(idty, s.getType()))

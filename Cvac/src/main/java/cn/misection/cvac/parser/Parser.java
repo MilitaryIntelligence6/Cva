@@ -240,7 +240,7 @@ public final class Parser
             }
             case IDENTIFIER:
             {
-                expr = new CvaIdentifier(curToken.getLineNum(), curToken.getLiteral());
+                expr = new CvaIdentifierExpr(curToken.getLineNum(), curToken.getLiteral());
                 advance();
                 return expr;
             }
