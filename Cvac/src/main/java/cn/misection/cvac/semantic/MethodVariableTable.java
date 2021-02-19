@@ -17,14 +17,31 @@ public final class MethodVariableTable
         super();
     }
 
+    /**
+     * 暴露给用户, 防止搞忘;
+     * @param formalList 方法形参;
+     * @param localVarList 方法本地变量;
+     */
     public void putVarList(List<AbstractDeclaration> formalList,
-                           List<AbstractDeclaration> localList)
+                           List<AbstractDeclaration> localVarList)
     {
-        putVariableList(formalList);
-        putVariableList(localList);
+        putMulList(formalList, localVarList);
     }
 
-    private void putVariableList(List<AbstractDeclaration> declList)
+    /**
+     * 安全的, 因为不暴露给用户, 其实final都不需要, private是隐式final;
+     * @param varListArray varLists;
+     */
+    @SafeVarargs
+    private final void putMulList(List<AbstractDeclaration>... varListArray)
+    {
+        for (List<AbstractDeclaration> varList : varListArray)
+        {
+            putSingleList(varList);
+        }
+    }
+
+    private void putSingleList(List<AbstractDeclaration> declList)
     {
         for (AbstractDeclaration decl : declList)
         {
