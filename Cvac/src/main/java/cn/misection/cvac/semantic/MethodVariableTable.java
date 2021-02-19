@@ -8,8 +8,6 @@ import java.util.List;
 
 /**
  * @author  MI6 root
- * @TODO GitHub
- * @TODO 如果回滚到这里, 证明回滚是本地;
  */
 public final class MethodVariableTable
         extends HashMap<String, AbstractType>
