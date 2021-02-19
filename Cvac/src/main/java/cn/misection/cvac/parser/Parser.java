@@ -23,6 +23,7 @@ import cn.misection.cvac.lexer.CvaKind;
 import cn.misection.cvac.lexer.CvaToken;
 import cn.misection.cvac.lexer.Lexer;
 
+import java.io.EOFException;
 import java.util.*;
 
 /**
@@ -1095,11 +1096,31 @@ public final class Parser
         // 一定是write;
         eatToken(curToken.getKind());
         // TODO 解析不带括号的echo;
-        eatToken(CvaKind.OPEN_PAREN);
-        AbstractExpression expr = parseExpr();
-        eatToken(CvaKind.CLOSE_PAREN);
-        eatToken(CvaKind.SEMI);
-        return new CvaWriteStatement(lineNum, expr, writeMode);
+        CvaKind curKind = curToken.getKind();
+        switch (curKind)
+        {
+            case OPEN_PAREN:
+            {
+                eatToken(CvaKind.OPEN_PAREN);
+                AbstractExpression expr = parseExpr();
+                eatToken(CvaKind.CLOSE_PAREN);
+                eatToken(CvaKind.SEMI);
+                return new CvaWriteStatement(lineNum, expr, writeMode);
+            }
+            default:
+            {
+                if (CvaKind.isType(curKind) || curKind == CvaKind.IDENTIFIER)
+                {
+                    AbstractExpression expr = parseExpr();
+                    eatToken(CvaKind.SEMI);
+                    return new CvaWriteStatement(lineNum, expr, writeMode);
+                }
+                errorLog("a string or an integer with parentheses or not",
+                        curKind);
+            }
+        }
+        // 不可达;
+        return null;
     }
 
     /**

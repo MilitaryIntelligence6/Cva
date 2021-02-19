@@ -28,7 +28,7 @@ class Test
         else if (num < 5)
         {
             total = num * (this.Compute(num-1));
-            println(num);
+            println num;
         }
         else
         {
@@ -59,6 +59,8 @@ int main(string[] args)
 //    printf(1);
     println(new Test().Compute(10));   // just a print statement
     echo("this is cva main who can in a random place\n");
+    echo "\nhello, echo\n\n";
+
     println("hello, main method");
     // return 0;
 //    echo("hello, string");

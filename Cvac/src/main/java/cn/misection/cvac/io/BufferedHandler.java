@@ -48,6 +48,10 @@ public final class BufferedHandler implements IBufferedQueue
         reader.close();
     }
 
+    /**
+     * 默认属于peek 1;
+     * @return
+     */
     @Override
     public char peek()
     {

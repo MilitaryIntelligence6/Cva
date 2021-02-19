@@ -83,6 +83,7 @@ public final class Lexer
 
     private static boolean isSpecialCharacter(char ch)
     {
+        // _ $ ' " 都没算;
         return CvaKind.containsKind(String.valueOf(ch))
                 ||'+' == ch || '-' == ch || '*' == ch || ch == '/'
                 || '&' == ch || ch == '|' || ch == '~' || ch == '^'
@@ -315,7 +316,6 @@ public final class Lexer
                 case '=':
                 {
                     stream.poll();
-                    // TODO 看不懂???;
                     return new CvaToken(CvaKind.MORE_OR_EQUALS, lineNum);
                 }
                 case '>':
@@ -551,10 +551,6 @@ public final class Lexer
             {
                 break;
             }
-//                        if (MacroConfig.DEBUG)
-//                        {
-//                            System.out.printf("remove %s\n", commentChar);
-//                        }
         }
         lineNum++;
     }
@@ -599,4 +595,26 @@ public final class Lexer
         // FIXME 修改;
         return true;
     }
+
+    /**
+     * 没有副作用;
+     * @return 下一个非空符;
+     * 基本可以不用了暂时, 以后要用再开;
+     */
+//    public char peekCh()
+//    {
+//        int peekedCount = 1;
+//        char ch = stream.peek();
+//        while (Character.isWhitespace(ch))
+//        {
+//            peekedCount++;
+//            ch = stream.peek(peekedCount);
+//            if (ch == LexerConst.EOF)
+//            {
+//                // peek完了全是白的, 瞎peek;
+//                break;
+//            }
+//        }
+//        return ch;
+//    }
 }
