@@ -659,7 +659,7 @@ public final class Parser
      * //  ->
      * // FormalRest -> , Type id
      *
-     * @return
+     * @return FormalList;
      */
     private List<AbstractDeclaration> parseFormalList()
     {
@@ -692,7 +692,7 @@ public final class Parser
      * // Method -> Type id (FormalList)
      * //          {VarDec* Statement* return Exp; }
      *
-     * @return
+     * @return Method;
      */
     private AbstractMethod parseMethod()
     {
@@ -867,7 +867,7 @@ public final class Parser
     /**
      * Program -> MainClass ClassDecl*
      *
-     * @return
+     * @return Program tree;
      */
     private CvaProgram parseProgram()
     {
@@ -1083,7 +1083,7 @@ public final class Parser
     }
 
     /**
-     * @return
+     * @return 处理if;
      * @TODO 嵌套判定有无else之类;
      */
     private AbstractStatement handleIf()
