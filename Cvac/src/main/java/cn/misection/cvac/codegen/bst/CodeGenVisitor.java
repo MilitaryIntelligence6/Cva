@@ -110,10 +110,9 @@ public interface CodeGenVisitor
                 visit((LabelJ) s);
                 break;
             }
-            case Operator.ILDC:
-            case Operator.SLDC:
+            case Operator.LDC:
             {
-                visit((BaseLdc) s);
+                visit((Ldc) s);
                 break;
             }
             case Operator.NEW:
@@ -167,7 +166,7 @@ public interface CodeGenVisitor
 
     void visit(LabelJ s);
 
-    void visit(BaseLdc s);
+    void visit(Ldc s);
 
     void visit(New s);
 

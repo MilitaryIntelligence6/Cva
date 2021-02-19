@@ -83,9 +83,9 @@ final class Operator
     /**
      * Ldc
      */
-    public static final String ILDC = "ILdc";
+    public static final String LDC = "Ldc";
 
-    public static final String SLDC = "SLdc";
+//    public static final String SLDC = "SLdc";
 
     /**
      * New

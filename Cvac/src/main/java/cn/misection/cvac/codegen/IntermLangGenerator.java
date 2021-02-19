@@ -188,7 +188,7 @@ public final class IntermLangGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(BaseLdc s)
+    public void visit(Ldc s)
     {
         iwritefln("ldc %s", s.value());
     }

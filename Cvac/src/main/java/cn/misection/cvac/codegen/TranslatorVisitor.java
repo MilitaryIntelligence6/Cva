@@ -118,15 +118,15 @@ public final class TranslatorVisitor implements IVisitor
         Label f = new Label();
         Label r = new Label();
         visit(expr.getLeft());
-        emit(new ILdc(1));
+        emit(new Ldc<Integer>(1));
         emit(new IFicmplt(f));
         visit(expr.getRight());
-        emit(new ILdc(1));
+        emit(new Ldc<Integer>(1));
         emit(new IFicmplt(f));
-        emit(new ILdc(1));
+        emit(new Ldc<Integer>(1));
         emit(new Goto(r));
         emit(new LabelJ(f));
-        emit(new ILdc(0));
+        emit(new Ldc<Integer>(0));
         emit(new LabelJ(r));
     }
 
@@ -149,7 +149,7 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaFalseExpr e)
     {
-        emit(new ILdc(0));
+        emit(new Ldc<Integer>(0));
     }
 
     @Override
@@ -186,10 +186,10 @@ public final class TranslatorVisitor implements IVisitor
         visit(e.getLeft());
         visit(e.getRight());
         emit(new IFicmplt(t));
-        emit(new ILdc(0));
+        emit(new Ldc<Integer>(0));
         emit(new Goto(r));
         emit(new LabelJ(t));
-        emit(new ILdc(1));
+        emit(new Ldc<Integer>(1));
         emit(new LabelJ(r));
     }
 
@@ -205,26 +205,26 @@ public final class TranslatorVisitor implements IVisitor
         Label f = new Label();
         Label r = new Label();
         visit(e.getExpr());
-        emit(new ILdc(1));
+        emit(new Ldc<Integer>(1));
         emit(new IFicmplt(f));
-        emit(new ILdc(1));
+        emit(new Ldc<Integer>(1));
         emit(new Goto(r));
         emit(new LabelJ(f));
-        emit(new ILdc(0));
+        emit(new Ldc<Integer>(0));
         emit(new LabelJ(r));
     }
 
     @Override
     public void visit(CvaNumberIntExpr e)
     {
-        emit(new ILdc(e.getValue()));
+        emit(new Ldc<Integer>(e.getValue()));
     }
 
     @Override
     public void visit(CvaStringExpr expr)
     {
         // FIXME;
-        emit(new SLdc(String.format("\"%s\"", expr.getLiteral())));
+        emit(new Ldc<String>(String.format("\"%s\"", expr.getLiteral())));
     }
 
     @Override
@@ -252,7 +252,7 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaTrueExpr e)
     {
-        emit(new ILdc(1));
+        emit(new Ldc<Integer>(1));
     }
 
     @Override
@@ -294,7 +294,7 @@ public final class TranslatorVisitor implements IVisitor
         Label l = new Label();
         Label r = new Label();
         visit(s.getCondition());
-        emit(new ILdc(1));
+        emit(new Ldc<Integer>(1));
         emit(new IFicmplt(l));
         visit(s.getThenStatement());
         emit(new Goto(r));
@@ -378,7 +378,7 @@ public final class TranslatorVisitor implements IVisitor
         Label end = new Label();
         emit(new LabelJ(con));
         visit(s.getCondition());
-        emit(new ILdc(1));
+        emit(new Ldc<Integer>(1));
         emit(new IFicmplt(end));
         visit(s.getBody());
         emit(new Goto(con));
