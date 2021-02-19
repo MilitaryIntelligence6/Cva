@@ -387,28 +387,28 @@ public final class TranslatorVisitor implements IVisitor
     {
         this.index = 1;
         this.indexTable = new HashMap<>();
-        visit(cvaMethod.getRetType());
+        visit(cvaMethod.retType());
         BaseType theRetType = this.getType();
 
         List<GenDeclaration> formalList = new ArrayList<>();
-        cvaMethod.getFormalList().forEach(f ->
+        cvaMethod.argumentList().forEach(f ->
         {
             visit(f);
             formalList.add(this.getDec());
         });
 
         List<GenDeclaration> localList = new ArrayList<>();
-        cvaMethod.getLocalList().forEach(l ->
+        cvaMethod.localList().forEach(l ->
         {
             visit(l);
             localList.add(this.getDec());
         });
         setStatementList(new ArrayList<>());
-        cvaMethod.getStatementList().forEach(this::visit);
+        cvaMethod.statementList().forEach(this::visit);
 
-        visit(cvaMethod.getRetExpr());
+        visit(cvaMethod.retExpr());
 
-        if (cvaMethod.getRetType() instanceof CvaClassType)
+        if (cvaMethod.retType() instanceof CvaClassType)
         {
             emit(new AReturn());
         }
@@ -419,7 +419,7 @@ public final class TranslatorVisitor implements IVisitor
 
         setMethod(
                 new GenMethod(
-                        cvaMethod.getLiteral(),
+                        cvaMethod.name(),
                         theRetType,
                         this.getClassId(),
                         formalList,
@@ -432,23 +432,23 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaClass cvaClass)
     {
-        setClassId(cvaClass.getLiteral());
+        setClassId(cvaClass.name());
         List<GenDeclaration> fieldList = new ArrayList<>();
-        cvaClass.getFieldList().forEach(f ->
+        cvaClass.fieldList().forEach(f ->
         {
             visit(f);
             fieldList.add(this.getDec());
         });
         List<GenMethod> methodList = new ArrayList<>();
-        cvaClass.getMethodList().forEach(m ->
+        cvaClass.methodList().forEach(m ->
         {
             visit(m);
             methodList.add(this.getMethod());
         });
         setClazz(
                 new GenClass(
-                        cvaClass.getLiteral(),
-                        cvaClass.getParent(),
+                        cvaClass.name(),
+                        cvaClass.parent(),
                         fieldList,
                         methodList
                 ));

@@ -165,21 +165,21 @@ public final class UnUsedVarDecl
     public void visit(CvaMethod m)
     {
         this.unUsedLocals = new HashMap<>();
-        m.getLocalList().forEach(local ->
+        m.localList().forEach(local ->
         {
             CvaDeclaration l = (CvaDeclaration) local;
             this.unUsedLocals.put(l.getLiteral(), l);
         });
 
         this.unUsedArgs = new HashMap<>();
-        m.getFormalList().forEach(formal ->
+        m.argumentList().forEach(formal ->
         {
             CvaDeclaration f = (CvaDeclaration) formal;
             this.unUsedArgs.put(f.getLiteral(), f);
         });
 
-        m.getStatementList().forEach(this::visit);
-        this.visit(m.getRetExpr());
+        m.statementList().forEach(this::visit);
+        this.visit(m.retExpr());
 
         this.isOptimizing = this.unUsedArgs.size() > 0
                 || this.unUsedLocals.size() > 0;
@@ -189,7 +189,7 @@ public final class UnUsedVarDecl
             {
                 System.out.printf("Warning: at Line %d:  the argument \"%s\" of" +
                                 " method \"%s\" you have never used.%n",
-                        uao.getLineNum(), uak, m.getLiteral());
+                        uao.getLineNum(), uak, m.name());
             }
         });
 
@@ -201,14 +201,14 @@ public final class UnUsedVarDecl
                                 "\"%s\" you have never used. Now we delete it.%n",
                         ulo.getLineNum(), ulk);
             }
-            m.getLocalList().remove(ulo);
+            m.localList().remove(ulo);
         });
     }
 
     @Override
     public void visit(CvaClass c)
     {
-        c.getMethodList().forEach(this::visit);
+        c.methodList().forEach(this::visit);
     }
 
     @Override

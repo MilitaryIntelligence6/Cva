@@ -33,7 +33,7 @@ final class Operator
     /**
      * GetField
      */
-    public static final String GETFIELD = "GetField";
+    public static final String GET_FIELD = "GetField";
 
     /**
      * IAdd

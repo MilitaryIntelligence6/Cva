@@ -16,66 +16,72 @@ import java.util.List;
  */
 public final class CvaMethod extends AbstractMethod
 {
-    private String literal;
+    private String name;
 
     private AbstractType retType;
 
     private AbstractExpression retExpr;
 
-    private List<AbstractDeclaration> formalList;
+    private List<AbstractDeclaration> argumentList;
 
     private List<AbstractDeclaration> localList;
 
     private List<AbstractStatement> statementList;
 
-    public CvaMethod(String literal,
+    public CvaMethod(String name,
                      AbstractType retType,
                      AbstractExpression retExpr,
-                     List<AbstractDeclaration> formalList,
+                     List<AbstractDeclaration> argumentList,
                      List<AbstractDeclaration> localList,
                      List<AbstractStatement> statementList)
     {
-        this.literal = literal;
+        this.name = name;
         this.retType = retType;
         this.retExpr = retExpr;
-        this.formalList = formalList;
+        this.argumentList = argumentList;
         this.localList = localList;
         this.statementList = statementList;
     }
 
-    public String getLiteral()
+    @Override
+    public String name()
     {
-        return literal;
+        return name;
     }
 
-    public AbstractType getRetType()
+    @Override
+    public AbstractType retType()
     {
         return retType;
     }
 
-    public AbstractExpression getRetExpr()
+    @Override
+    public AbstractExpression retExpr()
     {
         return retExpr;
     }
 
-    public List<AbstractDeclaration> getFormalList()
+    @Override
+    public List<AbstractDeclaration> argumentList()
     {
-        return formalList;
+        return argumentList;
     }
 
-    public List<AbstractDeclaration> getLocalList()
+    @Override
+    public List<AbstractDeclaration> localList()
     {
         return localList;
     }
 
-    public List<AbstractStatement> getStatementList()
+    @Override
+    public List<AbstractStatement> statementList()
     {
         return statementList;
     }
 
-    public void setLiteral(String literal)
+    public void setName(String name)
     {
-        this.literal = literal;
+        this.name = name;
     }
 
     public void setRetType(AbstractType retType)
@@ -88,9 +94,9 @@ public final class CvaMethod extends AbstractMethod
         this.retExpr = retExpr;
     }
 
-    public void setFormalList(List<AbstractDeclaration> formalList)
+    public void setArgumentList(List<AbstractDeclaration> argumentList)
     {
-        this.formalList = formalList;
+        this.argumentList = argumentList;
     }
 
     public void setLocalList(List<AbstractDeclaration> localList)

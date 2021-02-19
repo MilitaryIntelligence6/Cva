@@ -18,10 +18,7 @@ import cn.misection.cvac.lexer.CvaToken;
 import cn.misection.cvac.lexer.IBufferedQueue;
 import cn.misection.cvac.lexer.Lexer;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * @author MI6 root
@@ -785,7 +782,7 @@ public final class Parser
             eatToken(CvaKind.CLOSE_CURLY_BRACE);
             return new CvaEntry(entryName, statement);
         }
-        String mainName = TokenConstPool.DEFAULT_MAIN_NAME;
+        String mainName = TokenConstPool.DEFAULT_MAIN_CLASS_NAME;
         AbstractStatement statement = parseMainMethod();
         return new CvaEntry(mainName, statement);
     }
@@ -801,7 +798,47 @@ public final class Parser
         parseCallStatement();
         CvaEntry entry = parseEntry();
         List<AbstractClass> classList = parseClassDeclList();
+//        CvaEntry entry = null;
+//        List<AbstractClass> classList = new ArrayList<>();
+//        while (true)
+//        {
+//            CvaKind curKind = curToken.getKind();
+//            if (curKind == CvaKind.CLASS)
+//            {
+//                classList.addAll(parseClassDeclList());
+//            }
+//            else if (CvaKind.isType(curKind))
+//            {
+//                entry = parseEntry();
+//                hasEntry = true;
+//            }
+//            else if (curKind == CvaKind.EOF)
+//            {
+//                break;
+//            }
+//            else
+//            {
+//                errorLog("EOF or class def or main func def" +
+//                                "(cva only supported main func out the class) ",
+//                        curKind);
+//            }
+//        }
+//        if (!hasEntry)
+//        {
+//            for (AbstractClass absClass : classList)
+//            {
+//                for (AbstractMethod absMethod : absClass.methodList())
+//                {
+//                    // null 安全的equals;
+//                    if (Objects.equals(absMethod.name(), CvaKind.MAIN.getKindLiteral()))
+//                    {
+//                        entry =
+//                    }
+//                }
+//            }
+//        }
         eatEof();
+        // find entry;
         return new CvaProgram(entry, classList);
     }
 

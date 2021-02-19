@@ -160,7 +160,7 @@ public final class UnReachableDel
     public void visit(CvaMethod m)
     {
         ArrayList<AbstractStatement> stmList = new ArrayList<>();
-        m.getStatementList().forEach(stm ->
+        m.statementList().forEach(stm ->
         {
             this.visit(stm);
             if (this.curStm != null)
@@ -181,7 +181,7 @@ public final class UnReachableDel
     @Override
     public void visit(CvaClass c)
     {
-        c.getMethodList().forEach(this::visit);
+        c.methodList().forEach(this::visit);
     }
 
     @Override

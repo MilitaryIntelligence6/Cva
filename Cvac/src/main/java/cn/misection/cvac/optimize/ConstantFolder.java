@@ -314,15 +314,15 @@ public final class ConstantFolder
     @Override
     public void visit(CvaMethod cvaMethod)
     {
-        cvaMethod.getStatementList().forEach(this::visit);
-        this.visit(cvaMethod.getRetExpr());
+        cvaMethod.statementList().forEach(this::visit);
+        this.visit(cvaMethod.retExpr());
         cvaMethod.setRetExpr(this.lastExpr);
     }
 
     @Override
     public void visit(CvaClass cvaClass)
     {
-        cvaClass.getMethodList().forEach(this::visit);
+        cvaClass.methodList().forEach(this::visit);
     }
 
     @Override

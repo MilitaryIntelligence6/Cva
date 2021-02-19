@@ -458,20 +458,20 @@ public final class SemanticVisitor implements IVisitor
     {
         this.methodVarTable = new MethodVariableTable();
         this.methodVarTable.put(
-                cvaMethod.getFormalList(),
-                cvaMethod.getLocalList()
+                cvaMethod.argumentList(),
+                cvaMethod.localList()
         );
         this.curMthLocals = new HashSet<>();
-        cvaMethod.getLocalList().forEach(local ->
+        cvaMethod.localList().forEach(local ->
                 this.curMthLocals.add(((CvaDeclaration) local).getLiteral()));
-        cvaMethod.getStatementList().forEach(this::visit);
-        visit(cvaMethod.getRetExpr());
+        cvaMethod.statementList().forEach(this::visit);
+        visit(cvaMethod.retExpr());
         // if (!this.type.toString().equals(m.retType.toString()))
-        if (!isMatch(cvaMethod.getRetType(), this.type))
+        if (!isMatch(cvaMethod.retType(), this.type))
         {
-            errorLog(cvaMethod.getRetExpr().getLineNum(),
+            errorLog(cvaMethod.retExpr().getLineNum(),
                     String.format("the return expression's type is not match the method \"%s\" declared.", 
-                            cvaMethod.getLiteral()));
+                            cvaMethod.name()));
         }
 
     }
@@ -479,8 +479,8 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaClass cvaClass)
     {
-        this.currentClass = cvaClass.getLiteral();
-        cvaClass.getMethodList().forEach(this::visit);
+        this.currentClass = cvaClass.name();
+        cvaClass.methodList().forEach(this::visit);
     }
 
     @Override
@@ -500,18 +500,18 @@ public final class SemanticVisitor implements IVisitor
         for (AbstractClass abstractClass : cvaProgram.getClassList())
         {
             CvaClass cla = ((CvaClass) abstractClass);
-            classTable.putClassBinding(cla.getLiteral(), new ClassBinding(cla.getParent()));
+            classTable.putClassBinding(cla.name(), new ClassBinding(cla.parent()));
 
-            cla.getFieldList().forEach(field -> classTable.putFieldToClass(cla.getLiteral(),
+            cla.fieldList().forEach(field -> classTable.putFieldToClass(cla.name(),
                     ((CvaDeclaration) field).getLiteral(),
                     ((CvaDeclaration) field).getType())
             );
 
-            cla.getMethodList().forEach(method -> classTable.putMethodToClass(cla.getLiteral(),
-                    ((CvaMethod) method).getLiteral(),
+            cla.methodList().forEach(method -> classTable.putMethodToClass(cla.name(),
+                    ((CvaMethod) method).name(),
                     new MethodType(
-                            ((CvaMethod) method).getRetType(),
-                            ((CvaMethod) method).getFormalList()))
+                            ((CvaMethod) method).retType(),
+                            ((CvaMethod) method).argumentList()))
             );
         }
         visit(cvaProgram.getEntry());

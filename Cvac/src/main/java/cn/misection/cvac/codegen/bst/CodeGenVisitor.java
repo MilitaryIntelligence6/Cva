@@ -60,7 +60,7 @@ public interface CodeGenVisitor
                 visit((Goto) s);
                 break;
             }
-            case Operator.GETFIELD:
+            case Operator.GET_FIELD:
             {
                 visit((GetField) s);
                 break;

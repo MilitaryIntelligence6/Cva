@@ -1,6 +1,10 @@
 package cn.misection.cvac.ast.clas;
 
 import cn.misection.cvac.ast.ASTree;
+import cn.misection.cvac.ast.decl.AbstractDeclaration;
+import cn.misection.cvac.ast.method.AbstractMethod;
+
+import java.util.List;
 
 /**
  * @author Military Intelligence 6 root
@@ -11,4 +15,27 @@ import cn.misection.cvac.ast.ASTree;
  */
 public interface IClass extends ASTree
 {
+    /**
+     * 类名;
+     * @return
+     */
+    String name();
+
+    /**
+     * 父类;
+     * @return
+     */
+    String parent();
+
+    /**
+     * field;
+     * @return
+     */
+    List<AbstractDeclaration> fieldList();
+
+    /**
+     * 方法;
+     * @return
+     */
+    List<AbstractMethod> methodList();
 }

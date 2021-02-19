@@ -9,5 +9,5 @@ package cn.misection.cvac.constant;
  */
 public final class TokenConstPool
 {
-    public static final String DEFAULT_MAIN_NAME = "Application";
+    public static final String DEFAULT_MAIN_CLASS_NAME = "Application";
 }

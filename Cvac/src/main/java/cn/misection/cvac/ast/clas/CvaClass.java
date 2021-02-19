@@ -14,7 +14,7 @@ import java.util.List;
  */
 public final class CvaClass extends AbstractClass
 {
-    private final String literal;
+    private final String name;
 
     private final String parent;
 
@@ -22,30 +22,34 @@ public final class CvaClass extends AbstractClass
 
     private final List<AbstractMethod> methodList;
 
-    public CvaClass(String literal, String parent, List<AbstractDeclaration> fieldList, List<AbstractMethod> methodList)
+    public CvaClass(String name, String parent, List<AbstractDeclaration> fieldList, List<AbstractMethod> methodList)
     {
-        this.literal = literal;
+        this.name = name;
         this.parent = parent;
         this.fieldList = fieldList;
         this.methodList = methodList;
     }
 
-    public String getLiteral()
+    @Override
+    public String name()
     {
-        return literal;
+        return name;
     }
 
-    public String getParent()
+    @Override
+    public String parent()
     {
         return parent;
     }
 
-    public List<AbstractDeclaration> getFieldList()
+    @Override
+    public List<AbstractDeclaration> fieldList()
     {
         return fieldList;
     }
 
-    public List<AbstractMethod> getMethodList()
+    @Override
+    public List<AbstractMethod> methodList()
     {
         return methodList;
     }
