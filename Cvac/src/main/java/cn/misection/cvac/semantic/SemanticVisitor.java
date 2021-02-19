@@ -472,11 +472,14 @@ public final class SemanticVisitor implements IVisitor
         cvaMethod.getStatementList().forEach(this::visit);
         visit(cvaMethod.getRetExpr());
         // if (!this.type.toString().equals(m.retType.toString()))
-        if (!isMatch(cvaMethod.getRetType(), this.type))
+        if (!(cvaMethod.getRetType() instanceof CvaVoidType))
         {
-            errorLog(cvaMethod.getRetExpr().getLineNum(),
-                    String.format("the return expression's type is not match the method \"%s\" declared.", 
-                            cvaMethod.name()));
+            if (!isMatch(cvaMethod.getRetType(), this.type))
+            {
+                errorLog(cvaMethod.getRetExpr().getLineNum(),
+                        String.format("the return expression's type is not match the method \"%s\" declared.",
+                                cvaMethod.name()));
+            }
         }
     }
 

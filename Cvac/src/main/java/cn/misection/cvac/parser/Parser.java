@@ -877,46 +877,6 @@ public final class Parser
         return new CvaProgram(entryClass, classList);
     }
 
-    /**
-     * @TODO 目前是eat, 以后要检查返回值;
-     */
-    private CvaKind parseMainRetType()
-    {
-        // kind 能保存之前的kind;
-        CvaKind curKind = curToken.getKind();
-        if (CvaKind.isType(curKind))
-        {
-            eatToken(curKind);
-        }
-        else
-        {
-            errorLog("type in main func decl",
-                    curKind);
-        }
-        return curKind;
-    }
-
-    /**
-     * @return
-     * @deprecated
-     */
-//    private AbstractStatement parseMainMethod()
-//    {
-//        // TODO 现在没用到. 以后要检查;
-//        CvaKind mainRet = parseMainRetType();
-//
-//        eatToken(CvaKind.MAIN);
-//        eatToken(CvaKind.OPEN_PAREN);
-//
-//        parseMainArgs();
-//
-//        eatToken(CvaKind.CLOSE_PAREN);
-//        eatToken(CvaKind.OPEN_CURLY_BRACE);
-//        // 拓展到可以吃多个statement;
-//        AbstractStatement statement = parseStatement();
-//        eatToken(CvaKind.CLOSE_CURLY_BRACE);
-//        return statement;
-//    }
     private AbstractMethod parseMainMethod()
     {
         AbstractType mainRetType = parseType();
@@ -935,8 +895,6 @@ public final class Parser
         if (!(mainRetType instanceof CvaVoidType))
         {
             eatToken(CvaKind.RETURN);
-//        AbstractExpression retExp = parseExpr();
-            // 不接受其返回值, 不必要, 只要不特乱就行;
             retExpr = parseExpr();
             eatToken(CvaKind.SEMI);
         }
