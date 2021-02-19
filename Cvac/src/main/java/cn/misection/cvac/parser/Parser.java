@@ -721,6 +721,38 @@ public final class Parser
                 statementList);
     }
 
+    private AbstractMethod parseMainMethod()
+    {
+        AbstractType mainRetType = parseType();
+        String literal = curToken.getLiteral();
+        eatToken(CvaKind.MAIN);
+
+        eatToken(CvaKind.OPEN_PAREN);
+        List<AbstractDeclaration> mainArgs = parseMainArgs();
+        eatToken(CvaKind.CLOSE_PAREN);
+
+        eatToken(CvaKind.OPEN_CURLY_BRACE);
+        List<AbstractDeclaration> localVarDecls = parseVarDeclList();
+        List<AbstractStatement> statementList = parseStatementList();
+
+        AbstractExpression retExpr = null;
+        if (!(mainRetType instanceof CvaVoidType))
+        {
+            eatToken(CvaKind.RETURN);
+            retExpr = parseExpr();
+            eatToken(CvaKind.SEMI);
+        }
+        eatToken(CvaKind.CLOSE_CURLY_BRACE);
+
+        return new CvaMainMethod.Builder()
+                .putRetType(mainRetType)
+                .putRetExpr(retExpr)
+                .putMainArgList(mainArgs)
+                .putLocalVarList(localVarDecls)
+                .putStatementList(statementList)
+                .build();
+    }
+
     /**
      * // MethodDecls -> MethodDecl MethodDecls*
      * //  ->
@@ -875,38 +907,6 @@ public final class Parser
         eatEof();
         // find entry;
         return new CvaProgram(entryClass, classList);
-    }
-
-    private AbstractMethod parseMainMethod()
-    {
-        AbstractType mainRetType = parseType();
-        String literal = curToken.getLiteral();
-        eatToken(CvaKind.MAIN);
-
-        eatToken(CvaKind.OPEN_PAREN);
-        List<AbstractDeclaration> mainArgs = parseMainArgs();
-        eatToken(CvaKind.CLOSE_PAREN);
-
-        eatToken(CvaKind.OPEN_CURLY_BRACE);
-        List<AbstractDeclaration> localVarDecls = parseVarDeclList();
-        List<AbstractStatement> statementList = parseStatementList();
-
-        AbstractExpression retExpr = null;
-        if (!(mainRetType instanceof CvaVoidType))
-        {
-            eatToken(CvaKind.RETURN);
-            retExpr = parseExpr();
-            eatToken(CvaKind.SEMI);
-        }
-        eatToken(CvaKind.CLOSE_CURLY_BRACE);
-
-        return new CvaMainMethod.Builder()
-                .putRetType(mainRetType)
-                .putRetExpr(retExpr)
-                .putMainArgList(mainArgs)
-                .putLocalVarList(localVarDecls)
-                .putStatementList(statementList)
-                .build();
     }
 
     /**
