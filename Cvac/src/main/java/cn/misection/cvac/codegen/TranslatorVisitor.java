@@ -475,7 +475,7 @@ public final class TranslatorVisitor implements IVisitor
 //        setLinearInstrList(new ArrayList<>());
 //        visit(entryClass.statement());
 
-//        entryClass.getStatementList().forEach(this::visit);
+//        entryClass..forEach(this::visit);
         genEntry = new GenEntry(entryClass.name(),
                 this.linearInstrList);
         // 会重复使用, 赋给每个域;

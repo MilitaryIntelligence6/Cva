@@ -43,8 +43,4 @@ public final class CvaEntryClass extends AbstractEntryClass
         return null;
     }
 
-    public static class Builder
-    {
-
-    }
 }

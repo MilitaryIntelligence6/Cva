@@ -12,9 +12,13 @@ import java.util.List;
  * @author Military Intelligence 6 root
  * @version 1.0.0
  * @ClassName CvaMain
- * @Description main 方法入口;
+ * @Description main 方法入口, 由于Cva可能没有精力去实现static关键字了
+ * 也为了能将实例和static类完全解耦, 所以EntryClass非常特殊只容许衣柜main方法
+ * 更推荐直接在类外定义main方法;
+ * 所以Cva的main class是一个阉割的class;
  * @TODO main方法要传入命令行参数!
  * @TODO main方法要支持多条statement;
+ *
  * @CreateTime 2021年02月14日 17:54:00
  */
 public abstract class AbstractEntryClass extends AbstractCvaClass
