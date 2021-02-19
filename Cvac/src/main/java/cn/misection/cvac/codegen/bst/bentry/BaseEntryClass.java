@@ -11,21 +11,21 @@ import java.util.List;
  * @Description main 方法入口;
  * @CreateTime 2021年02月14日 17:54:00
  */
-public abstract class BaseEntry implements IEntry
+public abstract class BaseEntryClass implements IEntryClass
 {
-    protected String literal;
+    protected String name;
 
     protected List<BaseInstruction> statementList;
 
-    protected BaseEntry(String literal, List<BaseInstruction> statementList)
+    protected BaseEntryClass(String name, List<BaseInstruction> statementList)
     {
-        this.literal = literal;
+        this.name = name;
         this.statementList = statementList;
     }
 
-    public String getLiteral()
+    public String getName()
     {
-        return literal;
+        return name;
     }
 
     public List<BaseInstruction> getStatementList()
@@ -33,9 +33,9 @@ public abstract class BaseEntry implements IEntry
         return statementList;
     }
 
-    public void setLiteral(String literal)
+    public void setName(String name)
     {
-        this.literal = literal;
+        this.name = name;
     }
 
     public void setStatementList(List<BaseInstruction> statementList)

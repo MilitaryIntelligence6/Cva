@@ -18,7 +18,7 @@ import cn.misection.cvac.ast.type.reference.CvaStringType;
 import cn.misection.cvac.codegen.bst.Label;
 import cn.misection.cvac.codegen.bst.bclas.GenClass;
 import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
-import cn.misection.cvac.codegen.bst.bentry.GenEntry;
+import cn.misection.cvac.codegen.bst.bentry.GenEntryClass;
 import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
 import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
 import cn.misection.cvac.codegen.bst.btype.BaseType;
@@ -50,7 +50,7 @@ public final class TranslatorVisitor implements IVisitor
     private List<BaseInstruction> linearInstrList;
     private GenMethod genMethod;
     private GenClass genClass;
-    private GenEntry genEntry;
+    private GenEntryClass genEntryClass;
     private GenProgram genProgram;
 
     public TranslatorVisitor()
@@ -61,7 +61,7 @@ public final class TranslatorVisitor implements IVisitor
         this.genDecl = null;
         this.linearInstrList = new ArrayList<>();
         this.genMethod = null;
-        this.genEntry = null;
+        this.genEntryClass = null;
         this.genClass = null;
         this.genProgram = null;
     }
@@ -512,7 +512,7 @@ public final class TranslatorVisitor implements IVisitor
 //        visit(entryClass.statement());
 
 //        entryClass..forEach(this::visit);
-        genEntry = new GenEntry(entryClass.name(),
+        genEntryClass = new GenEntryClass(entryClass.name(),
                 this.linearInstrList);
         // 会重复使用, 赋给每个域;
         this.linearInstrList = new ArrayList<>();
@@ -529,7 +529,7 @@ public final class TranslatorVisitor implements IVisitor
             classList.add(this.genClass);
         });
         genProgram = new GenProgram(
-                this.genEntry,
+                this.genEntryClass,
                 classList);
     }
 
@@ -593,14 +593,14 @@ public final class TranslatorVisitor implements IVisitor
         this.genClass = genClass;
     }
 
-    public GenEntry getGenEntry()
+    public GenEntryClass getGenEntry()
     {
-        return genEntry;
+        return genEntryClass;
     }
 
-    public void setGenEntry(GenEntry genEntry)
+    public void setGenEntry(GenEntryClass genEntryClass)
     {
-        this.genEntry = genEntry;
+        this.genEntryClass = genEntryClass;
     }
 
     public GenProgram getGenProgram()

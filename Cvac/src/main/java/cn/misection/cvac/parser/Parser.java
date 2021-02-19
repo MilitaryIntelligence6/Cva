@@ -1097,27 +1097,26 @@ public final class Parser
         eatToken(curToken.getKind());
         // TODO 解析不带括号的echo;
         CvaKind curKind = curToken.getKind();
-        switch (curKind)
+        if (curKind == CvaKind.OPEN_PAREN)
         {
-            case OPEN_PAREN:
+            eatToken(CvaKind.OPEN_PAREN);
+            AbstractExpression expr = parseExpr();
+            eatToken(CvaKind.CLOSE_PAREN);
+            eatToken(CvaKind.SEMI);
+            return new CvaWriteStatement(lineNum, expr, writeMode);
+        }
+        else
+        {
+            if (CvaKind.isType(curKind)
+                    || curKind == CvaKind.IDENTIFIER
+                    || curKind == CvaKind.NUMBER)
             {
-                eatToken(CvaKind.OPEN_PAREN);
                 AbstractExpression expr = parseExpr();
-                eatToken(CvaKind.CLOSE_PAREN);
                 eatToken(CvaKind.SEMI);
                 return new CvaWriteStatement(lineNum, expr, writeMode);
             }
-            default:
-            {
-                if (CvaKind.isType(curKind) || curKind == CvaKind.IDENTIFIER)
-                {
-                    AbstractExpression expr = parseExpr();
-                    eatToken(CvaKind.SEMI);
-                    return new CvaWriteStatement(lineNum, expr, writeMode);
-                }
-                errorLog("a string or an integer with parentheses or not",
-                        curKind);
-            }
+            errorLog("a string or an integer with parentheses or not",
+                    curKind);
         }
         // 不可达;
         return null;

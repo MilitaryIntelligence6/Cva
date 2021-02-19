@@ -3,7 +3,7 @@ package cn.misection.cvac.codegen;
 import cn.misection.cvac.codegen.bst.CodeGenVisitor;
 import cn.misection.cvac.codegen.bst.bclas.GenClass;
 import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
-import cn.misection.cvac.codegen.bst.bentry.GenEntry;
+import cn.misection.cvac.codegen.bst.bentry.GenEntryClass;
 import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
 import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
 import cn.misection.cvac.codegen.bst.instruction.*;
@@ -271,11 +271,11 @@ public final class IntermLangGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(GenEntry entry)
+    public void visit(GenEntryClass entry)
     {
-        initWriter(String.format("%s.il", entry.getLiteral()));
+        initWriter(String.format("%s.il", entry.getName()));
 
-        writef(".class public %s\n", entry.getLiteral());
+        writef(".class public %s\n", entry.getName());
         writeln(".super java/lang/Object");
         writeln(".method public static main([Ljava/lang/String;)V");
         writef(".limit stack %d\n", StackConst.MAX_STACK_DEPTH);
@@ -290,7 +290,7 @@ public final class IntermLangGenerator implements CodeGenVisitor
     @Override
     public void visit(GenProgram program)
     {
-        visit(program.getEntry());
+         visit(program.getEntry());
         program.getClassList().forEach(this::visit);
     }
 

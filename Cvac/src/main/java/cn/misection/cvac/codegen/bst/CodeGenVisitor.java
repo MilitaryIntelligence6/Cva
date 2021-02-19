@@ -2,7 +2,7 @@ package cn.misection.cvac.codegen.bst;
 
 import cn.misection.cvac.codegen.bst.bclas.GenClass;
 import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
-import cn.misection.cvac.codegen.bst.bentry.GenEntry;
+import cn.misection.cvac.codegen.bst.bentry.GenEntryClass;
 import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
 import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
 import cn.misection.cvac.codegen.bst.instruction.*;
@@ -176,7 +176,7 @@ public interface CodeGenVisitor
 
     void visit(GenMethod m);
 
-    void visit(GenEntry c);
+    void visit(GenEntryClass c);
 
     void visit(GenClass c);
 
