@@ -25,7 +25,6 @@ public final class CvaEntryClass extends AbstractEntryClass
         super(name, statement);
     }
 
-
     @Override
     public String parent()
     {
