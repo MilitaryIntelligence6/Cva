@@ -7,7 +7,7 @@ package cn.misection.cvac.pkg;
  * @Description 包管理和项目管理;
  * @CreateTime 2021年02月19日 13:22:00
  */
-public class PackageManager
+public final class PackageManager
 {
     /**
      * @TODO 

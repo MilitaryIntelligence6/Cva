@@ -67,6 +67,11 @@ public final class CvaEntryClass extends AbstractEntryClass
             this.entryMethod = entryMethod;
         }
 
+        public CvaEntryClass build()
+        {
+            return new CvaEntryClass(this);
+        }
+
         public Builder putName(String name)
         {
             this.name = name;

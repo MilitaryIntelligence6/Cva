@@ -773,7 +773,7 @@ public final class Parser
      *
      * @return
      */
-    private CvaEntryClass parseEntry()
+    private CvaEntryClass parseEntryClass()
     {
         if (curToken.getKind() == CvaKind.CLASS)
         {
@@ -799,7 +799,7 @@ public final class Parser
     {
         parsePackage();
         parseCallStatement();
-        CvaEntryClass entry = parseEntry();
+        CvaEntryClass entry = parseEntryClass();
         List<AbstractCvaClass> classList = parseClassDeclList();
 //        CvaEntry entry = null;
 //        List<AbstractClass> classList = new ArrayList<>();
