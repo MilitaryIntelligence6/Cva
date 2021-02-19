@@ -763,26 +763,10 @@ public final class Parser
     {
         List<AbstractMethod> methodList = new ArrayList<>();
 
-        while (true)
+        while (CvaKind.isType(curToken.getKind())
+                || curToken.getKind() == CvaKind.IDENTIFIER)
         {
-            switch (curToken.getKind())
-            {
-                // 看返回值;
-                // id包括了class返回值;
-                case IDENTIFIER:
-                case INT:
-                case BOOLEAN:
-                case STRING:
-                {
-                    methodList.add(parseMethod());
-                    continue;
-                }
-                default:
-                {
-                    break;
-                }
-            }
-            break;
+            methodList.add(parseMethod());
         }
         return methodList;
     }
@@ -795,7 +779,7 @@ public final class Parser
      */
     private AbstractCvaClass parseClassDecl()
     {
-        eatToken(CvaKind.CLASS);
+        eatToken(CvaKind.CLASS_DECL);
         String literal = curToken.getLiteral();
         eatToken(CvaKind.IDENTIFIER);
         String superClass = null;
@@ -825,7 +809,7 @@ public final class Parser
     private List<AbstractCvaClass> parseClassDeclList()
     {
         List<AbstractCvaClass> classList = new ArrayList<>();
-        while (curToken.getKind() == CvaKind.CLASS)
+        while (curToken.getKind() == CvaKind.CLASS_DECL)
         {
             classList.add(parseClassDecl());
         }
@@ -845,9 +829,9 @@ public final class Parser
      */
     private CvaEntryClass parseEntryClass()
     {
-        if (curToken.getKind() == CvaKind.CLASS)
+        if (curToken.getKind() == CvaKind.CLASS_DECL)
         {
-            eatToken(CvaKind.CLASS);
+            eatToken(CvaKind.CLASS_DECL);
             String entryName = curToken.getLiteral();
             eatToken(CvaKind.IDENTIFIER);
             eatToken(CvaKind.OPEN_CURLY_BRACE);
@@ -962,9 +946,9 @@ public final class Parser
 
     private void parsePackage()
     {
-        if (curToken.getKind() == CvaKind.PACKAGE)
+        if (curToken.getKind() == CvaKind.PACKAGE_DECL)
         {
-            eatToken(CvaKind.PACKAGE);
+            eatToken(CvaKind.PACKAGE_DECL);
             CvaKind memKind = curToken.getKind();
             eatToken(CvaKind.IDENTIFIER);
             while (true)

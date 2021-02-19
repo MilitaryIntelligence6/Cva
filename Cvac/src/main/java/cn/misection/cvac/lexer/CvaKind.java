@@ -174,21 +174,21 @@ public enum CvaKind
     /**
      * class
      */
-    CLASS("class"),
+    CLASS_DECL("class"),
 
     /**
      * ENUM DEFINE
      */
-    ENUM("enum"),
+    ENUM_DECL("enum"),
 
-    STRUCT("struct"),
+    STRUCT_DECL("struct"),
 
     /**
      * 继承符;
      */
     EXTENDS("extends"),
 
-    PACKAGE("pkg"),
+    PACKAGE_DECL("pkg"),
 
     /*
      * non-prefix char;
@@ -609,14 +609,26 @@ public enum CvaKind
                 && kind.ordinal() <= CvaKind.POINTER.ordinal();
     }
 
-    public static boolean isReferenceType(CvaKind kind)
+    public static boolean isInternalRefType(CvaKind kind)
     {
-        return kind.ordinal() >= STRING.ordinal()
-                && kind.ordinal() <= STRUCT.ordinal();
+        return kind == STRING;
     }
 
     public static boolean isType(CvaKind kind)
     {
-        return isBasicType(kind) || isReferenceType(kind);
+        return isBasicType(kind) || isInternalRefType(kind);
     }
+
+
+    // class其实是声明, 而非type, 其type字面量是id;
+//    public static boolean isReferenceType(CvaKind kind)
+//    {
+//        return kind.ordinal() >= STRING.ordinal()
+//                && kind.ordinal() <= STRUCT.ordinal();
+//    }
+//
+//    public static boolean isType(CvaKind kind)
+//    {
+//        return isBasicType(kind) || isReferenceType(kind);
+//    }
 }
