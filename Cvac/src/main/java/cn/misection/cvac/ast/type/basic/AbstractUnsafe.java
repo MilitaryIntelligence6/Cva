@@ -1,4 +1,4 @@
-package cn.misection.cvac.ast.type;
+package cn.misection.cvac.ast.type.basic;
 
 /**
  * @author Military Intelligence 6 root
@@ -7,6 +7,6 @@ package cn.misection.cvac.ast.type;
  * @Description TODO
  * @CreateTime 2021年02月16日 16:15:00
  */
-public abstract class AbstractUnsafe extends AbstractType
+public abstract class AbstractUnsafe extends AbstractBasicType
 {
 }

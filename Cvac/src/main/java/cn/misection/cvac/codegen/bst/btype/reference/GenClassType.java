@@ -1,4 +1,4 @@
-package cn.misection.cvac.ast.type;
+package cn.misection.cvac.codegen.bst.btype.reference;
 
 /**
  * @author Military Intelligence 6 root
@@ -7,24 +7,26 @@ package cn.misection.cvac.ast.type;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:45:00
  */
-public final class CvaClassType extends AbstractType
+public final class GenClassType extends BaseReferenceType
 {
     public static final String TYPE_LITERAL = "@class";
 
     private String literal;
 
-    public CvaClassType(String literal)
+    public GenClassType(String literal)
     {
         this.literal = literal;
     }
 
+    // FIXME
+    // 后端这样行不行;
     @Override
     public String toString()
     {
         return String.format("@class:%s", literal);
     }
 
-    public String getLiteral()
+    public String literal()
     {
         return literal;
     }

@@ -9,6 +9,10 @@ import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.*;
+import cn.misection.cvac.ast.type.basic.CvaBooleanType;
+import cn.misection.cvac.ast.type.basic.CvaIntType;
+import cn.misection.cvac.ast.type.reference.CvaClassType;
+import cn.misection.cvac.ast.type.reference.CvaStringType;
 import cn.misection.cvac.codegen.bst.Label;
 import cn.misection.cvac.codegen.bst.bclas.GenClass;
 import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
@@ -17,8 +21,8 @@ import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
 import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
 import cn.misection.cvac.codegen.bst.btype.BaseType;
 import cn.misection.cvac.codegen.bst.btype.basic.GenIntType;
-import cn.misection.cvac.codegen.bst.btype.refer.GenClassType;
-import cn.misection.cvac.codegen.bst.btype.refer.GenStringType;
+import cn.misection.cvac.codegen.bst.btype.reference.GenClassType;
+import cn.misection.cvac.codegen.bst.btype.reference.GenStringType;
 import cn.misection.cvac.codegen.bst.instruction.*;
 import cn.misection.cvac.constant.CvaExprClassName;
 import cn.misection.cvac.constant.WriteILConst;
@@ -254,14 +258,20 @@ public final class TranslatorVisitor implements IVisitor
         emit(new Ldc<Integer>(1));
     }
 
+    /**
+     * @FIXME 类型添加String是1, 二是要用前面写的switch方法替换;
+     * 添加string应该只需要ref type就行;
+     * @param assignSta
+     */
     @Override
-    public void visit(CvaAssignStatement s)
+    public void visit(CvaAssignStatement assignSta)
     {
         try
         {
-            int index = this.indexTable.get(s.getLiteral());
-            visit(s.getExpr());
-            if (s.getType() instanceof CvaClassType)
+            int index = this.indexTable.get(assignSta.getLiteral());
+            visit(assignSta.getExpr());
+//            if (assignSta.getType() instanceof CvaClassType)
+            if (assignSta.getType() instanceof CvaClassType)
             {
                 emit(new AStore(index));
             }
@@ -273,10 +283,10 @@ public final class TranslatorVisitor implements IVisitor
         catch (NullPointerException e)
         {
             emit(new ALoad(0));
-            visit(s.getExpr());
-            emit(new PutField(String.format("%s/%s", this.classId, s.getLiteral()),
-                    s.getType() instanceof CvaClassType ?
-                            (String.format("L%s;", ((CvaClassType) s.getType()).getLiteral()))
+            visit(assignSta.getExpr());
+            emit(new PutField(String.format("%s/%s", this.classId, assignSta.getLiteral()),
+                    assignSta.getType() instanceof CvaClassType ?
+                            (String.format("L%s;", ((CvaClassType) assignSta.getType()).getLiteral()))
                             : "I"));
         }
     }

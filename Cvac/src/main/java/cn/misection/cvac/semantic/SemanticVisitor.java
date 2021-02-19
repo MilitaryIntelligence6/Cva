@@ -9,6 +9,10 @@ import cn.misection.cvac.ast.method.*;
 import cn.misection.cvac.ast.program.*;
 import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.*;
+import cn.misection.cvac.ast.type.basic.CvaBooleanType;
+import cn.misection.cvac.ast.type.basic.CvaIntType;
+import cn.misection.cvac.ast.type.reference.CvaClassType;
+import cn.misection.cvac.ast.type.reference.CvaStringType;
 
 import java.util.HashSet;
 import java.util.ArrayList;

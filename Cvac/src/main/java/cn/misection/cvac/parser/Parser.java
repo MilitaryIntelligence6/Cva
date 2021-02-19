@@ -11,6 +11,9 @@ import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.*;
+import cn.misection.cvac.ast.type.basic.*;
+import cn.misection.cvac.ast.type.reference.CvaClassType;
+import cn.misection.cvac.ast.type.reference.CvaStringType;
 import cn.misection.cvac.constant.LexerConst;
 import cn.misection.cvac.constant.WriteILConst;
 import cn.misection.cvac.lexer.CvaKind;
@@ -491,7 +494,7 @@ public final class Parser
         {
             case BYTE:
             {
-                type = new CvaBtyeType();
+                type = new CvaByteType();
                 break;
             }
             case CHAR:

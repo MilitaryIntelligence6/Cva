@@ -8,7 +8,7 @@ import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
 import cn.misection.cvac.codegen.bst.instruction.*;
 import cn.misection.cvac.codegen.bst.btype.BaseType;
 import cn.misection.cvac.codegen.bst.btype.basic.BaseBasicType;
-import cn.misection.cvac.codegen.bst.btype.refer.BaseReferenceType;
+import cn.misection.cvac.codegen.bst.btype.reference.BaseReferenceType;
 
 /**
  * Created by MI6 root 1/17.

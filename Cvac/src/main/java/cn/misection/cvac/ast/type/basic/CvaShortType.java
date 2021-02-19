@@ -1,17 +1,18 @@
-package cn.misection.cvac.ast.type;
+package cn.misection.cvac.ast.type.basic;
+
 
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
- * @ClassName CvaFloat
+ * @ClassName CvaShort
  * @Description TODO
  * @CreateTime 2021年02月14日 19:46:00
  */
-public final class CvaFloatType extends AbstractType
+public final class CvaShortType extends AbstractBasicType
 {
-    public static final String TYPE_LITERAL = "@float";
+    public static final String TYPE_LITERAL = "@short";
 
-    public CvaFloatType() {}
+    public CvaShortType() {}
 
     @Override
     public String toString()

@@ -1,4 +1,4 @@
-package cn.misection.cvac.ast.type;
+package cn.misection.cvac.ast.type.basic;
 
 /**
  * @author Military Intelligence 6 root
@@ -7,7 +7,7 @@ package cn.misection.cvac.ast.type;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:44:00
  */
-public final class CvaIntType extends AbstractType
+public final class CvaIntType extends AbstractBasicType
 {
     public static final String TYPE_LITERAL = "@int";
 

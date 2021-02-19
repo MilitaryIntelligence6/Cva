@@ -1,4 +1,4 @@
-package cn.misection.cvac.ast.type;
+package cn.misection.cvac.ast.type.basic;
 
 /**
  * @author Military Intelligence 6 root

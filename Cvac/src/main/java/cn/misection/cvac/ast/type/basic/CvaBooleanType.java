@@ -1,4 +1,4 @@
-package cn.misection.cvac.ast.type;
+package cn.misection.cvac.ast.type.basic;
 
 /**
  * @author Military Intelligence 6 root
@@ -7,13 +7,11 @@ package cn.misection.cvac.ast.type;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:41:00
  */
-public final class CvaBooleanType extends AbstractType
+public final class CvaBooleanType extends AbstractBasicType
 {
     public static final String TYPE_LITERAL = "@boolean";
 
-    public CvaBooleanType()
-    {
-    }
+    public CvaBooleanType() {}
 
     @Override
     public String toString()

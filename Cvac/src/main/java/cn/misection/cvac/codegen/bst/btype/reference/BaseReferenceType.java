@@ -1,4 +1,4 @@
-package cn.misection.cvac.codegen.bst.btype.refer;
+package cn.misection.cvac.codegen.bst.btype.reference;
 
 import cn.misection.cvac.codegen.bst.btype.BaseType;
 

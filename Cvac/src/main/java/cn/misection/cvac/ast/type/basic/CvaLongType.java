@@ -1,17 +1,17 @@
-package cn.misection.cvac.ast.type;
+package cn.misection.cvac.ast.type.basic;
 
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
- * @ClassName CvaString
+ * @ClassName CvaLong
  * @Description TODO
  * @CreateTime 2021年02月14日 19:46:00
  */
-public final class CvaStringType extends AbstractType
+public final class CvaLongType extends AbstractBasicType
 {
-    public static final String TYPE_LITERAL = "@string";
+    public static final String TYPE_LITERAL = "@long";
 
-    public CvaStringType() {}
+    public CvaLongType() {}
 
     @Override
     public String toString()

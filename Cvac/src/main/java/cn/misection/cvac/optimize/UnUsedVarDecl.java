@@ -8,10 +8,10 @@ import cn.misection.cvac.ast.expr.*;
 import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
-import cn.misection.cvac.ast.type.CvaBooleanType;
-import cn.misection.cvac.ast.type.CvaClassType;
-import cn.misection.cvac.ast.type.CvaIntType;
-import cn.misection.cvac.ast.type.CvaStringType;
+import cn.misection.cvac.ast.type.basic.CvaBooleanType;
+import cn.misection.cvac.ast.type.reference.CvaClassType;
+import cn.misection.cvac.ast.type.basic.CvaIntType;
+import cn.misection.cvac.ast.type.reference.CvaStringType;
 
 import java.util.HashMap;
 import java.util.Map;

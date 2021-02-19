@@ -8,7 +8,7 @@ import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
 import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
 import cn.misection.cvac.codegen.bst.instruction.*;
 import cn.misection.cvac.codegen.bst.btype.basic.BaseBasicType;
-import cn.misection.cvac.codegen.bst.btype.refer.BaseReferenceType;
+import cn.misection.cvac.codegen.bst.btype.reference.BaseReferenceType;
 import cn.misection.cvac.constant.WriteILConst;
 
 import java.io.*;

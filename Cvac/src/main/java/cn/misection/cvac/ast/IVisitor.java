@@ -10,6 +10,10 @@ import cn.misection.cvac.ast.program.AbstractProgram;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.*;
+import cn.misection.cvac.ast.type.basic.CvaBooleanType;
+import cn.misection.cvac.ast.type.basic.CvaIntType;
+import cn.misection.cvac.ast.type.reference.CvaClassType;
+import cn.misection.cvac.ast.type.reference.CvaStringType;
 import cn.misection.cvac.constant.CvaExprClassName;
 
 /**

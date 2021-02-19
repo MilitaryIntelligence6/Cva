@@ -8,7 +8,7 @@
 package cn.misection.cvac.codegen;
 
 
-import cn.misection.cvac.codegen.bst.btype.refer.GenStringType;
+import cn.misection.cvac.codegen.bst.btype.reference.GenStringType;
 import cn.misection.cvac.constant.WriteILConst;
 
 import java.util.HashMap;
