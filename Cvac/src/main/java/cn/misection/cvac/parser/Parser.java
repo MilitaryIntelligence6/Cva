@@ -200,7 +200,7 @@ public final class Parser
      * //  -> id
      * //  -> new id()
      *
-     * @return
+     * @return atom expr;
      */
     private AbstractExpression parseAtomExpr()
     {
@@ -273,7 +273,7 @@ public final class Parser
      * // NotExp -> AtomExp
      * //  -> AtomExp.id(expList)
      *
-     * @return
+     * @return negateExpr
      */
     private AbstractExpression parseNegateExpr()
     {
@@ -299,7 +299,7 @@ public final class Parser
      * // MulExpr -> ! MulExpr
      * //  -> NegateExpr
      *
-     * @return
+     * @return MulExpr
      */
     private AbstractExpression parseMulExpr()
     {
@@ -319,7 +319,7 @@ public final class Parser
      * // AddSubExp -> TimesExp * TimesExp
      * //  -> TimesExp
      *
-     * @return
+     * @return AddSubExpr
      */
     private AbstractExpression parseAddSubExpr()
     {
@@ -339,7 +339,7 @@ public final class Parser
      * //  -> AddSubExp - AddSubExp
      * //  -> AddSubExp
      *
-     * @return
+     * @return LessThanExpr
      */
     private AbstractExpression parseLessThanExpr()
     {
@@ -349,14 +349,25 @@ public final class Parser
             boolean addFlag = curToken.getKind() == CvaKind.ADD;
             advance();
             AbstractExpression tem = parseAddSubExpr();
-            expr = addFlag ?
-                    new CvaAddExpr(expr.getLineNum(), expr, tem)
-                    : tem instanceof CvaNumberIntExpr
-                    ? new CvaAddExpr(tem.getLineNum(),
-                    expr,
-                    new CvaNumberIntExpr(tem.getLineNum(),
-                            -((CvaNumberIntExpr) tem).getValue()))
-                    : new CvaSubExpr(expr.getLineNum(), expr, tem);
+            if (addFlag)
+            {
+                expr = new CvaAddExpr(expr.getLineNum(), expr, tem);
+            }
+            else
+            {
+                if (tem instanceof CvaNumberIntExpr)
+                {
+                    expr = new CvaAddExpr(
+                            tem.getLineNum(),
+                            expr,
+                            new CvaNumberIntExpr(tem.getLineNum(),
+                                    -((CvaNumberIntExpr) tem).getValue()));
+                }
+                else
+                {
+                    expr = new CvaSubExpr(expr.getLineNum(), expr, tem);
+                }
+            }
         }
         return expr;
     }
@@ -620,8 +631,9 @@ public final class Parser
     /**
      * // VarDecls -> VarDecl VarDecls
      * //  ->
-     * @FIXME while拆了;
+     *
      * @return
+     * @FIXME while拆了;
      */
     private List<AbstractDeclaration> parseVarDeclList()
     {
