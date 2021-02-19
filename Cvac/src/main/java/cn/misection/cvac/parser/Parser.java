@@ -762,11 +762,27 @@ public final class Parser
     private List<AbstractMethod> parseMethodDeclList()
     {
         List<AbstractMethod> methodList = new ArrayList<>();
-        while (curToken.getKind() == CvaKind.IDENTIFIER ||
-                curToken.getKind() == CvaKind.INT ||
-                curToken.getKind() == CvaKind.BOOLEAN)
+
+        while (true)
         {
-            methodList.add(parseMethod());
+            switch (curToken.getKind())
+            {
+                // 看返回值;
+                // id包括了class返回值;
+                case IDENTIFIER:
+                case INT:
+                case BOOLEAN:
+                case STRING:
+                {
+                    methodList.add(parseMethod());
+                    continue;
+                }
+                default:
+                {
+                    break;
+                }
+            }
+            break;
         }
         return methodList;
     }
