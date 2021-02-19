@@ -168,9 +168,9 @@ public final class Parser
      * //         ->
      * // ExpRest -> , Exp
      *
-     * @return
+     * @return Exprlist;
      */
-    private List<AbstractExpression> parseExpList()
+    private List<AbstractExpression> parseExprList()
     {
         List<AbstractExpression> expList = new ArrayList<>();
         if (curToken.getKind() == CvaKind.CLOSE_PAREN)
@@ -288,7 +288,7 @@ public final class Parser
                     token.getLineNum(),
                     token.getLiteral(),
                     expr,
-                    parseExpList()
+                    parseExprList()
             );
             eatToken(CvaKind.CLOSE_PAREN);
         }
