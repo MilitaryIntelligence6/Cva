@@ -15,7 +15,7 @@ import cn.misection.cvac.constant.LexerConst;
 import cn.misection.cvac.constant.WriteILConst;
 import cn.misection.cvac.lexer.CvaKind;
 import cn.misection.cvac.lexer.CvaToken;
-import cn.misection.cvac.lexer.IBufferedQueue;
+import cn.misection.cvac.io.IBufferedQueue;
 import cn.misection.cvac.lexer.Lexer;
 
 import java.util.*;

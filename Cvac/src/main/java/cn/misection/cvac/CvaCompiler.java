@@ -8,8 +8,8 @@ import cn.misection.cvac.config.DebugMacro;
 import cn.misection.cvac.config.Macro;
 import cn.misection.cvac.config.VersionMacro;
 import cn.misection.cvac.constant.UserIntfConst;
-import cn.misection.cvac.lexer.BufferedQueueHandler;
-import cn.misection.cvac.lexer.IBufferedQueue;
+import cn.misection.cvac.io.BufferedHandler;
+import cn.misection.cvac.io.IBufferedQueue;
 import cn.misection.cvac.optimize.Optimizer;
 import cn.misection.cvac.parser.Parser;
 import cn.misection.cvac.semantic.SemanticVisitor;
@@ -207,7 +207,7 @@ public final class CvaCompiler
     {
         try
         {
-            IBufferedQueue fStream = new BufferedQueueHandler(new FileReader(fName));
+            IBufferedQueue fStream = new BufferedHandler(fName);
             return fStream;
         }
         catch (IOException e)

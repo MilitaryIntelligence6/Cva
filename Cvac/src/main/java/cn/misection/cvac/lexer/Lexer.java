@@ -1,6 +1,7 @@
 package cn.misection.cvac.lexer;
 
 import cn.misection.cvac.constant.LexerConst;
+import cn.misection.cvac.io.IBufferedQueue;
 
 /**
  * @author MI6 root;

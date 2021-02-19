@@ -1,6 +1,8 @@
 package cn.misection.cvac.lexer;
 
 import cn.misection.cvac.config.DebugMacro;
+import cn.misection.cvac.io.BufferedHandler;
+import cn.misection.cvac.io.IBufferedQueue;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -128,7 +130,7 @@ try {
         IBufferedQueue fstream = null;
         try
         {
-            fstream = new BufferedQueueHandler(new FileReader(fname));
+            fstream = new BufferedHandler(fname);
         }
         catch (IOException e)
         {

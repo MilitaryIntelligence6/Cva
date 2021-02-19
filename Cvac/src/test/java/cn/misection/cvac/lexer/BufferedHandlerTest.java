@@ -1,5 +1,6 @@
 package cn.misection.cvac.lexer;
 
+import cn.misection.cvac.io.BufferedHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +14,7 @@ import java.io.*;
  * @version 1.0
  * @since <pre>2月 14, 2021</pre>
  */
-public class BufferedQueueHandlerTest
+public class BufferedHandlerTest
 {
 
     @Before
@@ -88,11 +89,8 @@ try {
     public static void main(String[] args) throws IOException
     {
         String path = "debug/hello/hello.c";
-        File file = new File(path);
-
-        BufferedQueueHandler handler = new BufferedQueueHandler(
-                        new FileReader(file)
-        );
+//        File file = new File(path);
+        BufferedHandler handler = new BufferedHandler(path);
 
         System.out.printf("handler.getBuffer() = %s%n", handler.getBuffer());
 

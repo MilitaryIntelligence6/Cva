@@ -1,12 +1,12 @@
 package cn.misection.cvac.unit;
 
 import cn.misection.cvac.ast.program.AbstractProgram;
-import cn.misection.cvac.lexer.BufferedQueueHandler;
-import cn.misection.cvac.lexer.IBufferedQueue;
+import cn.misection.cvac.io.BufferedHandler;
+import cn.misection.cvac.io.IBufferedQueue;
 import cn.misection.cvac.parser.Parser;
 import cn.misection.cvac.semantic.SemanticVisitor;
 
-import java.io.*;
+import java.io.IOException;
 
 /**
  * Created by MI6 root 1/14.
@@ -17,14 +17,20 @@ public class SemanticTest
     {
         final String fname;
         if (args.length > 0)
+        {
             fname = args[0];
-        else fname = "res/cvasrc/debug.cva";
+        }
+        else
+        {
+            fname = "res/cvasrc/debug.cva";
+        }
 
         IBufferedQueue fstream = null;
         try
         {
-            fstream = new BufferedQueueHandler(new FileReader(fname));
-        } catch (IOException e)
+            fstream = new BufferedHandler(fname);
+        }
+        catch (IOException e)
         {
             e.printStackTrace();
             System.exit(1);

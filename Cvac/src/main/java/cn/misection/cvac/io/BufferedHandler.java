@@ -1,8 +1,9 @@
-package cn.misection.cvac.lexer;
+package cn.misection.cvac.io;
 
 import cn.misection.cvac.constant.LexerConst;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 
@@ -14,14 +15,17 @@ import java.io.Reader;
  * @TODO 后面把int改回char;
  * @CreateTime 2021年02月14日 14:10:00
  */
-public final class BufferedQueueHandler
-        extends BufferedReader implements IBufferedQueue
+public final class BufferedHandler implements IBufferedQueue
 {
+    private BufferedReader reader = null;
+
     private final StringBuffer buffer = new StringBuffer();
 
-    public BufferedQueueHandler(Reader in) throws IOException
+    public BufferedHandler(String filePath) throws IOException
     {
-        super(in);
+        reader = new BufferedReader(
+                new FileReader(filePath)
+        );
         init();
     }
 
@@ -33,7 +37,7 @@ public final class BufferedQueueHandler
     private void load() throws IOException
     {
         String line = null;
-        while ((line = this.readLine()) != null)
+        while ((line = reader.readLine()) != null)
         {
             buffer.append(line).append(LexerConst.NEW_LINE);
         }
@@ -41,7 +45,7 @@ public final class BufferedQueueHandler
         //因为StringBuffer跟文件流不一样, 不会有EOF;
         // 加上才能模拟文件流;
         buffer.append(LexerConst.EOF);
-        this.close();
+        reader.close();
     }
 
     @Override
@@ -102,6 +106,6 @@ public final class BufferedQueueHandler
     @Override
     public String toString()
     {
-        return String.format("BufferedQueueHandler{buffer=%s}", buffer);
+        return String.format("BufferedHandler{buffer=%s}", buffer);
     }
 }
