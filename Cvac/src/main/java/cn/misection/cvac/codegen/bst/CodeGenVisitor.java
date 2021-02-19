@@ -72,7 +72,7 @@ public interface CodeGenVisitor
             }
             case Operator.IFICMPLT:
             {
-                visit((IFicmplt) s);
+                visit((Ificmplt) s);
                 break;
             }
             case Operator.ILOAD:
@@ -85,7 +85,7 @@ public interface CodeGenVisitor
                 visit((IMul) s);
                 break;
             }
-            case Operator.INVOKEVIRTUAL:
+            case Operator.INVOKE_VIRTUAL:
             {
                 visit((InvokeVirtual) s);
                 break;
@@ -150,7 +150,7 @@ public interface CodeGenVisitor
 
     void visit(IAdd s);
 
-    void visit(IFicmplt s);
+    void visit(Ificmplt s);
 
     void visit(ILoad s);
 

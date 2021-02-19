@@ -136,7 +136,7 @@ public final class IntermLangGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(IFicmplt s)
+    public void visit(Ificmplt s)
     {
         iwritefln("if_icmplt %s", s.getLabel().toString());
     }

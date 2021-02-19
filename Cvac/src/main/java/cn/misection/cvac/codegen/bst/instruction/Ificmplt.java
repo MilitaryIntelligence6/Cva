@@ -9,11 +9,11 @@ import cn.misection.cvac.codegen.bst.Label;
  * @Description TODO
  * @CreateTime 2021年02月16日 00:51:00
  */
-public final class IFicmplt extends BaseInstruction
+public final class Ificmplt extends BaseInstruction
 {
     private Label label;
 
-    public IFicmplt(Label label)
+    public Ificmplt(Label label)
     {
         this.label = label;
     }

@@ -116,10 +116,10 @@ public final class TranslatorVisitor implements IVisitor
         Label r = new Label();
         visit(expr.getLeft());
         emit(new Ldc<Integer>(1));
-        emit(new IFicmplt(f));
+        emit(new Ificmplt(f));
         visit(expr.getRight());
         emit(new Ldc<Integer>(1));
-        emit(new IFicmplt(f));
+        emit(new Ificmplt(f));
         emit(new Ldc<Integer>(1));
         emit(new Goto(r));
         emit(new LabelJ(f));
@@ -182,7 +182,7 @@ public final class TranslatorVisitor implements IVisitor
         Label r = new Label();
         visit(e.getLeft());
         visit(e.getRight());
-        emit(new IFicmplt(t));
+        emit(new Ificmplt(t));
         emit(new Ldc<Integer>(0));
         emit(new Goto(r));
         emit(new LabelJ(t));
@@ -203,7 +203,7 @@ public final class TranslatorVisitor implements IVisitor
         Label r = new Label();
         visit(e.getExpr());
         emit(new Ldc<Integer>(1));
-        emit(new IFicmplt(f));
+        emit(new Ificmplt(f));
         emit(new Ldc<Integer>(1));
         emit(new Goto(r));
         emit(new LabelJ(f));
@@ -292,7 +292,7 @@ public final class TranslatorVisitor implements IVisitor
         Label r = new Label();
         visit(s.getCondition());
         emit(new Ldc<Integer>(1));
-        emit(new IFicmplt(l));
+        emit(new Ificmplt(l));
         visit(s.getThenStatement());
         emit(new Goto(r));
         emit(new LabelJ(l));
@@ -376,7 +376,7 @@ public final class TranslatorVisitor implements IVisitor
         emit(new LabelJ(con));
         visit(s.getCondition());
         emit(new Ldc<Integer>(1));
-        emit(new IFicmplt(end));
+        emit(new Ificmplt(end));
         visit(s.getBody());
         emit(new Goto(con));
         emit(new LabelJ(end));

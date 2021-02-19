@@ -43,7 +43,7 @@ final class Operator
     /**
      * IFicmplt
      */
-    public static final String IFICMPLT = "IFicmplt";
+    public static final String IFICMPLT = "Ificmplt";
 
     /**
      * ILoad
@@ -58,7 +58,7 @@ final class Operator
     /**
      * InvokeVirtual
      */
-    public static final String INVOKEVIRTUAL = "InvokeVirtual";
+    public static final String INVOKE_VIRTUAL = "InvokeVirtual";
 
     /**
      * IReturn

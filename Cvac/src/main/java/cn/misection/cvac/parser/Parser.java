@@ -39,6 +39,8 @@ public final class Parser
 
     private boolean markingFlag;
 
+    private boolean hasEntry;
+
     private final Queue<CvaToken> markedTokenQueue;
 
 
@@ -606,7 +608,7 @@ public final class Parser
      *
      * @return
      */
-    private List<AbstractDeclaration> parseVarDecls()
+    private List<AbstractDeclaration> parseVarDeclList()
     {
         List<AbstractDeclaration> declList = new ArrayList<>();
         valDeclFlag = true;
@@ -681,7 +683,7 @@ public final class Parser
         eatToken(CvaKind.CLOSE_PAREN);
         // 吃掉大括号;
         eatToken(CvaKind.OPEN_CURLY_BRACE);
-        List<AbstractDeclaration> varDecs = parseVarDecls();
+        List<AbstractDeclaration> varDecs = parseVarDeclList();
         List<AbstractStatement> statementList = parseStatementList();
         eatToken(CvaKind.RETURN);
         AbstractExpression retExp = parseExpr();
@@ -703,7 +705,7 @@ public final class Parser
      *
      * @return
      */
-    private List<AbstractMethod> parseMethodDecls()
+    private List<AbstractMethod> parseMethodDeclList()
     {
         List<AbstractMethod> methodList = new ArrayList<>();
         while (curToken.getKind() == CvaKind.IDENTIFIER ||
@@ -727,17 +729,21 @@ public final class Parser
         String literal = curToken.getLiteral();
         eatToken(CvaKind.IDENTIFIER);
         String superClass = null;
-        if (curToken.getKind() == CvaKind.COLON)
+        if (curToken.getKind() == CvaKind.EXTENDS)
         {
             advance();
             superClass = curToken.getLiteral();
             eatToken(CvaKind.IDENTIFIER);
         }
         eatToken(CvaKind.OPEN_CURLY_BRACE);
-        List<AbstractDeclaration> declList = parseVarDecls();
-        List<AbstractMethod> methodList = parseMethodDecls();
+        List<AbstractDeclaration> declList = parseVarDeclList();
+        List<AbstractMethod> methodList = parseMethodDeclList();
         eatToken(CvaKind.CLOSE_CURLY_BRACE);
-        return new CvaClass(literal, superClass, declList, methodList);
+        return new CvaClass(
+                literal,
+                superClass,
+                declList,
+                methodList);
     }
 
     /**
@@ -746,7 +752,7 @@ public final class Parser
      *
      * @return
      */
-    private List<AbstractClass> parseClassDecls()
+    private List<AbstractClass> parseClassDeclList()
     {
         List<AbstractClass> classList = new ArrayList<>();
         while (curToken.getKind() == CvaKind.CLASS)
@@ -794,7 +800,7 @@ public final class Parser
         parsePackage();
         parseCallStatement();
         CvaEntry entry = parseEntry();
-        List<AbstractClass> classList = parseClassDecls();
+        List<AbstractClass> classList = parseClassDeclList();
         eatEof();
         return new CvaProgram(entry, classList);
     }
@@ -919,11 +925,11 @@ public final class Parser
         // call 是多条, 所以在这里用;
         while (curToken.getKind() == CvaKind.CALL)
         {
-            parseSingleCall();
+            parseCallSentence();
         }
     }
 
-    private void parseSingleCall()
+    private void parseCallSentence()
     {
         eatToken(CvaKind.CALL);
         // 规定至少一个pkg., 因为本包内不需要call;
