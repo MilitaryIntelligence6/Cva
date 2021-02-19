@@ -1,10 +1,10 @@
 package cn.misection.cvac.ast.entry;
 
 import cn.misection.cvac.ast.clas.AbstractCvaClass;
-import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.method.AbstractMethod;
 import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.statement.AbstractStatement;
+import cn.misection.cvac.codegen.bst.bmethod.BaseMethod;
 
 import java.util.List;
 
@@ -25,19 +25,11 @@ public abstract class AbstractEntryClass extends AbstractCvaClass
 {
     protected String name;
 
-    protected CvaMethod entryMethod;
+    protected AbstractMethod entryMethod;
 
     public AbstractEntryClass()
     {
         super();
-    }
-
-    public AbstractEntryClass(String name,
-                              String parent,
-                              List<AbstractDeclaration> fieldList,
-                              List<AbstractMethod> methodList)
-    {
-        super(name, parent, fieldList, methodList);
     }
 
 

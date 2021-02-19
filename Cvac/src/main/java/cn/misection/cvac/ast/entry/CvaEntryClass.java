@@ -2,7 +2,9 @@ package cn.misection.cvac.ast.entry;
 
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.method.AbstractMethod;
+import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.statement.AbstractStatement;
+import cn.misection.cvac.constant.LexerConst;
 
 import java.util.List;
 
@@ -15,6 +17,11 @@ import java.util.List;
  */
 public final class CvaEntryClass extends AbstractEntryClass
 {
+    private CvaEntryClass(Builder builder)
+    {
+        this.name = builder.name;
+        this.entryMethod = builder.entryMethod;
+    }
     /**
      * @deprecated
      * @param name
@@ -28,6 +35,7 @@ public final class CvaEntryClass extends AbstractEntryClass
     @Override
     public String parent()
     {
+        // TODO java.lang.Object;
         return null;
     }
 
@@ -43,4 +51,32 @@ public final class CvaEntryClass extends AbstractEntryClass
         return null;
     }
 
+    public static class Builder
+    {
+        private String name = LexerConst.DEFAULT_MAIN_CLASS_NAME;
+
+        private AbstractMethod entryMethod;
+
+        public Builder()
+        {
+
+        }
+
+        public Builder(AbstractMethod entryMethod)
+        {
+            this.entryMethod = entryMethod;
+        }
+
+        public Builder putName(String name)
+        {
+            this.name = name;
+            return this;
+        }
+
+        public Builder putEntryMethod(CvaMethod entryMethod)
+        {
+            this.entryMethod = entryMethod;
+            return this;
+        }
+    }
 }

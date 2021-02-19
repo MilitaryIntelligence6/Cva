@@ -100,19 +100,19 @@ public final class CvaEntryMethod extends AbstractMethod
             return new CvaEntryMethod(this);
         }
 
-        public Builder setRetType(AbstractType retType)
+        public Builder putRetType(AbstractType retType)
         {
             this.retType = retType;
             return this;
         }
 
-        public Builder setLocalVarList(List<AbstractDeclaration> localVarList)
+        public Builder putLocalVarList(List<AbstractDeclaration> localVarList)
         {
             this.localVarList = localVarList;
             return this;
         }
 
-        public Builder setStatementList(List<AbstractStatement> statementList)
+        public Builder putStatementList(List<AbstractStatement> statementList)
         {
             this.statementList = statementList;
             return this;
