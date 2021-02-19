@@ -11,6 +11,7 @@ import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.*;
 import cn.misection.cvac.ast.type.basic.CvaBooleanType;
 import cn.misection.cvac.ast.type.basic.CvaIntType;
+import cn.misection.cvac.ast.type.reference.AbstractReferenceType;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
 import cn.misection.cvac.ast.type.reference.CvaStringType;
 import cn.misection.cvac.codegen.bst.Label;
@@ -33,8 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by MI6 root 1/17.
- *
+ * @author  MI6 root;
  * @Description 将编译器前端翻译给后端;
  */
 public final class TranslatorVisitor implements IVisitor
@@ -162,15 +162,21 @@ public final class TranslatorVisitor implements IVisitor
         {
             emit(new ALoad(0));
             AbstractType type = expr.getType();
-            emit(new GetField(String.format("%s/%s", this.classId, expr.getLiteral()),
-                    type instanceof CvaClassType ?
-                            (String.format("L%s;", ((CvaClassType) type).getLiteral()))
-                            : "I"));
+            if (type instanceof CvaClassType)
+            {
+                emit(new GetField(String.format("%s/%s", this.classId, expr.getLiteral()),
+                        String.format("L%s;", ((CvaClassType) type).getLiteral())));
+            }
+            else
+            {
+                emit(new GetField(String.format("%s/%s", this.classId, expr.getLiteral()),
+                        "I"));
+            }
         }
         else
         {
             int index = this.indexTable.get(expr.getLiteral());
-            if (expr.getType() instanceof CvaClassType)
+            if (expr.getType() instanceof AbstractReferenceType)
             {
                 emit(new ALoad(index));
             }
@@ -271,7 +277,7 @@ public final class TranslatorVisitor implements IVisitor
             int index = this.indexTable.get(assignSta.getLiteral());
             visit(assignSta.getExpr());
 //            if (assignSta.getType() instanceof CvaClassType)
-            if (assignSta.getType() instanceof CvaClassType)
+            if (assignSta.getType() instanceof AbstractReferenceType)
             {
                 emit(new AStore(index));
             }
@@ -419,7 +425,7 @@ public final class TranslatorVisitor implements IVisitor
 
         visit(cvaMethod.retExpr());
 
-        if (cvaMethod.retType() instanceof CvaClassType)
+        if (cvaMethod.retType() instanceof AbstractReferenceType)
         {
             emit(new AReturn());
         }
