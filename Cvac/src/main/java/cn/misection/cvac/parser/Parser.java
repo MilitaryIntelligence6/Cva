@@ -376,7 +376,7 @@ public final class Parser
      * // AndExp -> LtExp < LtExp
      * // -> LtExp
      *
-     * @return
+     * @return AndAndExpr;
      */
     private AbstractExpression parseAndAndExpr()
     {
@@ -394,7 +394,7 @@ public final class Parser
      * // Exp -> AndExp && AndExp
      * //  -> AndExp
      *
-     * @return
+     * @return Single Expr
      */
     private AbstractExpression parseExpr()
     {
@@ -415,7 +415,7 @@ public final class Parser
      * //  -> print(Exp);
      * //  -> id = Exp;
      *
-     * @return
+     * @return single Statement;
      */
     private AbstractStatement parseStatement()
     {
@@ -462,7 +462,7 @@ public final class Parser
      * // Statements -> Statement Statements
      * //  ->
      *
-     * @return
+     * @return StatementList;
      */
     private List<AbstractStatement> parseStatementList()
     {
@@ -499,7 +499,7 @@ public final class Parser
      * //  -> boolean
      * //  -> id
      *
-     * @return
+     * @return Type;
      */
     private AbstractType parseType()
     {
@@ -577,7 +577,7 @@ public final class Parser
     /**
      * // VarDecl -> Type id;
      *
-     * @return
+     * @return VarDecl;
      */
     private AbstractDeclaration parseVarDecl()
     {
@@ -639,8 +639,7 @@ public final class Parser
     {
         List<AbstractDeclaration> declList = new ArrayList<>();
         valDeclFlag = true;
-        while (curToken.getKind() == CvaKind.INT
-                || curToken.getKind() == CvaKind.BOOLEAN
+        while (CvaKind.isType(curToken.getKind())
                 || curToken.getKind() == CvaKind.IDENTIFIER)
         {
             AbstractDeclaration decl = parseVarDecl();
