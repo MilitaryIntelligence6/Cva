@@ -298,25 +298,25 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaBlockStatement s)
+    public void visit(CvaBlockStatement blockSta)
     {
-        s.getStatementList().forEach(this::visit);
+        blockSta.getStatementList().forEach(this::visit);
     }
 
     @Override
-    public void visit(CvaIfStatement s)
+    public void visit(CvaIfStatement ifSta)
     {
         Label l = new Label();
         Label r = new Label();
-        visit(s.getCondition());
+        visit(ifSta.getCondition());
         emit(new Ldc<Integer>(1));
         emit(new Ificmplt(l));
-        visit(s.getThenStatement());
+        visit(ifSta.getThenStatement());
         emit(new Goto(r));
         emit(new LabelJ(l));
-        if (s.getElseStatement() != null)
+        if (ifSta.getElseStatement() != null)
         {
-            visit(s.getElseStatement());
+            visit(ifSta.getElseStatement());
         }
         emit(new LabelJ(r));
     }
@@ -384,17 +384,16 @@ public final class TranslatorVisitor implements IVisitor
         return -1;
     }
 
-
     @Override
-    public void visit(CvaWhileStatement s)
+    public void visit(CvaWhileStatement whileSta)
     {
         Label con = new Label();
         Label end = new Label();
         emit(new LabelJ(con));
-        visit(s.getCondition());
+        visit(whileSta.getCondition());
         emit(new Ldc<Integer>(1));
         emit(new Ificmplt(end));
-        visit(s.getBody());
+        visit(whileSta.getBody());
         emit(new Goto(con));
         emit(new LabelJ(end));
     }
@@ -420,6 +419,7 @@ public final class TranslatorVisitor implements IVisitor
             localList.add(this.genDecl);
         });
         setLinearInstrList(new ArrayList<>());
+        // 方法内的;
         cvaMethod.getStatementList().forEach(this::visit);
 
         visit(cvaMethod.getRetExpr());
@@ -469,11 +469,13 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaEntryClass entryClass)
     {
-//        visit(entryClass.statement());
+        visit(entryClass.statement());
 //        genEntry = new GenEntry(entryClass.name(),
 //                this.linearInstrList);
 //        setLinearInstrList(new ArrayList<>());
-        visit(entryClass.statement());
+//        visit(entryClass.statement());
+
+//        entryClass.getStatementList().forEach(this::visit);
         genEntry = new GenEntry(entryClass.name(),
                 this.linearInstrList);
         // 会重复使用, 赋给每个域;
