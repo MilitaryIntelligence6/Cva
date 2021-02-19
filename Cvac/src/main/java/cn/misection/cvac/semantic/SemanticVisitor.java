@@ -462,7 +462,7 @@ public final class SemanticVisitor implements IVisitor
     public void visit(CvaMethod cvaMethod)
     {
         this.methodVarTable = new MethodVariableTable();
-        this.methodVarTable.putVar(
+        this.methodVarTable.putVarList(
                 cvaMethod.getArgumentList(),
                 cvaMethod.getLocalVarList()
         );
@@ -487,7 +487,7 @@ public final class SemanticVisitor implements IVisitor
     public void visit(CvaMainMethod mainMethod)
     {
         this.methodVarTable = new MethodVariableTable();
-        this.methodVarTable.putVar(
+        this.methodVarTable.putVarList(
                 mainMethod.getArgumentList(),
                 mainMethod.getLocalVarList()
         );

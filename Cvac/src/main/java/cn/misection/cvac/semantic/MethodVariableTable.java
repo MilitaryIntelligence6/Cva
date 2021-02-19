@@ -1,12 +1,10 @@
 package cn.misection.cvac.semantic;
 
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
-import cn.misection.cvac.ast.decl.CvaDeclaration;
 import cn.misection.cvac.ast.type.AbstractType;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by MI6 root 1/13.
@@ -14,28 +12,26 @@ import java.util.Map;
  * @TODO 改成get set分开put方式;
  */
 public final class MethodVariableTable
+        extends HashMap<String, AbstractType>
 {
-    private Map<String, AbstractType> table;
-
     public MethodVariableTable()
     {
-        this.table = new HashMap<>();
+        super();
     }
 
-    public void putVar(List<AbstractDeclaration> formalList,
-                       List<AbstractDeclaration> localList)
+    public void putVarList(List<AbstractDeclaration> formalList,
+                           List<AbstractDeclaration> localList)
     {
-        putVariable(formalList);
-        putVariable(localList);
+        putVariableList(formalList);
+        putVariableList(localList);
     }
 
-    private void putVariable(List<AbstractDeclaration> declList)
+    private void putVariableList(List<AbstractDeclaration> declList)
     {
         for (AbstractDeclaration decl : declList)
         {
             // FIXME 不知道有无隐患!;
-//            CvaDeclaration decl = ((CvaDeclaration) decl);
-            if (this.table.get(decl.literal()) != null)
+            if (this.get(decl.literal()) != null)
             {
                 System.err.printf("duplicated parameter: %s at line %d%n",
                         decl.literal(), decl.getLineNum());
@@ -43,13 +39,8 @@ public final class MethodVariableTable
             }
             else
             {
-                this.table.put(decl.literal(), decl.type());
+                this.put(decl.literal(), decl.type());
             }
         }
-    }
-
-    public AbstractType get(String literal)
-    {
-        return this.table.get(literal);
     }
 }
