@@ -570,6 +570,7 @@ public final class Parser
         }
         // 因为有advance所以不能直接return;
         advance();
+//        handleArray();
         return type;
     }
 
@@ -918,7 +919,6 @@ public final class Parser
         // find entry;
         return new CvaProgram(entryClass, classList);
     }
-
 
     private AbstractCvaClass searchMain(List<AbstractCvaClass> classList)
     {

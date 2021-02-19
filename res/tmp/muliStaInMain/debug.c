@@ -12,7 +12,16 @@ call cva.lang.type.String;
 /**
  * block comm;
  */
-
+int main(string[] args)
+{
+//    println("hello, string");
+//    printf(1);
+    println(new Test().Compute(10));   // just a print statement
+    println("hello, main method");
+    // return 0;
+//    echo("hello, string");
+    return 0;
+}
 
 
 class Test
@@ -50,17 +59,4 @@ class Test
         println("hello, string");
         return total;
     }
-}
-
-
-int main(string[] args)
-{
-//    println("hello, string");
-//    printf(1);
-    println(new Test().Compute(10));   // just a print statement
-    echo("this is cva main who can in a random place\n");
-    println("hello, main method");
-    // return 0;
-//    echo("hello, string");
-    return 0;
 }
