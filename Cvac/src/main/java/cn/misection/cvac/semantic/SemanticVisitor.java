@@ -11,7 +11,8 @@ import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.*;
 
 import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -163,11 +164,11 @@ public final class SemanticVisitor implements IVisitor
             return;
         }
 
-        LinkedList<AbstractType> argsty = new LinkedList<>();
+        List<AbstractType> argsty = new ArrayList<>();
         e.getArgs().forEach(arg ->
         {
             visit(arg);
-            argsty.addLast(this.type);
+            argsty.add(this.type);
         });
 
         MethodType mty = classTable.getMethodType(expType.getLiteral(), e.getLiteral());

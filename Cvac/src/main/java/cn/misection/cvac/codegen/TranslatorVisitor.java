@@ -134,7 +134,7 @@ public final class TranslatorVisitor implements IVisitor
         e.getArgs().forEach(this::visit);
         visit(e.getRetType());
         BaseType rt = this.getType();
-        List<BaseType> at = new LinkedList<>();
+        List<BaseType> at = new ArrayList<>();
         e.getArgTypeList().forEach(a ->
         {
             visit(a);
@@ -390,20 +390,20 @@ public final class TranslatorVisitor implements IVisitor
         visit(cvaMethod.getRetType());
         BaseType theRetType = this.getType();
 
-        List<GenDeclaration> formalList = new LinkedList<>();
+        List<GenDeclaration> formalList = new ArrayList<>();
         cvaMethod.getFormalList().forEach(f ->
         {
             visit(f);
             formalList.add(this.getDec());
         });
 
-        List<GenDeclaration> localList = new LinkedList<>();
+        List<GenDeclaration> localList = new ArrayList<>();
         cvaMethod.getLocalList().forEach(l ->
         {
             visit(l);
             localList.add(this.getDec());
         });
-        setStatementList(new LinkedList<>());
+        setStatementList(new ArrayList<>());
         cvaMethod.getStatementList().forEach(this::visit);
 
         visit(cvaMethod.getRetExpr());
@@ -433,13 +433,13 @@ public final class TranslatorVisitor implements IVisitor
     public void visit(CvaClass cvaClass)
     {
         setClassId(cvaClass.getLiteral());
-        List<GenDeclaration> fieldList = new LinkedList<>();
+        List<GenDeclaration> fieldList = new ArrayList<>();
         cvaClass.getFieldList().forEach(f ->
         {
             visit(f);
             fieldList.add(this.getDec());
         });
-        List<GenMethod> methodList = new LinkedList<>();
+        List<GenMethod> methodList = new ArrayList<>();
         cvaClass.getMethodList().forEach(m ->
         {
             visit(m);
@@ -459,14 +459,14 @@ public final class TranslatorVisitor implements IVisitor
     {
         visit(c.getStatement());
         setMainClass(new GenEntry(c.getLiteral(), this.getStatementList()));
-        setStatementList(new LinkedList<>());
+        setStatementList(new ArrayList<>());
     }
 
     @Override
     public void visit(CvaProgram p)
     {
         visit(p.getEntry());
-        List<GenClass> classList = new LinkedList<>();
+        List<GenClass> classList = new ArrayList<>();
         p.getClassList().forEach(c ->
         {
             visit(c);

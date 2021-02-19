@@ -18,6 +18,7 @@ import cn.misection.cvac.lexer.CvaToken;
 import cn.misection.cvac.lexer.IBufferedQueue;
 import cn.misection.cvac.lexer.Lexer;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -163,16 +164,16 @@ public final class Parser
      *
      * @return
      */
-    private LinkedList<AbstractExpression> parseExpList()
+    private List<AbstractExpression> parseExpList()
     {
-        LinkedList<AbstractExpression> expList = new LinkedList<>();
+        List<AbstractExpression> expList = new ArrayList<>();
         if (curToken.getKind() == CvaKind.CLOSE_PAREN)
         {
             return expList;
         }
         AbstractExpression tem = parseExpr();
         tem.setLineNum(curToken.getLineNum());
-        expList.addLast(tem);
+        expList.add(tem);
         while (curToken.getKind() == CvaKind.COMMA)
         {
             advance();
@@ -446,9 +447,9 @@ public final class Parser
      *
      * @return
      */
-    private LinkedList<AbstractStatement> parseStatementList()
+    private List<AbstractStatement> parseStatementList()
     {
-        LinkedList<AbstractStatement> statementList = new LinkedList<>();
+        List<AbstractStatement> statementList = new ArrayList<>();
         while (true)
         {
             switch (curToken.getKind())
@@ -462,7 +463,7 @@ public final class Parser
                 case WRITE_LINE:
                 case WRITE_FORMAT:
                 {
-                    statementList.addLast(parseStatement());
+                    statementList.add(parseStatement());
                     continue;
                 }
                 default:
@@ -605,24 +606,24 @@ public final class Parser
      *
      * @return
      */
-    private LinkedList<AbstractDeclaration> parseVarDecls()
+    private List<AbstractDeclaration> parseVarDecls()
     {
-        LinkedList<AbstractDeclaration> decs = new LinkedList<>();
+        List<AbstractDeclaration> declList = new ArrayList<>();
         valDeclFlag = true;
         while (curToken.getKind() == CvaKind.INT || curToken.getKind() == CvaKind.BOOLEAN
                 || curToken.getKind() == CvaKind.IDENTIFIER)
         {
-            AbstractDeclaration dec = parseVarDecl();
-            if (dec != null)
+            AbstractDeclaration decl = parseVarDecl();
+            if (decl != null)
             {
-                decs.addLast(dec);
+                declList.add(decl);
             }
             if (!valDeclFlag)
             {
                 break;
             }
         }
-        return decs;
+        return declList;
     }
 
     /**
@@ -632,22 +633,22 @@ public final class Parser
      *
      * @return
      */
-    private LinkedList<AbstractDeclaration> parseFormalList()
+    private List<AbstractDeclaration> parseFormalList()
     {
-        LinkedList<AbstractDeclaration> declList = new LinkedList<>();
+        List<AbstractDeclaration> declList = new ArrayList<>();
         if (CvaKind.isType(curToken.getKind()))
         {
             // 这里非常坑. 必须要先parser;
             // parse的副作用是推一个token, 所以给new decl传参的时候先后顺序换了会导致意想不到的bug;
             // 保存上一个token的type, 拿取下一个token的literal;
             AbstractType type = parseType();
-            declList.addLast(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), type));
+            declList.add(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), type));
             eatToken(CvaKind.IDENTIFIER);
             while (curToken.getKind() == CvaKind.COMMA)
             {
                 advance();
                 AbstractType argType = parseType();
-                declList.addLast(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), argType));
+                declList.add(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), argType));
                 eatToken(CvaKind.IDENTIFIER);
             }
         }
@@ -702,16 +703,15 @@ public final class Parser
      *
      * @return
      */
-    private LinkedList<AbstractMethod> parseMethodDecls()
+    private List<AbstractMethod> parseMethodDecls()
     {
-        LinkedList<AbstractMethod> methodList = new LinkedList<>();
+        List<AbstractMethod> methodList = new ArrayList<>();
         while (curToken.getKind() == CvaKind.IDENTIFIER ||
                 curToken.getKind() == CvaKind.INT ||
                 curToken.getKind() == CvaKind.BOOLEAN)
         {
-            methodList.addLast(parseMethod());
+            methodList.add(parseMethod());
         }
-
         return methodList;
     }
 
@@ -734,10 +734,10 @@ public final class Parser
             eatToken(CvaKind.IDENTIFIER);
         }
         eatToken(CvaKind.OPEN_CURLY_BRACE);
-        LinkedList<AbstractDeclaration> decs = parseVarDecls();
-        LinkedList<AbstractMethod> methods = parseMethodDecls();
+        List<AbstractDeclaration> declList = parseVarDecls();
+        List<AbstractMethod> methodList = parseMethodDecls();
         eatToken(CvaKind.CLOSE_CURLY_BRACE);
-        return new CvaClass(literal, superClass, decs, methods);
+        return new CvaClass(literal, superClass, declList, methodList);
     }
 
     /**
@@ -746,12 +746,12 @@ public final class Parser
      *
      * @return
      */
-    private LinkedList<AbstractClass> parseClassDecls()
+    private List<AbstractClass> parseClassDecls()
     {
-        LinkedList<AbstractClass> classList = new LinkedList<>();
+        List<AbstractClass> classList = new ArrayList<>();
         while (curToken.getKind() == CvaKind.CLASS)
         {
-            classList.addLast(parseClassDecl());
+            classList.add(parseClassDecl());
         }
         return classList;
     }

@@ -3,7 +3,7 @@ package cn.misection.cvac.semantic;
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.type.AbstractType;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**

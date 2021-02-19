@@ -11,7 +11,7 @@ import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.*;
 
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 /**
  * Created by MI6 root 1/25.
@@ -88,7 +88,7 @@ public final class UnReachableDel
     @Override
     public void visit(CvaBlockStatement s)
     {
-        LinkedList<AbstractStatement> stmList = new LinkedList<>();
+        ArrayList<AbstractStatement> stmList = new ArrayList<>();
         s.getStatementList().forEach(stm ->
         {
             this.visit(stm);
@@ -159,7 +159,7 @@ public final class UnReachableDel
     @Override
     public void visit(CvaMethod m)
     {
-        LinkedList<AbstractStatement> stmList = new LinkedList<>();
+        ArrayList<AbstractStatement> stmList = new ArrayList<>();
         m.getStatementList().forEach(stm ->
         {
             this.visit(stm);

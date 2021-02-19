@@ -10,7 +10,7 @@ import cn.misection.cvac.ast.program.*;
 import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.*;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -115,7 +115,7 @@ public final class ConstantFolder
     @Override
     public void visit(CvaCallExpr e)
     {
-        List<AbstractExpression> argList = new LinkedList<>();
+        List<AbstractExpression> argList = new ArrayList<>();
         e.getArgs().forEach(arg ->
         {
             this.visit(arg);

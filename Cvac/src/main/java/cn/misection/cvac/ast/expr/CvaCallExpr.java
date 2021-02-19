@@ -18,7 +18,7 @@ public final class CvaCallExpr extends AbstractExpression
     private AbstractExpression expr;
 
     /**
-     * 原来是linkedlist;
+     * 原来是ArrayList;
      */
     private List<AbstractExpression> args;
 
