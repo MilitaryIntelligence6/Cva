@@ -22,7 +22,7 @@ public abstract class AbstractCvaClass implements IClass
 
     protected final List<AbstractMethod> methodList;
 
-    public AbstractCvaClass()
+    protected AbstractCvaClass()
     {
         this.name = null;
         this.parent = null;

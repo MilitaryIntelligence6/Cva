@@ -18,7 +18,7 @@ public final class CvaEntryMethod extends AbstractMethod
 {
     private CvaEntryMethod(Builder builder)
     {
-
+        super();
     }
 
     @Override
