@@ -24,10 +24,7 @@ import cn.misection.cvac.codegen.bst.instruction.*;
 import cn.misection.cvac.constant.CvaExprClassName;
 import cn.misection.cvac.constant.WriteILPool;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by MI6 root 1/17.
@@ -55,7 +52,7 @@ public final class TranslatorVisitor implements IVisitor
         this.indexTable = null;
         this.type = null;
         this.dec = null;
-        this.statementList = new LinkedList<>();
+        this.statementList = new ArrayList<>();
         this.method = null;
         this.mainClass = null;
         this.clazz = null;

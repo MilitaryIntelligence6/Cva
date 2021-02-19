@@ -208,33 +208,8 @@ public final class IntermLangGenerator implements CodeGenVisitor
         String type = writeTypeMap.get(inst.getWriteType());
         iwriteLine("getstatic java/lang/System/out Ljava/io/PrintStream;");
         iwriteLine("swap");
-        // TODO 封装常量字段, 同时把println变成print;
         iwritefln("invokevirtual java/io/PrintStream/%s(%s)V", mode, type);
     }
-
-    /**
-     * string 打印指令;
-     * @param s
-     */
-//    private void printString(String s) {
-//        if (s.length() == 0) {
-//            return;
-//        }
-//
-//        ProgramGenerator generator = ProgramGenerator.getInstance();
-//        generator.emit(Instruction.GETSTATIC, "java/lang/System/out Ljava/io/PrintStream;");
-//        generator.emit(Instruction.LDC, "\"" + s + "\"");
-//        String printMethod = "java/io/PrintStream/print(Ljava/lang/String;)V";
-//        generator.emit(Instruction.INVOKEVIRTUAL, printMethod);
-//    }
-//
-//    private void printInteger(int posInList) {
-//        ProgramGenerator generator = ProgramGenerator.getInstance();
-//        generator.emit(Instruction.GETSTATIC, "java/lang/System/out Ljava/io/PrintStream;");
-//        generator.emit(Instruction.ILOAD, "" + posInList);
-//        String printMethod = "java/io/PrintStream/print(I)V";
-//        generator.emit(Instruction.INVOKEVIRTUAL, printMethod);
-//    }
 
     @Override
     public void visit(PutField s)

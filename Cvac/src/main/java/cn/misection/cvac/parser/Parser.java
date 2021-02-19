@@ -769,25 +769,19 @@ public final class Parser
      */
     private CvaEntry parseEntry()
     {
-        switch (curToken.getKind())
+        if (curToken.getKind() == CvaKind.CLASS)
         {
-            case CLASS:
-            {
-                eatToken(CvaKind.CLASS);
-                String entryName = curToken.getLiteral();
-                eatToken(CvaKind.IDENTIFIER);
-                eatToken(CvaKind.OPEN_CURLY_BRACE);
-                AbstractStatement statement = parseMainMethod();
-                eatToken(CvaKind.CLOSE_CURLY_BRACE);
-                return new CvaEntry(entryName, statement);
-            }
-            default:
-            {
-                String mainName = TokenConstPool.DEFAULT_MAIN_NAME;
-                AbstractStatement statement = parseMainMethod();
-                return new CvaEntry(mainName, statement);
-            }
+            eatToken(CvaKind.CLASS);
+            String entryName = curToken.getLiteral();
+            eatToken(CvaKind.IDENTIFIER);
+            eatToken(CvaKind.OPEN_CURLY_BRACE);
+            AbstractStatement statement = parseMainMethod();
+            eatToken(CvaKind.CLOSE_CURLY_BRACE);
+            return new CvaEntry(entryName, statement);
         }
+        String mainName = TokenConstPool.DEFAULT_MAIN_NAME;
+        AbstractStatement statement = parseMainMethod();
+        return new CvaEntry(mainName, statement);
     }
 
     /**
