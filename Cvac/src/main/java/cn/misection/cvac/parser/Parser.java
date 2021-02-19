@@ -632,8 +632,7 @@ public final class Parser
      * // VarDecls -> VarDecl VarDecls
      * //  ->
      *
-     * @return
-     * @FIXME while拆了;
+     * @return VarDeclList;
      */
     private List<AbstractDeclaration> parseVarDeclList()
     {
@@ -768,7 +767,7 @@ public final class Parser
      * // MethodDecls -> MethodDecl MethodDecls*
      * //  ->
      *
-     * @return
+     * @return MethodDeclList;
      */
     private List<AbstractMethod> parseMethodDeclList()
     {
@@ -786,7 +785,7 @@ public final class Parser
      * // ClassDecl -> class id { VarDecl* MethodDecl* }
      * //  -> class id : id { VarDecl* Method* }
      *
-     * @return
+     * @return single ClassDecl;
      */
     private AbstractCvaClass parseClassDecl()
     {
@@ -815,7 +814,7 @@ public final class Parser
      * // ClassDecls -> ClassDecl ClassDecls*
      * //  ->
      *
-     * @return
+     * @return ClassDeclList;
      */
     private List<AbstractCvaClass> parseClassDeclList()
     {
@@ -836,7 +835,7 @@ public final class Parser
      * //        }
      * //    }
      *
-     * @return
+     * @return EntryClass;
      */
     private CvaEntryClass parseEntryClass()
     {
