@@ -27,20 +27,6 @@ public final class MethodVariableTable
     {
         putVariable(formalList);
         putVariable(localList);
-//        for (AbstractDeclaration local : localList)
-//        {
-//            CvaDeclaration decl = ((CvaDeclaration) local);
-//            if (this.table.get(decl.literal()) != null)
-//            {
-//                System.err.printf("duplicated variable: %s at line %d%n",
-//                        decl.literal(), decl.getLineNum());
-//                System.exit(1);
-//            }
-//            else
-//            {
-//                this.table.put(decl.literal(), decl.type());
-//            }
-//        }
     }
 
     private void putVariable(List<AbstractDeclaration> declList)
