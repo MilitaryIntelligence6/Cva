@@ -14,24 +14,24 @@ import java.util.List;
  */
 public abstract class BaseProgram implements IProgram
 {
-    protected GenEntryClass entry;
+    protected GenEntryClass entryClass;
 
     protected List<GenClass> classList;
 
-    protected BaseProgram(GenEntryClass entry, List<GenClass> classList)
+    protected BaseProgram(GenEntryClass entryClass, List<GenClass> classList)
     {
-        this.entry = entry;
+        this.entryClass = entryClass;
         this.classList = classList;
     }
 
-    public GenEntryClass getEntry()
+    public GenEntryClass getEntryClass()
     {
-        return entry;
+        return entryClass;
     }
 
-    public void setEntry(GenEntryClass entry)
+    public void setEntryClass(GenEntryClass entryClass)
     {
-        this.entry = entry;
+        this.entryClass = entryClass;
     }
 
     public List<GenClass> getClassList()

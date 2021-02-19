@@ -290,7 +290,7 @@ public final class IntermLangGenerator implements CodeGenVisitor
     @Override
     public void visit(GenProgram program)
     {
-         visit(program.getEntry());
+         visit(program.getEntryClass());
         program.getClassList().forEach(this::visit);
     }
 
