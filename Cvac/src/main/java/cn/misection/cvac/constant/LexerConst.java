@@ -7,7 +7,14 @@ package cn.misection.cvac.constant;
  * @Description TODO
  * @CreateTime 2021年02月16日 20:32:00
  */
-public final class TokenConstPool
+public final class LexerConst
 {
+    /**
+     * lexer 和buffer中文件末尾;
+     */
+    public static final char EOF = 0;
+
+    public static final char NEW_LINE = '\n';
+
     public static final String DEFAULT_MAIN_CLASS_NAME = "Application";
 }

@@ -9,7 +9,7 @@ import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
 import cn.misection.cvac.codegen.bst.instruction.*;
 import cn.misection.cvac.codegen.bst.btype.basic.BaseBasicType;
 import cn.misection.cvac.codegen.bst.btype.refer.BaseReferenceType;
-import cn.misection.cvac.constant.WriteILPool;
+import cn.misection.cvac.constant.WriteILConst;
 
 import java.io.*;
 
@@ -39,17 +39,17 @@ public final class IntermLangGenerator implements CodeGenVisitor
      */
     private void writeTabSpace()
     {
-        buffer.append(WriteILPool.TAB_SPACE);
+        buffer.append(WriteILConst.TAB_SPACE);
     }
 
     private void writeln(String s)
     {
-        buffer.append(s).append(WriteILPool.NEW_LINE_CH);
+        buffer.append(s).append(WriteILConst.NEW_LINE_CH);
     }
 
     private void writeln()
     {
-        buffer.append(WriteILPool.NEW_LINE_CH);
+        buffer.append(WriteILConst.NEW_LINE_CH);
     }
 
     private void writef(String format, Object... args)

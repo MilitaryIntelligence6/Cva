@@ -1,7 +1,6 @@
 package cn.misection.cvac.ast.statement;
 
 import cn.misection.cvac.ast.expr.AbstractExpression;
-import cn.misection.cvac.constant.WriteILPool;
 
 /**
  * @author Military Intelligence 6 root

@@ -22,7 +22,7 @@ import cn.misection.cvac.codegen.bst.btype.refer.GenStringType;
 import cn.misection.cvac.codegen.bst.instruction.*;
 
 import cn.misection.cvac.constant.CvaExprClassName;
-import cn.misection.cvac.constant.WriteILPool;
+import cn.misection.cvac.constant.WriteILConst;
 
 import java.util.*;
 
@@ -313,12 +313,12 @@ public final class TranslatorVisitor implements IVisitor
         {
             case CvaExprClassName.CVA_NUMBER_INT_EXPR:
             {
-                emit(new WriteInstruction(mode, WriteILPool.WRITE_INT));
+                emit(new WriteInstruction(mode, WriteILConst.WRITE_INT));
                 break;
             }
             case CvaExprClassName.CVA_STRING_EXPR:
             {
-                emit(new WriteInstruction(mode, WriteILPool.WRITE_STRING));
+                emit(new WriteInstruction(mode, WriteILConst.WRITE_STRING));
                 break;
             }
             case CvaExprClassName.CVA_IDENTIFIER_EXPR:
@@ -351,11 +351,11 @@ public final class TranslatorVisitor implements IVisitor
         {
             case CvaIntType.TYPE_LITERAL:
             {
-                return WriteILPool.WRITE_INT;
+                return WriteILConst.WRITE_INT;
             }
             case CvaStringType.TYPE_LITERAL:
             {
-                return WriteILPool.WRITE_STRING;
+                return WriteILConst.WRITE_STRING;
             }
             default:
             {

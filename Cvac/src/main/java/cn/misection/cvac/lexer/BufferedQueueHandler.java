@@ -1,5 +1,7 @@
 package cn.misection.cvac.lexer;
 
+import cn.misection.cvac.constant.LexerConst;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -33,12 +35,12 @@ public final class BufferedQueueHandler
         String line = null;
         while ((line = this.readLine()) != null)
         {
-            buffer.append(line).append(LexerConstPool.NEW_LINE);
+            buffer.append(line).append(LexerConst.NEW_LINE);
         }
         // 改进完毕, 只需要装载一个EOF了, 必须装载至少一个,
         //因为StringBuffer跟文件流不一样, 不会有EOF;
         // 加上才能模拟文件流;
-        buffer.append(LexerConstPool.EOF);
+        buffer.append(LexerConst.EOF);
         this.close();
     }
 

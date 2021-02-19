@@ -11,8 +11,8 @@ import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.*;
-import cn.misection.cvac.constant.TokenConstPool;
-import cn.misection.cvac.constant.WriteILPool;
+import cn.misection.cvac.constant.LexerConst;
+import cn.misection.cvac.constant.WriteILConst;
 import cn.misection.cvac.lexer.CvaKind;
 import cn.misection.cvac.lexer.CvaToken;
 import cn.misection.cvac.lexer.IBufferedQueue;
@@ -417,15 +417,15 @@ public final class Parser
             }
             case WRITE:
             {
-                return handleWriteOp(WriteILPool.CONSOLE_WRITE);
+                return handleWriteOp(WriteILConst.CONSOLE_WRITE);
             }
             case WRITE_LINE:
             {
-                return handleWriteOp(WriteILPool.CONSOLE_WRITELN);
+                return handleWriteOp(WriteILConst.CONSOLE_WRITELN);
             }
             case WRITE_FORMAT:
             {
-                return handleWriteOp(WriteILPool.CONSOLE_WRITE_FORMAT);
+                return handleWriteOp(WriteILConst.CONSOLE_WRITE_FORMAT);
             }
             case IDENTIFIER:
             {
@@ -782,7 +782,7 @@ public final class Parser
             eatToken(CvaKind.CLOSE_CURLY_BRACE);
             return new CvaEntry(entryName, statement);
         }
-        String mainName = TokenConstPool.DEFAULT_MAIN_CLASS_NAME;
+        String mainName = LexerConst.DEFAULT_MAIN_CLASS_NAME;
         AbstractStatement statement = parseMainMethod();
         return new CvaEntry(mainName, statement);
     }

@@ -10,19 +10,15 @@ package cn.misection.cvac.lexer;
 /**
  * 前端常量类;
  */
-final class LexerConstPool
+final class LexerPackageConst
 {
-    public static final char NEW_LINE = '\n';
-
     public static final char SPACE = ' ';
 
     /**
      * '\0'
      * '\u0000'
      */
-    public static final char EOF = 0;
-
-    private LexerConstPool() {}
+    private LexerPackageConst() {}
 }
 
 

@@ -7,7 +7,7 @@ package cn.misection.cvac.constant;
  * @Description TODO
  * @CreateTime 2021年02月16日 11:49:00
  */
-public final class WriteILPool
+public final class WriteILConst
 {
     /**
      * 控制台打印选项;
@@ -37,5 +37,5 @@ public final class WriteILPool
     /**
      * 禁止构造;
      */
-    private WriteILPool() {}
+    private WriteILConst() {}
 }

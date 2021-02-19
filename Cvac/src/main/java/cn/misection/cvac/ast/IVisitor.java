@@ -228,7 +228,9 @@ public interface IVisitor
 
     void visit(CvaWhileStatement s);
 
-    // Method
+    /**
+     * Method
+     */
     default void visit(AbstractMethod abstMethod)
     {
         visit(((CvaMethod) abstMethod));

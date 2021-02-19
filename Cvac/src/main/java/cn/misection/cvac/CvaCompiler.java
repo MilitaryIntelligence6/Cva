@@ -7,7 +7,7 @@ import cn.misection.cvac.codegen.bst.bclas.GenClass;
 import cn.misection.cvac.config.DebugMacro;
 import cn.misection.cvac.config.Macro;
 import cn.misection.cvac.config.VersionMacro;
-import cn.misection.cvac.constant.PublicConstPool;
+import cn.misection.cvac.constant.UserIntfConst;
 import cn.misection.cvac.lexer.BufferedQueueHandler;
 import cn.misection.cvac.lexer.IBufferedQueue;
 import cn.misection.cvac.optimize.Optimizer;
@@ -185,14 +185,14 @@ public final class CvaCompiler
     {
         if (Macro.DEBUG || Macro.RELEASE_LINUX)
         {
-            System.out.println(PublicConstPool.BANNER);
+            System.out.println(UserIntfConst.BANNER);
         }
         if (Macro.RELEASE_WINDOWS)
         {
             String BANNER_GBK = null;
             try
             {
-                BANNER_GBK = new String(PublicConstPool.BANNER.getBytes(),
+                BANNER_GBK = new String(UserIntfConst.BANNER.getBytes(),
                         "GBK");
             }
             catch (UnsupportedEncodingException e)
