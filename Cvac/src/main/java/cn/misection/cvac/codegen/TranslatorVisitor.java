@@ -96,7 +96,7 @@ public final class TranslatorVisitor implements IVisitor
         visit(decl.type());
         genDecl = new GenDeclaration(
                 decl.literal(),
-                this.getGenType());
+                this.genType);
         if (indexTable != null) // if it is field
         {
             indexTable.put(decl.literal(), index++);
@@ -135,12 +135,12 @@ public final class TranslatorVisitor implements IVisitor
         visit(e.getExpr());
         e.getArgs().forEach(this::visit);
         visit(e.getRetType());
-        BaseType rt = this.getGenType();
+        BaseType rt = this.genType;
         List<BaseType> at = new ArrayList<>();
         e.getArgTypeList().forEach(a ->
         {
             visit(a);
-            at.add(this.getGenType());
+            at.add(this.genType);
         });
         emit(new InvokeVirtual(e.getLiteral(), e.getType(), at, rt));
     }
@@ -152,21 +152,21 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaIdentifierExpr e)
+    public void visit(CvaIdentifierExpr expr)
     {
-        if (e.isField())
+        if (expr.isField())
         {
             emit(new ALoad(0));
-            AbstractType type = e.getType();
-            emit(new GetField(String.format("%s/%s", this.getClassId(), e.getLiteral()),
+            AbstractType type = expr.getType();
+            emit(new GetField(String.format("%s/%s", this.classId, expr.getLiteral()),
                     type instanceof CvaClassType ?
                             (String.format("L%s;", ((CvaClassType) type).getLiteral()))
                             : "I"));
         }
         else
         {
-            int index = this.indexTable.get(e.getLiteral());
-            if (e.getType() instanceof CvaClassType)
+            int index = this.indexTable.get(expr.getLiteral());
+            if (expr.getType() instanceof CvaClassType)
             {
                 emit(new ALoad(index));
             }
@@ -274,7 +274,7 @@ public final class TranslatorVisitor implements IVisitor
         {
             emit(new ALoad(0));
             visit(s.getExpr());
-            emit(new PutField(String.format("%s/%s", this.getClassId(), s.getLiteral()),
+            emit(new PutField(String.format("%s/%s", this.classId, s.getLiteral()),
                     s.getType() instanceof CvaClassType ?
                             (String.format("L%s;", ((CvaClassType) s.getType()).getLiteral()))
                             : "I"));
@@ -389,20 +389,20 @@ public final class TranslatorVisitor implements IVisitor
         this.index = 1;
         this.indexTable = new HashMap<>();
         visit(cvaMethod.retType());
-        BaseType theRetType = this.getGenType();
+        BaseType theRetType = this.genType;
 
         List<GenDeclaration> formalList = new ArrayList<>();
         cvaMethod.argumentList().forEach(f ->
         {
             visit(f);
-            formalList.add(this.getGenDecl());
+            formalList.add(this.genDecl);
         });
 
         List<GenDeclaration> localList = new ArrayList<>();
         cvaMethod.localList().forEach(l ->
         {
             visit(l);
-            localList.add(this.getGenDecl());
+            localList.add(this.genDecl);
         });
         setLinearInstrList(new ArrayList<>());
         cvaMethod.statementList().forEach(this::visit);
@@ -437,13 +437,13 @@ public final class TranslatorVisitor implements IVisitor
         cvaClass.fieldList().forEach(f ->
         {
             visit(f);
-            fieldList.add(this.getGenDecl());
+            fieldList.add(this.genDecl);
         });
         List<GenMethod> methodList = new ArrayList<>();
         cvaClass.methodList().forEach(m ->
         {
             visit(m);
-            methodList.add(this.getGenMethod());
+            methodList.add(this.genMethod);
         });
         genClass = new GenClass(
                 cvaClass.name(),
@@ -457,19 +457,20 @@ public final class TranslatorVisitor implements IVisitor
     public void visit(CvaEntryClass entryClass)
     {
         visit(entryClass.statement());
-        genEntry = new GenEntry(entryClass.name(), this.getLinearInstrList());
+        genEntry = new GenEntry(entryClass.name(),
+                this.linearInstrList);
         setLinearInstrList(new ArrayList<>());
     }
 
     @Override
-    public void visit(CvaProgram p)
+    public void visit(CvaProgram cvaProgram)
     {
-        visit(p.getEntry());
+        visit(cvaProgram.getEntry());
         List<GenClass> classList = new ArrayList<>();
-        p.getClassList().forEach(c ->
+        cvaProgram.getClassList().forEach(c ->
         {
             visit(c);
-            classList.add(this.getGenClass());
+            classList.add(this.genClass);
         });
         genProgram = new GenProgram(
                 this.genEntry,
