@@ -8,7 +8,7 @@ import cn.misection.cvac.ast.expr.*;
 import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
-import cn.misection.cvac.ast.type.*;
+import cn.misection.cvac.ast.type.AbstractType;
 import cn.misection.cvac.ast.type.basic.CvaBooleanType;
 import cn.misection.cvac.ast.type.basic.CvaIntType;
 import cn.misection.cvac.ast.type.reference.AbstractReferenceType;
@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author  MI6 root;
+ * @author MI6 root;
  * @Description 将编译器前端翻译给后端;
  */
 public final class TranslatorVisitor implements IVisitor
@@ -265,9 +265,9 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     /**
+     * @param assignSta
      * @FIXME 类型添加String是1, 二是要用前面写的switch方法替换;
      * 添加string应该只需要ref type就行;
-     * @param assignSta
      */
     @Override
     public void visit(CvaAssignStatement assignSta)
@@ -404,28 +404,26 @@ public final class TranslatorVisitor implements IVisitor
     {
         this.index = 1;
         this.indexTable = new HashMap<>();
-        visit(cvaMethod.retType());
+        visit(cvaMethod.getRetType());
         BaseType theRetType = this.genType;
 
         List<GenDeclaration> formalList = new ArrayList<>();
-        cvaMethod.argumentList().forEach(f ->
+        cvaMethod.getArgumentList().forEach(f ->
         {
             visit(f);
             formalList.add(this.genDecl);
         });
-
         List<GenDeclaration> localList = new ArrayList<>();
-        cvaMethod.localList().forEach(l ->
+        cvaMethod.getLocalVarList().forEach(l ->
         {
             visit(l);
             localList.add(this.genDecl);
         });
         setLinearInstrList(new ArrayList<>());
-        cvaMethod.statementList().forEach(this::visit);
+        cvaMethod.getStatementList().forEach(this::visit);
 
-        visit(cvaMethod.retExpr());
-
-        if (cvaMethod.retType() instanceof AbstractReferenceType)
+        visit(cvaMethod.getRetExpr());
+        if (cvaMethod.getRetType() instanceof AbstractReferenceType)
         {
             emit(new AReturn());
         }
@@ -433,7 +431,6 @@ public final class TranslatorVisitor implements IVisitor
         {
             emit(new IReturn());
         }
-
         genMethod = new GenMethod(
                 cvaMethod.name(),
                 theRetType,
@@ -450,13 +447,13 @@ public final class TranslatorVisitor implements IVisitor
     {
         setClassId(cvaClass.name());
         List<GenDeclaration> fieldList = new ArrayList<>();
-        cvaClass.fieldList().forEach(f ->
+        cvaClass.getFieldList().forEach(f ->
         {
             visit(f);
             fieldList.add(this.genDecl);
         });
         List<GenMethod> methodList = new ArrayList<>();
-        cvaClass.methodList().forEach(m ->
+        cvaClass.getMethodList().forEach(m ->
         {
             visit(m);
             methodList.add(this.genMethod);
@@ -472,10 +469,15 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaEntryClass entryClass)
     {
+//        visit(entryClass.statement());
+//        genEntry = new GenEntry(entryClass.name(),
+//                this.linearInstrList);
+//        setLinearInstrList(new ArrayList<>());
         visit(entryClass.statement());
         genEntry = new GenEntry(entryClass.name(),
                 this.linearInstrList);
-        setLinearInstrList(new ArrayList<>());
+        // 会重复使用, 赋给每个域;
+        this.linearInstrList = new ArrayList<>();
     }
 
     @Override

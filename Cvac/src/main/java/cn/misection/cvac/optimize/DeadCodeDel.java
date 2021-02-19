@@ -228,22 +228,22 @@ public final class DeadCodeDel
     public void visit(CvaMethod m)
     {
         this.localVars = new HashSet<>();
-        m.argumentList().forEach(f ->
+        m.getArgumentList().forEach(f ->
                 this.localVars.add(((CvaDeclaration) f).literal()));
-        m.localList().forEach(l ->
+        m.getLocalVarList().forEach(l ->
                 this.localVars.add(((CvaDeclaration) l).literal()));
         this.localLiveness = new HashSet<>();
 
         // this.isAssign = false;
-        this.visit(m.retExpr());
+        this.visit(m.getRetExpr());
 
-        for (int i = m.statementList().size() - 1; i >= 0; i--)
+        for (int i = m.getStatementList().size() - 1; i >= 0; i--)
         {
-            this.visit(m.statementList().get(i));
+            this.visit(m.getStatementList().get(i));
             if (this.shouldDel)
             {
                 this.isOptimizing = true;
-                m.statementList().remove(i);
+                m.getStatementList().remove(i);
             }
         }
     }
@@ -252,10 +252,10 @@ public final class DeadCodeDel
     public void visit(CvaClass c)
     {
         this.curFields = new HashSet<>();
-        c.fieldList().forEach(f ->
+        c.getFieldList().forEach(f ->
                 this.curFields.add(((CvaDeclaration) f).literal()));
 
-        c.methodList().forEach(this::visit);
+        c.getMethodList().forEach(this::visit);
     }
 
     @Override

@@ -24,7 +24,7 @@ public final class CvaMethod extends AbstractMethod
 
     private List<AbstractDeclaration> argumentList;
 
-    private List<AbstractDeclaration> localList;
+    private List<AbstractDeclaration> localVarList;
 
     private List<AbstractStatement> statementList;
 
@@ -32,14 +32,14 @@ public final class CvaMethod extends AbstractMethod
                      AbstractType retType,
                      AbstractExpression retExpr,
                      List<AbstractDeclaration> argumentList,
-                     List<AbstractDeclaration> localList,
+                     List<AbstractDeclaration> localVarList,
                      List<AbstractStatement> statementList)
     {
         this.name = name;
         this.retType = retType;
         this.retExpr = retExpr;
         this.argumentList = argumentList;
-        this.localList = localList;
+        this.localVarList = localVarList;
         this.statementList = statementList;
     }
 
@@ -50,31 +50,31 @@ public final class CvaMethod extends AbstractMethod
     }
 
     @Override
-    public AbstractType retType()
+    public AbstractType getRetType()
     {
         return retType;
     }
 
     @Override
-    public AbstractExpression retExpr()
+    public AbstractExpression getRetExpr()
     {
         return retExpr;
     }
 
     @Override
-    public List<AbstractDeclaration> argumentList()
+    public List<AbstractDeclaration> getArgumentList()
     {
         return argumentList;
     }
 
     @Override
-    public List<AbstractDeclaration> localList()
+    public List<AbstractDeclaration> getLocalVarList()
     {
-        return localList;
+        return localVarList;
     }
 
     @Override
-    public List<AbstractStatement> statementList()
+    public List<AbstractStatement> getStatementList()
     {
         return statementList;
     }
@@ -99,9 +99,9 @@ public final class CvaMethod extends AbstractMethod
         this.argumentList = argumentList;
     }
 
-    public void setLocalList(List<AbstractDeclaration> localList)
+    public void setLocalVarList(List<AbstractDeclaration> localVarList)
     {
-        this.localList = localList;
+        this.localVarList = localVarList;
     }
 
     public void setStatementList(List<AbstractStatement> statementList)

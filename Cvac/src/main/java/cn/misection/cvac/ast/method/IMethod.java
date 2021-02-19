@@ -27,29 +27,29 @@ public interface IMethod extends ASTree
      * 返回值;
      * @return
      */
-    AbstractType retType();
+    AbstractType getRetType();
 
     /**
      * 返回表达;
      * @return
      */
-    AbstractExpression retExpr();
+    AbstractExpression getRetExpr();
 
     /**
      * 形参List;
      * @return
      */
-    List<AbstractDeclaration> argumentList();
+    List<AbstractDeclaration> getArgumentList();
 
     /**
      * 局部变量List;
      * @return
      */
-    List<AbstractDeclaration> localList();
+    List<AbstractDeclaration> getLocalVarList();
 
     /**
      * 操作List;
      * @return
      */
-    List<AbstractStatement> statementList();
+    List<AbstractStatement> getStatementList();
 }

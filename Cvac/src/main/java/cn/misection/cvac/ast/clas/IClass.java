@@ -31,11 +31,11 @@ public interface IClass extends ASTree
      * field;
      * @return
      */
-    List<AbstractDeclaration> fieldList();
+    List<AbstractDeclaration> getFieldList();
 
     /**
      * 方法;
      * @return
      */
-    List<AbstractMethod> methodList();
+    List<AbstractMethod> getMethodList();
 }

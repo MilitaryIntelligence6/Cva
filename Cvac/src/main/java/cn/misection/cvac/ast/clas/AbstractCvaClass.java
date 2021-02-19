@@ -54,13 +54,13 @@ public abstract class AbstractCvaClass implements IClass
     }
 
     @Override
-    public List<AbstractDeclaration> fieldList()
+    public List<AbstractDeclaration> getFieldList()
     {
         return fieldList;
     }
 
     @Override
-    public List<AbstractMethod> methodList()
+    public List<AbstractMethod> getMethodList()
     {
         return methodList;
     }

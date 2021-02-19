@@ -165,21 +165,21 @@ public final class UnUsedVarDecl
     public void visit(CvaMethod m)
     {
         this.unUsedLocals = new HashMap<>();
-        m.localList().forEach(local ->
+        m.getLocalVarList().forEach(local ->
         {
             CvaDeclaration l = (CvaDeclaration) local;
             this.unUsedLocals.put(l.literal(), l);
         });
 
         this.unUsedArgs = new HashMap<>();
-        m.argumentList().forEach(formal ->
+        m.getArgumentList().forEach(formal ->
         {
             CvaDeclaration f = (CvaDeclaration) formal;
             this.unUsedArgs.put(f.literal(), f);
         });
 
-        m.statementList().forEach(this::visit);
-        this.visit(m.retExpr());
+        m.getStatementList().forEach(this::visit);
+        this.visit(m.getRetExpr());
 
         this.isOptimizing = this.unUsedArgs.size() > 0
                 || this.unUsedLocals.size() > 0;
@@ -201,14 +201,14 @@ public final class UnUsedVarDecl
                                 "\"%s\" you have never used. Now we delete it.%n",
                         ulo.getLineNum(), ulk);
             }
-            m.localList().remove(ulo);
+            m.getLocalVarList().remove(ulo);
         });
     }
 
     @Override
     public void visit(CvaClass c)
     {
-        c.methodList().forEach(this::visit);
+        c.getMethodList().forEach(this::visit);
     }
 
     @Override

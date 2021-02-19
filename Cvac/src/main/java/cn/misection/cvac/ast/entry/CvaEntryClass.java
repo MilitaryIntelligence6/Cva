@@ -37,13 +37,13 @@ public final class CvaEntryClass extends AbstractEntryClass
     }
 
     @Override
-    public List<AbstractDeclaration> fieldList()
+    public List<AbstractDeclaration> getFieldList()
     {
         return null;
     }
 
     @Override
-    public List<AbstractMethod> methodList()
+    public List<AbstractMethod> getMethodList()
     {
         return null;
     }

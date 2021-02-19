@@ -329,8 +329,8 @@ public final class ConstantAndCopyPropagation
     public void visit(CvaMethod cvaMethod)
     {
         this.conorcopy = new HashMap<>();
-        cvaMethod.statementList().forEach(this::visit);
-        this.visit(cvaMethod.retExpr());
+        cvaMethod.getStatementList().forEach(this::visit);
+        this.visit(cvaMethod.getRetExpr());
         if (this.canChange)
         {
             cvaMethod.setRetExpr(this.curExpr);
@@ -340,7 +340,7 @@ public final class ConstantAndCopyPropagation
     @Override
     public void visit(CvaClass cvaClass)
     {
-        cvaClass.methodList().forEach(m ->
+        cvaClass.getMethodList().forEach(m ->
         {
             this.canChange = false;
             this.visit(m);
