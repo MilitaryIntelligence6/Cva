@@ -226,9 +226,9 @@ public final class DeadCodeDel
     {
         this.localVars = new HashSet<>();
         m.argumentList().forEach(f ->
-                this.localVars.add(((CvaDeclaration) f).getLiteral()));
+                this.localVars.add(((CvaDeclaration) f).literal()));
         m.localList().forEach(l ->
-                this.localVars.add(((CvaDeclaration) l).getLiteral()));
+                this.localVars.add(((CvaDeclaration) l).literal()));
         this.localLiveness = new HashSet<>();
 
         // this.isAssign = false;
@@ -250,7 +250,7 @@ public final class DeadCodeDel
     {
         this.curFields = new HashSet<>();
         c.fieldList().forEach(f ->
-                this.curFields.add(((CvaDeclaration) f).getLiteral()));
+                this.curFields.add(((CvaDeclaration) f).literal()));
 
         c.methodList().forEach(this::visit);
     }

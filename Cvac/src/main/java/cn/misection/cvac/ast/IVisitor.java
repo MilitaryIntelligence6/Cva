@@ -229,17 +229,17 @@ public interface IVisitor
     void visit(CvaWhileStatement s);
 
     // Method
-    default void visit(AbstractMethod abstractMethod)
+    default void visit(AbstractMethod abstMethod)
     {
-        visit(((CvaMethod) abstractMethod));
+        visit(((CvaMethod) abstMethod));
     }
 
     void visit(CvaMethod cvaMethod);
 
     // Class
-    default void visit(AbstractClass abstractClass)
+    default void visit(AbstractClass abstClass)
     {
-        visit(((CvaClass) abstractClass));
+        visit(((CvaClass) abstClass));
     }
 
     void visit(CvaClass cvaClass);

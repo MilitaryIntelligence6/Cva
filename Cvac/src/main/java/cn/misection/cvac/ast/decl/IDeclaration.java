@@ -1,6 +1,7 @@
 package cn.misection.cvac.ast.decl;
 
 import cn.misection.cvac.ast.ASTree;
+import cn.misection.cvac.ast.type.AbstractType;
 
 /**
  * @author Military Intelligence 6 root
@@ -11,4 +12,16 @@ import cn.misection.cvac.ast.ASTree;
  */
 public interface IDeclaration extends ASTree
 {
+    /**
+     * 字面量;
+     * @return 字面量;
+     */
+    String literal();
+
+    /**
+     * 类型;
+     * @return t;
+     */
+    AbstractType type();
+
 }

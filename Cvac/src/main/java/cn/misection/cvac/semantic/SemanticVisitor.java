@@ -199,11 +199,11 @@ public final class SemanticVisitor implements IVisitor
 
         for (int i = 0; i < mty.getArgsType().size(); i++)
         {
-            if (!isMatch(((CvaDeclaration) mty.getArgsType().get(i)).getType(), argsty.get(i)))
+            if (!isMatch(((CvaDeclaration) mty.getArgsType().get(i)).type(), argsty.get(i)))
             {
                 errorLog(e.getArgs().get(i).getLineNum(),
                         String.format("the parameter %d needs a %s, but got a %s",
-                                i + 1, ((CvaDeclaration) mty.getArgsType().get(i)).getType().toString(), argsty.get(i).toString()));
+                                i + 1, ((CvaDeclaration) mty.getArgsType().get(i)).type().toString(), argsty.get(i).toString()));
             }
         }
 
@@ -463,7 +463,7 @@ public final class SemanticVisitor implements IVisitor
         );
         this.curMthLocals = new HashSet<>();
         cvaMethod.localList().forEach(local ->
-                this.curMthLocals.add(((CvaDeclaration) local).getLiteral()));
+                this.curMthLocals.add(((CvaDeclaration) local).literal()));
         cvaMethod.statementList().forEach(this::visit);
         visit(cvaMethod.retExpr());
         // if (!this.type.toString().equals(m.retType.toString()))
@@ -503,8 +503,8 @@ public final class SemanticVisitor implements IVisitor
             classTable.putClassBinding(cla.name(), new ClassBinding(cla.parent()));
 
             cla.fieldList().forEach(field -> classTable.putFieldToClass(cla.name(),
-                    ((CvaDeclaration) field).getLiteral(),
-                    ((CvaDeclaration) field).getType())
+                    ((CvaDeclaration) field).literal(),
+                    ((CvaDeclaration) field).type())
             );
 
             cla.methodList().forEach(method -> classTable.putMethodToClass(cla.name(),

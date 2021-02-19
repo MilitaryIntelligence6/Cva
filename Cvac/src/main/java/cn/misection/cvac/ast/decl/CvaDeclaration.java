@@ -22,12 +22,14 @@ public final class CvaDeclaration extends AbstractDeclaration
         this.type = type;
     }
 
-    public String getLiteral()
+    @Override
+    public String literal()
     {
         return literal;
     }
 
-    public AbstractType getType()
+    @Override
+    public AbstractType type()
     {
         return type;
     }

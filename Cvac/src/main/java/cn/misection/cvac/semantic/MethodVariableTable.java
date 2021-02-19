@@ -26,30 +26,30 @@ public final class MethodVariableTable
         for (AbstractDeclaration formal : formalList)
         {
             CvaDeclaration decl = ((CvaDeclaration) formal);
-            if (this.table.get(decl.getLiteral()) != null)
+            if (this.table.get(decl.literal()) != null)
             {
                 System.err.printf("duplicated parameter: %s at line %d%n",
-                        decl.getLiteral(), decl.getLineNum());
+                        decl.literal(), decl.getLineNum());
                 System.exit(1);
             }
             else
             {
-                this.table.put(decl.getLiteral(), decl.getType());
+                this.table.put(decl.literal(), decl.type());
             }
         }
 
         for (AbstractDeclaration local : localList)
         {
             CvaDeclaration decl = ((CvaDeclaration) local);
-            if (this.table.get(decl.getLiteral()) != null)
+            if (this.table.get(decl.literal()) != null)
             {
                 System.err.printf("duplicated variable: %s at line %d%n",
-                        decl.getLiteral(), decl.getLineNum());
+                        decl.literal(), decl.getLineNum());
                 System.exit(1);
             }
             else
             {
-                this.table.put(decl.getLiteral(), decl.getType());
+                this.table.put(decl.literal(), decl.type());
             }
         }
     }

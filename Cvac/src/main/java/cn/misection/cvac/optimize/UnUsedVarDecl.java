@@ -168,14 +168,14 @@ public final class UnUsedVarDecl
         m.localList().forEach(local ->
         {
             CvaDeclaration l = (CvaDeclaration) local;
-            this.unUsedLocals.put(l.getLiteral(), l);
+            this.unUsedLocals.put(l.literal(), l);
         });
 
         this.unUsedArgs = new HashMap<>();
         m.argumentList().forEach(formal ->
         {
             CvaDeclaration f = (CvaDeclaration) formal;
-            this.unUsedArgs.put(f.getLiteral(), f);
+            this.unUsedArgs.put(f.literal(), f);
         });
 
         m.statementList().forEach(this::visit);

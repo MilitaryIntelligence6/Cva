@@ -91,13 +91,13 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaDeclaration decl)
     {
-        visit(decl.getType());
+        visit(decl.type());
         setDec(new GenDeclaration(
-                decl.getLiteral(),
+                decl.literal(),
                 this.getType()));
         if (this.indexTable != null) // if it is field
         {
-            this.indexTable.put(decl.getLiteral(), index++);
+            this.indexTable.put(decl.literal(), index++);
         }
     }
 
