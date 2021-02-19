@@ -8,8 +8,8 @@ import java.util.List;
 
 /**
  * @author  MI6 root
- * @TODO 改成继承;
- * @TODO 改成get set分开put方式;
+ * @TODO GitHub
+ * @TODO GitHub
  */
 public final class MethodVariableTable
         extends HashMap<String, AbstractType>
