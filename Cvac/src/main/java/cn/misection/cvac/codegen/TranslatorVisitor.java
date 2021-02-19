@@ -521,7 +521,7 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaProgram cvaProgram)
     {
-        visit(cvaProgram.getEntry());
+        visit(cvaProgram.getEntryClass());
         List<GenClass> classList = new ArrayList<>();
         cvaProgram.getClassList().forEach(c ->
         {

@@ -527,7 +527,7 @@ public final class SemanticVisitor implements IVisitor
     public void visit(CvaProgram cvaProgram)
     {
         // put main class to class table
-        classTable.putClassBinding(((CvaEntryClass) cvaProgram.getEntry()).name(),
+        classTable.putClassBinding(((CvaEntryClass) cvaProgram.getEntryClass()).name(),
                 new ClassBinding(null));
 
         for (AbstractCvaClass abstractCvaClass : cvaProgram.getClassList())
@@ -547,7 +547,7 @@ public final class SemanticVisitor implements IVisitor
                             ((CvaMethod) method).getArgumentList()))
             );
         }
-        visit(cvaProgram.getEntry());
+        visit(cvaProgram.getEntryClass());
         cvaProgram.getClassList().forEach(this::visit);
     }
 }

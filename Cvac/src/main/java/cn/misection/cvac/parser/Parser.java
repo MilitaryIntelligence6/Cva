@@ -4,6 +4,7 @@ import cn.misection.cvac.ast.clas.AbstractCvaClass;
 import cn.misection.cvac.ast.clas.CvaClass;
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.decl.CvaDeclaration;
+import cn.misection.cvac.ast.entry.AbstractEntryClass;
 import cn.misection.cvac.ast.entry.CvaEntryClass;
 import cn.misection.cvac.ast.expr.*;
 import cn.misection.cvac.ast.method.AbstractMethod;
@@ -22,10 +23,7 @@ import cn.misection.cvac.lexer.CvaKind;
 import cn.misection.cvac.lexer.CvaToken;
 import cn.misection.cvac.lexer.Lexer;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * @author MI6 root
@@ -37,7 +35,7 @@ public final class Parser
     private CvaToken curToken;
 
     /**
-     * for vardecl cn.misection.cvac.parser;
+     * for varDecl cn.misection.cvac.parser;
      */
     private boolean valDeclFlag;
 
@@ -535,6 +533,7 @@ public final class Parser
             case LONG:
             {
                 type = new CvaLongType();
+                break;
             }
             case FLOAT:
             {
@@ -734,7 +733,6 @@ public final class Parser
     private AbstractMethod parseMainMethod()
     {
         AbstractType mainRetType = parseType();
-        String literal = curToken.getLiteral();
         eatToken(CvaKind.MAIN);
 
         eatToken(CvaKind.OPEN_PAREN);
@@ -873,50 +871,72 @@ public final class Parser
     {
         parsePackage();
         parseCallStatement();
-        CvaEntryClass entryClass = parseEntryClass();
-        List<AbstractCvaClass> classList = parseClassDeclList();
-//        CvaEntry entry = null;
-//        List<AbstractClass> classList = new ArrayList<>();
-//        while (true)
-//        {
-//            CvaKind curKind = curToken.getKind();
-//            if (curKind == CvaKind.CLASS)
-//            {
-//                classList.addAll(parseClassDeclList());
-//            }
-//            else if (CvaKind.isType(curKind))
-//            {
-//                entry = parseEntry();
-//                hasEntry = true;
-//            }
-//            else if (curKind == CvaKind.EOF)
-//            {
-//                break;
-//            }
-//            else
-//            {
-//                errorLog("EOF or class def or main func def" +
-//                                "(cva only supported main func out the class) ",
-//                        curKind);
-//            }
-//        }
-//        if (!hasEntry)
-//        {
-//            for (AbstractClass absClass : classList)
-//            {
-//                for (AbstractMethod absMethod : absClass.methodList())
-//                {
-//                    // null 安全的equals;
-//                    if (Objects.equals(absMethod.name(), CvaKind.MAIN.getKindLiteral()))
-//                    {
-//                        entry =
-//                    }
-//                }
-//            }
-//        }
+        // 直接解析;
+//        CvaEntryClass entryClass = parseEntryClass();
+//        List<AbstractCvaClass> classList = parseClassDeclList();
+        AbstractEntryClass entryClass = null;
+        List<AbstractCvaClass> classList = new ArrayList<>();
+        while (true)
+        {
+            CvaKind curKind = curToken.getKind();
+            switch (curKind)
+            {
+                case CLASS_DECL:
+                {
+                    classList.addAll(parseClassDeclList());
+                    continue;
+                }
+                case EOF:
+                {
+                    break;
+                }
+                default:
+                {
+                    if (CvaKind.isType(curKind))
+                    {
+                        entryClass = parseEntryClass();
+                        hasEntry = true;
+                        continue;
+                    }
+                    else
+                    {
+                        errorLog("EOF or class def or main func def" +
+                                        "(cva only supported main func out the class) ",
+                                curKind);
+                    }
+                    // 不可达;
+                    break;
+                }
+            }
+            break;
+        }
+        if (!hasEntry)
+        {
+            entryClass = (AbstractEntryClass) searchMain(classList);
+        }
         eatEof();
         // find entry;
         return new CvaProgram(entryClass, classList);
+    }
+
+
+    private AbstractCvaClass searchMain(List<AbstractCvaClass> classList)
+    {
+        for (AbstractCvaClass absClass : classList)
+        {
+            for (AbstractMethod absMethod : absClass.getMethodList())
+            {
+                // null 安全的equals;
+                if (Objects.equals(absMethod.name(), CvaKind.MAIN.getKindLiteral()))
+                {
+                    // return 打断多重循环, 如果重复定义main, 只执行第一个;
+                    return absClass;
+                }
+            }
+        }
+        errorLog("a main method",
+                "null, deny to compile the file!");
+        return null;
     }
 
     /**

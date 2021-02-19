@@ -344,7 +344,7 @@ public final class ConstantFolder
     public void visit(CvaProgram p)
     {
         this.isOptimizing = false;
-        this.visit(p.getEntry());
+        this.visit(p.getEntryClass());
         p.getClassList().forEach(this::visit);
     }
 

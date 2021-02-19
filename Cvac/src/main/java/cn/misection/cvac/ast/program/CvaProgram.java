@@ -14,8 +14,9 @@ import java.util.List;
  */
 public final class CvaProgram extends AbstractProgram
 {
-    public CvaProgram(AbstractEntryClass entry, List<AbstractCvaClass> classQueue)
+    public CvaProgram(AbstractEntryClass entryClass,
+                      List<AbstractCvaClass> classList)
     {
-        super(entry, classQueue);
+        super(entryClass, classList);
     }
 }

@@ -204,7 +204,7 @@ public final class UnReachableDel
     public void visit(CvaProgram p)
     {
         this.isOptimizing = false;
-        this.visit(p.getEntry());
+        this.visit(p.getEntryClass());
         p.getClassList().forEach(this::visit);
     }
 

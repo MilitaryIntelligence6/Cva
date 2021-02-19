@@ -14,19 +14,19 @@ import java.util.List;
  */
 public abstract class AbstractProgram implements IProgram
 {
-    protected AbstractEntryClass entry;
+    protected AbstractEntryClass entryClass;
 
     protected List<AbstractCvaClass> classList;
 
-    protected AbstractProgram(AbstractEntryClass entry, List<AbstractCvaClass> classList)
+    protected AbstractProgram(AbstractEntryClass entryClass, List<AbstractCvaClass> classList)
     {
-        this.entry = entry;
+        this.entryClass = entryClass;
         this.classList = classList;
     }
 
-    public AbstractEntryClass getEntry()
+    public AbstractEntryClass getEntryClass()
     {
-        return entry;
+        return entryClass;
     }
 
     public List<AbstractCvaClass> getClassList()
