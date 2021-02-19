@@ -3,6 +3,7 @@ package cn.misection.cvac.ast.entry;
 import cn.misection.cvac.ast.clas.AbstractCvaClass;
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.method.AbstractMethod;
+import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.statement.AbstractStatement;
 
 import java.util.List;
@@ -20,7 +21,12 @@ public abstract class AbstractEntryClass extends AbstractCvaClass
 {
     protected String name;
 
-    protected List<AbstractStatement> statementList;
+    protected CvaMethod entryMethod;
+
+    public AbstractEntryClass()
+    {
+        super();
+    }
 
     public AbstractEntryClass(String name,
                               String parent,
@@ -48,25 +54,13 @@ public abstract class AbstractEntryClass extends AbstractCvaClass
         this.statement = statement;
     }
 
-    /**
-     * @TODO
-     * @param name
-     * @param statementList
-     */
-    protected AbstractEntryClass(String name,
-                                 List<AbstractStatement> statementList)
-    {
-        this.name = name;
-        this.statementList = statementList;
-    }
-
     @Override
     public String name()
     {
         return name;
     }
 
-    public AbstractStatement statement()
+    public AbstractStatement getStatement()
     {
         return statement;
     }

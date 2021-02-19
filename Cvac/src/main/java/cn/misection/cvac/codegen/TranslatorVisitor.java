@@ -469,7 +469,7 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaEntryClass entryClass)
     {
-        visit(entryClass.statement());
+        visit(entryClass.getStatement());
 //        genEntry = new GenEntry(entryClass.name(),
 //                this.linearInstrList);
 //        setLinearInstrList(new ArrayList<>());

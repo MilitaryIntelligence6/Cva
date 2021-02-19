@@ -491,7 +491,7 @@ public final class SemanticVisitor implements IVisitor
     public void visit(CvaEntryClass c)
     {
         this.currentClass = c.name();
-        visit(c.statement());
+        visit(c.getStatement());
     }
 
     @Override

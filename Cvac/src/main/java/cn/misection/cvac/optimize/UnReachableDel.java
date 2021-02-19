@@ -190,7 +190,7 @@ public final class UnReachableDel
     @Override
     public void visit(CvaEntryClass c)
     {
-        this.visit(c.statement());
+        this.visit(c.getStatement());
         c.setStatement(this.curStm);
     }
 

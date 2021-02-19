@@ -25,10 +25,6 @@ public final class CvaEntryClass extends AbstractEntryClass
         super(name, statement);
     }
 
-    protected CvaEntryClass(String name, List<AbstractStatement> statementList)
-    {
-        super(name, statementList);
-    }
 
     @Override
     public String parent()
