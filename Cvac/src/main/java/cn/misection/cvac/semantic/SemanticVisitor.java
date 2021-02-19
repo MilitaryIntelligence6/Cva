@@ -11,6 +11,7 @@ import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.*;
 import cn.misection.cvac.ast.type.basic.CvaBooleanType;
 import cn.misection.cvac.ast.type.basic.CvaIntType;
+import cn.misection.cvac.ast.type.basic.CvaVoidType;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
 import cn.misection.cvac.ast.type.reference.CvaStringType;
 
@@ -38,7 +39,7 @@ public final class SemanticVisitor implements IVisitor
     /**
      * //current method locals;
      */
-    private HashSet<String> curMthLocals;
+    private HashSet<String> curMethodLocalSet;
 
     public SemanticVisitor()
     {
@@ -235,7 +236,7 @@ public final class SemanticVisitor implements IVisitor
             className = classTable.getClassBinding(className).parent;
         }
 
-        if (this.curMthLocals.contains(e.getLiteral()))
+        if (this.curMethodLocalSet.contains(e.getLiteral()))
         {
             errorLog(e.getLineNum(),
                     String.format("you should assign \"%s\" a value before use it.",
@@ -388,9 +389,9 @@ public final class SemanticVisitor implements IVisitor
         visit(s.getExpr());
         s.setType(this.type);
 
-        if (this.curMthLocals.contains(s.getLiteral()))
+        if (this.curMethodLocalSet.contains(s.getLiteral()))
         {
-            this.curMthLocals.remove(s.getLiteral());
+            this.curMethodLocalSet.remove(s.getLiteral());
         }
 
         CvaIdentifierExpr cvaIdentifierExpr = new CvaIdentifierExpr(s.getLineNum(), s.getLiteral());
@@ -465,9 +466,9 @@ public final class SemanticVisitor implements IVisitor
                 cvaMethod.getArgumentList(),
                 cvaMethod.getLocalVarList()
         );
-        this.curMthLocals = new HashSet<>();
+        this.curMethodLocalSet = new HashSet<>();
         cvaMethod.getLocalVarList().forEach(local ->
-                this.curMthLocals.add(((CvaDeclaration) local).literal()));
+                this.curMethodLocalSet.add(((CvaDeclaration) local).literal()));
         cvaMethod.getStatementList().forEach(this::visit);
         visit(cvaMethod.getRetExpr());
         // if (!this.type.toString().equals(m.retType.toString()))
@@ -480,24 +481,27 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaMainMethod cvaMethod)
+    public void visit(CvaMainMethod mainMethod)
     {
         this.methodVarTable = new MethodVariableTable();
         this.methodVarTable.putVar(
-                cvaMethod.getArgumentList(),
-                cvaMethod.getLocalVarList()
+                mainMethod.getArgumentList(),
+                mainMethod.getLocalVarList()
         );
-        this.curMthLocals = new HashSet<>();
-        cvaMethod.getLocalVarList().forEach(local ->
-                this.curMthLocals.add(((CvaDeclaration) local).literal()));
-        cvaMethod.getStatementList().forEach(this::visit);
-//        visit(cvaMethod.getRetExpr());
-        // if (!this.type.toString().equals(m.retType.toString()))
-        if (!isMatch(cvaMethod.getRetType(), this.type))
+        this.curMethodLocalSet = new HashSet<>();
+        mainMethod.getLocalVarList().forEach(local ->
+                this.curMethodLocalSet.add(((CvaDeclaration) local).literal()));
+        mainMethod.getStatementList().forEach(this::visit);
+        if (!(mainMethod.getRetType() instanceof CvaVoidType))
         {
-            errorLog(cvaMethod.getRetExpr().getLineNum(),
-                    String.format("the return expression's type is not match the method \"%s\" declared.",
-                            cvaMethod.name()));
+            visit(mainMethod.getRetExpr());
+            // if (!this.type.toString().equals(m.retType.toString()))
+            if (!isMatch(mainMethod.getRetType(), this.type))
+            {
+                errorLog(mainMethod.getRetExpr().getLineNum(),
+                        String.format("the return expression's type is not match the method \"%s\" declared.",
+                                mainMethod.name()));
+            }
         }
     }
 

@@ -930,18 +930,21 @@ public final class Parser
         eatToken(CvaKind.OPEN_CURLY_BRACE);
         List<AbstractDeclaration> localVarDecls = parseVarDeclList();
         List<AbstractStatement> statementList = parseStatementList();
+
+        AbstractExpression retExpr = null;
         if (!(mainRetType instanceof CvaVoidType))
         {
             eatToken(CvaKind.RETURN);
 //        AbstractExpression retExp = parseExpr();
             // 不接受其返回值, 不必要, 只要不特乱就行;
-            parseExpr();
+            retExpr = parseExpr();
             eatToken(CvaKind.SEMI);
         }
         eatToken(CvaKind.CLOSE_CURLY_BRACE);
 
         return new CvaMainMethod.Builder()
                 .putRetType(mainRetType)
+                .putRetExpr(retExpr)
                 .putMainArgList(mainArgs)
                 .putLocalVarList(localVarDecls)
                 .putStatementList(statementList)

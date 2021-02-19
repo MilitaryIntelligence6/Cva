@@ -17,7 +17,7 @@ int main(string[] args)
 //    println("hello, string");
 //    printf(1);
     println(new Test().Compute(10));   // just a print statement
-//    println("hello, main method");
+    println("hello, main method");
     // return 0;
 //    echo("hello, string");
     return 0;

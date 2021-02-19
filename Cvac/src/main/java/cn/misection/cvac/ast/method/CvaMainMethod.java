@@ -23,7 +23,7 @@ public final class CvaMainMethod extends AbstractMethod
         this.name = builder.name;
         this.retType = builder.retType;
         // main return后虚拟机停转,没有动作;
-        this.retExpr = null;
+        this.retExpr = builder.retExpr;
         this.argumentList = builder.argumentList;
         this.localVarList = builder.localVarList;
         this.statementList = builder.statementList;
@@ -44,7 +44,7 @@ public final class CvaMainMethod extends AbstractMethod
     @Override
     public AbstractExpression getRetExpr()
     {
-        return null;
+        return retExpr;
     }
 
     @Override
@@ -69,29 +69,30 @@ public final class CvaMainMethod extends AbstractMethod
     {
         private final String name = CvaKind.MAIN.getKindLiteral();
 
-        private final AbstractExpression retExpr = null;
+        private AbstractType retType;
+
+        private AbstractExpression retExpr;
 
         /**
          * @TODO String[] args
          */
         private List<AbstractDeclaration> argumentList;
 
-        private AbstractType retType;
-
         private List<AbstractDeclaration> localVarList;
 
         private List<AbstractStatement> statementList;
 
-        public Builder()
-        {
-
-        }
+        public Builder() {}
 
         public Builder(AbstractType retType,
+                       AbstractExpression retExpr,
+                       List<AbstractDeclaration> argumentList,
                        List<AbstractDeclaration> localVarList,
                        List<AbstractStatement> statementList)
         {
             this.retType = retType;
+            this.retExpr = retExpr;
+            this.argumentList = argumentList;
             this.localVarList = localVarList;
             this.statementList = statementList;
         }
@@ -104,6 +105,12 @@ public final class CvaMainMethod extends AbstractMethod
         public Builder putRetType(AbstractType retType)
         {
             this.retType = retType;
+            return this;
+        }
+
+        public Builder putRetExpr(AbstractExpression retExpr)
+        {
+            this.retExpr = retExpr;
             return this;
         }
 
