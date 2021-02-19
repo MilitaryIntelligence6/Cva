@@ -326,9 +326,9 @@ public final class ConstantFolder
     }
 
     @Override
-    public void visit(CvaEntry c)
+    public void visit(CvaEntryClass c)
     {
-        this.visit(c.getStatement());
+        this.visit(c.statement());
     }
 
     @Override

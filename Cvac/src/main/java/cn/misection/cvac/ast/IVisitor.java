@@ -1,6 +1,6 @@
 package cn.misection.cvac.ast;
 
-import cn.misection.cvac.ast.clas.AbstractClass;
+import cn.misection.cvac.ast.clas.AbstractCvaClass;
 import cn.misection.cvac.ast.clas.CvaClass;
 import cn.misection.cvac.ast.decl.*;
 import cn.misection.cvac.ast.entry.*;
@@ -239,19 +239,19 @@ public interface IVisitor
     void visit(CvaMethod cvaMethod);
 
     // Class
-    default void visit(AbstractClass abstClass)
+    default void visit(AbstractCvaClass abstClass)
     {
         visit(((CvaClass) abstClass));
     }
 
     void visit(CvaClass cvaClass);
 
-    default void visit(AbstractEntry c)
+    default void visit(AbstractEntryClass c)
     {
-        visit(((CvaEntry) c));
+        visit(((CvaEntryClass) c));
     }
 
-    void visit(CvaEntry c);
+    void visit(CvaEntryClass c);
 
     // Program
     default void visit(AbstractProgram p)

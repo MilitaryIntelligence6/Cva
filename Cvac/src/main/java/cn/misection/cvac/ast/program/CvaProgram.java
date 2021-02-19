@@ -1,7 +1,7 @@
 package cn.misection.cvac.ast.program;
 
-import cn.misection.cvac.ast.clas.AbstractClass;
-import cn.misection.cvac.ast.entry.AbstractEntry;
+import cn.misection.cvac.ast.clas.AbstractCvaClass;
+import cn.misection.cvac.ast.entry.AbstractEntryClass;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  */
 public final class CvaProgram extends AbstractProgram
 {
-    public CvaProgram(AbstractEntry entry, List<AbstractClass> classQueue)
+    public CvaProgram(AbstractEntryClass entry, List<AbstractCvaClass> classQueue)
     {
         super(entry, classQueue);
     }

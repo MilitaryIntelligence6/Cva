@@ -3,7 +3,7 @@ package cn.misection.cvac.codegen;
 import cn.misection.cvac.ast.IVisitor;
 import cn.misection.cvac.ast.clas.CvaClass;
 import cn.misection.cvac.ast.decl.CvaDeclaration;
-import cn.misection.cvac.ast.entry.CvaEntry;
+import cn.misection.cvac.ast.entry.CvaEntryClass;
 import cn.misection.cvac.ast.expr.*;
 import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
@@ -20,11 +20,13 @@ import cn.misection.cvac.codegen.bst.btype.basic.GenIntType;
 import cn.misection.cvac.codegen.bst.btype.refer.GenClassType;
 import cn.misection.cvac.codegen.bst.btype.refer.GenStringType;
 import cn.misection.cvac.codegen.bst.instruction.*;
-
 import cn.misection.cvac.constant.CvaExprClassName;
 import cn.misection.cvac.constant.WriteILConst;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by MI6 root 1/17.
@@ -38,66 +40,66 @@ public final class TranslatorVisitor implements IVisitor
 
     private Map<String, Integer> indexTable;
 
-    private BaseType type;
-    private GenDeclaration dec;
-    private List<BaseInstruction> statementList;
-    private GenMethod method;
-    private GenClass clazz;
-    private GenEntry mainClass;
-    private GenProgram program;
+    private BaseType genType;
+    private GenDeclaration genDecl;
+    private List<BaseInstruction> linearInstrList;
+    private GenMethod genMethod;
+    private GenClass genClass;
+    private GenEntry genEntry;
+    private GenProgram genProgram;
 
     public TranslatorVisitor()
     {
         this.classId = null;
         this.indexTable = null;
-        this.type = null;
-        this.dec = null;
-        this.statementList = new ArrayList<>();
-        this.method = null;
-        this.mainClass = null;
-        this.clazz = null;
-        this.program = null;
+        this.genType = null;
+        this.genDecl = null;
+        this.linearInstrList = new ArrayList<>();
+        this.genMethod = null;
+        this.genEntry = null;
+        this.genClass = null;
+        this.genProgram = null;
     }
 
     private void emit(BaseInstruction s)
     {
-        this.getStatementList().add(s);
+        linearInstrList.add(s);
     }
 
     @Override
     public void visit(CvaBooleanType type)
     {
-        setType(new GenIntType());
+        genType = new GenIntType();
     }
 
     @Override
     public void visit(CvaClassType type)
     {
-        setType(new GenClassType(type.getLiteral()));
+        genType = new GenClassType(type.getLiteral());
     }
 
     @Override
     public void visit(CvaIntType type)
     {
-        setType(new GenIntType());
+        genType = new GenIntType();
     }
 
     @Override
     public void visit(CvaStringType type)
     {
-        setType(new GenStringType());
+        genType = new GenStringType();
     }
 
     @Override
     public void visit(CvaDeclaration decl)
     {
         visit(decl.type());
-        setDec(new GenDeclaration(
+        genDecl = new GenDeclaration(
                 decl.literal(),
-                this.getType()));
-        if (this.indexTable != null) // if it is field
+                this.getGenType());
+        if (indexTable != null) // if it is field
         {
-            this.indexTable.put(decl.literal(), index++);
+            indexTable.put(decl.literal(), index++);
         }
     }
 
@@ -133,12 +135,12 @@ public final class TranslatorVisitor implements IVisitor
         visit(e.getExpr());
         e.getArgs().forEach(this::visit);
         visit(e.getRetType());
-        BaseType rt = this.getType();
+        BaseType rt = this.getGenType();
         List<BaseType> at = new ArrayList<>();
         e.getArgTypeList().forEach(a ->
         {
             visit(a);
-            at.add(this.getType());
+            at.add(this.getGenType());
         });
         emit(new InvokeVirtual(e.getLiteral(), e.getType(), at, rt));
     }
@@ -367,7 +369,6 @@ public final class TranslatorVisitor implements IVisitor
     }
 
 
-
     @Override
     public void visit(CvaWhileStatement s)
     {
@@ -388,22 +389,22 @@ public final class TranslatorVisitor implements IVisitor
         this.index = 1;
         this.indexTable = new HashMap<>();
         visit(cvaMethod.retType());
-        BaseType theRetType = this.getType();
+        BaseType theRetType = this.getGenType();
 
         List<GenDeclaration> formalList = new ArrayList<>();
         cvaMethod.argumentList().forEach(f ->
         {
             visit(f);
-            formalList.add(this.getDec());
+            formalList.add(this.getGenDecl());
         });
 
         List<GenDeclaration> localList = new ArrayList<>();
         cvaMethod.localList().forEach(l ->
         {
             visit(l);
-            localList.add(this.getDec());
+            localList.add(this.getGenDecl());
         });
-        setStatementList(new ArrayList<>());
+        setLinearInstrList(new ArrayList<>());
         cvaMethod.statementList().forEach(this::visit);
 
         visit(cvaMethod.retExpr());
@@ -417,16 +418,15 @@ public final class TranslatorVisitor implements IVisitor
             emit(new IReturn());
         }
 
-        setMethod(
-                new GenMethod(
-                        cvaMethod.name(),
-                        theRetType,
-                        this.getClassId(),
-                        formalList,
-                        localList,
-                        this.getStatementList(),
-                        0,
-                        this.index));
+        genMethod = new GenMethod(
+                cvaMethod.name(),
+                theRetType,
+                this.classId,
+                formalList,
+                localList,
+                this.linearInstrList,
+                0,
+                this.index);
     }
 
     @Override
@@ -437,29 +437,28 @@ public final class TranslatorVisitor implements IVisitor
         cvaClass.fieldList().forEach(f ->
         {
             visit(f);
-            fieldList.add(this.getDec());
+            fieldList.add(this.getGenDecl());
         });
         List<GenMethod> methodList = new ArrayList<>();
         cvaClass.methodList().forEach(m ->
         {
             visit(m);
-            methodList.add(this.getMethod());
+            methodList.add(this.getGenMethod());
         });
-        setClazz(
-                new GenClass(
-                        cvaClass.name(),
-                        cvaClass.parent(),
-                        fieldList,
-                        methodList
-                ));
+        genClass = new GenClass(
+                cvaClass.name(),
+                cvaClass.parent(),
+                fieldList,
+                methodList
+        );
     }
 
     @Override
-    public void visit(CvaEntry c)
+    public void visit(CvaEntryClass entryClass)
     {
-        visit(c.getStatement());
-        setMainClass(new GenEntry(c.getLiteral(), this.getStatementList()));
-        setStatementList(new ArrayList<>());
+        visit(entryClass.statement());
+        genEntry = new GenEntry(entryClass.name(), this.getLinearInstrList());
+        setLinearInstrList(new ArrayList<>());
     }
 
     @Override
@@ -470,12 +469,11 @@ public final class TranslatorVisitor implements IVisitor
         p.getClassList().forEach(c ->
         {
             visit(c);
-            classList.add(this.getClazz());
+            classList.add(this.getGenClass());
         });
-        setProgram(
-                new GenProgram(
-                        this.getMainClass(),
-                        classList));
+        genProgram = new GenProgram(
+                this.genEntry,
+                classList);
     }
 
     public String getClassId()
@@ -488,73 +486,73 @@ public final class TranslatorVisitor implements IVisitor
         this.classId = classId;
     }
 
-    public BaseType getType()
+    public BaseType getGenType()
     {
-        return type;
+        return genType;
     }
 
-    public void setType(BaseType type)
+    public void setGenType(BaseType genType)
     {
-        this.type = type;
+        this.genType = genType;
     }
 
-    public GenDeclaration getDec()
+    public GenDeclaration getGenDecl()
     {
-        return dec;
+        return genDecl;
     }
 
-    public void setDec(GenDeclaration dec)
+    public void setGenDecl(GenDeclaration genDecl)
     {
-        this.dec = dec;
+        this.genDecl = genDecl;
     }
 
-    public List<BaseInstruction> getStatementList()
+    public List<BaseInstruction> getLinearInstrList()
     {
-        return statementList;
+        return linearInstrList;
     }
 
-    public void setStatementList(List<BaseInstruction> statementList)
+    public void setLinearInstrList(List<BaseInstruction> linearInstrList)
     {
-        this.statementList = statementList;
+        this.linearInstrList = linearInstrList;
     }
 
-    public GenMethod getMethod()
+    public GenMethod getGenMethod()
     {
-        return method;
+        return genMethod;
     }
 
-    public void setMethod(GenMethod method)
+    public void setGenMethod(GenMethod genMethod)
     {
-        this.method = method;
+        this.genMethod = genMethod;
     }
 
-    public GenClass getClazz()
+    public GenClass getGenClass()
     {
-        return clazz;
+        return genClass;
     }
 
-    public void setClazz(GenClass clazz)
+    public void setGenClass(GenClass genClass)
     {
-        this.clazz = clazz;
+        this.genClass = genClass;
     }
 
-    public GenEntry getMainClass()
+    public GenEntry getGenEntry()
     {
-        return mainClass;
+        return genEntry;
     }
 
-    public void setMainClass(GenEntry mainClass)
+    public void setGenEntry(GenEntry genEntry)
     {
-        this.mainClass = mainClass;
+        this.genEntry = genEntry;
     }
 
-    public GenProgram getProgram()
+    public GenProgram getGenProgram()
     {
-        return program;
+        return genProgram;
     }
 
-    public void setProgram(GenProgram program)
+    public void setGenProgram(GenProgram genProgram)
     {
-        this.program = program;
+        this.genProgram = genProgram;
     }
 }

@@ -1,10 +1,10 @@
 package cn.misection.cvac.parser;
 
-import cn.misection.cvac.ast.clas.AbstractClass;
+import cn.misection.cvac.ast.clas.AbstractCvaClass;
 import cn.misection.cvac.ast.clas.CvaClass;
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.decl.CvaDeclaration;
-import cn.misection.cvac.ast.entry.CvaEntry;
+import cn.misection.cvac.ast.entry.CvaEntryClass;
 import cn.misection.cvac.ast.expr.*;
 import cn.misection.cvac.ast.method.AbstractMethod;
 import cn.misection.cvac.ast.method.CvaMethod;
@@ -720,7 +720,7 @@ public final class Parser
      *
      * @return
      */
-    private AbstractClass parseClassDecl()
+    private AbstractCvaClass parseClassDecl()
     {
         eatToken(CvaKind.CLASS);
         String literal = curToken.getLiteral();
@@ -749,9 +749,9 @@ public final class Parser
      *
      * @return
      */
-    private List<AbstractClass> parseClassDeclList()
+    private List<AbstractCvaClass> parseClassDeclList()
     {
-        List<AbstractClass> classList = new ArrayList<>();
+        List<AbstractCvaClass> classList = new ArrayList<>();
         while (curToken.getKind() == CvaKind.CLASS)
         {
             classList.add(parseClassDecl());
@@ -770,7 +770,7 @@ public final class Parser
      *
      * @return
      */
-    private CvaEntry parseEntry()
+    private CvaEntryClass parseEntry()
     {
         if (curToken.getKind() == CvaKind.CLASS)
         {
@@ -780,11 +780,11 @@ public final class Parser
             eatToken(CvaKind.OPEN_CURLY_BRACE);
             AbstractStatement statement = parseMainMethod();
             eatToken(CvaKind.CLOSE_CURLY_BRACE);
-            return new CvaEntry(entryName, statement);
+            return new CvaEntryClass(entryName, statement);
         }
         String mainName = LexerConst.DEFAULT_MAIN_CLASS_NAME;
         AbstractStatement statement = parseMainMethod();
-        return new CvaEntry(mainName, statement);
+        return new CvaEntryClass(mainName, statement);
     }
 
     /**
@@ -796,8 +796,8 @@ public final class Parser
     {
         parsePackage();
         parseCallStatement();
-        CvaEntry entry = parseEntry();
-        List<AbstractClass> classList = parseClassDeclList();
+        CvaEntryClass entry = parseEntry();
+        List<AbstractCvaClass> classList = parseClassDeclList();
 //        CvaEntry entry = null;
 //        List<AbstractClass> classList = new ArrayList<>();
 //        while (true)

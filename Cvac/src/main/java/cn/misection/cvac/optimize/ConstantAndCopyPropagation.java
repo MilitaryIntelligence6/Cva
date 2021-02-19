@@ -345,7 +345,7 @@ public final class ConstantAndCopyPropagation
     }
 
     @Override
-    public void visit(CvaEntry c)
+    public void visit(CvaEntryClass c)
     {
     }
 

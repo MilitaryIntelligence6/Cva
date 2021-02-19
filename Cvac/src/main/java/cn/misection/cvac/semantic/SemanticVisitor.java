@@ -484,22 +484,22 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaEntry c)
+    public void visit(CvaEntryClass c)
     {
-        this.currentClass = c.getLiteral();
-        visit(c.getStatement());
+        this.currentClass = c.name();
+        visit(c.statement());
     }
 
     @Override
     public void visit(CvaProgram cvaProgram)
     {
         // put main class to class table
-        classTable.putClassBinding(((CvaEntry) cvaProgram.getEntry()).getLiteral(),
+        classTable.putClassBinding(((CvaEntryClass) cvaProgram.getEntry()).name(),
                 new ClassBinding(null));
 
-        for (AbstractClass abstractClass : cvaProgram.getClassList())
+        for (AbstractCvaClass abstractCvaClass : cvaProgram.getClassList())
         {
-            CvaClass cla = ((CvaClass) abstractClass);
+            CvaClass cla = ((CvaClass) abstractCvaClass);
             classTable.putClassBinding(cla.name(), new ClassBinding(cla.parent()));
 
             cla.fieldList().forEach(field -> classTable.putFieldToClass(cla.name(),

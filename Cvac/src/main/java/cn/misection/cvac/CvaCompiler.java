@@ -70,7 +70,7 @@ public final class CvaCompiler
         translator.visit(program);
 
         IntermLangGenerator generator = new IntermLangGenerator();
-        generator.visit(translator.getProgram());
+        generator.visit(translator.getGenProgram());
         System.out.println("finish intermediate code gene\n");
 
         doMkDIrs();
@@ -78,11 +78,11 @@ public final class CvaCompiler
         System.out.println("start gene .class file\n");
 
         // 现在是从il读到文件中而不是先创建il, il步骤在前, 需要设定一个全局;
-        String ilPath = String.format("%s.il", translator.getProgram().getEntry().getLiteral());
+        String ilPath = String.format("%s.il", translator.getGenProgram().getEntry().getLiteral());
         // ascii instructions to binary file
         jasmin.Main.main(new String[] {ilPath});
 
-        for (GenClass cla : translator.getProgram().getClassList())
+        for (GenClass cla : translator.getGenProgram().getClassList())
         {
             String filePath = String.format("%s.il", cla.getLiteral());
             jasmin.Main.main(new String[] {filePath});

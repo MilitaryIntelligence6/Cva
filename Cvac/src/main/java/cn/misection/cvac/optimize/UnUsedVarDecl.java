@@ -3,7 +3,7 @@ package cn.misection.cvac.optimize;
 import cn.misection.cvac.ast.IVisitor;
 import cn.misection.cvac.ast.clas.CvaClass;
 import cn.misection.cvac.ast.decl.CvaDeclaration;
-import cn.misection.cvac.ast.entry.CvaEntry;
+import cn.misection.cvac.ast.entry.CvaEntryClass;
 import cn.misection.cvac.ast.expr.*;
 import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
@@ -212,7 +212,7 @@ public final class UnUsedVarDecl
     }
 
     @Override
-    public void visit(CvaEntry c)
+    public void visit(CvaEntryClass c)
     {
     }
 

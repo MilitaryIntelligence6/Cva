@@ -12,45 +12,12 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:57:00
  */
-public final class CvaClass extends AbstractClass
+public final class CvaClass extends AbstractCvaClass
 {
-    private final String name;
-
-    private final String parent;
-
-    private final List<AbstractDeclaration> fieldList;
-
-    private final List<AbstractMethod> methodList;
-
-    public CvaClass(String name, String parent, List<AbstractDeclaration> fieldList, List<AbstractMethod> methodList)
+    public CvaClass(String name, String parent,
+                    List<AbstractDeclaration> fieldList,
+                    List<AbstractMethod> methodList)
     {
-        this.name = name;
-        this.parent = parent;
-        this.fieldList = fieldList;
-        this.methodList = methodList;
-    }
-
-    @Override
-    public String name()
-    {
-        return name;
-    }
-
-    @Override
-    public String parent()
-    {
-        return parent;
-    }
-
-    @Override
-    public List<AbstractDeclaration> fieldList()
-    {
-        return fieldList;
-    }
-
-    @Override
-    public List<AbstractMethod> methodList()
-    {
-        return methodList;
+        super(name, parent, fieldList, methodList);
     }
 }

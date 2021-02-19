@@ -1,10 +1,9 @@
 package cn.misection.cvac.ast.program;
 
-import cn.misection.cvac.ast.clas.AbstractClass;
-import cn.misection.cvac.ast.entry.AbstractEntry;
+import cn.misection.cvac.ast.clas.AbstractCvaClass;
+import cn.misection.cvac.ast.entry.AbstractEntryClass;
 
 import java.util.List;
-import java.util.Queue;
 
 /**
  * @author Military Intelligence 6 root
@@ -15,22 +14,22 @@ import java.util.Queue;
  */
 public abstract class AbstractProgram implements IProgram
 {
-    protected AbstractEntry entry;
+    protected AbstractEntryClass entry;
 
-    protected List<AbstractClass> classList;
+    protected List<AbstractCvaClass> classList;
 
-    protected AbstractProgram(AbstractEntry entry, List<AbstractClass> classList)
+    protected AbstractProgram(AbstractEntryClass entry, List<AbstractCvaClass> classList)
     {
         this.entry = entry;
         this.classList = classList;
     }
 
-    public AbstractEntry getEntry()
+    public AbstractEntryClass getEntry()
     {
         return entry;
     }
 
-    public List<AbstractClass> getClassList()
+    public List<AbstractCvaClass> getClassList()
     {
         return classList;
     }

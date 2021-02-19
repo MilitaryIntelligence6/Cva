@@ -256,7 +256,7 @@ public final class DeadCodeDel
     }
 
     @Override
-    public void visit(CvaEntry c)
+    public void visit(CvaEntryClass c)
     {
     }
 
