@@ -461,7 +461,7 @@ public final class SemanticVisitor implements IVisitor
     public void visit(CvaMethod cvaMethod)
     {
         this.methodVarTable = new MethodVariableTable();
-        this.methodVarTable.put(
+        this.methodVarTable.putVar(
                 cvaMethod.getArgumentList(),
                 cvaMethod.getLocalVarList()
         );
@@ -477,7 +477,28 @@ public final class SemanticVisitor implements IVisitor
                     String.format("the return expression's type is not match the method \"%s\" declared.", 
                             cvaMethod.name()));
         }
+    }
 
+    @Override
+    public void visit(CvaMainMethod cvaMethod)
+    {
+        this.methodVarTable = new MethodVariableTable();
+        this.methodVarTable.putVar(
+                cvaMethod.getArgumentList(),
+                cvaMethod.getLocalVarList()
+        );
+        this.curMthLocals = new HashSet<>();
+        cvaMethod.getLocalVarList().forEach(local ->
+                this.curMthLocals.add(((CvaDeclaration) local).literal()));
+        cvaMethod.getStatementList().forEach(this::visit);
+//        visit(cvaMethod.getRetExpr());
+        // if (!this.type.toString().equals(m.retType.toString()))
+        if (!isMatch(cvaMethod.getRetType(), this.type))
+        {
+            errorLog(cvaMethod.getRetExpr().getLineNum(),
+                    String.format("the return expression's type is not match the method \"%s\" declared.",
+                            cvaMethod.name()));
+        }
     }
 
     @Override
@@ -488,10 +509,11 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaEntryClass c)
+    public void visit(CvaEntryClass entryClass)
     {
-        this.currentClass = c.name();
-        visit(c.getStatement());
+        this.currentClass = entryClass.name();
+//        visit(entryClass.getStatement());
+        visit((CvaMainMethod) entryClass.getMainMethod());
     }
 
     @Override

@@ -5,9 +5,7 @@ import cn.misection.cvac.ast.expr.AbstractExpression;
 import cn.misection.cvac.ast.statement.AbstractStatement;
 import cn.misection.cvac.ast.type.AbstractType;
 import cn.misection.cvac.lexer.CvaKind;
-import sun.reflect.generics.tree.ReturnType;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,9 +15,9 @@ import java.util.List;
  * @Description 建造者模式构建复杂但参数其实固定的main方法;
  * @CreateTime 2021年02月19日 15:59:00
  */
-public final class CvaEntryMethod extends AbstractMethod
+public final class CvaMainMethod extends AbstractMethod
 {
-    private CvaEntryMethod(Builder builder)
+    private CvaMainMethod(Builder builder)
     {
         super();
         this.name = builder.name;
@@ -73,7 +71,10 @@ public final class CvaEntryMethod extends AbstractMethod
 
         private final AbstractExpression retExpr = null;
 
-        private final List<AbstractDeclaration> argumentList = new ArrayList<>();
+        /**
+         * @TODO String[] args
+         */
+        private List<AbstractDeclaration> argumentList;
 
         private AbstractType retType;
 
@@ -95,14 +96,20 @@ public final class CvaEntryMethod extends AbstractMethod
             this.statementList = statementList;
         }
 
-        public CvaEntryMethod build()
+        public CvaMainMethod build()
         {
-            return new CvaEntryMethod(this);
+            return new CvaMainMethod(this);
         }
 
         public Builder putRetType(AbstractType retType)
         {
             this.retType = retType;
+            return this;
+        }
+
+        public Builder putMainArgList(List<AbstractDeclaration> argumentList)
+        {
+            this.argumentList = argumentList;
             return this;
         }
 

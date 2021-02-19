@@ -338,6 +338,12 @@ public final class ConstantAndCopyPropagation
     }
 
     @Override
+    public void visit(CvaMainMethod entryMethod)
+    {
+        // FIXME;
+    }
+
+    @Override
     public void visit(CvaClass cvaClass)
     {
         cvaClass.getMethodList().forEach(m ->

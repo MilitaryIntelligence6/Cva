@@ -167,6 +167,11 @@ public enum CvaKind
     STRING("string"),
 
     /**
+     * 数组;
+     */
+    ARRAY,
+
+    /**
      * class
      */
     CLASS("class"),

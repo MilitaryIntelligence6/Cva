@@ -2,7 +2,6 @@ package cn.misection.cvac.ast.entry;
 
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.method.AbstractMethod;
-import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.statement.AbstractStatement;
 import cn.misection.cvac.constant.LexerConst;
 
@@ -20,7 +19,7 @@ public final class CvaEntryClass extends AbstractEntryClass
     private CvaEntryClass(Builder builder)
     {
         this.name = builder.name;
-        this.entryMethod = builder.entryMethod;
+        this.mainMethod = builder.entryMethod;
     }
     /**
      * @deprecated
@@ -78,7 +77,7 @@ public final class CvaEntryClass extends AbstractEntryClass
             return this;
         }
 
-        public Builder putEntryMethod(CvaMethod entryMethod)
+        public Builder putEntryMethod(AbstractMethod entryMethod)
         {
             this.entryMethod = entryMethod;
             return this;

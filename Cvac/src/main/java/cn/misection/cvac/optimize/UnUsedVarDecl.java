@@ -5,6 +5,7 @@ import cn.misection.cvac.ast.clas.CvaClass;
 import cn.misection.cvac.ast.decl.CvaDeclaration;
 import cn.misection.cvac.ast.entry.CvaEntryClass;
 import cn.misection.cvac.ast.expr.*;
+import cn.misection.cvac.ast.method.CvaMainMethod;
 import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
@@ -203,6 +204,12 @@ public final class UnUsedVarDecl
             }
             m.getLocalVarList().remove(ulo);
         });
+    }
+
+    @Override
+    public void visit(CvaMainMethod entryMethod)
+    {
+        // FIXME;
     }
 
     @Override

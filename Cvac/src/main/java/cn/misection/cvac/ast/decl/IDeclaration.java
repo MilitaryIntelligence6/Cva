@@ -23,5 +23,4 @@ public interface IDeclaration extends ASTree
      * @return t;
      */
     AbstractType type();
-
 }

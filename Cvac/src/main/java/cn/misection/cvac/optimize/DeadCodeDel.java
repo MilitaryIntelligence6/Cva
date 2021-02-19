@@ -249,6 +249,12 @@ public final class DeadCodeDel
     }
 
     @Override
+    public void visit(CvaMainMethod entryMethod)
+    {
+        // FIXME;
+    }
+
+    @Override
     public void visit(CvaClass c)
     {
         this.curFields = new HashSet<>();

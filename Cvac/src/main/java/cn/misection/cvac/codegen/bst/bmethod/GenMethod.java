@@ -15,7 +15,7 @@ import java.util.List;
  */
 public final class GenMethod extends BaseMethod
 {
-    private String literal;
+    private String name;
 
     private BaseType retType;
 
@@ -28,7 +28,7 @@ public final class GenMethod extends BaseMethod
     /**
      * new;
      */
-    private String classId;
+    private String className;
 
     private List<GenDeclaration> formalList;
 
@@ -42,9 +42,9 @@ public final class GenMethod extends BaseMethod
 
     /**
      * 顺序很多, 注意!;
-     * @param literal
+     * @param name
      * @param retType
-     * @param classId
+     * @param className
      * @param formalList
      * @param localList
      * @param statementList
@@ -52,9 +52,9 @@ public final class GenMethod extends BaseMethod
      * @param index
      */
     public GenMethod(
-            String literal,
+            String name,
             BaseType retType,
-            String classId,
+            String className,
             List<GenDeclaration> formalList,
             List<GenDeclaration> localList,
             List<BaseInstruction> statementList,
@@ -62,9 +62,9 @@ public final class GenMethod extends BaseMethod
             int index
     )
     {
-        this.literal = literal;
+        this.name = name;
         this.retType = retType;
-        this.classId = classId;
+        this.className = className;
         this.formalList = formalList;
         this.localList = localList;
         this.statementList = statementList;
@@ -72,9 +72,9 @@ public final class GenMethod extends BaseMethod
         this.index = index;
     }
 
-    public String getLiteral()
+    public String getName()
     {
-        return literal;
+        return name;
     }
 
     public BaseType getRetType()
@@ -88,9 +88,9 @@ public final class GenMethod extends BaseMethod
         return statementList;
     }
 
-    public void setLiteral(String literal)
+    public void setName(String name)
     {
-        this.literal = literal;
+        this.name = name;
     }
 
     public void setRetType(BaseType retType)
@@ -103,14 +103,14 @@ public final class GenMethod extends BaseMethod
         this.statementList = statementList;
     }
 
-    public String getClassId()
+    public String getClassName()
     {
-        return classId;
+        return className;
     }
 
-    public void setClassId(String classId)
+    public void setClassName(String className)
     {
-        this.classId = classId;
+        this.className = className;
     }
 
     public List<GenDeclaration> getFormalList()

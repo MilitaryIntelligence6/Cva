@@ -2,11 +2,7 @@ package cn.misection.cvac.ast.entry;
 
 import cn.misection.cvac.ast.clas.AbstractCvaClass;
 import cn.misection.cvac.ast.method.AbstractMethod;
-import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.statement.AbstractStatement;
-import cn.misection.cvac.codegen.bst.bmethod.BaseMethod;
-
-import java.util.List;
 
 /**
  * @author Military Intelligence 6 root
@@ -25,7 +21,7 @@ public abstract class AbstractEntryClass extends AbstractCvaClass
 {
     protected String name;
 
-    protected AbstractMethod entryMethod;
+    protected AbstractMethod mainMethod;
 
     public AbstractEntryClass()
     {
@@ -56,9 +52,14 @@ public abstract class AbstractEntryClass extends AbstractCvaClass
         return name;
     }
 
-    public AbstractStatement getStatement()
+//    public AbstractStatement getStatement()
+//    {
+//        return statement;
+//    }
+
+    public AbstractMethod getMainMethod()
     {
-        return statement;
+        return mainMethod;
     }
 
     public void setName(String name)

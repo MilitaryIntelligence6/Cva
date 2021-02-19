@@ -257,6 +257,8 @@ public interface IVisitor
 
     void visit(CvaEntryClass c);
 
+    void visit(CvaMainMethod entryMethod);
+
     // Program
     default void visit(AbstractProgram p)
     {

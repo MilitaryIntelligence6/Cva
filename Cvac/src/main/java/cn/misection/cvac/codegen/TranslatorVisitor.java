@@ -5,6 +5,7 @@ import cn.misection.cvac.ast.clas.CvaClass;
 import cn.misection.cvac.ast.decl.CvaDeclaration;
 import cn.misection.cvac.ast.entry.CvaEntryClass;
 import cn.misection.cvac.ast.expr.*;
+import cn.misection.cvac.ast.method.CvaMainMethod;
 import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
@@ -39,7 +40,7 @@ import java.util.Map;
  */
 public final class TranslatorVisitor implements IVisitor
 {
-    private String classId;
+    private String className;
     private int index;
 
     private Map<String, Integer> indexTable;
@@ -54,7 +55,7 @@ public final class TranslatorVisitor implements IVisitor
 
     public TranslatorVisitor()
     {
-        this.classId = null;
+        this.className = null;
         this.indexTable = null;
         this.genType = null;
         this.genDecl = null;
@@ -164,12 +165,12 @@ public final class TranslatorVisitor implements IVisitor
             AbstractType type = expr.getType();
             if (type instanceof CvaClassType)
             {
-                emit(new GetField(String.format("%s/%s", this.classId, expr.getLiteral()),
+                emit(new GetField(String.format("%s/%s", this.className, expr.getLiteral()),
                         String.format("L%s;", ((CvaClassType) type).getLiteral())));
             }
             else
             {
-                emit(new GetField(String.format("%s/%s", this.classId, expr.getLiteral()),
+                emit(new GetField(String.format("%s/%s", this.className, expr.getLiteral()),
                         "I"));
             }
         }
@@ -290,7 +291,7 @@ public final class TranslatorVisitor implements IVisitor
         {
             emit(new ALoad(0));
             visit(assignSta.getExpr());
-            emit(new PutField(String.format("%s/%s", this.classId, assignSta.getLiteral()),
+            emit(new PutField(String.format("%s/%s", this.className, assignSta.getLiteral()),
                     assignSta.getType() instanceof CvaClassType ?
                             (String.format("L%s;", ((CvaClassType) assignSta.getType()).getLiteral()))
                             : "I"));
@@ -434,7 +435,42 @@ public final class TranslatorVisitor implements IVisitor
         genMethod = new GenMethod(
                 cvaMethod.name(),
                 theRetType,
-                this.classId,
+                this.className,
+                formalList,
+                localList,
+                this.linearInstrList,
+                0,
+                this.index);
+    }
+
+    @Override
+    public void visit(CvaMainMethod mainMethod)
+    {
+        this.index = 1;
+        this.indexTable = new HashMap<>();
+        visit(mainMethod.getRetType());
+        BaseType theRetType = this.genType;
+
+        List<GenDeclaration> formalList = new ArrayList<>();
+        mainMethod.getArgumentList().forEach(f ->
+        {
+            visit(f);
+            formalList.add(this.genDecl);
+        });
+        List<GenDeclaration> localList = new ArrayList<>();
+        mainMethod.getLocalVarList().forEach(l ->
+        {
+            visit(l);
+            localList.add(this.genDecl);
+        });
+        setLinearInstrList(new ArrayList<>());
+        // 方法内的;
+        mainMethod.getStatementList().forEach(this::visit);
+
+        genMethod = new GenMethod(
+                mainMethod.name(),
+                theRetType,
+                this.className,
                 formalList,
                 localList,
                 this.linearInstrList,
@@ -445,7 +481,7 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaClass cvaClass)
     {
-        setClassId(cvaClass.name());
+        setClassName(cvaClass.name());
         List<GenDeclaration> fieldList = new ArrayList<>();
         cvaClass.getFieldList().forEach(f ->
         {
@@ -469,7 +505,7 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaEntryClass entryClass)
     {
-        visit(entryClass.getStatement());
+        visit((CvaMainMethod) entryClass.getMainMethod());
 //        genEntry = new GenEntry(entryClass.name(),
 //                this.linearInstrList);
 //        setLinearInstrList(new ArrayList<>());
@@ -497,14 +533,14 @@ public final class TranslatorVisitor implements IVisitor
                 classList);
     }
 
-    public String getClassId()
+    public String getClassName()
     {
-        return classId;
+        return className;
     }
 
-    public void setClassId(String classId)
+    public void setClassName(String className)
     {
-        this.classId = classId;
+        this.className = className;
     }
 
     public BaseType getGenType()

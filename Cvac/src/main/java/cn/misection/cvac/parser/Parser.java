@@ -7,21 +7,25 @@ import cn.misection.cvac.ast.decl.CvaDeclaration;
 import cn.misection.cvac.ast.entry.CvaEntryClass;
 import cn.misection.cvac.ast.expr.*;
 import cn.misection.cvac.ast.method.AbstractMethod;
+import cn.misection.cvac.ast.method.CvaMainMethod;
 import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
-import cn.misection.cvac.ast.type.*;
+import cn.misection.cvac.ast.type.AbstractType;
 import cn.misection.cvac.ast.type.basic.*;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
 import cn.misection.cvac.ast.type.reference.CvaStringType;
 import cn.misection.cvac.constant.LexerConst;
 import cn.misection.cvac.constant.WriteILConst;
+import cn.misection.cvac.io.IBufferedQueue;
 import cn.misection.cvac.lexer.CvaKind;
 import cn.misection.cvac.lexer.CvaToken;
-import cn.misection.cvac.io.IBufferedQueue;
 import cn.misection.cvac.lexer.Lexer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 /**
  * @author MI6 root
@@ -492,6 +496,11 @@ public final class Parser
         // 放map只能反射, 不放了还是;
         switch (curToken.getKind())
         {
+            case VOID:
+            {
+                type = new CvaVoidType();
+                break;
+            }
             case BYTE:
             {
                 type = new CvaByteType();
@@ -564,55 +573,62 @@ public final class Parser
         this.mark();
         AbstractType type = parseType();
         // maybe a assign statement in method;
-        if (curToken.getKind() == CvaKind.ASSIGN)
+        switch (curToken.getKind())
         {
-            this.reset();
-            valDeclFlag = false;
-            return null;
-        }
-        else if (curToken.getKind() == CvaKind.IDENTIFIER)
-        {
-            String literal = curToken.getLiteral();
-            advance();
-            if (curToken.getKind() == CvaKind.SEMI)
+            case ASSIGN:
             {
-                this.deMark();
-                valDeclFlag = true;
-                AbstractDeclaration dec = new CvaDeclaration(curToken.getLineNum(), literal, type);
-                eatToken(CvaKind.SEMI);
-                return dec;
-            }
-            // maybe a method in class;
-            else if (curToken.getKind() == CvaKind.OPEN_PAREN)
-            {
-                valDeclFlag = false;
                 this.reset();
+                valDeclFlag = false;
                 return null;
             }
-            else
+            case IDENTIFIER:
+            {
+                String literal = curToken.getLiteral();
+                advance();
+                switch (curToken.getKind())
+                {
+                    case SEMI:
+                    {
+                        this.deMark();
+                        valDeclFlag = true;
+                        AbstractDeclaration decl = new CvaDeclaration(curToken.getLineNum(), literal, type);
+                        eatToken(CvaKind.SEMI);
+                        return decl;
+                    }
+                    // maybe a method in class;
+                    case OPEN_PAREN:
+                    {
+                        valDeclFlag = false;
+                        this.reset();
+                        return null;
+                    }
+                    default:
+                    {
+                        errorLog();
+                        return null;
+                    }
+                }
+            }
+            default:
             {
                 errorLog();
                 return null;
             }
-        }
-        else
-        {
-            errorLog();
-            return null;
         }
     }
 
     /**
      * // VarDecls -> VarDecl VarDecls
      * //  ->
-     *
+     * @FIXME while拆了;
      * @return
      */
     private List<AbstractDeclaration> parseVarDeclList()
     {
         List<AbstractDeclaration> declList = new ArrayList<>();
         valDeclFlag = true;
-        while (curToken.getKind() == CvaKind.INT || curToken.getKind() == CvaKind.BOOLEAN
+        while (curToken.getKind() == CvaKind.INT
+                || curToken.getKind() == CvaKind.BOOLEAN
                 || curToken.getKind() == CvaKind.IDENTIFIER)
         {
             AbstractDeclaration decl = parseVarDecl();
@@ -683,19 +699,25 @@ public final class Parser
         eatToken(CvaKind.CLOSE_PAREN);
         // 吃掉大括号;
         eatToken(CvaKind.OPEN_CURLY_BRACE);
-        List<AbstractDeclaration> varDecs = parseVarDeclList();
+        List<AbstractDeclaration> localVarDecls = parseVarDeclList();
         List<AbstractStatement> statementList = parseStatementList();
-        eatToken(CvaKind.RETURN);
-        AbstractExpression retExp = parseExpr();
-        eatToken(CvaKind.SEMI);
+
+        // FIXME 隐患;
+        AbstractExpression retExpr = null;
+        if (!(retType instanceof CvaVoidType))
+        {
+            eatToken(CvaKind.RETURN);
+            retExpr = parseExpr();
+            eatToken(CvaKind.SEMI);
+        }
         eatToken(CvaKind.CLOSE_CURLY_BRACE);
 
         return new CvaMethod(
                 literal,
                 retType,
-                retExp,
+                retExpr,
                 formalList,
-                varDecs,
+                localVarDecls,
                 statementList);
     }
 
@@ -781,13 +803,23 @@ public final class Parser
             String entryName = curToken.getLiteral();
             eatToken(CvaKind.IDENTIFIER);
             eatToken(CvaKind.OPEN_CURLY_BRACE);
-            AbstractStatement statement = parseMainMethod();
+//            AbstractStatement statement = parseMainMethod();
+            AbstractMethod mainMethod = parseMainMethod();
+
             eatToken(CvaKind.CLOSE_CURLY_BRACE);
-            return new CvaEntryClass(entryName, statement);
+//            return new CvaEntryClass(entryName, statement);
+            return new CvaEntryClass.Builder()
+                    .putName(entryName)
+                    .putEntryMethod(mainMethod)
+                    .build();
         }
         String mainName = LexerConst.DEFAULT_MAIN_CLASS_NAME;
-        AbstractStatement statement = parseMainMethod();
-        return new CvaEntryClass(mainName, statement);
+//        AbstractStatement statement = parseMainMethod();
+        AbstractMethod mainMethod = parseMainMethod();
+        return new CvaEntryClass.Builder()
+                .putName(mainName)
+                .putEntryMethod(mainMethod)
+                .build();
     }
 
     /**
@@ -799,7 +831,7 @@ public final class Parser
     {
         parsePackage();
         parseCallStatement();
-        CvaEntryClass entry = parseEntryClass();
+        CvaEntryClass entryClass = parseEntryClass();
         List<AbstractCvaClass> classList = parseClassDeclList();
 //        CvaEntry entry = null;
 //        List<AbstractClass> classList = new ArrayList<>();
@@ -842,7 +874,7 @@ public final class Parser
 //        }
         eatEof();
         // find entry;
-        return new CvaProgram(entry, classList);
+        return new CvaProgram(entryClass, classList);
     }
 
     /**
@@ -864,31 +896,66 @@ public final class Parser
         return curKind;
     }
 
-    private AbstractStatement parseMainMethod()
+    /**
+     * @return
+     * @deprecated
+     */
+//    private AbstractStatement parseMainMethod()
+//    {
+//        // TODO 现在没用到. 以后要检查;
+//        CvaKind mainRet = parseMainRetType();
+//
+//        eatToken(CvaKind.MAIN);
+//        eatToken(CvaKind.OPEN_PAREN);
+//
+//        parseMainArgs();
+//
+//        eatToken(CvaKind.CLOSE_PAREN);
+//        eatToken(CvaKind.OPEN_CURLY_BRACE);
+//        // 拓展到可以吃多个statement;
+//        AbstractStatement statement = parseStatement();
+//        eatToken(CvaKind.CLOSE_CURLY_BRACE);
+//        return statement;
+//    }
+    private AbstractMethod parseMainMethod()
     {
-        // TODO 现在没用到. 以后要检查;
-        CvaKind mainRet = parseMainRetType();
-
+        AbstractType mainRetType = parseType();
+        String literal = curToken.getLiteral();
         eatToken(CvaKind.MAIN);
+
         eatToken(CvaKind.OPEN_PAREN);
-
-        parseMainArgs();
-
+        List<AbstractDeclaration> mainArgs = parseMainArgs();
         eatToken(CvaKind.CLOSE_PAREN);
+
         eatToken(CvaKind.OPEN_CURLY_BRACE);
-        // 拓展到可以吃多个statement;
-        AbstractStatement statement = parseStatement();
+        List<AbstractDeclaration> localVarDecls = parseVarDeclList();
+        List<AbstractStatement> statementList = parseStatementList();
+        if (!(mainRetType instanceof CvaVoidType))
+        {
+            eatToken(CvaKind.RETURN);
+//        AbstractExpression retExp = parseExpr();
+            // 不接受其返回值, 不必要, 只要不特乱就行;
+            parseExpr();
+            eatToken(CvaKind.SEMI);
+        }
         eatToken(CvaKind.CLOSE_CURLY_BRACE);
-        return statement;
+
+        return new CvaMainMethod.Builder()
+                .putRetType(mainRetType)
+                .putMainArgList(mainArgs)
+                .putLocalVarList(localVarDecls)
+                .putStatementList(statementList)
+                .build();
     }
 
     /**
      * @TODO 目前是eat, 以后要传入;
      * 应返回参数List;
      */
-    private AbstractDeclaration parseMainArgs()
+    private List<AbstractDeclaration> parseMainArgs()
     {
-        AbstractDeclaration cmdArgsDecl = null;
+        // 保持统一用list;
+        List<AbstractDeclaration> cmdArgsDeclList = new ArrayList<>();
         if (CvaKind.isType(curToken.getKind()))
         {
             // 这里非常坑. 必须要先parser;
@@ -901,7 +968,11 @@ public final class Parser
             }
             eatToken(CvaKind.OPEN_BRACKETS);
             eatToken(CvaKind.CLOSE_BRACKETS);
-            cmdArgsDecl = new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), type);
+            cmdArgsDeclList.add(
+                    new CvaDeclaration(
+                            curToken.getLineNum(),
+                            curToken.getLiteral(),
+                            type));
             eatToken(CvaKind.IDENTIFIER);
         }
         else
@@ -909,7 +980,7 @@ public final class Parser
             errorLog("String[] in main formal args list",
                     curToken.getKind());
         }
-        return cmdArgsDecl;
+        return cmdArgsDeclList;
     }
 
     private void parsePackage()

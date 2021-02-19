@@ -220,7 +220,7 @@ public final class IntermLangGenerator implements CodeGenVisitor
     @Override
     public void visit(GenMethod method)
     {
-        writef(".method public %s(", method.getLiteral());
+        writef(".method public %s(", method.getName());
         method.getFormalList().forEach(f -> visit(f.getType()));
         write(")");
         visit(method.getRetType());

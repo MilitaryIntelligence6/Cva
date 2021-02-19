@@ -323,15 +323,21 @@ public final class ConstantFolder
     }
 
     @Override
+    public void visit(CvaMainMethod entryMethod)
+    {
+        // FIXME;
+    }
+
+    @Override
     public void visit(CvaClass cvaClass)
     {
         cvaClass.getMethodList().forEach(this::visit);
     }
 
     @Override
-    public void visit(CvaEntryClass c)
+    public void visit(CvaEntryClass entryClass)
     {
-        this.visit(c.getStatement());
+        this.visit((CvaMainMethod) entryClass.getMainMethod());
     }
 
     @Override
