@@ -36,98 +36,98 @@ public interface CodeGenVisitor
     void visit(GenDeclaration d);
 
     // Stm
-    default void visit(BaseInstruction s)
+    default void visit(BaseInstruction instruction)
     {
-        switch (s.getClass().getSimpleName())
+        switch (instruction.getClass().getSimpleName())
         {
             case Operator.ALOAD:
             {
-                visit((ALoad) s);
+                visit((ALoad) instruction);
                 break;
             }
             case Operator.ARETURN:
             {
-                visit((AReturn) s);
+                visit((AReturn) instruction);
                 break;
             }
             case Operator.ASTORE:
             {
-                visit((AStore) s);
+                visit((AStore) instruction);
                 break;
             }
             case Operator.GOTO:
             {
-                visit((Goto) s);
+                visit((Goto) instruction);
                 break;
             }
             case Operator.GET_FIELD:
             {
-                visit((GetField) s);
+                visit((GetField) instruction);
                 break;
             }
             case Operator.IADD:
             {
-                visit((IAdd) s);
+                visit((IAdd) instruction);
                 break;
             }
             case Operator.IFICMPLT:
             {
-                visit((Ificmplt) s);
+                visit((Ificmplt) instruction);
                 break;
             }
             case Operator.ILOAD:
             {
-                visit((ILoad) s);
+                visit((ILoad) instruction);
                 break;
             }
             case Operator.IMUL:
             {
-                visit((IMul) s);
+                visit((IMul) instruction);
                 break;
             }
             case Operator.INVOKE_VIRTUAL:
             {
-                visit((InvokeVirtual) s);
+                visit((InvokeVirtual) instruction);
                 break;
             }
             case Operator.IRETURN:
             {
-                visit((IReturn) s);
+                visit((IReturn) instruction);
                 break;
             }
             case Operator.ISTORE:
             {
-                visit((IStore) s);
+                visit((IStore) instruction);
                 break;
             }
             case Operator.ISUB:
             {
-                visit((ISub) s);
+                visit((ISub) instruction);
                 break;
             }
             case Operator.LABEL_J:
             {
-                visit((LabelJ) s);
+                visit((LabelJ) instruction);
                 break;
             }
             case Operator.LDC:
             {
-                visit((Ldc) s);
+                visit((Ldc) instruction);
                 break;
             }
             case Operator.NEW:
             {
-                visit((New) s);
+                visit((New) instruction);
                 break;
             }
             case Operator.WRITE_INSTRUCTION:
             {
-                visit((WriteInstruction) s);
+                visit((WriteInstruction) instruction);
                 break;
             }
             case Operator.PUT_FIELD:
             {
-                visit((PutField) s);
+                visit((PutField) instruction);
                 break;
             }
             default:

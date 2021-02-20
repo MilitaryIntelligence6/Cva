@@ -185,33 +185,33 @@ public interface IVisitor
     void visit(CvaTrueExpr e);
 
     // Stm
-    default void visit(AbstractStatement s)
+    default void visit(AbstractStatement abstSta)
     {
-        switch (s.getClass().getSimpleName())
+        switch (abstSta.getClass().getSimpleName())
         {
             case CvaStatementClassName.CVA_ASSIGN_STATEMENT:
             {
-                visit((CvaAssignStatement) s);
+                visit((CvaAssignStatement) abstSta);
                 break;
             }
             case CvaStatementClassName.CVA_BLOCK_STATEMENT:
             {
-                visit((CvaBlockStatement) s);
+                visit((CvaBlockStatement) abstSta);
                 break;
             }
             case CvaStatementClassName.CVA_IF_STATEMENT:
             {
-                visit((CvaIfStatement) s);
+                visit((CvaIfStatement) abstSta);
                 break;
             }
             case CvaStatementClassName.CVA_WRITE_STATEMENT:
             {
-                visit((CvaWriteStatement) s);
+                visit((CvaWriteStatement) abstSta);
                 break;
             }
             case CvaStatementClassName.CVA_WHILE_STATEMENT:
             {
-                visit((CvaWhileStatement) s);
+                visit((CvaWhileStatement) abstSta);
                 break;
             }
             default:

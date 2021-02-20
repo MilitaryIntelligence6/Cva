@@ -11,7 +11,11 @@ call cva.lang.type.String;
 
 int main(string[] args)
 {
+    echo "hello, world!\n";
+    println 1;
+    println "String";
     println 1 + 2;
+
     return 0;
 }
 

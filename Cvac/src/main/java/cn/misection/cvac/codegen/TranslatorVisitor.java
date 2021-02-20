@@ -66,9 +66,9 @@ public final class TranslatorVisitor implements IVisitor
         this.genProgram = null;
     }
 
-    private void emit(BaseInstruction s)
+    private void emit(BaseInstruction instruction)
     {
-        linearInstrList.add(s);
+        linearInstrList.add(instruction);
     }
 
     @Override
@@ -322,6 +322,11 @@ public final class TranslatorVisitor implements IVisitor
         emit(new LabelJ(r));
     }
 
+    /**
+     * @TODO 要针对所有的expr操作判断写类型, 还是麻烦, 想个办法, 最好让抽象expr能返回类型;
+     * @deprecated 目前大而化之只是权宜之计;
+     * @param writeSta
+     */
     @Override
     public void visit(CvaWriteStatement writeSta)
     {
@@ -359,6 +364,7 @@ public final class TranslatorVisitor implements IVisitor
                 // 目前可能遇到的情况有 idexpr, callfuncexpr, numberintexpr;
                 // 注释掉这个可以应对可能的异常;
 //                emit(new WriteInt());
+                emit(new WriteInstruction(mode, WriteILConst.WRITE_INT));
                 break;
             }
         }
@@ -463,7 +469,7 @@ public final class TranslatorVisitor implements IVisitor
             visit(l);
             localList.add(this.genDecl);
         });
-        setLinearInstrList(new ArrayList<>());
+        this.linearInstrList = (new ArrayList<>());
         // 方法内的;
         mainMethod.getStatementList().forEach(this::visit);
 

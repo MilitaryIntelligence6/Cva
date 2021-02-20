@@ -11,4 +11,9 @@ import cn.misection.cvac.ast.ASTree;
  */
 public interface IExpression extends ASTree
 {
+    /**
+     * type 传入 int string byte等, 放一个常量池里;
+     * @return
+     */
+//    byte type();
 }

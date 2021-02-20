@@ -271,16 +271,16 @@ public final class IntermLangGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(GenEntryClass entry)
+    public void visit(GenEntryClass entryClass)
     {
-        initWriter(String.format("%s.il", entry.getName()));
+        initWriter(String.format("%s.il", entryClass.getName()));
 
-        writef(".class public %s\n", entry.getName());
+        writef(".class public %s\n", entryClass.getName());
         writeln(".super java/lang/Object");
         writeln(".method public static main([Ljava/lang/String;)V");
         writef(".limit stack %d\n", StackConst.MAX_STACK_DEPTH);
         writeln(".limit locals 2");
-        entry.getStatementList().forEach(this::visit);
+        entryClass.getStatementList().forEach(this::visit);
         iwriteLine("return");
         writeln(".end method");
 
