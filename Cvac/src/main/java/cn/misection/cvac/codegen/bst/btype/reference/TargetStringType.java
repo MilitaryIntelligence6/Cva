@@ -7,13 +7,13 @@ package cn.misection.cvac.codegen.bst.btype.reference;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:46:00
  */
-public final class GenStringType extends BaseReferenceType
+public final class TargetStringType extends BaseReferenceType
 {
     public static final String TYPE_LITERAL = "@string";
 
     public static final String FULL_LITERAL = "java/lang/String";
 
-    public GenStringType() {}
+    public TargetStringType() {}
 
     @Override
     public String toString()

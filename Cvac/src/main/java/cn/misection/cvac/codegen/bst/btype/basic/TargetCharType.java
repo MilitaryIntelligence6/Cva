@@ -5,15 +5,15 @@ import cn.misection.cvac.codegen.bst.btype.BaseType;
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
- * @ClassName CvaFloat
+ * @ClassName CvaChar
  * @Description TODO
  * @CreateTime 2021年02月14日 19:46:00
  */
-public final class GenFloatType extends BaseBasicType
+public final class TargetCharType extends BaseBasicType
 {
-    public static final String TYPE_LITERAL = "@float";
+    public static final String TYPE_LITERAL = "@char";
 
-    public GenFloatType() {}
+    public TargetCharType() {}
 
     @Override
     public String toString()

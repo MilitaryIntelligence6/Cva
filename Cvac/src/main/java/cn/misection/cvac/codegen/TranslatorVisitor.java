@@ -22,13 +22,12 @@ import cn.misection.cvac.codegen.bst.bentry.GenEntryClass;
 import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
 import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
 import cn.misection.cvac.codegen.bst.btype.BaseType;
-import cn.misection.cvac.codegen.bst.btype.basic.GenIntType;
-import cn.misection.cvac.codegen.bst.btype.reference.GenClassType;
-import cn.misection.cvac.codegen.bst.btype.reference.GenStringType;
+import cn.misection.cvac.codegen.bst.btype.basic.TargetIntType;
+import cn.misection.cvac.codegen.bst.btype.reference.TargetClassType;
+import cn.misection.cvac.codegen.bst.btype.reference.TargetStringType;
 import cn.misection.cvac.codegen.bst.instruction.*;
 import cn.misection.cvac.constant.CvaExprClassName;
 import cn.misection.cvac.constant.CvaTypeCode;
-import cn.misection.cvac.constant.IntermLangCommon;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,25 +74,25 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaBooleanType type)
     {
-        genType = new GenIntType();
+        genType = new TargetIntType();
     }
 
     @Override
     public void visit(CvaClassType type)
     {
-        genType = new GenClassType(type.getLiteral());
+        genType = new TargetClassType(type.getLiteral());
     }
 
     @Override
     public void visit(CvaIntType type)
     {
-        genType = new GenIntType();
+        genType = new TargetIntType();
     }
 
     @Override
     public void visit(CvaStringType type)
     {
-        genType = new GenStringType();
+        genType = new TargetStringType();
     }
 
     @Override

@@ -5,15 +5,15 @@ import cn.misection.cvac.codegen.bst.btype.BaseType;
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
- * @ClassName CvaChar
+ * @ClassName CvaShort
  * @Description TODO
  * @CreateTime 2021年02月14日 19:46:00
  */
-public final class GenCharType extends BaseBasicType
+public final class TargetShortType extends BaseBasicType
 {
-    public static final String TYPE_LITERAL = "@char";
+    public static final String TYPE_LITERAL = "@short";
 
-    public GenCharType() {}
+    public TargetShortType() {}
 
     @Override
     public String toString()

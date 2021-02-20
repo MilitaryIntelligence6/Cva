@@ -5,15 +5,15 @@ import cn.misection.cvac.codegen.bst.btype.BaseType;
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
- * @ClassName CvaDouble
+ * @ClassName CvaLong
  * @Description TODO
- * @CreateTime 2021年02月14日 19:45:00
+ * @CreateTime 2021年02月14日 19:46:00
  */
-public final class GenDoubleType extends BaseBasicType
+public final class TargetLongType extends BaseBasicType
 {
-    public static final String TYPE_LITERAL = "@double";
+    public static final String TYPE_LITERAL = "@long";
 
-    public GenDoubleType() {}
+    public TargetLongType() {}
 
     @Override
     public String toString()

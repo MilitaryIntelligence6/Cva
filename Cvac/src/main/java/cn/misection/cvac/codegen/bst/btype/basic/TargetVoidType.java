@@ -1,19 +1,17 @@
 package cn.misection.cvac.codegen.bst.btype.basic;
 
-import cn.misection.cvac.codegen.bst.btype.BaseType;
-
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
- * @ClassName CvaShort
+ * @ClassName GenVoid
  * @Description TODO
- * @CreateTime 2021年02月14日 19:46:00
+ * @CreateTime 2021年02月16日 20:13:00
  */
-public final class GenShortType extends BaseBasicType
+public final class TargetVoidType extends BaseBasicType
 {
-    public static final String TYPE_LITERAL = "@short";
+    public static final String TYPE_LITERAL = "@void";
 
-    public GenShortType() {}
+    public TargetVoidType() {}
 
     @Override
     public String toString()

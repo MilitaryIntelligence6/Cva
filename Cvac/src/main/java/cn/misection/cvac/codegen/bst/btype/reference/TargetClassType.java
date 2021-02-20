@@ -7,13 +7,13 @@ package cn.misection.cvac.codegen.bst.btype.reference;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:45:00
  */
-public final class GenClassType extends BaseReferenceType
+public final class TargetClassType extends BaseReferenceType
 {
     public static final String TYPE_LITERAL = "@class";
 
     private String literal;
 
-    public GenClassType(String literal)
+    public TargetClassType(String literal)
     {
         this.literal = literal;
     }
