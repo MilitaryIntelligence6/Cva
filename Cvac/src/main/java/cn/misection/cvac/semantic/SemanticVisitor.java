@@ -59,16 +59,17 @@ public final class SemanticVisitor implements IVisitor
         System.err.printf("Error: Line %d %s%n", lineNum, msg);
     }
 
-    private boolean isMatch(ICvaType target, ICvaType cur)
+    private boolean isMatch(ICvaType src, ICvaType target)
     {
-        if (target.toString().equals(cur.toString()))
+//        if (target.toString().equals(cur.toString()))
+        if (src.toEnum() == target.toEnum())
         {
             return true;
         }
-        else if (target instanceof CvaClassType && cur instanceof CvaClassType)
+        else if (src instanceof CvaClassType && target instanceof CvaClassType)
         {
-            String tarName = ((CvaClassType) target).getName();
-            String curName = ((CvaClassType) cur).getName();
+            String tarName = ((CvaClassType) src).getName();
+            String curName = ((CvaClassType) target).getName();
             boolean flag = tarName.equals(curName);
             while (curName != null && !flag)
             {
@@ -114,20 +115,16 @@ public final class SemanticVisitor implements IVisitor
         ICvaType leftType = this.type;
         visit(expr.getRight());
 //        if (!this.type.toString().equals(leftType.toString()))
-        if (this.type.toEnum() != leftType.toEnum())
+        if (type.toEnum() != leftType.toEnum())
         {
             errorLog(expr.getLineNum(),
                     String.format("add expression the type of left is %s, but the type of right is %s",
                             leftType.toString(), this.type.toString()));
         }
 //        else if (!new CvaInt().toString().equals(this.type.toString()))
-        else if (!(type instanceof EnumCvaType))
+        else if (!EnumCvaType.isNumber(type.toEnum()))
         {
-            errorLog(expr.getLineNum(), " only basic type  numbers can be added.");
-        }
-        else if (type == EnumCvaType.CVA_BOOLEAN)
-        {
-            errorLog(expr.getLineNum(), "boolean can not add");
+            errorLog(expr.getLineNum(), " only numeric type numbers can be added.");
         }
 //        this.type = new CvaIntType();
     }
@@ -138,7 +135,8 @@ public final class SemanticVisitor implements IVisitor
         visit(expr.getLeft());
         ICvaType leftType = this.type;
         visit(expr.getRight());
-        if (!this.type.toString().equals(leftType.toString()))
+//        if (!this.type.toString().equals(leftType.toString()))
+        if (type.toEnum() != leftType.toEnum())
         {
             errorLog(expr.getLineNum(),
                     String.format("and expression the type of left is %s, but the type of right is %s", leftType.toString(), this.type.toString()));
@@ -300,7 +298,8 @@ public final class SemanticVisitor implements IVisitor
         visit(expr.getLeft());
         ICvaType leftType = this.type;
         visit(expr.getRight());
-        if (!this.type.toString().equals(leftType.toString()))
+//        if (!this.type.toString().equals(leftType.toString()))
+        if (type.toEnum() != leftType.toEnum())
         {
             errorLog(expr.getLineNum(),
                     String.format("compare expression the type of left is %s, but the type of right is %s",
@@ -308,13 +307,10 @@ public final class SemanticVisitor implements IVisitor
         }
 //        else if (type != CvaType.CVA_INT)
         // 相等了随便判一个;
-        else if (!(type instanceof EnumCvaType))
+//        else if (!(type instanceof EnumCvaType))
+        else if (!EnumCvaType.isNumber(type.toEnum()))
         {
-            errorLog(expr.getLineNum(), "only basic type numbers can be compared.");
-        }
-        else if (type == EnumCvaType.CVA_BOOLEAN)
-        {
-            errorLog(expr.getLineNum(), "boolean can not compare");
+            errorLog(expr.getLineNum(), "only numeric type can be compared.");
         }
         this.type = EnumCvaType.CVA_BOOLEAN;
     }
@@ -354,7 +350,7 @@ public final class SemanticVisitor implements IVisitor
     {
         visit(expr.getExpr());
 //        if (!(type instanceof CvaBooleanType))
-        if (type != EnumCvaType.CVA_BOOLEAN)
+        if (type.toEnum() != EnumCvaType.CVA_BOOLEAN)
         {
             errorLog(expr.getLineNum(), "the exp cannot calculate to a boolean.");
         }
@@ -379,19 +375,16 @@ public final class SemanticVisitor implements IVisitor
         visit(expr.getLeft());
         ICvaType leftType = this.type;
         visit(expr.getRight());
-        if (!this.type.toString().equals(leftType.toString()))
+//        if (!this.type.toString().equals(leftType.toString()))
+        if (type.toEnum() != leftType.toEnum())
         {
             errorLog(expr.getLineNum(),
                     String.format("sub expression the type of left is %s, but the type of right is %s",
                     leftType.toString(), this.type.toString()));
         }
-        else if (!(type instanceof EnumCvaType))
+        else if (!EnumCvaType.isNumber(type.toEnum()))
         {
             errorLog(expr.getLineNum(), " only basic numbers can be subbed.");
-        }
-        else if (type == EnumCvaType.CVA_BOOLEAN)
-        {
-            errorLog(expr.getLineNum(), "boolean can not do sub");
         }
 //        this.type = CvaType.CVA_INT;
     }
@@ -408,19 +401,16 @@ public final class SemanticVisitor implements IVisitor
         visit(expr.getLeft());
         ICvaType leftType = this.type;
         visit(expr.getRight());
-        if (!this.type.toString().equals(leftType.toString()))
+//        if (!this.type.toString().equals(leftType.toString()))
+        if (type.toEnum() != leftType.toEnum())
         {
             errorLog(expr.getLineNum(),
                     String.format("times expression the type of left is %s, but the type of right is %s",
                             leftType.toString(), this.type.toString()));
         }
-        else if (!(type instanceof EnumCvaType))
+        else if (!EnumCvaType.isNumber(type.toEnum()))
         {
             errorLog(expr.getLineNum(), "only basic type  can be multiply.");
-        }
-        else if (type == EnumCvaType.CVA_BOOLEAN)
-        {
-            errorLog(expr.getLineNum(), "boolean can not multiply");
         }
         // 这一句似乎是多余的;
 //        this.type = CvaType.CVA_INT;
@@ -483,8 +473,8 @@ public final class SemanticVisitor implements IVisitor
     {
         visit(stm.getExpr());
 //        if (!this.type.toString().equals(new CvaInt().toString()))
-        if (this.type instanceof EnumCvaType
-                || type instanceof CvaStringType)
+        if (EnumCvaType.isNumber(type.toEnum())
+                || type.toEnum() == EnumCvaType.CVA_STRING)
         {
             return;
         }
@@ -547,7 +537,7 @@ public final class SemanticVisitor implements IVisitor
         {
             visit(mainMethod.getRetExpr());
             // if (!this.type.toString().equals(m.retType.toString()))
-            if (!isMatch(mainMethod.getRetType(), this.type))
+            if (!isMatch(mainMethod.getRetType(), type))
             {
                 errorLog(mainMethod.getRetExpr().getLineNum(),
                         String.format("the return expression's type is not match the method \"%s\" declared.",
