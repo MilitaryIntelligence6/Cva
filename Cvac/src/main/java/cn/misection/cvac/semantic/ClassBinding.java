@@ -12,52 +12,82 @@ import java.util.Map;
  */
 public final class ClassBinding
 {
-    /**
-     * // null for non-existing base class
-     */
-    public String parent;
-    public Map<String, ICvaType> fields;
-    public Map<String, MethodType> methods;
+    private String parent;
+    private Map<String, ICvaType> fields;
+    private Map<String, MethodType> methods;
 
     public ClassBinding(String parent)
     {
-        this.parent = parent;
-        this.fields = new HashMap<>();
-        this.methods = new HashMap<>();
+        this.setParent(parent);
+        this.setFields(new HashMap<>());
+        this.setMethods(new HashMap<>());
     }
 
     public ClassBinding(String parent,
                         Map<String, ICvaType> fields,
                         Map<String, MethodType> methods)
     {
-        this.parent = parent;
-        this.fields = fields;
-        this.methods = methods;
+        this.setParent(parent);
+        this.setFields(fields);
+        this.setMethods(methods);
     }
 
     public void putField(String literal, ICvaType type)
     {
-        if (fields.get(literal) != null)
+        if (getFields().get(literal) != null)
         {
             System.out.printf("duplicated class field: %s%n", literal);
             System.exit(1);
         }
         else
         {
-            fields.put(literal, type);
+            getFields().put(literal, type);
         }
     }
 
     public void putMethod(String literal, MethodType type)
     {
-        if (methods.get(literal) != null)
+        if (getMethods().get(literal) != null)
         {
             System.out.printf("duplicated class method: %s%n", literal);
             System.exit(1);
         }
         else
         {
-            methods.put(literal, type);
+            getMethods().put(literal, type);
         }
+    }
+
+    /**
+     * // null for non-existing base class
+     */
+    public String getParent()
+    {
+        return parent;
+    }
+
+    public void setParent(String parent)
+    {
+        this.parent = parent;
+    }
+
+    public Map<String, ICvaType> getFields()
+    {
+        return fields;
+    }
+
+    public void setFields(Map<String, ICvaType> fields)
+    {
+        this.fields = fields;
+    }
+
+    public Map<String, MethodType> getMethods()
+    {
+        return methods;
+    }
+
+    public void setMethods(Map<String, MethodType> methods)
+    {
+        this.methods = methods;
     }
 }

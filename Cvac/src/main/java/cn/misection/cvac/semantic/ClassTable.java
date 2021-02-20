@@ -3,79 +3,75 @@ package cn.misection.cvac.semantic;
 import cn.misection.cvac.ast.type.ICvaType;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author MI6 root
  * @FIXME 改继承
  */
-public final class ClassTable
+public final class ClassTable extends HashMap<String, ClassBinding>
 {
-    private Map<String, ClassBinding> table;
-
     public ClassTable()
     {
-        this.table = new HashMap<>();
+        super();
     }
 
-    public void putClassBinding(String c, ClassBinding cb)
+    public void putClassBinding(String className, ClassBinding bind)
     {
-        if (this.table.get(c) != null)
+        if (this.get(className) != null)
         {
-            System.out.printf("duplicated class: %s%n", c);
+            System.out.printf("duplicated class: %s%n", className);
             System.exit(1);
         }
         else
         {
-            this.table.put(c, cb);
+            this.put(className, bind);
         }
     }
 
-    public void putFieldToClass(String c, String literal, ICvaType type)
+    public void putFieldToClass(String className, String literal, ICvaType type)
     {
-        this.table.get(c).putField(literal, type);
+        this.get(className).putField(literal, type);
     }
 
-    public void putMethodToClass(String c, String literal, MethodType type)
+    public void putMethodToClass(String className, String literal, MethodType type)
     {
-        this.table.get(c).putMethod(literal, type);
+        this.get(className).putMethod(literal, type);
     }
 
-    public ClassBinding getClassBinding(String c)
+    public ClassBinding getClassBinding(String className)
     {
-        return this.table.get(c);
+        return this.get(className);
     }
 
-    public ICvaType getFieldType(String c, String literal)
+    public ICvaType getFieldType(String className, String literal)
     {
-        ClassBinding cb = this.table.get(c);
-        ICvaType type = cb.fields.get(literal);
+        ClassBinding bind = this.get(className);
+        ICvaType type = bind.getFields().get(literal);
         while (type == null)
         {
-            if (cb.parent == null)
+            if (bind.getParent() == null)
             {
                 return type;
             }
 
-            cb = this.table.get(cb.parent);
-            type = cb.fields.get(literal);
+            bind = this.get(bind.getParent());
+            type = bind.getFields().get(literal);
         }
         return type;
     }
 
-    public MethodType getMethodType(String c, String literal)
+    public MethodType getMethodType(String className, String literal)
     {
-        ClassBinding cb = this.table.get(c);
-        MethodType type = cb.methods.get(literal);
+        ClassBinding bind = this.get(className);
+        MethodType type = bind.getMethods().get(literal);
         while (type == null)
         {
-            if (cb.parent == null)
+            if (bind.getParent() == null)
             {
                 return type;
             }
-
-            cb = this.table.get(cb.parent);
-            type = cb.methods.get(literal);
+            bind = this.get(bind.getParent());
+            type = bind.getMethods().get(literal);
         }
         return type;
     }

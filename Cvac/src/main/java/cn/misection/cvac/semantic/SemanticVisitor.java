@@ -73,7 +73,7 @@ public final class SemanticVisitor implements IVisitor
             boolean flag = tarName.equals(curName);
             while (curName != null && !flag)
             {
-                curName = classTable.getClassBinding(curName).parent;
+                curName = classTable.getClassBinding(curName).getParent();
                 flag = tarName.equals(curName);
             }
             return flag;
@@ -212,7 +212,7 @@ public final class SemanticVisitor implements IVisitor
         while (varType == null && className != null)
         {
             varType = classTable.getFieldType(className, expr.getLiteral());
-            className = classTable.getClassBinding(className).parent;
+            className = classTable.getClassBinding(className).getParent();
         }
 
         if (this.curMethodLocalSet.contains(expr.getLiteral()))
