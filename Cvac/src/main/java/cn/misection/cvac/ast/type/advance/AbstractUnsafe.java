@@ -1,7 +1,5 @@
 package cn.misection.cvac.ast.type.advance;
 
-import cn.misection.cvac.ast.type.basic.AbstractBasicType;
-
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0

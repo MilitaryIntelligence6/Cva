@@ -1,5 +1,7 @@
 package cn.misection.cvac.codegen.bst.btype.basic;
 
+import cn.misection.cvac.ast.type.basic.EnumCvaType;
+
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
@@ -64,5 +66,30 @@ public enum TargetType
     public static boolean isReferenceType(TargetType type)
     {
         return type.ordinal() >= TARGET_STRUCT.ordinal();
+    }
+
+    /**
+     * 是否是整形, byte short等都是;
+     * @param type
+     * @return
+     */
+    public static boolean isInteger(TargetType type)
+    {
+        return type.ordinal() >= TARGET_BYTE.ordinal()
+                && type.ordinal() <= TARGET_LONG.ordinal();
+    }
+
+    public static boolean isFloatPoint(TargetType type)
+    {
+        return type == TARGET_FLOAT || type == TARGET_DOUBLE;
+    }
+
+    /**
+     * 是否是前端的数字, boolean在后端是, 但在前端不是;
+     * @return
+     */
+    public static boolean isNumber(TargetType type)
+    {
+        return isInteger(type) || isFloatPoint(type);
     }
 }

@@ -113,7 +113,8 @@ public final class SemanticVisitor implements IVisitor
         visit(expr.getLeft());
         ICvaType leftType = this.type;
         visit(expr.getRight());
-        if (!this.type.toString().equals(leftType.toString()))
+//        if (!this.type.toString().equals(leftType.toString()))
+        if (this.type.toEnum() != leftType.toEnum())
         {
             errorLog(expr.getLineNum(),
                     String.format("add expression the type of left is %s, but the type of right is %s",

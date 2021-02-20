@@ -97,4 +97,29 @@ public enum EnumCvaType implements ICvaType
     {
         return type.ordinal() >= CVA_STRUCT.ordinal();
     }
+
+    /**
+     * 是否是整形, byte short等都是;
+     * @param type
+     * @return
+     */
+    public static boolean isInteger(EnumCvaType type)
+    {
+        return type.ordinal() >= CVA_BYTE.ordinal()
+                && type.ordinal() <= CVA_LONG.ordinal();
+    }
+
+    public static boolean isFloatPoint(EnumCvaType type)
+    {
+        return type == CVA_FLOAT || type == CVA_DOUBLE;
+    }
+
+    /**
+     * 是否是前端的数字, boolean在后端是, 但在前端不是;
+     * @return
+     */
+    public static boolean isNumber(EnumCvaType type)
+    {
+        return isInteger(type) || isFloatPoint(type);
+    }
 }
