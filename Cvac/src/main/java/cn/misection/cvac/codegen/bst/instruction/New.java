@@ -9,20 +9,20 @@ package cn.misection.cvac.codegen.bst.instruction;
  */
 public final class New extends BaseInstruction
 {
-    private String clazz;
+    private String newClassName;
 
-    public New(String clazz)
+    public New(String newClassName)
     {
-        this.clazz = clazz;
+        this.newClassName = newClassName;
     }
 
-    public String getClazz()
+    public String getNewClassName()
     {
-        return clazz;
+        return newClassName;
     }
 
-    public void setClazz(String clazz)
+    public void setNewClassName(String newClassName)
     {
-        this.clazz = clazz;
+        this.newClassName = newClassName;
     }
 }

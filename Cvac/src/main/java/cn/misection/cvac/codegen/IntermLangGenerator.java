@@ -196,9 +196,9 @@ public final class IntermLangGenerator implements IBackendVisitor
     @Override
     public void visit(New instruction)
     {
-        iwritefln("new %s", instruction.getClazz());
+        iwritefln("new %s", instruction.getNewClassName());
         iwriteLine("dup");
-        iwritefln("invokespecial %s/<init>()V", instruction.getClazz());
+        iwritefln("invokespecial %s/<init>()V", instruction.getNewClassName());
     }
 
     @Override
