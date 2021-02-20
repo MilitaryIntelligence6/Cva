@@ -65,7 +65,10 @@ public interface IVisitor
 
     void visit(CvaStringType type);
 
-    // Dec
+    /**
+     * decl
+     * @param abstDecl decl;
+     */
     default void visit(AbstractDeclaration abstDecl)
     {
         visit(((CvaDeclaration) abstDecl));

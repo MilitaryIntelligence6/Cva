@@ -1,6 +1,6 @@
 package cn.misection.cvac.codegen;
 
-import cn.misection.cvac.codegen.bst.CodeGenVisitor;
+import cn.misection.cvac.codegen.bst.IBackendVisitor;
 import cn.misection.cvac.codegen.bst.bclas.GenClass;
 import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
 import cn.misection.cvac.codegen.bst.bentry.GenEntryClass;
@@ -18,7 +18,7 @@ import java.io.*;
  * @author MI6 root;
  * @date 
  */
-public final class IntermLangGenerator implements CodeGenVisitor
+public final class IntermLangGenerator implements IBackendVisitor
 {
     private BufferedWriter writer;
 
@@ -82,153 +82,153 @@ public final class IntermLangGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(BaseReferenceType t)
+    public void visit(BaseReferenceType type)
     {
-        writef("L%s;", t.literal());
+        writef("L%s;", type.literal());
     }
 
     @Override
-    public void visit(BaseBasicType t)
+    public void visit(BaseBasicType type)
     {
-        write(t.instruction());
+        write(type.instruction());
     }
 
     @Override
-    public void visit(GenDeclaration d)
+    public void visit(GenDeclaration decl)
     {
         writeln(";Error: you are accessing the dec single instance.");
     }
 
     @Override
-    public void visit(ALoad s)
+    public void visit(ALoad instruction)
     {
-        iwritefln("aload %d", s.getIndex());
+        iwritefln("aload %d", instruction.getIndex());
     }
 
     @Override
-    public void visit(AReturn s)
+    public void visit(AReturn instruction)
     {
         iwriteLine("areturn");
     }
 
     @Override
-    public void visit(AStore s)
+    public void visit(AStore instruction)
     {
-        iwritefln("astore %d", s.getIndex());
+        iwritefln("astore %d", instruction.getIndex());
     }
 
     @Override
-    public void visit(Goto s)
+    public void visit(Goto instruction)
     {
-        iwritefln("goto %s", s.getLabel().toString());
+        iwritefln("goto %s", instruction.getLabel().toString());
     }
 
     @Override
-    public void visit(GetField s)
+    public void visit(GetField instruction)
     {
-        iwritefln("getfield %s %s", s.getFieldSpec(), s.getDescriptor());
+        iwritefln("getfield %s %s", instruction.getFieldSpec(), instruction.getDescriptor());
     }
 
     @Override
-    public void visit(IAdd s)
+    public void visit(IAdd instruction)
     {
         iwriteLine("iadd");
     }
 
     @Override
-    public void visit(Ificmplt s)
+    public void visit(Ificmplt instruction)
     {
-        iwritefln("if_icmplt %s", s.getLabel().toString());
+        iwritefln("if_icmplt %s", instruction.getLabel().toString());
     }
 
     @Override
-    public void visit(ILoad s)
+    public void visit(ILoad instruction)
     {
-        iwritefln("iload %d", s.getIndex());
+        iwritefln("iload %d", instruction.getIndex());
     }
 
     @Override
-    public void visit(IMul s)
+    public void visit(IMul instruction)
     {
         iwriteLine("imul");
     }
 
     @Override
-    public void visit(InvokeVirtual s)
+    public void visit(InvokeVirtual instruction)
     {
-        iwritef("invokevirtual %s/%s(", s.getC(), s.getF());
-        s.getArgTypeList().forEach(this::visit);
+        iwritef("invokevirtual %s/%s(", instruction.getC(), instruction.getF());
+        instruction.getArgTypeList().forEach(this::visit);
         write(")");
-        visit(s.getRetType());
+        visit(instruction.getRetType());
         writeln();
     }
 
     @Override
-    public void visit(IReturn s)
+    public void visit(IReturn instruction)
     {
         iwriteLine("ireturn");
     }
 
     @Override
-    public void visit(IStore s)
+    public void visit(IStore instruction)
     {
-        iwritefln("istore %d", s.getIndex());
+        iwritefln("istore %d", instruction.getIndex());
     }
 
     @Override
-    public void visit(ISub s)
+    public void visit(ISub instruction)
     {
         iwriteLine("isub");
     }
 
     @Override
-    public void visit(LabelJ s)
+    public void visit(LabelJ instruction)
     {
-        writef("%s:\n", s.getLabel().toString());
+        writef("%s:\n", instruction.getLabel().toString());
     }
 
     @Override
-    public void visit(Ldc s)
+    public void visit(Ldc instruction)
     {
-        iwritefln("ldc %s", s.value());
+        iwritefln("ldc %s", instruction.value());
     }
 
     @Override
-    public void visit(New s)
+    public void visit(New instruction)
     {
-        iwritefln("new %s", s.getClazz());
+        iwritefln("new %s", instruction.getClazz());
         iwriteLine("dup");
-        iwritefln("invokespecial %s/<init>()V", s.getClazz());
+        iwritefln("invokespecial %s/<init>()V", instruction.getClazz());
     }
 
     @Override
-    public void visit(WriteInstruction inst)
+    public void visit(WriteInstruction instruction)
     {
-        String mode = writeModeMap.get(inst.getWriteMode());
-        String type = writeTypeMap.get(inst.getWriteType());
+        String mode = writeModeMap.get(instruction.getWriteMode());
+        String type = writeTypeMap.get(instruction.getWriteType());
         iwriteLine("getstatic java/lang/System/out Ljava/io/PrintStream;");
         iwriteLine("swap");
         iwritefln("invokevirtual java/io/PrintStream/%s(%s)V", mode, type);
     }
 
     @Override
-    public void visit(PutField s)
+    public void visit(PutField instruction)
     {
-        iwritefln("putfield %s %s", s.getFieldSpec(), s.getDescriptor());
+        iwritefln("putfield %s %s", instruction.getFieldSpec(), instruction.getDescriptor());
     }
 
     @Override
-    public void visit(GenMethod method)
+    public void visit(GenMethod genMethod)
     {
-        writef(".method public %s(", method.getName());
-        method.getFormalList().forEach(f -> visit(f.getType()));
+        writef(".method public %s(", genMethod.getName());
+        genMethod.getFormalList().forEach(f -> visit(f.getType()));
         write(")");
-        visit(method.getRetType());
+        visit(genMethod.getRetType());
         writeln();
         writef(".limit stack %d\n", StackConst.MAX_STACK_DEPTH);
-        writef(".limit locals %d\n", method.getIndex() + 1);
+        writef(".limit locals %d\n", genMethod.getIndex() + 1);
 
-        method.getStatementList().forEach(this::visit);
+        genMethod.getStatementList().forEach(this::visit);
         writeln(".end method");
     }
 
@@ -288,10 +288,10 @@ public final class IntermLangGenerator implements CodeGenVisitor
     }
 
     @Override
-    public void visit(GenProgram program)
+    public void visit(GenProgram genProgram)
     {
-         visit(program.getEntryClass());
-        program.getClassList().forEach(this::visit);
+         visit(genProgram.getEntryClass());
+        genProgram.getClassList().forEach(this::visit);
     }
 
 

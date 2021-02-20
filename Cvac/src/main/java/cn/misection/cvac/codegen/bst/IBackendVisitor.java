@@ -13,29 +13,38 @@ import cn.misection.cvac.codegen.bst.btype.reference.BaseReferenceType;
 /**
  * Created by MI6 root 1/17.
  */
-public interface CodeGenVisitor
+public interface IBackendVisitor
 {
-    // Type
-    default void visit(BaseType t)
+    /**
+     * typel
+     * @param type t;
+     */
+    default void visit(BaseType type)
     {
-        if (t instanceof BaseReferenceType)
+        if (type instanceof BaseReferenceType)
         {
-            this.visit(((BaseReferenceType) t));
+            this.visit(((BaseReferenceType) type));
         }
         else
         {
-            this.visit(((BaseBasicType) t));
+            this.visit(((BaseBasicType) type));
         }
     }
 
-    void visit(BaseReferenceType t);
+    void visit(BaseReferenceType type);
 
-    void visit(BaseBasicType t);
+    void visit(BaseBasicType type);
 
-    // Dec
-    void visit(GenDeclaration d);
+    /**
+     * declrartion;
+     * @param decl declaration;
+     */
+    void visit(GenDeclaration decl);
 
-    // Stm
+    /**
+     * statements
+     * @param instruction linear inst;
+     */
     default void visit(BaseInstruction instruction)
     {
         switch (instruction.getClass().getSimpleName())
@@ -138,47 +147,47 @@ public interface CodeGenVisitor
         }
     }
 
-    void visit(ALoad s);
+    void visit(ALoad instruction);
 
-    void visit(AReturn s);
+    void visit(AReturn instruction);
 
-    void visit(AStore s);
+    void visit(AStore instruction);
 
-    void visit(Goto s);
+    void visit(Goto instruction);
 
-    void visit(GetField s);
+    void visit(GetField instruction);
 
-    void visit(IAdd s);
+    void visit(IAdd instruction);
 
-    void visit(Ificmplt s);
+    void visit(Ificmplt instruction);
 
-    void visit(ILoad s);
+    void visit(ILoad instruction);
 
-    void visit(IMul s);
+    void visit(IMul instruction);
 
-    void visit(InvokeVirtual s);
+    void visit(InvokeVirtual instruction);
 
-    void visit(IReturn s);
+    void visit(IReturn instruction);
 
-    void visit(IStore s);
+    void visit(IStore instruction);
 
-    void visit(ISub s);
+    void visit(ISub instruction);
 
-    void visit(LabelJ s);
+    void visit(LabelJ instruction);
 
-    void visit(Ldc s);
+    void visit(Ldc instruction);
 
-    void visit(New s);
+    void visit(New instruction);
 
-    void visit(WriteInstruction s);
+    void visit(WriteInstruction instruction);
 
-    void visit(PutField s);
+    void visit(PutField instruction);
 
-    void visit(GenMethod m);
+    void visit(GenMethod genMethod);
 
-    void visit(GenEntryClass c);
+    void visit(GenEntryClass entryClass);
 
-    void visit(GenClass c);
+    void visit(GenClass genClass);
 
-    void visit(GenProgram p);
+    void visit(GenProgram genProgram);
 }
