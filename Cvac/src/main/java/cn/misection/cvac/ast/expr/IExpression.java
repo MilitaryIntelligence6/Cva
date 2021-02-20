@@ -1,6 +1,8 @@
 package cn.misection.cvac.ast.expr;
 
 import cn.misection.cvac.ast.ASTree;
+import cn.misection.cvac.ast.type.AbstractType;
+import cn.misection.cvac.ast.type.basic.CvaType;
 
 /**
  * @author Military Intelligence 6 root
@@ -11,9 +13,9 @@ import cn.misection.cvac.ast.ASTree;
  */
 public interface IExpression extends ASTree
 {
-    /**
-     * type 传入 int string byte等, 放一个常量池里;
-     * @return
-     */
-//    byte type();
+//    /**
+//     * type 传入 int string byte等, 放一个常量池里;
+//     * @return
+//     */
+//    CvaType exprType();
 }

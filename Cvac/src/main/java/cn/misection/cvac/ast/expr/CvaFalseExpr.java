@@ -1,5 +1,7 @@
 package cn.misection.cvac.ast.expr;
 
+import cn.misection.cvac.ast.type.AbstractType;
+
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0

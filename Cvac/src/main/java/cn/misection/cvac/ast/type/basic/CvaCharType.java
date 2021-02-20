@@ -12,8 +12,7 @@ public final class CvaCharType extends AbstractBasicType
     public static final String TYPE_LITERAL = "@char";
 
     public CvaCharType()
-    {
-    }
+    {}
 
     @Override
     public String toString()

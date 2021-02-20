@@ -7,7 +7,7 @@ package cn.misection.cvac.ast.expr;
  * @Description TODO
  * @CreateTime 2021年02月18日 14:54:00
  */
-public class CvaStringExpr extends AbstractExpression
+public final class CvaStringExpr extends AbstractExpression
 {
     private String literal;
 

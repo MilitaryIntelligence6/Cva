@@ -82,6 +82,7 @@ public interface IVisitor
      */
     default void visit(AbstractExpression expr)
     {
+        // 用typeCode代替, 可以避免反射以及改名麻烦;
         switch (expr.getClass().getSimpleName())
         {
             case CvaExprClassName.CVA_ADD_EXPR:
