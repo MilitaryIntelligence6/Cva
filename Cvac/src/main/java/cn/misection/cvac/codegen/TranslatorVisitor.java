@@ -22,10 +22,10 @@ import cn.misection.cvac.codegen.bst.bdecl.TargetDeclaration;
 import cn.misection.cvac.codegen.bst.bentry.TargetEntryClass;
 import cn.misection.cvac.codegen.bst.bmethod.TargetMethod;
 import cn.misection.cvac.codegen.bst.bprogram.TargetProgram;
-import cn.misection.cvac.codegen.bst.btype.BaseType;
-import cn.misection.cvac.codegen.bst.btype.basic.TargetIntType;
+import cn.misection.cvac.codegen.bst.btype.ITargetType;
+import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
 import cn.misection.cvac.codegen.bst.btype.reference.TargetClassType;
-import cn.misection.cvac.codegen.bst.btype.reference.TargetStringType;
+import cn.misection.cvac.codegen.bst.btype.advance.TargetStringType;
 import cn.misection.cvac.codegen.bst.instruction.*;
 import cn.misection.cvac.constant.CvaExprClassName;
 
@@ -45,7 +45,7 @@ public final class TranslatorVisitor implements IVisitor
 
     private Map<String, Integer> indexTable;
 
-    private BaseType targetType;
+    private ITargetType targetType;
     private TargetDeclaration targetDecl;
     private List<BaseInstruction> linearInstrList;
     private TargetMethod targetMethod;
@@ -87,7 +87,7 @@ public final class TranslatorVisitor implements IVisitor
             case CVA_BOOLEAN:
             {
                 // FIXME 后端取消;
-                targetType = new TargetIntType();
+                targetType = EnumTargetType.TARGET_INT;
                 break;
             }
             default:
@@ -111,7 +111,8 @@ public final class TranslatorVisitor implements IVisitor
         targetDecl = new TargetDeclaration(
                 decl.literal(),
                 this.targetType);
-        if (indexTable != null) // if it is field
+        // if it is field;
+        if (indexTable != null)
         {
             indexTable.put(decl.literal(), index++);
         }
@@ -149,14 +150,18 @@ public final class TranslatorVisitor implements IVisitor
         visit(expr.getExpr());
         expr.getArgs().forEach(this::visit);
         visit(expr.getRetType());
-        BaseType rt = this.targetType;
-        List<BaseType> at = new ArrayList<>();
-        expr.getArgTypeList().forEach(a ->
+        ITargetType retType = this.targetType;
+        List<ITargetType> argTypeList = new ArrayList<>();
+        expr.getArgTypeList().forEach(argType ->
         {
-            visit(a);
-            at.add(this.targetType);
+            visit(argType);
+            argTypeList.add(this.targetType);
         });
-        emit(new InvokeVirtual(expr.getLiteral(), expr.getType(), at, rt));
+        emit(new InvokeVirtual(
+                expr.getFuncName(),
+                expr.getType(),
+                argTypeList,
+                retType));
     }
 
     @Override
@@ -426,7 +431,7 @@ public final class TranslatorVisitor implements IVisitor
         this.index = 1;
         this.indexTable = new HashMap<>();
         visit(cvaMethod.getRetType());
-        BaseType theRetType = this.targetType;
+        ITargetType theRetType = this.targetType;
 
         List<TargetDeclaration> formalList = new ArrayList<>();
         cvaMethod.getArgumentList().forEach(f ->
@@ -470,7 +475,7 @@ public final class TranslatorVisitor implements IVisitor
         this.index = 1;
         this.indexTable = new HashMap<>();
         visit(mainMethod.getRetType());
-        BaseType theRetType = this.targetType;
+        ITargetType theRetType = this.targetType;
 
         List<TargetDeclaration> formalList = new ArrayList<>();
         mainMethod.getArgumentList().forEach(f ->
@@ -564,12 +569,12 @@ public final class TranslatorVisitor implements IVisitor
         this.className = className;
     }
 
-    public BaseType getTargetType()
+    public ITargetType getTargetType()
     {
         return targetType;
     }
 
-    public void setTargetType(BaseType targetType)
+    public void setTargetType(ITargetType targetType)
     {
         this.targetType = targetType;
     }

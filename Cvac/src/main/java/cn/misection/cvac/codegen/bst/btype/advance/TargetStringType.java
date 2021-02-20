@@ -1,4 +1,6 @@
-package cn.misection.cvac.codegen.bst.btype.reference;
+package cn.misection.cvac.codegen.bst.btype.advance;
+
+import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
 
 /**
  * @author Military Intelligence 6 root
@@ -7,7 +9,7 @@ package cn.misection.cvac.codegen.bst.btype.reference;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:46:00
  */
-public final class TargetStringType extends BaseReferenceType
+public final class TargetStringType extends BaseAdvanceType
 {
     public static final String TYPE_LITERAL = "@string";
 
@@ -16,14 +18,26 @@ public final class TargetStringType extends BaseReferenceType
     public TargetStringType() {}
 
     @Override
+    public String literal()
+    {
+        return FULL_LITERAL;
+    }
+
+    @Override
+    public String instruct()
+    {
+        return FULL_LITERAL;
+    }
+
+    @Override
     public String toString()
     {
         return TYPE_LITERAL;
     }
 
     @Override
-    public String literal()
+    public EnumTargetType toEnum()
     {
-        return FULL_LITERAL;
+        return EnumTargetType.TARGET_STRING;
     }
 }

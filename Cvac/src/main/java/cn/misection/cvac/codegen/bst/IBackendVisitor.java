@@ -5,9 +5,10 @@ import cn.misection.cvac.codegen.bst.bdecl.TargetDeclaration;
 import cn.misection.cvac.codegen.bst.bentry.TargetEntryClass;
 import cn.misection.cvac.codegen.bst.bmethod.TargetMethod;
 import cn.misection.cvac.codegen.bst.bprogram.TargetProgram;
+import cn.misection.cvac.codegen.bst.btype.ITargetType;
+import cn.misection.cvac.codegen.bst.btype.advance.BaseAdvanceType;
+import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
 import cn.misection.cvac.codegen.bst.instruction.*;
-import cn.misection.cvac.codegen.bst.btype.BaseType;
-import cn.misection.cvac.codegen.bst.btype.basic.BaseBasicType;
 import cn.misection.cvac.codegen.bst.btype.reference.BaseReferenceType;
 
 /**
@@ -19,21 +20,36 @@ public interface IBackendVisitor
      * typel
      * @param type t;
      */
-    default void visit(BaseType type)
+    default void visit(ITargetType type)
     {
-        if (type instanceof BaseReferenceType)
+//        if (type instanceof BaseReferenceType)
+//        {
+//            this.visit(((BaseReferenceType) type));
+//        }
+//        else
+//        {
+//            this.visit(((BaseBasicType) type));
+//        }
+        EnumTargetType typeEnum = type.toEnum();
+        if (EnumTargetType.isBasicType(typeEnum))
         {
-            this.visit(((BaseReferenceType) type));
+            visit((EnumTargetType) type);
+        }
+        else if (EnumTargetType.isAdvanceType(typeEnum))
+        {
+            visit((BaseAdvanceType) type);
         }
         else
         {
-            this.visit(((BaseBasicType) type));
+            visit((BaseReferenceType) type);
         }
     }
 
-    void visit(BaseReferenceType type);
+    void visit(EnumTargetType type);
 
-    void visit(BaseBasicType type);
+    void visit(BaseAdvanceType type);
+
+    void visit(BaseReferenceType type);
 
     /**
      * declrartion;

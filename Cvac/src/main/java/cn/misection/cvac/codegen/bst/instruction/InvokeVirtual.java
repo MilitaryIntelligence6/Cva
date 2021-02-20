@@ -1,6 +1,6 @@
 package cn.misection.cvac.codegen.bst.instruction;
 
-import cn.misection.cvac.codegen.bst.btype.BaseType;
+import cn.misection.cvac.codegen.bst.btype.ITargetType;
 
 import java.util.List;
 
@@ -16,58 +16,64 @@ public final class InvokeVirtual extends BaseInstruction
     /**
      * @FIXME
      */
-    private String f;
+    private String funcName;
 
-    private String c;
+    /**
+     * type of first field;
+     */
+    private String firstFieldType;
 
-    private List<BaseType> argTypeList;
+    private List<ITargetType> argTypeList;
 
-    private BaseType retType;
+    private ITargetType retType;
 
-    public InvokeVirtual(String f, String c, List<BaseType> argTypeList, BaseType retType)
+    public InvokeVirtual(String funcName,
+                         String firstFieldType,
+                         List<ITargetType> argTypeList, 
+                         ITargetType retType)
     {
-        this.f = f;
-        this.c = c;
+        this.funcName = funcName;
+        this.firstFieldType = firstFieldType;
         this.argTypeList = argTypeList;
         this.retType = retType;
     }
 
-    public String getF()
+    public String getFuncName()
     {
-        return f;
+        return funcName;
     }
 
-    public void setF(String f)
+    public void setFuncName(String funcName)
     {
-        this.f = f;
+        this.funcName = funcName;
     }
 
-    public String getC()
+    public String getFirstFieldType()
     {
-        return c;
+        return firstFieldType;
     }
 
-    public void setC(String c)
+    public void setFirstFieldType(String firstFieldType)
     {
-        this.c = c;
+        this.firstFieldType = firstFieldType;
     }
 
-    public List<BaseType> getArgTypeList()
+    public List<ITargetType> getArgTypeList()
     {
         return argTypeList;
     }
 
-    public void setArgTypeList(List<BaseType> argTypeList)
+    public void setArgTypeList(List<ITargetType> argTypeList)
     {
         this.argTypeList = argTypeList;
     }
 
-    public BaseType getRetType()
+    public ITargetType getRetType()
     {
         return retType;
     }
 
-    public void setRetType(BaseType retType)
+    public void setRetType(ITargetType retType)
     {
         this.retType = retType;
     }

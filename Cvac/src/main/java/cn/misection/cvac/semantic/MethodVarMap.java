@@ -10,10 +10,10 @@ import java.util.List;
 /**
  * @author  MI6 root
  */
-public final class MethodVariableTable
+public final class MethodVarMap
         extends HashMap<String, ICvaType>
 {
-    public MethodVariableTable()
+    public MethodVarMap()
     {
         super();
     }

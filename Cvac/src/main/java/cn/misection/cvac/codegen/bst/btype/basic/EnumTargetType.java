@@ -1,6 +1,7 @@
 package cn.misection.cvac.codegen.bst.btype.basic;
 
-import cn.misection.cvac.ast.type.basic.EnumCvaType;
+import cn.misection.cvac.codegen.bst.btype.ITargetType;
+import cn.misection.cvac.codegen.bst.btype.Instructable;
 
 /**
  * @author Military Intelligence 6 root
@@ -9,12 +10,13 @@ import cn.misection.cvac.ast.type.basic.EnumCvaType;
  * @Description TODO
  * @CreateTime 2021年02月20日 14:37:00
  */
-public enum TargetType
+public enum EnumTargetType
+        implements ITargetType, Instructable
 {
     /**
      * void;
      */
-    TARGET_VOID("@void"),
+    TARGET_VOID("@void", "V"),
 
     TARGET_BYTE("@byte"),
 
@@ -22,7 +24,7 @@ public enum TargetType
 
     TARGET_SHORT("@short"),
 
-    TARGET_INT("@int"),
+    TARGET_INT("@int", "I"),
 
     TARGET_LONG("@long"),
 
@@ -43,27 +45,68 @@ public enum TargetType
     TARGET_ENUM("@enum"),
     ;
 
+    /**
+     * instance domain;
+     */
     private final String literal;
 
-    TargetType(String literal)
+    private String instruction;
+
+    EnumTargetType(String literal)
     {
         this.literal = literal;
     }
 
+    EnumTargetType(String literal, String instruction)
+    {
+        this.literal = literal;
+        this.instruction = instruction;
+    }
 
-    public static boolean isBasicType(TargetType type)
+    @Override
+    public EnumTargetType toEnum()
+    {
+        return this;
+    }
+
+    @Override
+    public String toString()
+    {
+        return literal;
+    }
+
+    @Override
+    public String instruct()
+    {
+        return instruction;
+    }
+
+    public String getLiteral()
+    {
+        return literal;
+    }
+    /*
+     * end instance domain;
+     */
+
+    /**
+     * class static domain;
+     * @param type t;
+     * @return boolean;
+     */
+    public static boolean isBasicType(EnumTargetType type)
     {
         return type.ordinal() >= TARGET_VOID.ordinal()
                 && type.ordinal() <= TARGET_DOUBLE.ordinal();
     }
 
-    public static boolean isAdvanceType(TargetType type)
+    public static boolean isAdvanceType(EnumTargetType type)
     {
         return type.ordinal() >= TARGET_POINTER.ordinal()
                 && type.ordinal() <= TARGET_ARRAY.ordinal();
     }
 
-    public static boolean isReferenceType(TargetType type)
+    public static boolean isReferenceType(EnumTargetType type)
     {
         return type.ordinal() >= TARGET_STRUCT.ordinal();
     }
@@ -73,13 +116,13 @@ public enum TargetType
      * @param type
      * @return
      */
-    public static boolean isInteger(TargetType type)
+    public static boolean isInteger(EnumTargetType type)
     {
         return type.ordinal() >= TARGET_BYTE.ordinal()
                 && type.ordinal() <= TARGET_LONG.ordinal();
     }
 
-    public static boolean isFloatPoint(TargetType type)
+    public static boolean isFloatPoint(EnumTargetType type)
     {
         return type == TARGET_FLOAT || type == TARGET_DOUBLE;
     }
@@ -88,7 +131,7 @@ public enum TargetType
      * 是否是前端的数字, boolean在后端是, 但在前端不是;
      * @return
      */
-    public static boolean isNumber(TargetType type)
+    public static boolean isNumber(EnumTargetType type)
     {
         return isInteger(type) || isFloatPoint(type);
     }

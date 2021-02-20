@@ -26,7 +26,7 @@ import java.util.List;
 public final class SemanticVisitor implements IVisitor
 {
     private ClassTable classTable;
-    private MethodVariableTable methodVarTable;
+    private MethodVarMap methodVarTable;
     private String currentClass;
     private ICvaType type;
 
@@ -43,7 +43,7 @@ public final class SemanticVisitor implements IVisitor
     public SemanticVisitor()
     {
         this.classTable = new ClassTable();
-        this.methodVarTable = new MethodVariableTable();
+        this.methodVarTable = new MethodVarMap();
         this.currentClass = null;
         this.type = null;
         this.isOk = true;
@@ -165,7 +165,7 @@ public final class SemanticVisitor implements IVisitor
             argTypeList.add(this.type);
         });
 
-        MethodType methodType = classTable.getMethodType(expType.getName(), expr.getLiteral());
+        MethodType methodType = classTable.getMethodType(expType.getName(), expr.getFuncName());
 
         if (methodType == null)
         {
@@ -426,7 +426,7 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaMethod cvaMethod)
     {
-        this.methodVarTable = new MethodVariableTable();
+        this.methodVarTable = new MethodVarMap();
         this.methodVarTable.putVarList(
                 cvaMethod.getArgumentList(),
                 cvaMethod.getLocalVarList()
@@ -451,7 +451,7 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaMainMethod mainMethod)
     {
-        this.methodVarTable = new MethodVariableTable();
+        this.methodVarTable = new MethodVarMap();
         this.methodVarTable.putVarList(
                 mainMethod.getArgumentList(),
                 mainMethod.getLocalVarList()

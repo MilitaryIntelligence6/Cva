@@ -1,6 +1,6 @@
 package cn.misection.cvac.codegen.bst.bdecl;
 
-import cn.misection.cvac.codegen.bst.btype.BaseType;
+import cn.misection.cvac.codegen.bst.btype.ITargetType;
 
 /**
  * @author Military Intelligence 6 root
@@ -13,9 +13,9 @@ public final class TargetDeclaration extends BaseDeclaration
 {
     private String literal;
 
-    private BaseType type;
+    private ITargetType type;
 
-    public TargetDeclaration(String literal, BaseType type)
+    public TargetDeclaration(String literal, ITargetType type)
     {
         this.literal = literal;
         this.type = type;
@@ -26,7 +26,7 @@ public final class TargetDeclaration extends BaseDeclaration
         return literal;
     }
 
-    public BaseType getType()
+    public ITargetType getType()
     {
         return type;
     }

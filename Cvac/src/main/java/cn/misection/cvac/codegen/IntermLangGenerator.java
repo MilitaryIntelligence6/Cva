@@ -6,8 +6,9 @@ import cn.misection.cvac.codegen.bst.bdecl.TargetDeclaration;
 import cn.misection.cvac.codegen.bst.bentry.TargetEntryClass;
 import cn.misection.cvac.codegen.bst.bmethod.TargetMethod;
 import cn.misection.cvac.codegen.bst.bprogram.TargetProgram;
+import cn.misection.cvac.codegen.bst.btype.advance.BaseAdvanceType;
+import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
 import cn.misection.cvac.codegen.bst.instruction.*;
-import cn.misection.cvac.codegen.bst.btype.basic.BaseBasicType;
 import cn.misection.cvac.codegen.bst.btype.reference.BaseReferenceType;
 import cn.misection.cvac.constant.IntermLangCommon;
 
@@ -82,15 +83,21 @@ public final class IntermLangGenerator implements IBackendVisitor
     }
 
     @Override
-    public void visit(BaseReferenceType type)
+    public void visit(EnumTargetType type)
     {
-        writef("L%s;", type.literal());
+        write(type.instruct());
     }
 
     @Override
-    public void visit(BaseBasicType type)
+    public void visit(BaseAdvanceType type)
     {
-        write(type.instruction());
+        write(type.instruct());
+    }
+
+    @Override
+    public void visit(BaseReferenceType type)
+    {
+        writef("L%s;", type.literal());
     }
 
     @Override
@@ -156,7 +163,7 @@ public final class IntermLangGenerator implements IBackendVisitor
     @Override
     public void visit(InvokeVirtual instruction)
     {
-        iwritef("invokevirtual %s/%s(", instruction.getC(), instruction.getF());
+        iwritef("invokevirtual %s/%s(", instruction.getFirstFieldType(), instruction.getFuncName());
         instruction.getArgTypeList().forEach(this::visit);
         write(")");
         visit(instruction.getRetType());

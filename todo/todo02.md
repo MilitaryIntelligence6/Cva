@@ -14,3 +14,5 @@
 
 - 把所有的取type操作都改成enumType();
 能换的icvatype都换掉;
+
+- ClassTable

@@ -7,16 +7,6 @@ package cn.misection.cvac.codegen.bst.btype;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:52:00
  */
-public abstract class BaseType implements IType
+public abstract class BaseType implements ITargetType
 {
-    public BaseType()
-    {
-    }
-
-    /**
-     * 转string;
-     * @return
-     */
-    @Override
-    public abstract String toString();
 }

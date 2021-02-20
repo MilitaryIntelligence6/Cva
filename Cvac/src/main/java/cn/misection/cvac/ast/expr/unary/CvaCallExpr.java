@@ -16,7 +16,7 @@ import java.util.List;
  */
 public final class CvaCallExpr extends AbstractExpression
 {
-    private String literal;
+    private String funcName;
 
     private AbstractExpression expr;
 
@@ -26,7 +26,7 @@ public final class CvaCallExpr extends AbstractExpression
     private List<AbstractExpression> args;
 
     /**
-     * type of first field "exp";
+     * type of first field "expr";
      */
     private String type;
 
@@ -38,12 +38,12 @@ public final class CvaCallExpr extends AbstractExpression
     public ICvaType retType;
 
     public CvaCallExpr(int lineNum,
-                       String literal,
+                       String funcName,
                        AbstractExpression expr,
                        List<AbstractExpression> args)
     {
         super(lineNum);
-        this.literal = literal;
+        this.funcName = funcName;
         this.expr = expr;
         this.args = args;
         init();
@@ -66,9 +66,9 @@ public final class CvaCallExpr extends AbstractExpression
         return EnumCvaExpr.CALL;
     }
 
-    public String getLiteral()
+    public String getFuncName()
     {
-        return literal;
+        return funcName;
     }
 
     public AbstractExpression getExpr()
@@ -96,9 +96,9 @@ public final class CvaCallExpr extends AbstractExpression
         return retType;
     }
 
-    public void setLiteral(String literal)
+    public void setFuncName(String funcName)
     {
-        this.literal = literal;
+        this.funcName = funcName;
     }
 
     public void setExpr(AbstractExpression expr)

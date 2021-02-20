@@ -2,7 +2,7 @@ package cn.misection.cvac.codegen.bst.bmethod;
 
 import cn.misection.cvac.codegen.bst.bdecl.TargetDeclaration;
 import cn.misection.cvac.codegen.bst.instruction.BaseInstruction;
-import cn.misection.cvac.codegen.bst.btype.BaseType;
+import cn.misection.cvac.codegen.bst.btype.ITargetType;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public final class TargetMethod extends BaseMethod
 {
     private String name;
 
-    private BaseType retType;
+    private ITargetType retType;
 
     /**
      * deprecated
@@ -53,7 +53,7 @@ public final class TargetMethod extends BaseMethod
      */
     public TargetMethod(
             String name,
-            BaseType retType,
+            ITargetType retType,
             String className,
             List<TargetDeclaration> formalList,
             List<TargetDeclaration> localList,
@@ -77,7 +77,7 @@ public final class TargetMethod extends BaseMethod
         return name;
     }
 
-    public BaseType getRetType()
+    public ITargetType getRetType()
     {
         return retType;
     }
@@ -93,7 +93,7 @@ public final class TargetMethod extends BaseMethod
         this.name = name;
     }
 
-    public void setRetType(BaseType retType)
+    public void setRetType(ITargetType retType)
     {
         this.retType = retType;
     }

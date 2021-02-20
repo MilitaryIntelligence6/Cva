@@ -9,7 +9,7 @@ package cn.misection.cvac.codegen;
 
 
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
-import cn.misection.cvac.codegen.bst.btype.reference.TargetStringType;
+import cn.misection.cvac.codegen.bst.btype.advance.TargetStringType;
 import cn.misection.cvac.constant.WriteOptionCode;
 
 import java.util.HashMap;

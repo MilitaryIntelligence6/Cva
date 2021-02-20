@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by MI6 root 1/13.
+ * @author MI6 root
  * @FIXME 改继承
  */
 public final class ClassTable
