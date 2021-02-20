@@ -5,15 +5,15 @@ import cn.misection.cvac.ast.type.basic.EnumCvaType;
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
- * @ClassName BitOperator
- * @Description TODO
- * @CreateTime 2021年02月20日 21:30:00
+ * @ClassName SelfCreable
+ * @Description 自增自减运算;
+ * @CreateTime 2021年02月20日 21:55:00
  */
 @FunctionalInterface
-public interface BitOperatorExpr extends IExpression
+public interface SelfCreasable extends IExpression
 {
     /**
-     * 位操作只能是int;
+     * 自增自减只有 int能用;
      * @return
      */
     @Override

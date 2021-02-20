@@ -1,9 +1,7 @@
 package cn.misection.cvac.ast.expr.unary;
 
-import cn.misection.cvac.ast.expr.BitOperatorExpr;
+import cn.misection.cvac.ast.expr.BitOperable;
 import cn.misection.cvac.ast.expr.EnumCvaExpr;
-import cn.misection.cvac.ast.expr.unary.AbstractUnaryExpr;
-import cn.misection.cvac.ast.type.basic.EnumCvaType;
 
 /**
  * @author Military Intelligence 6 root
@@ -13,7 +11,7 @@ import cn.misection.cvac.ast.type.basic.EnumCvaType;
  * @CreateTime 2021年02月20日 20:15:00
  */
 public class CvaBitNegateExpr
-        extends AbstractUnaryExpr implements BitOperatorExpr
+        extends AbstractUnaryExpr implements BitOperable
 {
     protected CvaBitNegateExpr(int lineNum)
     {

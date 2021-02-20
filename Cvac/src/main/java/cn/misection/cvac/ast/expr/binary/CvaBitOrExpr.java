@@ -1,7 +1,7 @@
 package cn.misection.cvac.ast.expr.binary;
 
 import cn.misection.cvac.ast.expr.AbstractExpression;
-import cn.misection.cvac.ast.expr.BitOperatorExpr;
+import cn.misection.cvac.ast.expr.BitOperable;
 import cn.misection.cvac.ast.expr.EnumCvaExpr;
 
 /**
@@ -12,7 +12,7 @@ import cn.misection.cvac.ast.expr.EnumCvaExpr;
  * @CreateTime 2021年02月20日 20:14:00
  */
 public class CvaBitOrExpr
-        extends AbstractBinaryExpr implements BitOperatorExpr
+        extends AbstractBinaryExpr implements BitOperable
 {
     public CvaBitOrExpr(int lineNum,
                         AbstractExpression left,
