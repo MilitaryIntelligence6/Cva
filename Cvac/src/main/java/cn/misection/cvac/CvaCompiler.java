@@ -113,7 +113,7 @@ public final class CvaCompiler
         SemanticVisitor checker = new SemanticVisitor();
         checker.visit(program);
         // if the program is correct, we generate code for it
-        if (!checker.isOK())
+        if (!checker.isOkay())
         {
             System.err.println("ERROE: check failed");
             System.exit(1);
