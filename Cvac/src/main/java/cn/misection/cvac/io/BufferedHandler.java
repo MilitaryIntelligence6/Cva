@@ -1,11 +1,10 @@
 package cn.misection.cvac.io;
 
-import cn.misection.cvac.constant.LexerConst;
+import cn.misection.cvac.constant.LexerCommon;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 
 /**
  * @author Military Intelligence 6 root
@@ -39,12 +38,12 @@ public final class BufferedHandler implements IBufferedQueue
         String line = null;
         while ((line = reader.readLine()) != null)
         {
-            buffer.append(line).append(LexerConst.NEW_LINE);
+            buffer.append(line).append(LexerCommon.NEW_LINE);
         }
         // 改进完毕, 只需要装载一个EOF了, 必须装载至少一个,
         //因为StringBuffer跟文件流不一样, 不会有EOF;
         // 加上才能模拟文件流;
-        buffer.append(LexerConst.EOF);
+        buffer.append(LexerCommon.EOF);
         reader.close();
     }
 

@@ -16,14 +16,13 @@ import cn.misection.cvac.ast.type.AbstractType;
 import cn.misection.cvac.ast.type.basic.*;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
 import cn.misection.cvac.ast.type.reference.CvaStringType;
-import cn.misection.cvac.constant.LexerConst;
-import cn.misection.cvac.constant.WriteILConst;
+import cn.misection.cvac.constant.LexerCommon;
+import cn.misection.cvac.constant.WriteOptionCode;
 import cn.misection.cvac.io.IBufferedQueue;
 import cn.misection.cvac.lexer.CvaKind;
 import cn.misection.cvac.lexer.CvaToken;
 import cn.misection.cvac.lexer.Lexer;
 
-import java.io.EOFException;
 import java.util.*;
 
 /**
@@ -434,15 +433,15 @@ public final class Parser
             }
             case WRITE:
             {
-                return handleWriteOp(WriteILConst.CONSOLE_WRITE);
+                return handleWriteOp(WriteOptionCode.CONSOLE_WRITE);
             }
             case WRITE_LINE:
             {
-                return handleWriteOp(WriteILConst.CONSOLE_WRITELN);
+                return handleWriteOp(WriteOptionCode.CONSOLE_WRITELN);
             }
             case WRITE_FORMAT:
             {
-                return handleWriteOp(WriteILConst.CONSOLE_WRITE_FORMAT);
+                return handleWriteOp(WriteOptionCode.CONSOLE_WRITE_FORMAT);
             }
             case IDENTIFIER:
             {
@@ -855,7 +854,7 @@ public final class Parser
                     .putEntryMethod(mainMethod)
                     .build();
         }
-        String mainName = LexerConst.DEFAULT_MAIN_CLASS_NAME;
+        String mainName = LexerCommon.DEFAULT_MAIN_CLASS_NAME;
 //        AbstractStatement statement = parseMainMethod();
         AbstractMethod mainMethod = parseMainMethod();
         return new CvaEntryClass.Builder()

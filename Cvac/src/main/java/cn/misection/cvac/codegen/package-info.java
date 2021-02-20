@@ -10,6 +10,7 @@ package cn.misection.cvac.codegen;
 
 import cn.misection.cvac.codegen.bst.btype.reference.GenStringType;
 import cn.misection.cvac.constant.WriteILConst;
+import cn.misection.cvac.constant.WriteOptionCode;
 
 import java.util.HashMap;
 
@@ -52,9 +53,9 @@ final class WriteModeMap extends HashMap<Byte, String>
 
     private void init()
     {
-        this.put(WriteILConst.CONSOLE_WRITE, "print");
-        this.put(WriteILConst.CONSOLE_WRITELN, "println");
-        this.put(WriteILConst.CONSOLE_WRITE_FORMAT, "printf");
+        this.put(WriteOptionCode.CONSOLE_WRITE, "print");
+        this.put(WriteOptionCode.CONSOLE_WRITELN, "println");
+        this.put(WriteOptionCode.CONSOLE_WRITE_FORMAT, "printf");
     }
 }
 

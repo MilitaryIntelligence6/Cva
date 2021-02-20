@@ -3,7 +3,7 @@ package cn.misection.cvac.ast.entry;
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.method.AbstractMethod;
 import cn.misection.cvac.ast.statement.AbstractStatement;
-import cn.misection.cvac.constant.LexerConst;
+import cn.misection.cvac.constant.LexerCommon;
 
 import java.util.List;
 
@@ -52,7 +52,7 @@ public final class CvaEntryClass extends AbstractEntryClass
 
     public static class Builder
     {
-        private String name = LexerConst.DEFAULT_MAIN_CLASS_NAME;
+        private String name = LexerCommon.DEFAULT_MAIN_CLASS_NAME;
 
         private AbstractMethod entryMethod;
 

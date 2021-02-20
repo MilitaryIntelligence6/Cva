@@ -1,6 +1,6 @@
 package cn.misection.cvac.lexer;
 
-import cn.misection.cvac.constant.LexerConst;
+import cn.misection.cvac.constant.LexerCommon;
 import cn.misection.cvac.io.IBufferedQueue;
 
 /**
@@ -46,7 +46,7 @@ public final class Lexer
         ch = handleWhiteSpace(ch);
         switch (ch)
         {
-            case LexerConst.EOF:
+            case LexerCommon.EOF:
                 return new CvaToken(CvaKind.EOF, lineNum);
             case '+':
                 return handlePlus();
@@ -90,7 +90,7 @@ public final class Lexer
                 || '=' == ch || '<' == ch || ch == '>'
                 || ch == '%' || ch == '@' || ch == '#' || ch == '`'
                 || ch == '\\' || ch == '"' || ch == '\''
-                || ch == LexerConst.EOF;
+                || ch == LexerCommon.EOF;
     }
 
     private static boolean isNumber(String str)
@@ -384,7 +384,7 @@ public final class Lexer
         {
             ch = stream.peek();
             // Cva命名容许_和$符号;
-            if (ch != LexerConst.EOF
+            if (ch != LexerCommon.EOF
                     && !Character.isWhitespace(ch)
                     && !isSpecialCharacter(ch))
             {
@@ -463,7 +463,7 @@ public final class Lexer
                     builder.append(escapeCh);
                     continue;
                 }
-                case LexerConst.EOF:
+                case LexerCommon.EOF:
                 {
                     errorLog("string literal char or end of string '\"'",
                             "EOF in error place");
@@ -488,14 +488,14 @@ public final class Lexer
         {
             switch (ch)
             {
-                case LexerConst.NEW_LINE:
+                case LexerCommon.NEW_LINE:
                 {
                     lineNum++;
                     break;
                 }
-                case LexerConst.EOF:
+                case LexerCommon.EOF:
                 {
-                    return LexerConst.EOF;
+                    return LexerCommon.EOF;
                 }
                 default:
                 {
@@ -547,7 +547,7 @@ public final class Lexer
         char commentChar;
         while (true)
         {
-            if ((commentChar = stream.poll()) == LexerConst.NEW_LINE)
+            if ((commentChar = stream.poll()) == LexerCommon.NEW_LINE)
             {
                 break;
             }
@@ -575,7 +575,7 @@ public final class Lexer
                     }
                     continue;
                 }
-                case LexerConst.NEW_LINE:
+                case LexerCommon.NEW_LINE:
                 {
                     lineNum++;
                     continue;

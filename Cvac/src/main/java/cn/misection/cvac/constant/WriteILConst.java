@@ -12,17 +12,13 @@ public final class WriteILConst
     /**
      * 控制台打印选项;
      */
-    public static final byte CONSOLE_WRITE = 0;
-
-    public static final byte CONSOLE_WRITELN = 1;
-
-    public static final byte CONSOLE_WRITE_FORMAT = 2;
 
     public static final byte WRITE_STRING = 0;
 
     public static final byte WRITE_INT = 1;
 
     public static final byte WRITE_BOOLEAN = 2;
+
 
     /*
      * end 控制台打印选项;

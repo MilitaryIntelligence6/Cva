@@ -7,7 +7,7 @@ package cn.misection.cvac.constant;
  * @Description TODO
  * @CreateTime 2021年02月15日 22:48:00
  */
-public final class UserIntfConst
+public final class UserInterfaceCommon
 {
     /**
      * arrow;
@@ -202,5 +202,5 @@ public final class UserIntfConst
 //                    "  ░░░░░░      ░░     ░░      ░░ \n" +
 //                    "\n";
 
-    private UserIntfConst() {}
+    private UserInterfaceCommon() {}
 }
