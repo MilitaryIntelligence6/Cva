@@ -27,7 +27,8 @@ import cn.misection.cvac.codegen.bst.btype.reference.GenClassType;
 import cn.misection.cvac.codegen.bst.btype.reference.GenStringType;
 import cn.misection.cvac.codegen.bst.instruction.*;
 import cn.misection.cvac.constant.CvaExprClassName;
-import cn.misection.cvac.constant.WriteILConst;
+import cn.misection.cvac.constant.CvaTypeCode;
+import cn.misection.cvac.constant.IntermLangCommon;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -337,12 +338,12 @@ public final class TranslatorVisitor implements IVisitor
         {
             case CvaExprClassName.CVA_NUMBER_INT_EXPR:
             {
-                emit(new WriteInstruction(mode, WriteILConst.WRITE_INT));
+                emit(new WriteInstruction(mode, CvaTypeCode.CVA_INT_TYPE));
                 break;
             }
             case CvaExprClassName.CVA_STRING_EXPR:
             {
-                emit(new WriteInstruction(mode, WriteILConst.WRITE_STRING));
+                emit(new WriteInstruction(mode, CvaTypeCode.CVA_STRING_TYPE));
                 break;
             }
             case CvaExprClassName.CVA_IDENTIFIER_EXPR:
@@ -364,7 +365,7 @@ public final class TranslatorVisitor implements IVisitor
                 // 目前可能遇到的情况有 idexpr, callfuncexpr, numberintexpr;
                 // 注释掉这个可以应对可能的异常;
 //                emit(new WriteInt());
-                emit(new WriteInstruction(mode, WriteILConst.WRITE_INT));
+                emit(new WriteInstruction(mode, CvaTypeCode.CVA_INT_TYPE));
                 break;
             }
         }
@@ -376,11 +377,11 @@ public final class TranslatorVisitor implements IVisitor
         {
             case CvaIntType.TYPE_LITERAL:
             {
-                return WriteILConst.WRITE_INT;
+                return CvaTypeCode.CVA_INT_TYPE;
             }
             case CvaStringType.TYPE_LITERAL:
             {
-                return WriteILConst.WRITE_STRING;
+                return CvaTypeCode.CVA_STRING_TYPE;
             }
             default:
             {

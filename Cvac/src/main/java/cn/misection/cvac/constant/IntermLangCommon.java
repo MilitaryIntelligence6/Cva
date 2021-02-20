@@ -7,23 +7,8 @@ package cn.misection.cvac.constant;
  * @Description TODO
  * @CreateTime 2021年02月16日 11:49:00
  */
-public final class WriteILConst
+public final class IntermLangCommon
 {
-    /**
-     * 控制台打印选项;
-     */
-
-    public static final byte WRITE_STRING = 0;
-
-    public static final byte WRITE_INT = 1;
-
-    public static final byte WRITE_BOOLEAN = 2;
-
-
-    /*
-     * end 控制台打印选项;
-     */
-
     public static final String NEW_LINE_S = "\n";
 
     public static final char NEW_LINE_CH = '\n';
@@ -33,5 +18,5 @@ public final class WriteILConst
     /**
      * 禁止构造;
      */
-    private WriteILConst() {}
+    private IntermLangCommon() {}
 }
