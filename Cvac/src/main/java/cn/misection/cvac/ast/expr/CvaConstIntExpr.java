@@ -7,11 +7,11 @@ package cn.misection.cvac.ast.expr;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:28:00
  */
-public final class CvaNumberIntExpr extends AbstractExpression
+public final class CvaConstIntExpr extends AbstractExpression
 {
     private int value;
 
-    public CvaNumberIntExpr(int lineNum, int value)
+    public CvaConstIntExpr(int lineNum, int value)
     {
         super(lineNum);
         this.value = value;

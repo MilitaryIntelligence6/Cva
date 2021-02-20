@@ -46,7 +46,7 @@ public final class UnReachableDel
     public void visit(CvaCallExpr expr) {}
 
     @Override
-    public void visit(CvaFalseExpr expr) {}
+    public void visit(CvaConstFalseExpr expr) {}
 
     @Override
     public void visit(CvaIdentifierExpr expr) {}
@@ -61,10 +61,10 @@ public final class UnReachableDel
     public void visit(CvaNegateExpr expr) {}
 
     @Override
-    public void visit(CvaNumberIntExpr expr) {}
+    public void visit(CvaConstIntExpr expr) {}
 
     @Override
-    public void visit(CvaStringExpr expr) {}
+    public void visit(CvaConstStringExpr expr) {}
 
     @Override
     public void visit(CvaSubExpr expr) {}
@@ -76,7 +76,7 @@ public final class UnReachableDel
     public void visit(CvaMulExpr expr) {}
 
     @Override
-    public void visit(CvaTrueExpr expr) {}
+    public void visit(CvaConstTrueExpr expr) {}
 
     @Override
     public void visit(CvaAssignStatement stm)
@@ -110,13 +110,13 @@ public final class UnReachableDel
     @Override
     public void visit(CvaIfStatement stm)
     {
-        if (stm.getCondition() instanceof CvaTrueExpr)
+        if (stm.getCondition() instanceof CvaConstTrueExpr)
         {
             this.isOptimizing = true;
             this.curStm = stm.getThenStatement();
             this.visit(this.curStm);
         }
-        else if (stm.getCondition() instanceof CvaFalseExpr)
+        else if (stm.getCondition() instanceof CvaConstFalseExpr)
         {
             this.isOptimizing = true;
             this.curStm = stm.getElseStatement();
@@ -137,12 +137,12 @@ public final class UnReachableDel
     @Override
     public void visit(CvaWhileStatement stm)
     {
-        if (stm.getCondition() instanceof CvaFalseExpr)
+        if (stm.getCondition() instanceof CvaConstFalseExpr)
         {
             this.isOptimizing = true;
             this.curStm = null;
         }
-        else if (stm.getCondition() instanceof CvaTrueExpr)
+        else if (stm.getCondition() instanceof CvaConstTrueExpr)
         {
             System.out.printf("Warning: at Line %d:  unend-loop!%n",
                     stm.getLineNum());

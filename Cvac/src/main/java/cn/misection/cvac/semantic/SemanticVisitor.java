@@ -197,7 +197,7 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaFalseExpr expr)
+    public void visit(CvaConstFalseExpr expr)
     {
         this.type = EnumCvaType.CVA_BOOLEAN;
     }
@@ -290,13 +290,13 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaNumberIntExpr expr)
+    public void visit(CvaConstIntExpr expr)
     {
         this.type = EnumCvaType.CVA_INT;
     }
 
     @Override
-    public void visit(CvaStringExpr expr)
+    public void visit(CvaConstStringExpr expr)
     {
         this.type = new CvaStringType();
     }
@@ -345,7 +345,7 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaTrueExpr expr)
+    public void visit(CvaConstTrueExpr expr)
     {
         this.type = EnumCvaType.CVA_BOOLEAN;
     }

@@ -9,9 +9,9 @@ import cn.misection.cvac.ast.type.AbstractType;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:18:00
  */
-public final class CvaFalseExpr extends AbstractExpression
+public final class CvaConstFalseExpr extends AbstractExpression
 {
-    public CvaFalseExpr(int lineNum)
+    public CvaConstFalseExpr(int lineNum)
     {
         super(lineNum);
     }

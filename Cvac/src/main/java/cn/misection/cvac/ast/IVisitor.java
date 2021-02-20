@@ -133,9 +133,9 @@ public interface IVisitor
                 visit((CvaCallExpr) expr);
                 break;
             }
-            case CvaExprClassName.CVA_FALSE_EXPR:
+            case CvaExprClassName.CVA_CONST_FALSE_EXPR:
             {
-                visit((CvaFalseExpr) expr);
+                visit((CvaConstFalseExpr) expr);
                 break;
             }
             case CvaExprClassName.CVA_IDENTIFIER_EXPR:
@@ -158,14 +158,14 @@ public interface IVisitor
                 visit((CvaNegateExpr) expr);
                 break;
             }
-            case CvaExprClassName.CVA_NUMBER_INT_EXPR:
+            case CvaExprClassName.CVA_CONST_INT_EXPR:
             {
-                visit((CvaNumberIntExpr) expr);
+                visit((CvaConstIntExpr) expr);
                 break;
             }
-            case CvaExprClassName.CVA_STRING_EXPR:
+            case CvaExprClassName.CVA_CONST_STRING_EXPR:
             {
-                visit((CvaStringExpr) expr);
+                visit((CvaConstStringExpr) expr);
                 break;
             }
             case CvaExprClassName.CVA_SUB_EXPR:
@@ -183,9 +183,9 @@ public interface IVisitor
                 visit((CvaMulExpr) expr);
                 break;
             }
-            case CvaExprClassName.CVA_TRUE_EXPR:
+            case CvaExprClassName.CVA_CONST_TRUE_EXPR:
             {
-                visit((CvaTrueExpr) expr);
+                visit((CvaConstTrueExpr) expr);
                 break;
             }
             default:
@@ -202,7 +202,7 @@ public interface IVisitor
 
     void visit(CvaCallExpr expr);
 
-    void visit(CvaFalseExpr expr);
+    void visit(CvaConstFalseExpr expr);
 
     void visit(CvaIdentifierExpr expr);
 
@@ -212,9 +212,9 @@ public interface IVisitor
 
     void visit(CvaNegateExpr expr);
 
-    void visit(CvaNumberIntExpr expr);
+    void visit(CvaConstIntExpr expr);
 
-    void visit(CvaStringExpr expr);
+    void visit(CvaConstStringExpr expr);
 
     void visit(CvaSubExpr expr);
 
@@ -222,7 +222,7 @@ public interface IVisitor
 
     void visit(CvaMulExpr expr);
 
-    void visit(CvaTrueExpr expr);
+    void visit(CvaConstTrueExpr expr);
 
     // Stm
     default void visit(AbstractStatement abstStm)

@@ -158,7 +158,7 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaFalseExpr expr)
+    public void visit(CvaConstFalseExpr expr)
     {
         emit(new Ldc<Integer>(0));
     }
@@ -238,13 +238,13 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaNumberIntExpr expr)
+    public void visit(CvaConstIntExpr expr)
     {
         emit(new Ldc<Integer>(expr.getValue()));
     }
 
     @Override
-    public void visit(CvaStringExpr expr)
+    public void visit(CvaConstStringExpr expr)
     {
         // FIXME;
         emit(new Ldc<String>(String.format("\"%s\"", expr.getLiteral())));
@@ -273,7 +273,7 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaTrueExpr expr)
+    public void visit(CvaConstTrueExpr expr)
     {
         emit(new Ldc<Integer>(1));
     }
@@ -348,12 +348,12 @@ public final class TranslatorVisitor implements IVisitor
         visit(expr);
         switch (expr.getClass().getSimpleName())
         {
-            case CvaExprClassName.CVA_NUMBER_INT_EXPR:
+            case CvaExprClassName.CVA_CONST_INT_EXPR:
             {
                 emit(new WriteInstruction(mode, EnumCvaType.CVA_INT));
                 break;
             }
-            case CvaExprClassName.CVA_STRING_EXPR:
+            case CvaExprClassName.CVA_CONST_STRING_EXPR:
             {
                 emit(new WriteInstruction(mode, EnumCvaType.CVA_STRING));
                 break;

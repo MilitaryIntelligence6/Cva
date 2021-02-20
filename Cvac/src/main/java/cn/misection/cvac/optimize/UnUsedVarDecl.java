@@ -61,7 +61,7 @@ public final class UnUsedVarDecl
     }
 
     @Override
-    public void visit(CvaFalseExpr expr) {}
+    public void visit(CvaConstFalseExpr expr) {}
 
     @Override
     public void visit(CvaIdentifierExpr expr)
@@ -93,10 +93,10 @@ public final class UnUsedVarDecl
     }
 
     @Override
-    public void visit(CvaNumberIntExpr expr) {}
+    public void visit(CvaConstIntExpr expr) {}
 
     @Override
-    public void visit(CvaStringExpr expr)
+    public void visit(CvaConstStringExpr expr)
     {
         // FIXME
     }
@@ -119,7 +119,7 @@ public final class UnUsedVarDecl
     }
 
     @Override
-    public void visit(CvaTrueExpr expr) {}
+    public void visit(CvaConstTrueExpr expr) {}
 
     @Override
     public void visit(CvaAssignStatement stm)

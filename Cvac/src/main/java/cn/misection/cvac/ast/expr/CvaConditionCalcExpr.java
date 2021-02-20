@@ -7,9 +7,9 @@ package cn.misection.cvac.ast.expr;
  * @Description TODO
  * @CreateTime 2021年02月20日 20:17:00
  */
-public class CvaConditionalExpr extends AbstractTernaryExpr
+public class CvaConditionCalcExpr extends AbstractTernaryExpr
 {
-    protected CvaConditionalExpr(int lineNum)
+    protected CvaConditionCalcExpr(int lineNum)
     {
         super(lineNum);
     }

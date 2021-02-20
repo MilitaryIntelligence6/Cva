@@ -13,7 +13,6 @@ import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.ICvaType;
-import cn.misection.cvac.ast.type.ICvaType;
 import cn.misection.cvac.ast.type.basic.*;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
 import cn.misection.cvac.ast.type.advance.CvaStringType;
@@ -217,25 +216,25 @@ public final class Parser
             }
             case NUMBER:
             {
-                expr = new CvaNumberIntExpr(curToken.getLineNum(), Integer.parseInt(curToken.getLiteral()));
+                expr = new CvaConstIntExpr(curToken.getLineNum(), Integer.parseInt(curToken.getLiteral()));
                 advance();
                 return expr;
             }
             case STRING:
             {
-                expr = new CvaStringExpr(curToken.getLineNum(), curToken.getLiteral());
+                expr = new CvaConstStringExpr(curToken.getLineNum(), curToken.getLiteral());
                 advance();
                 return expr;
             }
             case TRUE:
             {
-                expr = new CvaTrueExpr(curToken.getLineNum());
+                expr = new CvaConstTrueExpr(curToken.getLineNum());
                 advance();
                 return expr;
             }
             case FALSE:
             {
-                expr = new CvaFalseExpr(curToken.getLineNum());
+                expr = new CvaConstFalseExpr(curToken.getLineNum());
                 advance();
                 return expr;
             }
@@ -354,13 +353,13 @@ public final class Parser
             }
             else
             {
-                if (tem instanceof CvaNumberIntExpr)
+                if (tem instanceof CvaConstIntExpr)
                 {
                     expr = new CvaAddExpr(
                             tem.getLineNum(),
                             expr,
-                            new CvaNumberIntExpr(tem.getLineNum(),
-                                    -((CvaNumberIntExpr) tem).getValue()));
+                            new CvaConstIntExpr(tem.getLineNum(),
+                                    -((CvaConstIntExpr) tem).getValue()));
                 }
                 else
                 {

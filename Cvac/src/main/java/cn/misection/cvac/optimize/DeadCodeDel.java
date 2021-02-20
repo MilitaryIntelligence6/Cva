@@ -64,7 +64,7 @@ public final class DeadCodeDel
     }
 
     @Override
-    public void visit(CvaFalseExpr expr)
+    public void visit(CvaConstFalseExpr expr)
     {
     }
 
@@ -96,10 +96,10 @@ public final class DeadCodeDel
     }
 
     @Override
-    public void visit(CvaNumberIntExpr expr) {}
+    public void visit(CvaConstIntExpr expr) {}
 
     @Override
-    public void visit(CvaStringExpr expr)
+    public void visit(CvaConstStringExpr expr)
     {
         // FIXME
     }
@@ -124,7 +124,7 @@ public final class DeadCodeDel
     }
 
     @Override
-    public void visit(CvaTrueExpr expr)
+    public void visit(CvaConstTrueExpr expr)
     {
     }
 

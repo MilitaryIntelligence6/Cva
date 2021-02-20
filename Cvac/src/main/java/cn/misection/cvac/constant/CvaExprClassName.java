@@ -62,21 +62,21 @@ public final class CvaExprClassName
     /**
      * true
      */
-    public static final String CVA_TRUE_EXPR = "CvaTrueExpr";
+    public static final String CVA_CONST_TRUE_EXPR = "CvaConstTrueExpr";
 
     /**
      * CvaFalseExpr
      */
-    public static final String CVA_FALSE_EXPR = "CvaFalseExpr";
+    public static final String CVA_CONST_FALSE_EXPR = "CvaConstFalseExpr";
 
     /**
      * CvaNumberIntExpr
      */
-    public static final String CVA_NUMBER_INT_EXPR = "CvaNumberIntExpr";
+    public static final String CVA_CONST_INT_EXPR = "CvaConstIntExpr";
 
     /**
      * string;
      */
-    public static final String CVA_STRING_EXPR = "CvaStringExpr";
+    public static final String CVA_CONST_STRING_EXPR = "CvaConstStringExpr";
 
 }

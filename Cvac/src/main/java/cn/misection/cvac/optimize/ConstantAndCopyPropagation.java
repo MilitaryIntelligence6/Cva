@@ -37,9 +37,9 @@ public final class ConstantAndCopyPropagation
 
     private boolean isEqual(AbstractExpression fir, AbstractExpression sec)
     {
-        return (fir instanceof CvaNumberIntExpr
-                && sec instanceof CvaNumberIntExpr
-                && ((CvaNumberIntExpr) fir).getValue() == ((CvaNumberIntExpr) sec).getValue())
+        return (fir instanceof CvaConstIntExpr
+                && sec instanceof CvaConstIntExpr
+                && ((CvaConstIntExpr) fir).getValue() == ((CvaConstIntExpr) sec).getValue())
                 || (fir instanceof CvaIdentifierExpr
                 && sec instanceof CvaIdentifierExpr
                 && ((CvaIdentifierExpr) fir).getLiteral().equals(((CvaIdentifierExpr) sec).getLiteral()));
@@ -121,7 +121,7 @@ public final class ConstantAndCopyPropagation
     }
 
     @Override
-    public void visit(CvaFalseExpr expr)
+    public void visit(CvaConstFalseExpr expr)
     {
         this.curExpr = expr;
         this.canChange = true;
@@ -176,14 +176,14 @@ public final class ConstantAndCopyPropagation
     }
 
     @Override
-    public void visit(CvaNumberIntExpr expr)
+    public void visit(CvaConstIntExpr expr)
     {
         this.curExpr = expr;
         this.canChange = true;
     }
 
     @Override
-    public void visit(CvaStringExpr expr)
+    public void visit(CvaConstStringExpr expr)
     {
         // FIXME
     }
@@ -227,7 +227,7 @@ public final class ConstantAndCopyPropagation
     }
 
     @Override
-    public void visit(CvaTrueExpr expr)
+    public void visit(CvaConstTrueExpr expr)
     {
         this.curExpr = expr;
         this.canChange = true;
@@ -245,7 +245,7 @@ public final class ConstantAndCopyPropagation
             return;
         }
 
-        if (stm.getExpr() instanceof CvaIdentifierExpr || stm.getExpr() instanceof CvaNumberIntExpr)
+        if (stm.getExpr() instanceof CvaIdentifierExpr || stm.getExpr() instanceof CvaConstIntExpr)
         {
             this.conorcopy.put(stm.getLiteral(), stm.getExpr());
         }

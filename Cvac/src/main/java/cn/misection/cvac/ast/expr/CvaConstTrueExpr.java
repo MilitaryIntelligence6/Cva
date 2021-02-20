@@ -7,9 +7,9 @@ package cn.misection.cvac.ast.expr;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:33:00
  */
-public final class CvaTrueExpr extends AbstractExpression
+public final class CvaConstTrueExpr extends AbstractExpression
 {
-    public CvaTrueExpr(int lineNum)
+    public CvaConstTrueExpr(int lineNum)
     {
         super(lineNum);
     }
