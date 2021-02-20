@@ -45,8 +45,8 @@ public final class TranslatorVisitor implements IVisitor
 
     private Map<String, Integer> indexTable;
 
-    private BaseType genType;
-    private TargetDeclaration genDecl;
+    private BaseType targetType;
+    private TargetDeclaration targetDecl;
     private List<BaseInstruction> linearInstrList;
     private TargetMethod targetMethod;
     private TargetClass targetClass;
@@ -57,8 +57,8 @@ public final class TranslatorVisitor implements IVisitor
     {
         this.className = null;
         this.indexTable = null;
-        this.genType = null;
-        this.genDecl = null;
+        this.targetType = null;
+        this.targetDecl = null;
         this.linearInstrList = new ArrayList<>();
         this.targetMethod = null;
         this.targetEntryClass = null;
@@ -75,7 +75,7 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaClassType type)
     {
-        genType = new TargetClassType(type.getName());
+        targetType = new TargetClassType(type.getName());
     }
 
     @Override
@@ -87,7 +87,7 @@ public final class TranslatorVisitor implements IVisitor
             case CVA_BOOLEAN:
             {
                 // FIXME 后端取消;
-                genType = new TargetIntType();
+                targetType = new TargetIntType();
                 break;
             }
             default:
@@ -101,16 +101,16 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaStringType type)
     {
-        genType = new TargetStringType();
+        targetType = new TargetStringType();
     }
 
     @Override
     public void visit(CvaDeclaration decl)
     {
         visit(decl.type());
-        genDecl = new TargetDeclaration(
+        targetDecl = new TargetDeclaration(
                 decl.literal(),
-                this.genType);
+                this.targetType);
         if (indexTable != null) // if it is field
         {
             indexTable.put(decl.literal(), index++);
@@ -149,12 +149,12 @@ public final class TranslatorVisitor implements IVisitor
         visit(expr.getExpr());
         expr.getArgs().forEach(this::visit);
         visit(expr.getRetType());
-        BaseType rt = this.genType;
+        BaseType rt = this.targetType;
         List<BaseType> at = new ArrayList<>();
         expr.getArgTypeList().forEach(a ->
         {
             visit(a);
-            at.add(this.genType);
+            at.add(this.targetType);
         });
         emit(new InvokeVirtual(expr.getLiteral(), expr.getType(), at, rt));
     }
@@ -426,19 +426,19 @@ public final class TranslatorVisitor implements IVisitor
         this.index = 1;
         this.indexTable = new HashMap<>();
         visit(cvaMethod.getRetType());
-        BaseType theRetType = this.genType;
+        BaseType theRetType = this.targetType;
 
         List<TargetDeclaration> formalList = new ArrayList<>();
         cvaMethod.getArgumentList().forEach(f ->
         {
             visit(f);
-            formalList.add(this.genDecl);
+            formalList.add(this.targetDecl);
         });
         List<TargetDeclaration> localList = new ArrayList<>();
         cvaMethod.getLocalVarList().forEach(l ->
         {
             visit(l);
-            localList.add(this.genDecl);
+            localList.add(this.targetDecl);
         });
         setLinearInstrList(new ArrayList<>());
         // 方法内的;
@@ -470,19 +470,19 @@ public final class TranslatorVisitor implements IVisitor
         this.index = 1;
         this.indexTable = new HashMap<>();
         visit(mainMethod.getRetType());
-        BaseType theRetType = this.genType;
+        BaseType theRetType = this.targetType;
 
         List<TargetDeclaration> formalList = new ArrayList<>();
         mainMethod.getArgumentList().forEach(f ->
         {
             visit(f);
-            formalList.add(this.genDecl);
+            formalList.add(this.targetDecl);
         });
         List<TargetDeclaration> localList = new ArrayList<>();
         mainMethod.getLocalVarList().forEach(l ->
         {
             visit(l);
-            localList.add(this.genDecl);
+            localList.add(this.targetDecl);
         });
         this.linearInstrList = (new ArrayList<>());
         // 方法内的;
@@ -507,7 +507,7 @@ public final class TranslatorVisitor implements IVisitor
         cvaClass.getFieldList().forEach(f ->
         {
             visit(f);
-            fieldList.add(this.genDecl);
+            fieldList.add(this.targetDecl);
         });
         List<TargetMethod> methodList = new ArrayList<>();
         cvaClass.getMethodList().forEach(m ->
@@ -564,24 +564,24 @@ public final class TranslatorVisitor implements IVisitor
         this.className = className;
     }
 
-    public BaseType getGenType()
+    public BaseType getTargetType()
     {
-        return genType;
+        return targetType;
     }
 
-    public void setGenType(BaseType genType)
+    public void setTargetType(BaseType targetType)
     {
-        this.genType = genType;
+        this.targetType = targetType;
     }
 
-    public TargetDeclaration getGenDecl()
+    public TargetDeclaration getTargetDecl()
     {
-        return genDecl;
+        return targetDecl;
     }
 
-    public void setGenDecl(TargetDeclaration genDecl)
+    public void setTargetDecl(TargetDeclaration targetDecl)
     {
-        this.genDecl = genDecl;
+        this.targetDecl = targetDecl;
     }
 
     public List<BaseInstruction> getLinearInstrList()
@@ -594,42 +594,42 @@ public final class TranslatorVisitor implements IVisitor
         this.linearInstrList = linearInstrList;
     }
 
-    public TargetMethod getGenMethod()
+    public TargetMethod getTargetMethod()
     {
         return targetMethod;
     }
 
-    public void setGenMethod(TargetMethod targetMethod)
+    public void setTargetMethod(TargetMethod targetMethod)
     {
         this.targetMethod = targetMethod;
     }
 
-    public TargetClass getGenClass()
+    public TargetClass getTargetClass()
     {
         return targetClass;
     }
 
-    public void setGenClass(TargetClass targetClass)
+    public void setTargetClass(TargetClass targetClass)
     {
         this.targetClass = targetClass;
     }
 
-    public TargetEntryClass getGenEntry()
+    public TargetEntryClass getTargetEntryClass()
     {
         return targetEntryClass;
     }
 
-    public void setGenEntry(TargetEntryClass targetEntryClass)
+    public void setTargetEntryClass(TargetEntryClass targetEntryClass)
     {
         this.targetEntryClass = targetEntryClass;
     }
 
-    public TargetProgram getGenProgram()
+    public TargetProgram getTargetProgram()
     {
         return targetProgram;
     }
 
-    public void setGenProgram(TargetProgram targetProgram)
+    public void setTargetProgram(TargetProgram targetProgram)
     {
         this.targetProgram = targetProgram;
     }

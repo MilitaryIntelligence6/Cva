@@ -70,19 +70,19 @@ public final class CvaCompiler
         translator.visit(program);
 
         IntermLangGenerator generator = new IntermLangGenerator();
-        generator.visit(translator.getGenProgram());
+        generator.visit(translator.getTargetProgram());
         System.out.println("finish intermediate code gene\n");
 
-        doMkDIrs();
+        doMakeDirs();
 
         System.out.println("start gene .class file\n");
 
         // 现在是从il读到文件中而不是先创建il, il步骤在前, 需要设定一个全局;
-        String ilPath = String.format("%s.il", translator.getGenProgram().getEntryClass().getName());
+        String ilPath = String.format("%s.il", translator.getTargetProgram().getEntryClass().getName());
         // ascii instructions to binary file
         jasmin.Main.main(new String[] {ilPath});
 
-        for (TargetClass cla : translator.getGenProgram().getClassList())
+        for (TargetClass cla : translator.getTargetProgram().getClassList())
         {
             String filePath = String.format("%s.il", cla.getLiteral());
             jasmin.Main.main(new String[] {filePath});
@@ -132,7 +132,7 @@ public final class CvaCompiler
         return args[0];
     }
 
-    private static boolean mkDirs(String dirPath)
+    private static boolean makeDirs(String dirPath)
     {
         File dir = new File(dirPath);
         if (dir.exists())
@@ -150,13 +150,13 @@ public final class CvaCompiler
         }
     }
 
-    private static void doMkDIrs()
+    private static void doMakeDirs()
     {
-        if (!mkDirs(DebugMacro.DEBUG_CLASS_DIR))
+        if (!makeDirs(DebugMacro.DEBUG_CLASS_DIR))
         {
             System.err.printf("mkdir %s failed!\n", DebugMacro.DEBUG_CLASS_DIR);
         }
-        if (!mkDirs(DebugMacro.DEBUG_IL_DIR))
+        if (!makeDirs(DebugMacro.DEBUG_IL_DIR))
         {
             System.err.printf("mkdir %s failed\n", DebugMacro.DEBUG_IL_DIR);
         }
