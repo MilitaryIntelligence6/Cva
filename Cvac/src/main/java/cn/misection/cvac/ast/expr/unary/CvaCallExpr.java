@@ -1,6 +1,9 @@
-package cn.misection.cvac.ast.expr;
+package cn.misection.cvac.ast.expr.unary;
 
+import cn.misection.cvac.ast.expr.AbstractExpression;
+import cn.misection.cvac.ast.expr.EnumCvaExpr;
 import cn.misection.cvac.ast.type.ICvaType;
+import cn.misection.cvac.ast.type.basic.EnumCvaType;
 
 import java.util.List;
 
@@ -49,6 +52,18 @@ public final class CvaCallExpr extends AbstractExpression
     private void init()
     {
         this.type = null;
+    }
+
+    @Override
+    public EnumCvaType resType()
+    {
+        return retType.toEnum();
+    }
+
+    @Override
+    public EnumCvaExpr toEnum()
+    {
+        return EnumCvaExpr.CALL;
     }
 
     public String getLiteral()

@@ -1,4 +1,6 @@
-package cn.misection.cvac.ast.expr;
+package cn.misection.cvac.ast.expr.unary;
+
+import cn.misection.cvac.ast.expr.unary.AbstractUnaryExpr;
 
 /**
  * @author Military Intelligence 6 root
@@ -7,7 +9,7 @@ package cn.misection.cvac.ast.expr;
  * @Description TODO
  * @CreateTime 2021年02月20日 20:25:00
  */
-public class AbstractConstExpr extends AbstractUnaryExpr
+public abstract class AbstractConstExpr extends AbstractUnaryExpr
 {
     protected AbstractConstExpr(int lineNum)
     {

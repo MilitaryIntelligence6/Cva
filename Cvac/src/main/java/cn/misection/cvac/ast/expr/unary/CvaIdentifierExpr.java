@@ -1,6 +1,8 @@
-package cn.misection.cvac.ast.expr;
+package cn.misection.cvac.ast.expr.unary;
 
+import cn.misection.cvac.ast.expr.EnumCvaExpr;
 import cn.misection.cvac.ast.type.ICvaType;
+import cn.misection.cvac.ast.type.basic.EnumCvaType;
 
 /**
  * @author Military Intelligence 6 root
@@ -9,7 +11,7 @@ import cn.misection.cvac.ast.type.ICvaType;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:19:00
  */
-public final class CvaIdentifierExpr extends AbstractExpression
+public final class CvaIdentifierExpr extends AbstractUnaryExpr
 {
     private String literal;
 
@@ -32,6 +34,18 @@ public final class CvaIdentifierExpr extends AbstractExpression
         this.literal = literal;
         this.type = type;
         this.fieldFlag = fieldFlag;
+    }
+
+    @Override
+    public EnumCvaType resType()
+    {
+        return type.toEnum();
+    }
+
+    @Override
+    public EnumCvaExpr toEnum()
+    {
+        return EnumCvaExpr.IDENTIFIER;
     }
 
     public String getLiteral()

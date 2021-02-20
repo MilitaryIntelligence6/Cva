@@ -1,5 +1,7 @@
 package cn.misection.cvac.ast.expr;
 
+import cn.misection.cvac.ast.type.basic.EnumCvaType;
+
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0

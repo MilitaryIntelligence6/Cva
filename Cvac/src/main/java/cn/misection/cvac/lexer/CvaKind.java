@@ -468,6 +468,8 @@ public enum CvaKind
 
     RIGHT_SHIFT,
 
+    UNSIGNED_RIGHT_SHIFT,
+
 
     /*
      * 乘法, 原来无, 由于要和指针混淆, 所以暂时难以处理;
@@ -534,6 +536,11 @@ public enum CvaKind
      * <<=
      */
     RIGHT_SHIFT_ASSIGN,
+
+    /**
+     * >>>=
+     */
+    UNSIGNED_RIGHT_SHIFT_ASSIGN,
 
     /**
      * %=

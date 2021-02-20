@@ -7,6 +7,8 @@ import cn.misection.cvac.ast.decl.CvaDeclaration;
 import cn.misection.cvac.ast.entry.AbstractEntryClass;
 import cn.misection.cvac.ast.entry.CvaEntryClass;
 import cn.misection.cvac.ast.expr.*;
+import cn.misection.cvac.ast.expr.binary.*;
+import cn.misection.cvac.ast.expr.unary.*;
 import cn.misection.cvac.ast.method.AbstractMethod;
 import cn.misection.cvac.ast.method.CvaMainMethod;
 import cn.misection.cvac.ast.method.CvaMethod;

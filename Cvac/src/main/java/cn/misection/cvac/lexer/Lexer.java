@@ -320,14 +320,33 @@ public final class Lexer
                 }
                 case '>':
                 {
-                    if (stream.hasNext(2)
-                            && stream.peek(2) == '=')
+                    if (stream.hasNext(2))
                     {
-                        stream.poll(2);
-                        return new CvaToken(CvaKind.RIGHT_SHIFT_ASSIGN, lineNum);
+                        switch (stream.peek(2))
+                        {
+                            case '>':
+                            {
+                                if (stream.hasNext(3)
+                                        && stream.peek(3) == '=')
+                                {
+                                    stream.poll(3);
+                                    return new CvaToken(CvaKind.UNSIGNED_RIGHT_SHIFT_ASSIGN, lineNum);
+                                }
+                                stream.poll(2);
+                                return new CvaToken(CvaKind.UNSIGNED_RIGHT_SHIFT, lineNum);
+                            }
+                            case '=':
+                            {
+                                stream.poll(2);
+                                return new CvaToken(CvaKind.RIGHT_SHIFT_ASSIGN, lineNum);
+                            }
+                            default:
+                            {
+                                stream.poll();
+                                return new CvaToken(CvaKind.RIGHT_SHIFT, lineNum);
+                            }
+                        }
                     }
-                    stream.poll();
-                    return new CvaToken(CvaKind.RIGHT_SHIFT, lineNum);
                 }
                 default:
                 {

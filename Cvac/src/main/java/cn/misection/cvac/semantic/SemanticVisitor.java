@@ -4,7 +4,8 @@ import cn.misection.cvac.ast.IVisitor;
 import cn.misection.cvac.ast.clas.*;
 import cn.misection.cvac.ast.decl.*;
 import cn.misection.cvac.ast.entry.*;
-import cn.misection.cvac.ast.expr.*;
+import cn.misection.cvac.ast.expr.binary.*;
+import cn.misection.cvac.ast.expr.unary.*;
 import cn.misection.cvac.ast.method.*;
 import cn.misection.cvac.ast.program.*;
 import cn.misection.cvac.ast.statement.*;
@@ -264,15 +265,15 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaNewExpr expr)
     {
-        if (classTable.getClassBinding(expr.getLiteral()) != null)
+        if (classTable.getClassBinding(expr.getNewClassName()) != null)
         {
-            this.type = new CvaClassType(expr.getLiteral());
+            this.type = new CvaClassType(expr.getNewClassName());
         }
         else
         {
             errorLog(expr.getLineNum(),
                     String.format("cannot find the declaration of class \"%s\".",
-                            expr.getLiteral()));
+                            expr.getNewClassName()));
             // 执行不到死代码;
             type = EnumCvaType.UNKNOWN;
         }

@@ -1,4 +1,6 @@
-package cn.misection.cvac.ast.expr;
+package cn.misection.cvac.ast.expr.ternary;
+
+import cn.misection.cvac.ast.expr.AbstractExpression;
 
 /**
  * @author Military Intelligence 6 root

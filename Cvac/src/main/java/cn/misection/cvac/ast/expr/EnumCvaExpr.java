@@ -1,5 +1,7 @@
 package cn.misection.cvac.ast.expr;
 
+import javafx.beans.property.BooleanProperty;
+
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
@@ -7,7 +9,7 @@ package cn.misection.cvac.ast.expr;
  * @Description TODO
  * @CreateTime 2021年02月20日 20:09:00
  */
-public enum EnumCvaExpr implements IExpression
+public enum EnumCvaExpr
 {
     /**
      * 单目;
@@ -35,6 +37,8 @@ public enum EnumCvaExpr implements IExpression
 
     IDENTIFIER,
 
+    NEW,
+
     THIS,
 
     /*
@@ -58,9 +62,13 @@ public enum EnumCvaExpr implements IExpression
 
     BIT_OR,
 
+    BIT_XOR,
+
     LEFT_SHIFT,
 
     RIGHT_SHIFT,
+
+    UNSIGNED_RIGHT_SHIFT,
 
     XOR,
 
@@ -83,4 +91,20 @@ public enum EnumCvaExpr implements IExpression
      */
     CONDITION_CALC,
     ;
+
+    public static boolean isUnary(EnumCvaExpr expr)
+    {
+        return expr.ordinal() <= THIS.ordinal();
+    }
+
+    public static boolean isBinary(EnumCvaExpr expr)
+    {
+        return expr.ordinal() >= ADD.ordinal()
+                && expr.ordinal() <= OR_OR.ordinal();
+    }
+
+    public static boolean isTernary(EnumCvaExpr expr)
+    {
+        return expr == CONDITION_CALC;
+    }
 }

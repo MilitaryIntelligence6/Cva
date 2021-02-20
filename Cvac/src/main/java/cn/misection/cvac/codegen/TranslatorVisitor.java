@@ -5,6 +5,8 @@ import cn.misection.cvac.ast.clas.CvaClass;
 import cn.misection.cvac.ast.decl.CvaDeclaration;
 import cn.misection.cvac.ast.entry.CvaEntryClass;
 import cn.misection.cvac.ast.expr.*;
+import cn.misection.cvac.ast.expr.binary.*;
+import cn.misection.cvac.ast.expr.unary.*;
 import cn.misection.cvac.ast.method.CvaMainMethod;
 import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
@@ -219,7 +221,7 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaNewExpr expr)
     {
-        emit(new New(expr.getLiteral()));
+        emit(new New(expr.getNewClassName()));
     }
 
     @Override
