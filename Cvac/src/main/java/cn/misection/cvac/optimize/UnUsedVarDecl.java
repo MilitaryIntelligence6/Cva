@@ -29,75 +29,75 @@ public final class UnUsedVarDecl
     public boolean givesWarning;
 
     @Override
-    public void visit(CvaBooleanType t) {}
+    public void visit(CvaBooleanType type) {}
 
     @Override
-    public void visit(CvaClassType t) {}
+    public void visit(CvaClassType type) {}
 
     @Override
-    public void visit(CvaIntType t) {}
+    public void visit(CvaIntType type) {}
 
     @Override
     public void visit(CvaStringType type) {}
 
     @Override
-    public void visit(CvaDeclaration d) {}
+    public void visit(CvaDeclaration decl) {}
 
     @Override
-    public void visit(CvaAddExpr e)
+    public void visit(CvaAddExpr expr)
     {
-        this.visit(e.getLeft());
-        this.visit(e.getRight());
+        this.visit(expr.getLeft());
+        this.visit(expr.getRight());
     }
 
     @Override
-    public void visit(CvaAndAndExpr e)
+    public void visit(CvaAndAndExpr expr)
     {
-        this.visit(e.getLeft());
-        this.visit(e.getRight());
+        this.visit(expr.getLeft());
+        this.visit(expr.getRight());
     }
 
     @Override
-    public void visit(CvaCallExpr e)
+    public void visit(CvaCallExpr expr)
     {
-        this.visit(e.getExpr());
-        e.getArgs().forEach(this::visit);
+        this.visit(expr.getExpr());
+        expr.getArgs().forEach(this::visit);
     }
 
     @Override
-    public void visit(CvaFalseExpr e) {}
+    public void visit(CvaFalseExpr expr) {}
 
     @Override
-    public void visit(CvaIdentifierExpr e)
+    public void visit(CvaIdentifierExpr expr)
     {
-        if (this.unUsedLocals.containsKey(e.getLiteral()))
+        if (this.unUsedLocals.containsKey(expr.getLiteral()))
         {
-            this.unUsedLocals.remove(e.getLiteral());
+            this.unUsedLocals.remove(expr.getLiteral());
         }
-        else if (this.unUsedArgs.containsKey(e.getLiteral()))
+        else if (this.unUsedArgs.containsKey(expr.getLiteral()))
         {
-            this.unUsedArgs.remove(e.getLiteral());
+            this.unUsedArgs.remove(expr.getLiteral());
         }
     }
 
     @Override
-    public void visit(CvaLessThanExpr e)
+    public void visit(CvaLessThanExpr expr)
     {
-        this.visit(e.getLeft());
-        this.visit(e.getRight());
+        this.visit(expr.getLeft());
+        this.visit(expr.getRight());
     }
 
     @Override
-    public void visit(CvaNewExpr e) {}
+    public void visit(CvaNewExpr expr) {}
 
     @Override
-    public void visit(CvaNegateExpr e)
+    public void visit(CvaNegateExpr expr)
     {
-        this.visit(e.getExpr());
+        this.visit(expr.getExpr());
     }
 
     @Override
-    public void visit(CvaNumberIntExpr e) {}
+    public void visit(CvaNumberIntExpr expr) {}
 
     @Override
     public void visit(CvaStringExpr expr)
@@ -106,60 +106,60 @@ public final class UnUsedVarDecl
     }
 
     @Override
-    public void visit(CvaSubExpr e)
+    public void visit(CvaSubExpr expr)
     {
-        this.visit(e.getLeft());
-        this.visit(e.getRight());
+        this.visit(expr.getLeft());
+        this.visit(expr.getRight());
     }
 
     @Override
-    public void visit(CvaThisExpr e) {}
+    public void visit(CvaThisExpr expr) {}
 
     @Override
-    public void visit(CvaMulExpr e)
+    public void visit(CvaMulExpr expr)
     {
-        this.visit(e.getLeft());
-        this.visit(e.getRight());
+        this.visit(expr.getLeft());
+        this.visit(expr.getRight());
     }
 
     @Override
-    public void visit(CvaTrueExpr e) {}
+    public void visit(CvaTrueExpr expr) {}
 
     @Override
-    public void visit(CvaAssignStatement s)
+    public void visit(CvaAssignStatement stm)
     {
-        this.visit(new CvaIdentifierExpr(s.getLineNum(), s.getLiteral()));
-        this.visit(s.getExpr());
+        this.visit(new CvaIdentifierExpr(stm.getLineNum(), stm.getLiteral()));
+        this.visit(stm.getExpr());
     }
 
     @Override
-    public void visit(CvaBlockStatement s)
+    public void visit(CvaBlockStatement stm)
     {
-        s.getStatementList().forEach(this::visit);
+        stm.getStatementList().forEach(this::visit);
     }
 
     @Override
-    public void visit(CvaIfStatement s)
+    public void visit(CvaIfStatement stm)
     {
-        this.visit(s.getCondition());
-        this.visit(s.getThenStatement());
-        if (s.getElseStatement() != null)
+        this.visit(stm.getCondition());
+        this.visit(stm.getThenStatement());
+        if (stm.getElseStatement() != null)
         {
-            this.visit(s.getElseStatement());
+            this.visit(stm.getElseStatement());
         }
     }
 
     @Override
-    public void visit(CvaWriteStatement s)
+    public void visit(CvaWriteStatement stm)
     {
-        this.visit(s.getExpr());
+        this.visit(stm.getExpr());
     }
 
     @Override
-    public void visit(CvaWhileStatement s)
+    public void visit(CvaWhileStatement stm)
     {
-        this.visit(s.getCondition());
-        this.visit(s.getBody());
+        this.visit(stm.getCondition());
+        this.visit(stm.getBody());
     }
 
     @Override
@@ -219,15 +219,15 @@ public final class UnUsedVarDecl
     }
 
     @Override
-    public void visit(CvaEntryClass c)
+    public void visit(CvaEntryClass entryClass)
     {
     }
 
     @Override
-    public void visit(CvaProgram p)
+    public void visit(CvaProgram program)
     {
         this.isOptimizing = false;
-        p.getClassList().forEach(this::visit);
+        program.getClassList().forEach(this::visit);
     }
 
     @Override

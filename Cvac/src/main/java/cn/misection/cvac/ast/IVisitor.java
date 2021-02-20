@@ -21,29 +21,32 @@ import cn.misection.cvac.constant.CvaExprClassName;
  */
 public interface IVisitor
 {
-    // Type
-    default void visit(AbstractType t)
+    /**
+     * type
+     * @param type t;
+     */
+    default void visit(AbstractType type)
     {
-        switch (t.getClass().getSimpleName())
+        switch (type.getClass().getSimpleName())
         {
             case CvaTypeClassName.CVA_BOOLEAN_TYPE:
             {
-                visit((CvaBooleanType) t);
+                visit((CvaBooleanType) type);
                 break;
             }
             case CvaTypeClassName.CVA_CLASS_TYPE:
             {
-                visit((CvaClassType) t);
+                visit((CvaClassType) type);
                 break;
             }
             case CvaTypeClassName.CVA_INT_TYPE:
             {
-                visit((CvaIntType) t);
+                visit((CvaIntType) type);
                 break;
             }
             case CvaTypeClassName.CVA_STRING_TYPE:
             {
-                visit((CvaStringType) t);
+                visit((CvaStringType) type);
                 break;
             }
             default:
@@ -54,98 +57,98 @@ public interface IVisitor
         }
     }
 
-    void visit(CvaBooleanType t);
+    void visit(CvaBooleanType type);
 
-    void visit(CvaClassType t);
+    void visit(CvaClassType type);
 
-    void visit(CvaIntType t);
+    void visit(CvaIntType type);
 
     void visit(CvaStringType type);
 
     // Dec
-    default void visit(AbstractDeclaration d)
+    default void visit(AbstractDeclaration abstDecl)
     {
-        visit(((CvaDeclaration) d));
+        visit(((CvaDeclaration) abstDecl));
     }
 
-    void visit(CvaDeclaration d);
+    void visit(CvaDeclaration decl);
 
     /**
      * 做成map之后, 可以精简代码分散, 但是这里要用反射, 算了;
-     * @param e
+     * @param expr
      */
-    default void visit(AbstractExpression e)
+    default void visit(AbstractExpression expr)
     {
-        switch (e.getClass().getSimpleName())
+        switch (expr.getClass().getSimpleName())
         {
             case CvaExprClassName.CVA_ADD_EXPR:
             {
-                visit((CvaAddExpr) e);
+                visit((CvaAddExpr) expr);
                 break;
             }
             case CvaExprClassName.CVA_AND_AND_EXPR:
             {
-                visit((CvaAndAndExpr) e);
+                visit((CvaAndAndExpr) expr);
                 break;
             }
             case CvaExprClassName.CVA_CALL_EXPR:
             {
-                visit((CvaCallExpr) e);
+                visit((CvaCallExpr) expr);
                 break;
             }
             case CvaExprClassName.CVA_FALSE_EXPR:
             {
-                visit((CvaFalseExpr) e);
+                visit((CvaFalseExpr) expr);
                 break;
             }
             case CvaExprClassName.CVA_IDENTIFIER_EXPR:
             {
-                visit((CvaIdentifierExpr) e);
+                visit((CvaIdentifierExpr) expr);
                 break;
             }
             case CvaExprClassName.CVA_LESS_THAN_EXPR:
             {
-                visit((CvaLessThanExpr) e);
+                visit((CvaLessThanExpr) expr);
                 break;
             }
             case CvaExprClassName.CVA_NEW_EXPR:
             {
-                visit((CvaNewExpr) e);
+                visit((CvaNewExpr) expr);
                 break;
             }
             case CvaExprClassName.CVA_NEGATE_EXPR:
             {
-                visit((CvaNegateExpr) e);
+                visit((CvaNegateExpr) expr);
                 break;
             }
             case CvaExprClassName.CVA_NUMBER_INT_EXPR:
             {
-                visit((CvaNumberIntExpr) e);
+                visit((CvaNumberIntExpr) expr);
                 break;
             }
             case CvaExprClassName.CVA_STRING_EXPR:
             {
-                visit((CvaStringExpr) e);
+                visit((CvaStringExpr) expr);
                 break;
             }
             case CvaExprClassName.CVA_SUB_EXPR:
             {
-                visit((CvaSubExpr) e);
+                visit((CvaSubExpr) expr);
                 break;
             }
             case CvaExprClassName.CVA_THIS_EXPR:
             {
-                visit((CvaThisExpr) e);
+                visit((CvaThisExpr) expr);
                 break;
             }
             case CvaExprClassName.CVA_MUL_EXPR:
             {
-                visit((CvaMulExpr) e);
+                visit((CvaMulExpr) expr);
                 break;
             }
             case CvaExprClassName.CVA_TRUE_EXPR:
             {
-                visit((CvaTrueExpr) e);
+                visit((CvaTrueExpr) expr);
                 break;
             }
             default:
@@ -156,62 +159,62 @@ public interface IVisitor
         }
     }
 
-    void visit(CvaAddExpr e);
+    void visit(CvaAddExpr expr);
 
-    void visit(CvaAndAndExpr e);
+    void visit(CvaAndAndExpr expr);
 
-    void visit(CvaCallExpr e);
+    void visit(CvaCallExpr expr);
 
-    void visit(CvaFalseExpr e);
+    void visit(CvaFalseExpr expr);
 
-    void visit(CvaIdentifierExpr e);
+    void visit(CvaIdentifierExpr expr);
 
-    void visit(CvaLessThanExpr e);
+    void visit(CvaLessThanExpr expr);
 
-    void visit(CvaNewExpr e);
+    void visit(CvaNewExpr expr);
 
-    void visit(CvaNegateExpr e);
+    void visit(CvaNegateExpr expr);
 
-    void visit(CvaNumberIntExpr e);
+    void visit(CvaNumberIntExpr expr);
 
     void visit(CvaStringExpr expr);
 
-    void visit(CvaSubExpr e);
+    void visit(CvaSubExpr expr);
 
-    void visit(CvaThisExpr e);
+    void visit(CvaThisExpr expr);
 
-    void visit(CvaMulExpr e);
+    void visit(CvaMulExpr expr);
 
-    void visit(CvaTrueExpr e);
+    void visit(CvaTrueExpr expr);
 
     // Stm
-    default void visit(AbstractStatement abstSta)
+    default void visit(AbstractStatement abstStm)
     {
-        switch (abstSta.getClass().getSimpleName())
+        switch (abstStm.getClass().getSimpleName())
         {
             case CvaStatementClassName.CVA_ASSIGN_STATEMENT:
             {
-                visit((CvaAssignStatement) abstSta);
+                visit((CvaAssignStatement) abstStm);
                 break;
             }
             case CvaStatementClassName.CVA_BLOCK_STATEMENT:
             {
-                visit((CvaBlockStatement) abstSta);
+                visit((CvaBlockStatement) abstStm);
                 break;
             }
             case CvaStatementClassName.CVA_IF_STATEMENT:
             {
-                visit((CvaIfStatement) abstSta);
+                visit((CvaIfStatement) abstStm);
                 break;
             }
             case CvaStatementClassName.CVA_WRITE_STATEMENT:
             {
-                visit((CvaWriteStatement) abstSta);
+                visit((CvaWriteStatement) abstStm);
                 break;
             }
             case CvaStatementClassName.CVA_WHILE_STATEMENT:
             {
-                visit((CvaWhileStatement) abstSta);
+                visit((CvaWhileStatement) abstStm);
                 break;
             }
             default:
@@ -222,15 +225,15 @@ public interface IVisitor
         }
     }
 
-    void visit(CvaAssignStatement s);
+    void visit(CvaAssignStatement stm);
 
-    void visit(CvaBlockStatement s);
+    void visit(CvaBlockStatement stm);
 
-    void visit(CvaIfStatement s);
+    void visit(CvaIfStatement stm);
 
-    void visit(CvaWriteStatement s);
+    void visit(CvaWriteStatement stm);
 
-    void visit(CvaWhileStatement s);
+    void visit(CvaWhileStatement stm);
 
     /**
      * Method
@@ -250,20 +253,20 @@ public interface IVisitor
 
     void visit(CvaClass cvaClass);
 
-    default void visit(AbstractEntryClass c)
+    default void visit(AbstractEntryClass entryClass)
     {
-        visit(((CvaEntryClass) c));
+        visit(((CvaEntryClass) entryClass));
     }
 
-    void visit(CvaEntryClass c);
+    void visit(CvaEntryClass entryClass);
 
     void visit(CvaMainMethod entryMethod);
 
     // Program
-    default void visit(AbstractProgram p)
+    default void visit(AbstractProgram program)
     {
-        visit(((CvaProgram) p));
+        visit(((CvaProgram) program));
     }
 
-    void visit(CvaProgram p);
+    void visit(CvaProgram program);
 }

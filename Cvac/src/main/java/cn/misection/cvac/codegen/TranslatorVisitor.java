@@ -110,10 +110,10 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaAddExpr e)
+    public void visit(CvaAddExpr expr)
     {
-        visit(e.getLeft());
-        visit(e.getRight());
+        visit(expr.getLeft());
+        visit(expr.getRight());
         emit(new IAdd());
     }
 
@@ -136,23 +136,23 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaCallExpr e)
+    public void visit(CvaCallExpr expr)
     {
-        visit(e.getExpr());
-        e.getArgs().forEach(this::visit);
-        visit(e.getRetType());
+        visit(expr.getExpr());
+        expr.getArgs().forEach(this::visit);
+        visit(expr.getRetType());
         BaseType rt = this.genType;
         List<BaseType> at = new ArrayList<>();
-        e.getArgTypeList().forEach(a ->
+        expr.getArgTypeList().forEach(a ->
         {
             visit(a);
             at.add(this.genType);
         });
-        emit(new InvokeVirtual(e.getLiteral(), e.getType(), at, rt));
+        emit(new InvokeVirtual(expr.getLiteral(), expr.getType(), at, rt));
     }
 
     @Override
-    public void visit(CvaFalseExpr e)
+    public void visit(CvaFalseExpr expr)
     {
         emit(new Ldc<Integer>(0));
     }
@@ -190,12 +190,12 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaLessThanExpr e)
+    public void visit(CvaLessThanExpr expr)
     {
         Label t = new Label();
         Label r = new Label();
-        visit(e.getLeft());
-        visit(e.getRight());
+        visit(expr.getLeft());
+        visit(expr.getRight());
         emit(new Ificmplt(t));
         emit(new Ldc<Integer>(0));
         emit(new Goto(r));
@@ -205,17 +205,17 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaNewExpr e)
+    public void visit(CvaNewExpr expr)
     {
-        emit(new New(e.getLiteral()));
+        emit(new New(expr.getLiteral()));
     }
 
     @Override
-    public void visit(CvaNegateExpr e)
+    public void visit(CvaNegateExpr expr)
     {
         Label f = new Label();
         Label r = new Label();
-        visit(e.getExpr());
+        visit(expr.getExpr());
         emit(new Ldc<Integer>(1));
         emit(new Ificmplt(f));
         emit(new Ldc<Integer>(1));
@@ -226,9 +226,9 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaNumberIntExpr e)
+    public void visit(CvaNumberIntExpr expr)
     {
-        emit(new Ldc<Integer>(e.getValue()));
+        emit(new Ldc<Integer>(expr.getValue()));
     }
 
     @Override
@@ -239,47 +239,47 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaSubExpr e)
+    public void visit(CvaSubExpr expr)
     {
-        visit(e.getLeft());
-        visit(e.getRight());
+        visit(expr.getLeft());
+        visit(expr.getRight());
         emit(new ISub());
     }
 
     @Override
-    public void visit(CvaThisExpr e)
+    public void visit(CvaThisExpr expr)
     {
         emit(new ALoad(0));
     }
 
     @Override
-    public void visit(CvaMulExpr e)
+    public void visit(CvaMulExpr expr)
     {
-        visit(e.getLeft());
-        visit(e.getRight());
+        visit(expr.getLeft());
+        visit(expr.getRight());
         emit(new IMul());
     }
 
     @Override
-    public void visit(CvaTrueExpr e)
+    public void visit(CvaTrueExpr expr)
     {
         emit(new Ldc<Integer>(1));
     }
 
     /**
-     * @param assignSta
+     * @param stm
      * @FIXME 类型添加String是1, 二是要用前面写的switch方法替换;
      * 添加string应该只需要ref type就行;
      */
     @Override
-    public void visit(CvaAssignStatement assignSta)
+    public void visit(CvaAssignStatement stm)
     {
         try
         {
-            int index = this.indexTable.get(assignSta.getLiteral());
-            visit(assignSta.getExpr());
+            int index = this.indexTable.get(stm.getLiteral());
+            visit(stm.getExpr());
 //            if (assignSta.getType() instanceof CvaClassType)
-            if (assignSta.getType() instanceof AbstractReferenceType)
+            if (stm.getType() instanceof AbstractReferenceType)
             {
                 emit(new AStore(index));
             }
@@ -291,34 +291,34 @@ public final class TranslatorVisitor implements IVisitor
         catch (NullPointerException e)
         {
             emit(new ALoad(0));
-            visit(assignSta.getExpr());
-            emit(new PutField(String.format("%s/%s", this.className, assignSta.getLiteral()),
-                    assignSta.getType() instanceof CvaClassType ?
-                            (String.format("L%s;", ((CvaClassType) assignSta.getType()).getLiteral()))
+            visit(stm.getExpr());
+            emit(new PutField(String.format("%s/%s", this.className, stm.getLiteral()),
+                    stm.getType() instanceof CvaClassType ?
+                            (String.format("L%s;", ((CvaClassType) stm.getType()).getLiteral()))
                             : "I"));
         }
     }
 
     @Override
-    public void visit(CvaBlockStatement blockSta)
+    public void visit(CvaBlockStatement stm)
     {
-        blockSta.getStatementList().forEach(this::visit);
+        stm.getStatementList().forEach(this::visit);
     }
 
     @Override
-    public void visit(CvaIfStatement ifSta)
+    public void visit(CvaIfStatement stm)
     {
         Label l = new Label();
         Label r = new Label();
-        visit(ifSta.getCondition());
+        visit(stm.getCondition());
         emit(new Ldc<Integer>(1));
         emit(new Ificmplt(l));
-        visit(ifSta.getThenStatement());
+        visit(stm.getThenStatement());
         emit(new Goto(r));
         emit(new LabelJ(l));
-        if (ifSta.getElseStatement() != null)
+        if (stm.getElseStatement() != null)
         {
-            visit(ifSta.getElseStatement());
+            visit(stm.getElseStatement());
         }
         emit(new LabelJ(r));
     }
@@ -326,13 +326,13 @@ public final class TranslatorVisitor implements IVisitor
     /**
      * @TODO 要针对所有的expr操作判断写类型, 还是麻烦, 想个办法, 最好让抽象expr能返回类型;
      * @deprecated 目前大而化之只是权宜之计;
-     * @param writeSta
+     * @param stm
      */
     @Override
-    public void visit(CvaWriteStatement writeSta)
+    public void visit(CvaWriteStatement stm)
     {
-        byte mode = writeSta.getWriteMode();
-        AbstractExpression expr = writeSta.getExpr();
+        byte mode = stm.getWriteMode();
+        AbstractExpression expr = stm.getExpr();
         visit(expr);
         switch (expr.getClass().getSimpleName())
         {
@@ -393,15 +393,15 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaWhileStatement whileSta)
+    public void visit(CvaWhileStatement stm)
     {
         Label con = new Label();
         Label end = new Label();
         emit(new LabelJ(con));
-        visit(whileSta.getCondition());
+        visit(stm.getCondition());
         emit(new Ldc<Integer>(1));
         emit(new Ificmplt(end));
-        visit(whileSta.getBody());
+        visit(stm.getBody());
         emit(new Goto(con));
         emit(new LabelJ(end));
     }
@@ -526,11 +526,11 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaProgram cvaProgram)
+    public void visit(CvaProgram program)
     {
-        visit(cvaProgram.getEntryClass());
+        visit(program.getEntryClass());
         List<GenClass> classList = new ArrayList<>();
-        cvaProgram.getClassList().forEach(c ->
+        program.getClassList().forEach(c ->
         {
             visit(c);
             classList.add(this.genClass);

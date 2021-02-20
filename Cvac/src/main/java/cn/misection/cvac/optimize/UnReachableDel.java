@@ -26,66 +26,66 @@ public final class UnReachableDel
     private boolean isOptimizing;
 
     @Override
-    public void visit(CvaBooleanType t) {}
+    public void visit(CvaBooleanType type) {}
 
     @Override
-    public void visit(CvaClassType t) {}
+    public void visit(CvaClassType type) {}
 
     @Override
-    public void visit(CvaIntType t) {}
+    public void visit(CvaIntType type) {}
 
     @Override
     public void visit(CvaStringType type) {}
 
     @Override
-    public void visit(CvaDeclaration d) {}
+    public void visit(CvaDeclaration decl) {}
 
     @Override
-    public void visit(CvaAddExpr e) {}
+    public void visit(CvaAddExpr expr) {}
 
     @Override
-    public void visit(CvaAndAndExpr e) {}
+    public void visit(CvaAndAndExpr expr) {}
 
     @Override
-    public void visit(CvaCallExpr e) {}
+    public void visit(CvaCallExpr expr) {}
 
     @Override
-    public void visit(CvaFalseExpr e) {}
+    public void visit(CvaFalseExpr expr) {}
 
     @Override
-    public void visit(CvaIdentifierExpr e) {}
+    public void visit(CvaIdentifierExpr expr) {}
 
     @Override
-    public void visit(CvaLessThanExpr e) {}
+    public void visit(CvaLessThanExpr expr) {}
 
     @Override
-    public void visit(CvaNewExpr e) {}
+    public void visit(CvaNewExpr expr) {}
 
     @Override
-    public void visit(CvaNegateExpr e) {}
+    public void visit(CvaNegateExpr expr) {}
 
     @Override
-    public void visit(CvaNumberIntExpr e) {}
+    public void visit(CvaNumberIntExpr expr) {}
 
     @Override
     public void visit(CvaStringExpr expr) {}
 
     @Override
-    public void visit(CvaSubExpr e) {}
+    public void visit(CvaSubExpr expr) {}
 
     @Override
-    public void visit(CvaThisExpr e) {}
+    public void visit(CvaThisExpr expr) {}
 
     @Override
-    public void visit(CvaMulExpr e) {}
+    public void visit(CvaMulExpr expr) {}
 
     @Override
-    public void visit(CvaTrueExpr e) {}
+    public void visit(CvaTrueExpr expr) {}
 
     @Override
-    public void visit(CvaAssignStatement s)
+    public void visit(CvaAssignStatement stm)
     {
-        this.curStm = s;
+        this.curStm = stm;
     }
 
     @Override
@@ -112,49 +112,49 @@ public final class UnReachableDel
     }
 
     @Override
-    public void visit(CvaIfStatement s)
+    public void visit(CvaIfStatement stm)
     {
-        if (s.getCondition() instanceof CvaTrueExpr)
+        if (stm.getCondition() instanceof CvaTrueExpr)
         {
             this.isOptimizing = true;
-            this.curStm = s.getThenStatement();
+            this.curStm = stm.getThenStatement();
             this.visit(this.curStm);
         }
-        else if (s.getCondition() instanceof CvaFalseExpr)
+        else if (stm.getCondition() instanceof CvaFalseExpr)
         {
             this.isOptimizing = true;
-            this.curStm = s.getElseStatement();
+            this.curStm = stm.getElseStatement();
             this.visit(this.curStm);
         }
         else
         {
-            this.curStm = s;
+            this.curStm = stm;
         }
     }
 
     @Override
-    public void visit(CvaWriteStatement s)
+    public void visit(CvaWriteStatement stm)
     {
-        this.curStm = s;
+        this.curStm = stm;
     }
 
     @Override
-    public void visit(CvaWhileStatement s)
+    public void visit(CvaWhileStatement stm)
     {
-        if (s.getCondition() instanceof CvaFalseExpr)
+        if (stm.getCondition() instanceof CvaFalseExpr)
         {
             this.isOptimizing = true;
             this.curStm = null;
         }
-        else if (s.getCondition() instanceof CvaTrueExpr)
+        else if (stm.getCondition() instanceof CvaTrueExpr)
         {
             System.out.printf("Warning: at Line %d:  unend-loop!%n",
-                    s.getLineNum());
-            this.curStm = s;
+                    stm.getLineNum());
+            this.curStm = stm;
         }
         else
         {
-            this.curStm = s;
+            this.curStm = stm;
         }
 
     }
@@ -188,10 +188,10 @@ public final class UnReachableDel
     }
 
     @Override
-    public void visit(CvaEntryClass cvaEntryClass)
+    public void visit(CvaEntryClass entryClass)
     {
-        this.visit((CvaMainMethod) cvaEntryClass.getMainMethod());
-        cvaEntryClass.setStatement(this.curStm);
+        this.visit((CvaMainMethod) entryClass.getMainMethod());
+        entryClass.setStatement(this.curStm);
     }
 
     @Override
@@ -201,11 +201,11 @@ public final class UnReachableDel
     }
 
     @Override
-    public void visit(CvaProgram p)
+    public void visit(CvaProgram program)
     {
         this.isOptimizing = false;
-        this.visit(p.getEntryClass());
-        p.getClassList().forEach(this::visit);
+        this.visit(program.getEntryClass());
+        program.getClassList().forEach(this::visit);
     }
 
     @Override

@@ -38,28 +38,28 @@ public final class ConstantFolder
     }
 
     @Override
-    public void visit(CvaBooleanType t) {}
+    public void visit(CvaBooleanType type) {}
 
     @Override
-    public void visit(CvaClassType t) {}
+    public void visit(CvaClassType type) {}
 
     @Override
-    public void visit(CvaIntType t) {}
+    public void visit(CvaIntType type) {}
 
     @Override
     public void visit(CvaStringType type) {}
 
     @Override
-    public void visit(CvaDeclaration d) {}
+    public void visit(CvaDeclaration decl) {}
 
     @Override
-    public void visit(CvaAddExpr e)
+    public void visit(CvaAddExpr expr)
     {
-        this.visit(e.getLeft());
+        this.visit(expr.getLeft());
         if (isConstant())
         {
             CvaNumberIntExpr temLeft = (CvaNumberIntExpr) this.lastExpr;
-            this.visit(e.getRight());
+            this.visit(expr.getRight());
             if (isConstant())
             {
                 this.isOptimizing = true;
@@ -77,23 +77,23 @@ public final class ConstantFolder
         }
         else
         {
-            this.lastExpr = e;
+            this.lastExpr = expr;
         }
     }
 
     @Override
-    public void visit(CvaAndAndExpr e)
+    public void visit(CvaAndAndExpr expr)
     {
-        this.visit(e.getLeft());
+        this.visit(expr.getLeft());
         AbstractExpression temLeft = this.lastExpr;
-        this.visit(e.getRight());
+        this.visit(expr.getRight());
         AbstractExpression temRight = this.lastExpr;
 
         this.isOptimizing = true;
         if (temLeft instanceof CvaFalseExpr
                 || temRight instanceof CvaFalseExpr)
         {
-            this.lastExpr = new CvaFalseExpr(e.getLineNum());
+            this.lastExpr = new CvaFalseExpr(expr.getLineNum());
         }
         else if (temLeft instanceof CvaTrueExpr
                 && temRight instanceof CvaTrueExpr)
@@ -111,43 +111,43 @@ public final class ConstantFolder
         else
         {
             this.isOptimizing = false;
-            this.lastExpr = e;
+            this.lastExpr = expr;
         }
     }
 
     @Override
-    public void visit(CvaCallExpr e)
+    public void visit(CvaCallExpr expr)
     {
         List<AbstractExpression> argList = new ArrayList<>();
-        e.getArgs().forEach(arg ->
+        expr.getArgs().forEach(arg ->
         {
             this.visit(arg);
             argList.add(this.lastExpr);
         });
-        e.setArgs(argList);
-        this.lastExpr = e;
+        expr.setArgs(argList);
+        this.lastExpr = expr;
     }
 
     @Override
-    public void visit(CvaFalseExpr e)
+    public void visit(CvaFalseExpr expr)
     {
-        this.lastExpr = e;
+        this.lastExpr = expr;
     }
 
     @Override
-    public void visit(CvaIdentifierExpr e)
+    public void visit(CvaIdentifierExpr expr)
     {
-        this.lastExpr = e;
+        this.lastExpr = expr;
     }
 
     @Override
-    public void visit(CvaLessThanExpr e)
+    public void visit(CvaLessThanExpr expr)
     {
-        this.visit(e.getLeft());
+        this.visit(expr.getLeft());
         if (isConstant())
         {
             CvaNumberIntExpr temLeft = (CvaNumberIntExpr) this.lastExpr;
-            this.visit(e.getRight());
+            this.visit(expr.getRight());
             if (isConstant())
             {
                 this.isOptimizing = true;
@@ -165,20 +165,20 @@ public final class ConstantFolder
         }
         else
         {
-            this.lastExpr = e;
+            this.lastExpr = expr;
         }
     }
 
     @Override
-    public void visit(CvaNewExpr e)
+    public void visit(CvaNewExpr expr)
     {
-        this.lastExpr = e;
+        this.lastExpr = expr;
     }
 
     @Override
-    public void visit(CvaNegateExpr e)
+    public void visit(CvaNegateExpr expr)
     {
-        this.visit(e.getExpr());
+        this.visit(expr.getExpr());
         if (isConstant())
         {
             this.isOptimizing = true;
@@ -188,14 +188,14 @@ public final class ConstantFolder
         }
         else
         {
-            this.lastExpr = e;
+            this.lastExpr = expr;
         }
     }
 
     @Override
-    public void visit(CvaNumberIntExpr e)
+    public void visit(CvaNumberIntExpr expr)
     {
-        this.lastExpr = e;
+        this.lastExpr = expr;
     }
 
     @Override
@@ -205,13 +205,13 @@ public final class ConstantFolder
     }
 
     @Override
-    public void visit(CvaSubExpr e)
+    public void visit(CvaSubExpr expr)
     {
-        this.visit(e.getLeft());
+        this.visit(expr.getLeft());
         if (isConstant())
         {
             CvaNumberIntExpr temLeft = (CvaNumberIntExpr) this.lastExpr;
-            this.visit(e.getRight());
+            this.visit(expr.getRight());
             if (isConstant())
             {
                 this.isOptimizing = true;
@@ -229,24 +229,24 @@ public final class ConstantFolder
         }
         else
         {
-            this.lastExpr = e;
+            this.lastExpr = expr;
         }
     }
 
     @Override
-    public void visit(CvaThisExpr e)
+    public void visit(CvaThisExpr expr)
     {
-        this.lastExpr = e;
+        this.lastExpr = expr;
     }
 
     @Override
-    public void visit(CvaMulExpr e)
+    public void visit(CvaMulExpr expr)
     {
-        this.visit(e.getLeft());
+        this.visit(expr.getLeft());
         if (isConstant())
         {
             CvaNumberIntExpr temLeft = (CvaNumberIntExpr) this.lastExpr;
-            this.visit(e.getRight());
+            this.visit(expr.getRight());
             if (isConstant())
             {
                 this.isOptimizing = true;
@@ -264,54 +264,54 @@ public final class ConstantFolder
         }
         else
         {
-            this.lastExpr = e;
+            this.lastExpr = expr;
         }
     }
 
     @Override
-    public void visit(CvaTrueExpr e)
+    public void visit(CvaTrueExpr expr)
     {
-        this.lastExpr = e;
+        this.lastExpr = expr;
     }
 
     @Override
-    public void visit(CvaAssignStatement s)
+    public void visit(CvaAssignStatement stm)
     {
-        this.visit(s.getExpr());
-        s.setExpr(this.lastExpr);
+        this.visit(stm.getExpr());
+        stm.setExpr(this.lastExpr);
     }
 
     @Override
-    public void visit(CvaBlockStatement s)
+    public void visit(CvaBlockStatement stm)
     {
-        s.getStatementList().forEach(this::visit);
+        stm.getStatementList().forEach(this::visit);
     }
 
     @Override
-    public void visit(CvaIfStatement s)
+    public void visit(CvaIfStatement stm)
     {
-        this.visit(s.getCondition());
-        s.setCondition(this.lastExpr);
-        this.visit(s.getThenStatement());
-        if (s.getElseStatement() != null)
+        this.visit(stm.getCondition());
+        stm.setCondition(this.lastExpr);
+        this.visit(stm.getThenStatement());
+        if (stm.getElseStatement() != null)
         {
-            this.visit(s.getElseStatement());
+            this.visit(stm.getElseStatement());
         }
     }
 
     @Override
-    public void visit(CvaWriteStatement s)
+    public void visit(CvaWriteStatement stm)
     {
-        this.visit(s.getExpr());
-        s.setExpr(this.lastExpr);
+        this.visit(stm.getExpr());
+        stm.setExpr(this.lastExpr);
     }
 
     @Override
-    public void visit(CvaWhileStatement s)
+    public void visit(CvaWhileStatement stm)
     {
-        this.visit(s.getCondition());
-        s.setCondition(this.lastExpr);
-        this.visit(s.getBody());
+        this.visit(stm.getCondition());
+        stm.setCondition(this.lastExpr);
+        this.visit(stm.getBody());
     }
 
     @Override
@@ -341,11 +341,11 @@ public final class ConstantFolder
     }
 
     @Override
-    public void visit(CvaProgram p)
+    public void visit(CvaProgram program)
     {
         this.isOptimizing = false;
-        this.visit(p.getEntryClass());
-        p.getClassList().forEach(this::visit);
+        this.visit(program.getEntryClass());
+        program.getClassList().forEach(this::visit);
     }
 
     @Override

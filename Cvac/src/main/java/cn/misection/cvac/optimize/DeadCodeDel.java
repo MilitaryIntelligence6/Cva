@@ -31,76 +31,76 @@ public final class DeadCodeDel
     private boolean isOptimizing;
 
     @Override
-    public void visit(CvaBooleanType t) {}
+    public void visit(CvaBooleanType type) {}
 
     @Override
-    public void visit(CvaClassType t) {}
+    public void visit(CvaClassType type) {}
 
     @Override
-    public void visit(CvaIntType t) {}
+    public void visit(CvaIntType type) {}
 
     @Override
     public void visit(CvaStringType type) {}
 
     @Override
-    public void visit(CvaDeclaration d) {}
+    public void visit(CvaDeclaration decl) {}
 
     @Override
-    public void visit(CvaAddExpr e)
+    public void visit(CvaAddExpr expr)
     {
-        this.visit(e.getLeft());
-        this.visit(e.getRight());
+        this.visit(expr.getLeft());
+        this.visit(expr.getRight());
     }
 
     @Override
-    public void visit(CvaAndAndExpr e)
+    public void visit(CvaAndAndExpr expr)
     {
-        this.visit(e.getLeft());
-        this.visit(e.getRight());
+        this.visit(expr.getLeft());
+        this.visit(expr.getRight());
     }
 
     @Override
-    public void visit(CvaCallExpr e)
+    public void visit(CvaCallExpr expr)
     {
-        this.visit(e.getExpr());
-        e.getArgs().forEach(this::visit);
+        this.visit(expr.getExpr());
+        expr.getArgs().forEach(this::visit);
         this.containsCall = true;
     }
 
     @Override
-    public void visit(CvaFalseExpr e)
+    public void visit(CvaFalseExpr expr)
     {
     }
 
     @Override
-    public void visit(CvaIdentifierExpr e)
+    public void visit(CvaIdentifierExpr expr)
     {
-        if (this.localVars.contains(e.getLiteral()))
+        if (this.localVars.contains(expr.getLiteral()))
         {
-            this.localLiveness.add(e.getLiteral());
+            this.localLiveness.add(expr.getLiteral());
         }
     }
 
     @Override
-    public void visit(CvaLessThanExpr e)
+    public void visit(CvaLessThanExpr expr)
     {
-        this.visit(e.getLeft());
-        this.visit(e.getRight());
+        this.visit(expr.getLeft());
+        this.visit(expr.getRight());
     }
 
     @Override
-    public void visit(CvaNewExpr e)
+    public void visit(CvaNewExpr expr)
     {
     }
 
     @Override
-    public void visit(CvaNegateExpr e)
+    public void visit(CvaNegateExpr expr)
     {
-        this.visit(e.getExpr());
+        this.visit(expr.getExpr());
     }
 
     @Override
-    public void visit(CvaNumberIntExpr e) {}
+    public void visit(CvaNumberIntExpr expr) {}
 
     @Override
     public void visit(CvaStringExpr expr)
@@ -109,43 +109,43 @@ public final class DeadCodeDel
     }
 
     @Override
-    public void visit(CvaSubExpr e)
+    public void visit(CvaSubExpr expr)
     {
-        this.visit(e.getLeft());
-        this.visit(e.getRight());
+        this.visit(expr.getLeft());
+        this.visit(expr.getRight());
     }
 
     @Override
-    public void visit(CvaThisExpr e)
-    {
-    }
-
-    @Override
-    public void visit(CvaMulExpr e)
-    {
-        this.visit(e.getLeft());
-        this.visit(e.getRight());
-    }
-
-    @Override
-    public void visit(CvaTrueExpr e)
+    public void visit(CvaThisExpr expr)
     {
     }
 
     @Override
-    public void visit(CvaAssignStatement s)
+    public void visit(CvaMulExpr expr)
     {
-        if (this.localLiveness.contains(s.getLiteral())
-                || this.curFields.contains(s.getLiteral()))
+        this.visit(expr.getLeft());
+        this.visit(expr.getRight());
+    }
+
+    @Override
+    public void visit(CvaTrueExpr expr)
+    {
+    }
+
+    @Override
+    public void visit(CvaAssignStatement stm)
+    {
+        if (this.localLiveness.contains(stm.getLiteral())
+                || this.curFields.contains(stm.getLiteral()))
         {
-            this.localLiveness.remove(s.getLiteral());
-            this.visit(s.getExpr());
+            this.localLiveness.remove(stm.getLiteral());
+            this.visit(stm.getExpr());
             this.shouldDel = false;
             return;
         }
 
         this.containsCall = false;
-        this.visit(s.getExpr());
+        this.visit(stm.getExpr());
         if (this.containsCall)
         {
             this.shouldDel = false;
@@ -153,75 +153,75 @@ public final class DeadCodeDel
     }
 
     @Override
-    public void visit(CvaBlockStatement s)
+    public void visit(CvaBlockStatement stm)
     {
-        for (int i = s.getStatementList().size() - 1; i >= 0; i--)
+        for (int i = stm.getStatementList().size() - 1; i >= 0; i--)
         {
-            this.visit(s.getStatementList().get(i));
+            this.visit(stm.getStatementList().get(i));
             if (this.shouldDel)
             {
                 this.isOptimizing = true;
-                s.getStatementList().remove(i);
+                stm.getStatementList().remove(i);
             }
         }
-        this.shouldDel = s.getStatementList().size() == 0;
+        this.shouldDel = stm.getStatementList().size() == 0;
     }
 
     @Override
-    public void visit(CvaIfStatement s)
+    public void visit(CvaIfStatement stm)
     {
         HashSet<String> temOriginal = new HashSet<>();
         this.localLiveness.forEach(temOriginal::add);
-        this.visit(s.getThenStatement());
+        this.visit(stm.getThenStatement());
         if (this.shouldDel)
         {
-            s.setThenStatement(null);
+            stm.setThenStatement(null);
         }
         HashSet<String> tehLeftLiveness = this.localLiveness;
 
         this.localLiveness = temOriginal;
-        if (s.getElseStatement() != null)
+        if (stm.getElseStatement() != null)
         {
-            this.visit(s.getElseStatement());
+            this.visit(stm.getElseStatement());
         }
         if (this.shouldDel)
         {
-            s.setElseStatement(null);
+            stm.setElseStatement(null);
         }
         tehLeftLiveness.forEach(this.localLiveness::add);
 
 //        this.shouldDel = s.getThenStatement() == null && s.getThenStatement() == null;
-        this.shouldDel = s.getThenStatement() == null;
+        this.shouldDel = stm.getThenStatement() == null;
         if (this.shouldDel)
         {
             this.localLiveness = temOriginal;
             return;
         }
         // this.isAssign = false;
-        this.visit(s.getCondition());
+        this.visit(stm.getCondition());
     }
 
     @Override
-    public void visit(CvaWriteStatement s)
+    public void visit(CvaWriteStatement stm)
     {
         // this.isAssign = false;
-        this.visit(s.getExpr());
+        this.visit(stm.getExpr());
         this.shouldDel = false;
     }
 
     @Override
-    public void visit(CvaWhileStatement s)
+    public void visit(CvaWhileStatement stm)
     {
         HashSet<String> temOriginal = new HashSet<>();
         this.localLiveness.forEach(temOriginal::add);
-        this.visit(s.getBody());
+        this.visit(stm.getBody());
         if (this.shouldDel) // this statement will be deleted totally
         {
             this.localLiveness = temOriginal;
             return;         // so return is safe.
         }
         // this.isAssign = false;
-        this.visit(s.getCondition());
+        this.visit(stm.getCondition());
     }
 
     @Override
@@ -265,15 +265,15 @@ public final class DeadCodeDel
     }
 
     @Override
-    public void visit(CvaEntryClass c)
+    public void visit(CvaEntryClass entryClass)
     {
     }
 
     @Override
-    public void visit(CvaProgram p)
+    public void visit(CvaProgram program)
     {
         this.isOptimizing = false;
-        p.getClassList().forEach(this::visit);
+        program.getClassList().forEach(this::visit);
     }
 
     @Override
