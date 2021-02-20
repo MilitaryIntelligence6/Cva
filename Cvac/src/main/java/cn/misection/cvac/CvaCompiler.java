@@ -21,15 +21,15 @@ import java.io.*;
  */
 public final class CvaCompiler
 {
-    private static final String ORDINARY = "-o";
+    private static final String OPTIMIZE = "-o";
 
-    private static final String ORDINARY_0 = "-o0";
+    private static final String OPTIMIZE_0 = "-o0";
 
-    private static final String ORDINARY_1 = "-o1";
+    private static final String OPTIMIZE_1 = "-o1";
 
-    private static final String ORDINARY_2 = "-o2";
+    private static final String OPTIMIZE_2 = "-o2";
 
-    private static final String ORDINARY_3 = "-o3";
+    private static final String OPTIMIZE_3 = "-o3";
 
     private static final String PEEK_VERSION = "-v";
 
