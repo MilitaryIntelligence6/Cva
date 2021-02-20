@@ -1,10 +1,10 @@
 package cn.misection.cvac.codegen.bst;
 
-import cn.misection.cvac.codegen.bst.bclas.GenClass;
-import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
-import cn.misection.cvac.codegen.bst.bentry.GenEntryClass;
-import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
-import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
+import cn.misection.cvac.codegen.bst.bclas.TargetClass;
+import cn.misection.cvac.codegen.bst.bdecl.TargetDeclaration;
+import cn.misection.cvac.codegen.bst.bentry.TargetEntryClass;
+import cn.misection.cvac.codegen.bst.bmethod.TargetMethod;
+import cn.misection.cvac.codegen.bst.bprogram.TargetProgram;
 import cn.misection.cvac.codegen.bst.instruction.*;
 import cn.misection.cvac.codegen.bst.btype.BaseType;
 import cn.misection.cvac.codegen.bst.btype.basic.BaseBasicType;
@@ -39,7 +39,7 @@ public interface IBackendVisitor
      * declrartion;
      * @param decl declaration;
      */
-    void visit(GenDeclaration decl);
+    void visit(TargetDeclaration decl);
 
     /**
      * statements
@@ -183,11 +183,11 @@ public interface IBackendVisitor
 
     void visit(PutField instruction);
 
-    void visit(GenMethod genMethod);
+    void visit(TargetMethod targetMethod);
 
-    void visit(GenEntryClass entryClass);
+    void visit(TargetEntryClass entryClass);
 
-    void visit(GenClass genClass);
+    void visit(TargetClass targetClass);
 
-    void visit(GenProgram genProgram);
+    void visit(TargetProgram targetProgram);
 }

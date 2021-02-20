@@ -1,6 +1,6 @@
 package cn.misection.cvac.codegen.bst.bmethod;
 
-import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
+import cn.misection.cvac.codegen.bst.bdecl.TargetDeclaration;
 import cn.misection.cvac.codegen.bst.instruction.BaseInstruction;
 import cn.misection.cvac.codegen.bst.btype.BaseType;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 20:02:00
  */
-public final class GenMethod extends BaseMethod
+public final class TargetMethod extends BaseMethod
 {
     private String name;
 
@@ -30,9 +30,9 @@ public final class GenMethod extends BaseMethod
      */
     private String className;
 
-    private List<GenDeclaration> formalList;
+    private List<TargetDeclaration> formalList;
 
-    private List<GenDeclaration> localList;
+    private List<TargetDeclaration> localList;
 
     private List<BaseInstruction> statementList;
 
@@ -51,12 +51,12 @@ public final class GenMethod extends BaseMethod
      * @param retExpr
      * @param index
      */
-    public GenMethod(
+    public TargetMethod(
             String name,
             BaseType retType,
             String className,
-            List<GenDeclaration> formalList,
-            List<GenDeclaration> localList,
+            List<TargetDeclaration> formalList,
+            List<TargetDeclaration> localList,
             List<BaseInstruction> statementList,
             int retExpr,
             int index
@@ -113,22 +113,22 @@ public final class GenMethod extends BaseMethod
         this.className = className;
     }
 
-    public List<GenDeclaration> getFormalList()
+    public List<TargetDeclaration> getFormalList()
     {
         return formalList;
     }
 
-    public void setFormalList(List<GenDeclaration> formalList)
+    public void setFormalList(List<TargetDeclaration> formalList)
     {
         this.formalList = formalList;
     }
 
-    public List<GenDeclaration> getLocalList()
+    public List<TargetDeclaration> getLocalList()
     {
         return localList;
     }
 
-    public void setLocalList(List<GenDeclaration> localList)
+    public void setLocalList(List<TargetDeclaration> localList)
     {
         this.localList = localList;
     }

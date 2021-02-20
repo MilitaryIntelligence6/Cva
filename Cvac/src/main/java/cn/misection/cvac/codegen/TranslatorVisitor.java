@@ -16,11 +16,11 @@ import cn.misection.cvac.ast.type.reference.AbstractReferenceType;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
 import cn.misection.cvac.ast.type.reference.CvaStringType;
 import cn.misection.cvac.codegen.bst.Label;
-import cn.misection.cvac.codegen.bst.bclas.GenClass;
-import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
-import cn.misection.cvac.codegen.bst.bentry.GenEntryClass;
-import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
-import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
+import cn.misection.cvac.codegen.bst.bclas.TargetClass;
+import cn.misection.cvac.codegen.bst.bdecl.TargetDeclaration;
+import cn.misection.cvac.codegen.bst.bentry.TargetEntryClass;
+import cn.misection.cvac.codegen.bst.bmethod.TargetMethod;
+import cn.misection.cvac.codegen.bst.bprogram.TargetProgram;
 import cn.misection.cvac.codegen.bst.btype.BaseType;
 import cn.misection.cvac.codegen.bst.btype.basic.TargetIntType;
 import cn.misection.cvac.codegen.bst.btype.reference.TargetClassType;
@@ -46,12 +46,12 @@ public final class TranslatorVisitor implements IVisitor
     private Map<String, Integer> indexTable;
 
     private BaseType genType;
-    private GenDeclaration genDecl;
+    private TargetDeclaration genDecl;
     private List<BaseInstruction> linearInstrList;
-    private GenMethod genMethod;
-    private GenClass genClass;
-    private GenEntryClass genEntryClass;
-    private GenProgram genProgram;
+    private TargetMethod targetMethod;
+    private TargetClass targetClass;
+    private TargetEntryClass targetEntryClass;
+    private TargetProgram targetProgram;
 
     public TranslatorVisitor()
     {
@@ -60,10 +60,10 @@ public final class TranslatorVisitor implements IVisitor
         this.genType = null;
         this.genDecl = null;
         this.linearInstrList = new ArrayList<>();
-        this.genMethod = null;
-        this.genEntryClass = null;
-        this.genClass = null;
-        this.genProgram = null;
+        this.targetMethod = null;
+        this.targetEntryClass = null;
+        this.targetClass = null;
+        this.targetProgram = null;
     }
 
     private void emit(BaseInstruction instruction)
@@ -99,7 +99,7 @@ public final class TranslatorVisitor implements IVisitor
     public void visit(CvaDeclaration decl)
     {
         visit(decl.type());
-        genDecl = new GenDeclaration(
+        genDecl = new TargetDeclaration(
                 decl.literal(),
                 this.genType);
         if (indexTable != null) // if it is field
@@ -413,13 +413,13 @@ public final class TranslatorVisitor implements IVisitor
         visit(cvaMethod.getRetType());
         BaseType theRetType = this.genType;
 
-        List<GenDeclaration> formalList = new ArrayList<>();
+        List<TargetDeclaration> formalList = new ArrayList<>();
         cvaMethod.getArgumentList().forEach(f ->
         {
             visit(f);
             formalList.add(this.genDecl);
         });
-        List<GenDeclaration> localList = new ArrayList<>();
+        List<TargetDeclaration> localList = new ArrayList<>();
         cvaMethod.getLocalVarList().forEach(l ->
         {
             visit(l);
@@ -438,7 +438,7 @@ public final class TranslatorVisitor implements IVisitor
         {
             emit(new IReturn());
         }
-        genMethod = new GenMethod(
+        targetMethod = new TargetMethod(
                 cvaMethod.name(),
                 theRetType,
                 this.className,
@@ -457,13 +457,13 @@ public final class TranslatorVisitor implements IVisitor
         visit(mainMethod.getRetType());
         BaseType theRetType = this.genType;
 
-        List<GenDeclaration> formalList = new ArrayList<>();
+        List<TargetDeclaration> formalList = new ArrayList<>();
         mainMethod.getArgumentList().forEach(f ->
         {
             visit(f);
             formalList.add(this.genDecl);
         });
-        List<GenDeclaration> localList = new ArrayList<>();
+        List<TargetDeclaration> localList = new ArrayList<>();
         mainMethod.getLocalVarList().forEach(l ->
         {
             visit(l);
@@ -473,7 +473,7 @@ public final class TranslatorVisitor implements IVisitor
         // 方法内的;
         mainMethod.getStatementList().forEach(this::visit);
 
-        genMethod = new GenMethod(
+        targetMethod = new TargetMethod(
                 mainMethod.name(),
                 theRetType,
                 this.className,
@@ -488,19 +488,19 @@ public final class TranslatorVisitor implements IVisitor
     public void visit(CvaClass cvaClass)
     {
         setClassName(cvaClass.name());
-        List<GenDeclaration> fieldList = new ArrayList<>();
+        List<TargetDeclaration> fieldList = new ArrayList<>();
         cvaClass.getFieldList().forEach(f ->
         {
             visit(f);
             fieldList.add(this.genDecl);
         });
-        List<GenMethod> methodList = new ArrayList<>();
+        List<TargetMethod> methodList = new ArrayList<>();
         cvaClass.getMethodList().forEach(m ->
         {
             visit(m);
-            methodList.add(this.genMethod);
+            methodList.add(this.targetMethod);
         });
-        genClass = new GenClass(
+        targetClass = new TargetClass(
                 cvaClass.name(),
                 cvaClass.parent(),
                 fieldList,
@@ -518,7 +518,7 @@ public final class TranslatorVisitor implements IVisitor
 //        visit(entryClass.statement());
 
 //        entryClass..forEach(this::visit);
-        genEntryClass = new GenEntryClass(entryClass.name(),
+        targetEntryClass = new TargetEntryClass(entryClass.name(),
                 this.linearInstrList);
         // 会重复使用, 赋给每个域;
         this.linearInstrList = new ArrayList<>();
@@ -528,14 +528,14 @@ public final class TranslatorVisitor implements IVisitor
     public void visit(CvaProgram program)
     {
         visit(program.getEntryClass());
-        List<GenClass> classList = new ArrayList<>();
+        List<TargetClass> classList = new ArrayList<>();
         program.getClassList().forEach(c ->
         {
             visit(c);
-            classList.add(this.genClass);
+            classList.add(this.targetClass);
         });
-        genProgram = new GenProgram(
-                this.genEntryClass,
+        targetProgram = new TargetProgram(
+                this.targetEntryClass,
                 classList);
     }
 
@@ -559,12 +559,12 @@ public final class TranslatorVisitor implements IVisitor
         this.genType = genType;
     }
 
-    public GenDeclaration getGenDecl()
+    public TargetDeclaration getGenDecl()
     {
         return genDecl;
     }
 
-    public void setGenDecl(GenDeclaration genDecl)
+    public void setGenDecl(TargetDeclaration genDecl)
     {
         this.genDecl = genDecl;
     }
@@ -579,43 +579,43 @@ public final class TranslatorVisitor implements IVisitor
         this.linearInstrList = linearInstrList;
     }
 
-    public GenMethod getGenMethod()
+    public TargetMethod getGenMethod()
     {
-        return genMethod;
+        return targetMethod;
     }
 
-    public void setGenMethod(GenMethod genMethod)
+    public void setGenMethod(TargetMethod targetMethod)
     {
-        this.genMethod = genMethod;
+        this.targetMethod = targetMethod;
     }
 
-    public GenClass getGenClass()
+    public TargetClass getGenClass()
     {
-        return genClass;
+        return targetClass;
     }
 
-    public void setGenClass(GenClass genClass)
+    public void setGenClass(TargetClass targetClass)
     {
-        this.genClass = genClass;
+        this.targetClass = targetClass;
     }
 
-    public GenEntryClass getGenEntry()
+    public TargetEntryClass getGenEntry()
     {
-        return genEntryClass;
+        return targetEntryClass;
     }
 
-    public void setGenEntry(GenEntryClass genEntryClass)
+    public void setGenEntry(TargetEntryClass targetEntryClass)
     {
-        this.genEntryClass = genEntryClass;
+        this.targetEntryClass = targetEntryClass;
     }
 
-    public GenProgram getGenProgram()
+    public TargetProgram getGenProgram()
     {
-        return genProgram;
+        return targetProgram;
     }
 
-    public void setGenProgram(GenProgram genProgram)
+    public void setGenProgram(TargetProgram targetProgram)
     {
-        this.genProgram = genProgram;
+        this.targetProgram = targetProgram;
     }
 }

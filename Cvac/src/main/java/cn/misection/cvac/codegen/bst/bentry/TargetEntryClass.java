@@ -11,11 +11,11 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:27:00
  */
-public final class GenEntryClass extends BaseEntryClass
+public final class TargetEntryClass extends BaseEntryClass
 {
     // FIXME
     // TODO 这里是有改动的, stms是list;
-    public GenEntryClass(String name, List<BaseInstruction> statementList)
+    public TargetEntryClass(String name, List<BaseInstruction> statementList)
     {
         super(name, statementList);
     }

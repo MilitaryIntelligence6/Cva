@@ -1,11 +1,11 @@
 package cn.misection.cvac.codegen;
 
 import cn.misection.cvac.codegen.bst.IBackendVisitor;
-import cn.misection.cvac.codegen.bst.bclas.GenClass;
-import cn.misection.cvac.codegen.bst.bdecl.GenDeclaration;
-import cn.misection.cvac.codegen.bst.bentry.GenEntryClass;
-import cn.misection.cvac.codegen.bst.bmethod.GenMethod;
-import cn.misection.cvac.codegen.bst.bprogram.GenProgram;
+import cn.misection.cvac.codegen.bst.bclas.TargetClass;
+import cn.misection.cvac.codegen.bst.bdecl.TargetDeclaration;
+import cn.misection.cvac.codegen.bst.bentry.TargetEntryClass;
+import cn.misection.cvac.codegen.bst.bmethod.TargetMethod;
+import cn.misection.cvac.codegen.bst.bprogram.TargetProgram;
 import cn.misection.cvac.codegen.bst.instruction.*;
 import cn.misection.cvac.codegen.bst.btype.basic.BaseBasicType;
 import cn.misection.cvac.codegen.bst.btype.reference.BaseReferenceType;
@@ -94,7 +94,7 @@ public final class IntermLangGenerator implements IBackendVisitor
     }
 
     @Override
-    public void visit(GenDeclaration decl)
+    public void visit(TargetDeclaration decl)
     {
         writeln(";Error: you are accessing the dec single instance.");
     }
@@ -218,35 +218,35 @@ public final class IntermLangGenerator implements IBackendVisitor
     }
 
     @Override
-    public void visit(GenMethod genMethod)
+    public void visit(TargetMethod targetMethod)
     {
-        writef(".method public %s(", genMethod.getName());
-        genMethod.getFormalList().forEach(f -> visit(f.getType()));
+        writef(".method public %s(", targetMethod.getName());
+        targetMethod.getFormalList().forEach(f -> visit(f.getType()));
         write(")");
-        visit(genMethod.getRetType());
+        visit(targetMethod.getRetType());
         writeln();
         writef(".limit stack %d\n", StackConst.MAX_STACK_DEPTH);
-        writef(".limit locals %d\n", genMethod.getIndex() + 1);
+        writef(".limit locals %d\n", targetMethod.getIndex() + 1);
 
-        genMethod.getStatementList().forEach(this::visit);
+        targetMethod.getStatementList().forEach(this::visit);
         writeln(".end method");
     }
 
     @Override
-    public void visit(GenClass genClass)
+    public void visit(TargetClass targetClass)
     {
-        initWriter(String.format("%s.il", genClass.getLiteral()));
-        writef(".class public %s\n", genClass.getLiteral());
-        if (genClass.getParent() == null)
+        initWriter(String.format("%s.il", targetClass.getLiteral()));
+        writef(".class public %s\n", targetClass.getLiteral());
+        if (targetClass.getParent() == null)
         {
             writeln(".super java/lang/Object");
         }
         else
         {
-            writef(".super %s\n", genClass.getParent());
+            writef(".super %s\n", targetClass.getParent());
         }
 
-        genClass.getFieldList().forEach(f ->
+        targetClass.getFieldList().forEach(f ->
         {
             writef(".field public %s ", f.getLiteral());
             visit(f.getType());
@@ -255,23 +255,23 @@ public final class IntermLangGenerator implements IBackendVisitor
 
         writeln(".method public <init>()V");
         iwriteLine("aload 0");
-        if (genClass.getParent() == null)
+        if (targetClass.getParent() == null)
         {
             iwriteLine("invokespecial java/lang/Object/<init>()V");
         }
         else
         {
-            iwritefln("invokespecial %s/<init>()V", genClass.getParent());
+            iwritefln("invokespecial %s/<init>()V", targetClass.getParent());
         }
         iwriteLine("return");
         writeln(".end method");
-        genClass.getMethodList().forEach(this::visit);
+        targetClass.getMethodList().forEach(this::visit);
 
         saveAndReinit();
     }
 
     @Override
-    public void visit(GenEntryClass entryClass)
+    public void visit(TargetEntryClass entryClass)
     {
         initWriter(String.format("%s.il", entryClass.getName()));
 
@@ -288,10 +288,10 @@ public final class IntermLangGenerator implements IBackendVisitor
     }
 
     @Override
-    public void visit(GenProgram genProgram)
+    public void visit(TargetProgram targetProgram)
     {
-         visit(genProgram.getEntryClass());
-        genProgram.getClassList().forEach(this::visit);
+         visit(targetProgram.getEntryClass());
+        targetProgram.getClassList().forEach(this::visit);
     }
 
 

@@ -9,13 +9,13 @@ import cn.misection.cvac.codegen.bst.btype.BaseType;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:54:00
  */
-public final class GenDeclaration extends BaseDeclaration
+public final class TargetDeclaration extends BaseDeclaration
 {
     private String literal;
 
     private BaseType type;
 
-    public GenDeclaration( String literal, BaseType type)
+    public TargetDeclaration(String literal, BaseType type)
     {
         this.literal = literal;
         this.type = type;

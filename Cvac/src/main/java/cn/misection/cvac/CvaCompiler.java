@@ -3,7 +3,7 @@ package cn.misection.cvac;
 import cn.misection.cvac.ast.program.AbstractProgram;
 import cn.misection.cvac.codegen.IntermLangGenerator;
 import cn.misection.cvac.codegen.TranslatorVisitor;
-import cn.misection.cvac.codegen.bst.bclas.GenClass;
+import cn.misection.cvac.codegen.bst.bclas.TargetClass;
 import cn.misection.cvac.config.DebugMacro;
 import cn.misection.cvac.config.Macro;
 import cn.misection.cvac.config.VersionMacro;
@@ -82,7 +82,7 @@ public final class CvaCompiler
         // ascii instructions to binary file
         jasmin.Main.main(new String[] {ilPath});
 
-        for (GenClass cla : translator.getGenProgram().getClassList())
+        for (TargetClass cla : translator.getGenProgram().getClassList())
         {
             String filePath = String.format("%s.il", cla.getLiteral());
             jasmin.Main.main(new String[] {filePath});

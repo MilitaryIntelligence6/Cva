@@ -1,7 +1,7 @@
 package cn.misection.cvac.codegen.bst.bprogram;
 
-import cn.misection.cvac.codegen.bst.bclas.GenClass;
-import cn.misection.cvac.codegen.bst.bentry.GenEntryClass;
+import cn.misection.cvac.codegen.bst.bclas.TargetClass;
+import cn.misection.cvac.codegen.bst.bentry.TargetEntryClass;
 
 import java.util.List;
 
@@ -12,9 +12,9 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:14:00
  */
-public final class GenProgram extends BaseProgram
+public final class TargetProgram extends BaseProgram
 {
-    public GenProgram(GenEntryClass entry, List<GenClass> classList)
+    public TargetProgram(TargetEntryClass entry, List<TargetClass> classList)
     {
         super(entry, classList);
     }
