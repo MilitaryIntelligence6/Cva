@@ -8,9 +8,9 @@ import java.util.HashMap;
  * @author MI6 root
  * @FIXME 改继承
  */
-public final class ClassTable extends HashMap<String, ClassBinding>
+public final class ClassMap extends HashMap<String, ClassBinding>
 {
-    public ClassTable()
+    public ClassMap()
     {
         super();
     }

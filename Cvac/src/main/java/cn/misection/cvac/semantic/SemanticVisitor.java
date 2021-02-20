@@ -25,7 +25,7 @@ import java.util.List;
  */
 public final class SemanticVisitor implements IVisitor
 {
-    private ClassTable classTable;
+    private ClassMap classMap;
     private MethodVarMap methodVarTable;
     private String currentClass;
     private ICvaType type;
@@ -42,7 +42,7 @@ public final class SemanticVisitor implements IVisitor
 
     public SemanticVisitor()
     {
-        this.classTable = new ClassTable();
+        this.classMap = new ClassMap();
         this.methodVarTable = new MethodVarMap();
         this.currentClass = null;
         this.type = null;
@@ -73,7 +73,7 @@ public final class SemanticVisitor implements IVisitor
             boolean flag = tarName.equals(curName);
             while (curName != null && !flag)
             {
-                curName = classTable.getClassBinding(curName).getParent();
+                curName = classMap.getClassBinding(curName).getParent();
                 flag = tarName.equals(curName);
             }
             return flag;
@@ -165,7 +165,7 @@ public final class SemanticVisitor implements IVisitor
             argTypeList.add(this.type);
         });
 
-        MethodType methodType = classTable.getMethodType(expType.getName(), expr.getFuncName());
+        MethodType methodType = classMap.getMethodType(expType.getName(), expr.getFuncName());
 
         if (methodType == null)
         {
@@ -211,8 +211,8 @@ public final class SemanticVisitor implements IVisitor
         String className = currentClass;
         while (varType == null && className != null)
         {
-            varType = classTable.getFieldType(className, expr.getLiteral());
-            className = classTable.getClassBinding(className).getParent();
+            varType = classMap.getFieldType(className, expr.getLiteral());
+            className = classMap.getClassBinding(className).getParent();
         }
 
         if (this.curMethodLocalSet.contains(expr.getLiteral()))
@@ -265,7 +265,7 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaNewExpr expr)
     {
-        if (classTable.getClassBinding(expr.getNewClassName()) != null)
+        if (classMap.getClassBinding(expr.getNewClassName()) != null)
         {
             this.type = new CvaClassType(expr.getNewClassName());
         }
@@ -490,20 +490,20 @@ public final class SemanticVisitor implements IVisitor
     public void visit(CvaProgram program)
     {
         // put main class to class table
-        classTable.putClassBinding(((CvaEntryClass) program.getEntryClass()).name(),
+        classMap.putClassBinding(((CvaEntryClass) program.getEntryClass()).name(),
                 new ClassBinding(null));
 
         for (AbstractCvaClass abstractCvaClass : program.getClassList())
         {
             CvaClass cla = ((CvaClass) abstractCvaClass);
-            classTable.putClassBinding(cla.name(), new ClassBinding(cla.parent()));
+            classMap.putClassBinding(cla.name(), new ClassBinding(cla.parent()));
 
-            cla.getFieldList().forEach(field -> classTable.putFieldToClass(cla.name(),
+            cla.getFieldList().forEach(field -> classMap.putFieldToClass(cla.name(),
                     ((CvaDeclaration) field).literal(),
                     ((CvaDeclaration) field).type())
             );
 
-            cla.getMethodList().forEach(method -> classTable.putMethodToClass(cla.name(),
+            cla.getMethodList().forEach(method -> classMap.putMethodToClass(cla.name(),
                     ((CvaMethod) method).name(),
                     new MethodType(
                             ((CvaMethod) method).getRetType(),
