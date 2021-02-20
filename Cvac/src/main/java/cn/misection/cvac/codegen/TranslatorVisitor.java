@@ -133,10 +133,10 @@ public final class TranslatorVisitor implements IVisitor
         Label r = new Label();
         visit(expr.getLeft());
         emit(new Ldc<Integer>(1));
-        emit(new Ificmplt(f));
+        emit(new IfICmpLt(f));
         visit(expr.getRight());
         emit(new Ldc<Integer>(1));
-        emit(new Ificmplt(f));
+        emit(new IfICmpLt(f));
         emit(new Ldc<Integer>(1));
         emit(new Goto(r));
         emit(new LabelJ(f));
@@ -215,7 +215,7 @@ public final class TranslatorVisitor implements IVisitor
         Label r = new Label();
         visit(expr.getLeft());
         visit(expr.getRight());
-        emit(new Ificmplt(t));
+        emit(new IfICmpLt(t));
         emit(new Ldc<Integer>(0));
         emit(new Goto(r));
         emit(new LabelJ(t));
@@ -236,7 +236,7 @@ public final class TranslatorVisitor implements IVisitor
         Label r = new Label();
         visit(expr.getExpr());
         emit(new Ldc<Integer>(1));
-        emit(new Ificmplt(f));
+        emit(new IfICmpLt(f));
         emit(new Ldc<Integer>(1));
         emit(new Goto(r));
         emit(new LabelJ(f));
@@ -331,7 +331,7 @@ public final class TranslatorVisitor implements IVisitor
         Label r = new Label();
         visit(stm.getCondition());
         emit(new Ldc<Integer>(1));
-        emit(new Ificmplt(l));
+        emit(new IfICmpLt(l));
         visit(stm.getThenStatement());
         emit(new Goto(r));
         emit(new LabelJ(l));
@@ -390,27 +390,6 @@ public final class TranslatorVisitor implements IVisitor
         }
     }
 
-//    private byte parseEmitTypeCode(String typeString)
-//    {
-//        switch (typeString)
-//        {
-//            case CvaIntType.TYPE_LITERAL:
-//            {
-//                return CvaTypeCode.CVA_INT_TYPE;
-//            }
-//            case CvaStringType.TYPE_LITERAL:
-//            {
-//                return CvaTypeCode.CVA_STRING_TYPE;
-//            }
-//            default:
-//            {
-//                // todo;
-//                break;
-//            }
-//        }
-//        return -1;
-//    }
-
     @Override
     public void visit(CvaWhileStatement stm)
     {
@@ -419,7 +398,7 @@ public final class TranslatorVisitor implements IVisitor
         emit(new LabelJ(con));
         visit(stm.getCondition());
         emit(new Ldc<Integer>(1));
-        emit(new Ificmplt(end));
+        emit(new IfICmpLt(end));
         visit(stm.getBody());
         emit(new Goto(con));
         emit(new LabelJ(end));

@@ -95,9 +95,9 @@ public interface IBackendVisitor
                 visit((GetField) instruction);
                 break;
             }
-            case Operator.IFICMPLT:
+            case Operator.IF_ICMP_LT:
             {
-                visit((Ificmplt) instruction);
+                visit((IfICmpLt) instruction);
                 break;
             }
             case Operator.ILOAD:
@@ -162,7 +162,7 @@ public interface IBackendVisitor
 
 //    void visit(IAdd instruction);
 
-    void visit(Ificmplt instruction);
+    void visit(IfICmpLt instruction);
 
     void visit(ILoad instruction);
 

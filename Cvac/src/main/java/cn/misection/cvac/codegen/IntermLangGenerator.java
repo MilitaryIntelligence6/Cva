@@ -149,7 +149,7 @@ public final class IntermLangGenerator implements IBackendVisitor
 //    }
 
     @Override
-    public void visit(Ificmplt instruction)
+    public void visit(IfICmpLt instruction)
     {
         iwritefln("if_icmplt %s", instruction.getLabel().toString());
     }

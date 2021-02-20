@@ -43,7 +43,7 @@ final class Operator
     /**
      * IFicmplt
      */
-    public static final String IFICMPLT = "Ificmplt";
+    public static final String IF_ICMP_LT = "IfICmpLt";
 
     /**
      * ILoad
