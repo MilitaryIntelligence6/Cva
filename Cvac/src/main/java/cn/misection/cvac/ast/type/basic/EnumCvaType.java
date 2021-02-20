@@ -43,6 +43,8 @@ public enum EnumCvaType implements ICvaType
     CVA_CLASS("@class"),
 
     CVA_ENUM("@enum"),
+
+    UNKNOWN("unknown"),
     ;
 
     /**

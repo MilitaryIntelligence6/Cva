@@ -61,12 +61,11 @@ public final class SemanticVisitor implements IVisitor
 
     private boolean isMatch(ICvaType src, ICvaType target)
     {
-//        if (target.toString().equals(cur.toString()))
         if (src.toEnum() == target.toEnum())
         {
             return true;
         }
-        else if (src instanceof CvaClassType && target instanceof CvaClassType)
+        if (src instanceof CvaClassType && target instanceof CvaClassType)
         {
             String tarName = ((CvaClassType) src).getName();
             String curName = ((CvaClassType) target).getName();
@@ -78,10 +77,7 @@ public final class SemanticVisitor implements IVisitor
             }
             return flag;
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 
     /**
@@ -114,19 +110,16 @@ public final class SemanticVisitor implements IVisitor
         visit(expr.getLeft());
         ICvaType leftType = this.type;
         visit(expr.getRight());
-//        if (!this.type.toString().equals(leftType.toString()))
         if (type.toEnum() != leftType.toEnum())
         {
             errorLog(expr.getLineNum(),
                     String.format("add expression the type of left is %s, but the type of right is %s",
                             leftType.toString(), this.type.toString()));
         }
-//        else if (!new CvaInt().toString().equals(this.type.toString()))
         else if (!EnumCvaType.isNumber(type.toEnum()))
         {
             errorLog(expr.getLineNum(), " only numeric type numbers can be added.");
         }
-//        this.type = new CvaIntType();
     }
 
     @Override
@@ -135,18 +128,15 @@ public final class SemanticVisitor implements IVisitor
         visit(expr.getLeft());
         ICvaType leftType = this.type;
         visit(expr.getRight());
-//        if (!this.type.toString().equals(leftType.toString()))
         if (type.toEnum() != leftType.toEnum())
         {
             errorLog(expr.getLineNum(),
                     String.format("and expression the type of left is %s, but the type of right is %s", leftType.toString(), this.type.toString()));
         }
-//        else if (!new CvaBoolean().toString().equals(this.type.toString()))
         else if (type != EnumCvaType.CVA_BOOLEAN)
         {
             errorLog(expr.getLineNum(), "only boolean can be ");
         }
-//        this.type = new CvaBooleanType();
     }
 
     @Override
@@ -163,20 +153,7 @@ public final class SemanticVisitor implements IVisitor
         else
         {
             errorLog(expr.getLineNum(), "only an instance of class can be invoked.");
-            this.type = new ICvaType()
-            {
-                @Override
-                public String toString()
-                {
-                    return "unknown";
-                }
-
-                @Override
-                public EnumCvaType toEnum()
-                {
-                    return null;
-                }
-            };
+            type = EnumCvaType.UNKNOWN;
             return;
         }
 
@@ -187,52 +164,36 @@ public final class SemanticVisitor implements IVisitor
             argTypeList.add(this.type);
         });
 
-        MethodType mty = classTable.getMethodType(expType.getName(), expr.getLiteral());
+        MethodType methodType = classTable.getMethodType(expType.getName(), expr.getLiteral());
 
-        if (mty == null)
+        if (methodType == null)
         {
             errorLog(expr.getLineNum(), "the method you are calling haven't been defined.");
             expr.setArgTypeList(argTypeList);
-            expr.setRetType(
-                    new ICvaType()
-                    {
-                        @Override
-                        public String toString()
-                        {
-                            return "unknown";
-                        }
-
-                        @Override
-                        public EnumCvaType toEnum()
-                        {
-                            return null;
-                        }
-                    }
-            );
+            expr.setRetType(EnumCvaType.UNKNOWN);
 
             this.type = expr.getRetType();
             return;
         }
 
-        if (mty.getArgsType().size() != argTypeList.size())
+        if (methodType.getArgsType().size() != argTypeList.size())
         {
             errorLog(expr.getLineNum(), "the count of arguments is not match.");
         }
 
-        for (int i = 0; i < mty.getArgsType().size(); i++)
+        for (int i = 0; i < methodType.getArgsType().size(); i++)
         {
-            if (!isMatch(((CvaDeclaration) mty.getArgsType().get(i)).type(), argTypeList.get(i)))
+            if (!isMatch(((CvaDeclaration) methodType.getArgsType().get(i)).type(), argTypeList.get(i)))
             {
                 errorLog(expr.getArgs().get(i).getLineNum(),
                         String.format("the parameter %d needs a %s, but got a %s",
-                                i + 1, ((CvaDeclaration) mty.getArgsType().get(i)).type().toString(), argTypeList.get(i).toString()));
+                                i + 1, ((CvaDeclaration) methodType.getArgsType().get(i)).type().toString(), argTypeList.get(i).toString()));
             }
         }
 
-
         expr.setArgTypeList(argTypeList);
-        expr.setRetType(mty.getRetType());
-        this.type = mty.getRetType();
+        expr.setRetType(methodType.getRetType());
+        this.type = methodType.getRetType();
     }
 
     @Override
@@ -266,22 +227,7 @@ public final class SemanticVisitor implements IVisitor
                     String.format("you should declare \"%s\" before use it.",
                             expr.getLiteral()));
             // 不可达;
-            expr.setType(
-                    new ICvaType()
-                    {
-                        @Override
-                        public String toString()
-                        {
-                            return "unknown";
-                        }
-
-                        @Override
-                        public EnumCvaType toEnum()
-                        {
-                            return null;
-                        }
-                    }
-            );
+            expr.setType(EnumCvaType.UNKNOWN);
             this.type = expr.getType();
         }
         else
@@ -328,20 +274,7 @@ public final class SemanticVisitor implements IVisitor
                     String.format("cannot find the declaration of class \"%s\".",
                             expr.getLiteral()));
             // 执行不到死代码;
-            this.type = new ICvaType()
-            {
-                @Override
-                public String toString()
-                {
-                    return "unknown class";
-                }
-
-                @Override
-                public EnumCvaType toEnum()
-                {
-                    return null;
-                }
-            };
+            type = EnumCvaType.UNKNOWN;
         }
     }
 
@@ -349,7 +282,6 @@ public final class SemanticVisitor implements IVisitor
     public void visit(CvaNegateExpr expr)
     {
         visit(expr.getExpr());
-//        if (!(type instanceof CvaBooleanType))
         if (type.toEnum() != EnumCvaType.CVA_BOOLEAN)
         {
             errorLog(expr.getLineNum(), "the exp cannot calculate to a boolean.");
@@ -375,7 +307,6 @@ public final class SemanticVisitor implements IVisitor
         visit(expr.getLeft());
         ICvaType leftType = this.type;
         visit(expr.getRight());
-//        if (!this.type.toString().equals(leftType.toString()))
         if (type.toEnum() != leftType.toEnum())
         {
             errorLog(expr.getLineNum(),
@@ -386,7 +317,6 @@ public final class SemanticVisitor implements IVisitor
         {
             errorLog(expr.getLineNum(), " only basic numbers can be subbed.");
         }
-//        this.type = CvaType.CVA_INT;
     }
 
     @Override
@@ -412,8 +342,6 @@ public final class SemanticVisitor implements IVisitor
         {
             errorLog(expr.getLineNum(), "only basic type  can be multiply.");
         }
-        // 这一句似乎是多余的;
-//        this.type = CvaType.CVA_INT;
     }
 
     @Override
@@ -436,7 +364,6 @@ public final class SemanticVisitor implements IVisitor
         CvaIdentifierExpr cvaIdentifierExpr = new CvaIdentifierExpr(stm.getLineNum(), stm.getLiteral());
         visit(cvaIdentifierExpr);
         ICvaType idType = this.type;
-        //if (!this.type.toString().equals(idty.toString()))
         if (!isMatch(idType, stm.getType()))
         {
             errorLog(stm.getLineNum(), String.format("the type of \"%s\" is %s, but the type of expression is %s. Assign failed.",
@@ -472,7 +399,6 @@ public final class SemanticVisitor implements IVisitor
     public void visit(CvaWriteStatement stm)
     {
         visit(stm.getExpr());
-//        if (!this.type.toString().equals(new CvaInt().toString()))
         if (EnumCvaType.isNumber(type.toEnum())
                 || type.toEnum() == EnumCvaType.CVA_STRING)
         {
@@ -536,7 +462,6 @@ public final class SemanticVisitor implements IVisitor
         if (mainMethod.getRetType() != EnumCvaType.CVA_VOID)
         {
             visit(mainMethod.getRetExpr());
-            // if (!this.type.toString().equals(m.retType.toString()))
             if (!isMatch(mainMethod.getRetType(), type))
             {
                 errorLog(mainMethod.getRetExpr().getLineNum(),
@@ -557,7 +482,6 @@ public final class SemanticVisitor implements IVisitor
     public void visit(CvaEntryClass entryClass)
     {
         this.currentClass = entryClass.name();
-//        visit(entryClass.getStatement());
         visit((CvaMainMethod) entryClass.getMainMethod());
     }
 
