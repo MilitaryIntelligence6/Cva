@@ -1,6 +1,6 @@
 package cn.misection.cvac.codegen.bst.bentry;
 
-import cn.misection.cvac.codegen.bst.instruction.BaseInstruction;
+import cn.misection.cvac.codegen.bst.instruction.IInstructor;
 
 import java.util.List;
 
@@ -15,7 +15,8 @@ public final class TargetEntryClass extends BaseEntryClass
 {
     // FIXME
     // TODO 这里是有改动的, stms是list;
-    public TargetEntryClass(String name, List<BaseInstruction> statementList)
+    public TargetEntryClass(String name, 
+                            List<IInstructor> statementList)
     {
         super(name, statementList);
     }

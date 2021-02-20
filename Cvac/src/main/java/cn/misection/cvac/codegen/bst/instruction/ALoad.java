@@ -7,7 +7,7 @@ package cn.misection.cvac.codegen.bst.instruction;
  * @Description load 引用类型的指令;
  * @CreateTime 2021年02月16日 00:43:00
  */
-public final class ALoad extends BaseInstruction
+public final class ALoad extends BaseInstructor
 {
     private int index;
 

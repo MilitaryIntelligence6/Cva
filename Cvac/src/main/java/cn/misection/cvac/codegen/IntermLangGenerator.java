@@ -107,16 +107,22 @@ public final class IntermLangGenerator implements IBackendVisitor
     }
 
     @Override
+    public void visit(EnumInstructor instructor)
+    {
+        iwriteLine(instructor.instruct());
+    }
+
+    @Override
     public void visit(ALoad instruction)
     {
         iwritefln("aload %d", instruction.getIndex());
     }
 
-    @Override
-    public void visit(AReturn instruction)
-    {
-        iwriteLine("areturn");
-    }
+//    @Override
+//    public void visit(AReturn instruction)
+//    {
+//        iwriteLine("areturn");
+//    }
 
     @Override
     public void visit(AStore instruction)
@@ -136,11 +142,11 @@ public final class IntermLangGenerator implements IBackendVisitor
         iwritefln("getfield %s %s", instruction.getFieldSpec(), instruction.getDescriptor());
     }
 
-    @Override
-    public void visit(IAdd instruction)
-    {
-        iwriteLine("iadd");
-    }
+//    @Override
+//    public void visit(IAdd instruction)
+//    {
+//        iwriteLine("iadd");
+//    }
 
     @Override
     public void visit(Ificmplt instruction)
@@ -154,11 +160,11 @@ public final class IntermLangGenerator implements IBackendVisitor
         iwritefln("iload %d", instruction.getIndex());
     }
 
-    @Override
-    public void visit(IMul instruction)
-    {
-        iwriteLine("imul");
-    }
+//    @Override
+//    public void visit(IMul instruction)
+//    {
+//        iwriteLine("imul");
+//    }
 
     @Override
     public void visit(InvokeVirtual instruction)
@@ -170,11 +176,11 @@ public final class IntermLangGenerator implements IBackendVisitor
         writeln();
     }
 
-    @Override
-    public void visit(IReturn instruction)
-    {
-        iwriteLine("ireturn");
-    }
+//    @Override
+//    public void visit(IReturn instruction)
+//    {
+//        iwriteLine("ireturn");
+//    }
 
     @Override
     public void visit(IStore instruction)
@@ -182,11 +188,11 @@ public final class IntermLangGenerator implements IBackendVisitor
         iwritefln("istore %d", instruction.getIndex());
     }
 
-    @Override
-    public void visit(ISub instruction)
-    {
-        iwriteLine("isub");
-    }
+//    @Override
+//    public void visit(ISub instruction)
+//    {
+//        iwriteLine("isub");
+//    }
 
     @Override
     public void visit(LabelJ instruction)
@@ -209,7 +215,7 @@ public final class IntermLangGenerator implements IBackendVisitor
     }
 
     @Override
-    public void visit(WriteInstruction instruction)
+    public void visit(WriteInstructor instruction)
     {
         String mode = writeModeMap.get(instruction.getWriteMode());
         String type = writeTypeMap.get(instruction.getWriteType());

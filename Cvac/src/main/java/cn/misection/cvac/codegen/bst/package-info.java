@@ -95,7 +95,7 @@ final class Operator
     /**
      * Write
      */
-    public static final String WRITE_INSTRUCTION = "WriteInstruction";
+    public static final String WRITE_INSTRUCTOR = "WriteInstructor";
 
     /**
      * PutField

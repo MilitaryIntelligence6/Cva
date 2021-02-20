@@ -7,7 +7,7 @@ package cn.misection.cvac.codegen.bst.instruction;
  * @Description TODO
  * @CreateTime 2021年02月16日 00:52:00
  */
-public final class ILoad extends BaseInstruction
+public final class ILoad extends BaseInstructor
 {
     private int index;
 

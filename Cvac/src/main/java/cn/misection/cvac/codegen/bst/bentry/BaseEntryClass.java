@@ -1,6 +1,6 @@
 package cn.misection.cvac.codegen.bst.bentry;
 
-import cn.misection.cvac.codegen.bst.instruction.BaseInstruction;
+import cn.misection.cvac.codegen.bst.instruction.IInstructor;
 
 import java.util.List;
 
@@ -15,9 +15,9 @@ public abstract class BaseEntryClass implements IEntryClass
 {
     protected String name;
 
-    protected List<BaseInstruction> statementList;
+    protected List<IInstructor> statementList;
 
-    protected BaseEntryClass(String name, List<BaseInstruction> statementList)
+    protected BaseEntryClass(String name, List<IInstructor> statementList)
     {
         this.name = name;
         this.statementList = statementList;
@@ -28,7 +28,7 @@ public abstract class BaseEntryClass implements IEntryClass
         return name;
     }
 
-    public List<BaseInstruction> getStatementList()
+    public List<IInstructor> getStatementList()
     {
         return statementList;
     }
@@ -38,7 +38,7 @@ public abstract class BaseEntryClass implements IEntryClass
         this.name = name;
     }
 
-    public void setStatementList(List<BaseInstruction> statementList)
+    public void setStatementList(List<IInstructor> statementList)
     {
         this.statementList = statementList;
     }

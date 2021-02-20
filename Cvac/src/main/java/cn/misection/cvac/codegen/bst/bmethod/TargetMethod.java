@@ -1,7 +1,7 @@
 package cn.misection.cvac.codegen.bst.bmethod;
 
 import cn.misection.cvac.codegen.bst.bdecl.TargetDeclaration;
-import cn.misection.cvac.codegen.bst.instruction.BaseInstruction;
+import cn.misection.cvac.codegen.bst.instruction.IInstructor;
 import cn.misection.cvac.codegen.bst.btype.ITargetType;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public final class TargetMethod extends BaseMethod
 
     private List<TargetDeclaration> localList;
 
-    private List<BaseInstruction> statementList;
+    private List<IInstructor> statementList;
 
     private int index;
 
@@ -57,7 +57,7 @@ public final class TargetMethod extends BaseMethod
             String className,
             List<TargetDeclaration> formalList,
             List<TargetDeclaration> localList,
-            List<BaseInstruction> statementList,
+            List<IInstructor> statementList,
             int retExpr,
             int index
     )
@@ -83,7 +83,7 @@ public final class TargetMethod extends BaseMethod
     }
 
 
-    public List<BaseInstruction> getStatementList()
+    public List<IInstructor> getStatementList()
     {
         return statementList;
     }
@@ -98,7 +98,7 @@ public final class TargetMethod extends BaseMethod
         this.retType = retType;
     }
 
-    public void setStatementList(List<BaseInstruction> statementList)
+    public void setStatementList(List<IInstructor> statementList)
     {
         this.statementList = statementList;
     }

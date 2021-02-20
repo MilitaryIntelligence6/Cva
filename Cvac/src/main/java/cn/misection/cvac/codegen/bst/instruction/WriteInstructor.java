@@ -9,7 +9,7 @@ import cn.misection.cvac.ast.type.basic.EnumCvaType;
  * @Description TODO
  * @CreateTime 2021年02月16日 01:00:00
  */
-public final class WriteInstruction extends BaseInstruction
+public final class WriteInstructor extends BaseInstructor
 {
     private byte writeMode;
 
@@ -18,7 +18,7 @@ public final class WriteInstruction extends BaseInstruction
      */
     private EnumCvaType writeType;
 
-    public WriteInstruction(byte writeMode, EnumCvaType writeType)
+    public WriteInstructor(byte writeMode, EnumCvaType writeType)
     {
         this.writeMode = writeMode;
         this.writeType = writeType;

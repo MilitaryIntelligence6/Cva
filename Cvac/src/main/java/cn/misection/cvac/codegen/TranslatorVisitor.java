@@ -4,7 +4,7 @@ import cn.misection.cvac.ast.IVisitor;
 import cn.misection.cvac.ast.clas.CvaClass;
 import cn.misection.cvac.ast.decl.CvaDeclaration;
 import cn.misection.cvac.ast.entry.CvaEntryClass;
-import cn.misection.cvac.ast.expr.*;
+import cn.misection.cvac.ast.expr.AbstractExpression;
 import cn.misection.cvac.ast.expr.binary.*;
 import cn.misection.cvac.ast.expr.unary.*;
 import cn.misection.cvac.ast.method.CvaMainMethod;
@@ -12,10 +12,10 @@ import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.ICvaType;
+import cn.misection.cvac.ast.type.advance.CvaStringType;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
 import cn.misection.cvac.ast.type.reference.AbstractReferenceType;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
-import cn.misection.cvac.ast.type.advance.CvaStringType;
 import cn.misection.cvac.codegen.bst.Label;
 import cn.misection.cvac.codegen.bst.bclas.TargetClass;
 import cn.misection.cvac.codegen.bst.bdecl.TargetDeclaration;
@@ -23,9 +23,9 @@ import cn.misection.cvac.codegen.bst.bentry.TargetEntryClass;
 import cn.misection.cvac.codegen.bst.bmethod.TargetMethod;
 import cn.misection.cvac.codegen.bst.bprogram.TargetProgram;
 import cn.misection.cvac.codegen.bst.btype.ITargetType;
+import cn.misection.cvac.codegen.bst.btype.advance.TargetStringType;
 import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
 import cn.misection.cvac.codegen.bst.btype.reference.TargetClassType;
-import cn.misection.cvac.codegen.bst.btype.advance.TargetStringType;
 import cn.misection.cvac.codegen.bst.instruction.*;
 import cn.misection.cvac.constant.CvaExprClassName;
 
@@ -47,7 +47,7 @@ public final class TranslatorVisitor implements IVisitor
 
     private ITargetType targetType;
     private TargetDeclaration targetDecl;
-    private List<BaseInstruction> linearInstrList;
+    private List<IInstructor> linearInstrList;
     private TargetMethod targetMethod;
     private TargetClass targetClass;
     private TargetEntryClass targetEntryClass;
@@ -66,7 +66,7 @@ public final class TranslatorVisitor implements IVisitor
         this.targetProgram = null;
     }
 
-    private void emit(BaseInstruction instruction)
+    private void emit(IInstructor instruction)
     {
         linearInstrList.add(instruction);
     }
@@ -123,7 +123,7 @@ public final class TranslatorVisitor implements IVisitor
     {
         visit(expr.getLeft());
         visit(expr.getRight());
-        emit(new IAdd());
+        emit(EnumInstructor.I_ADD);
     }
 
     @Override
@@ -262,7 +262,7 @@ public final class TranslatorVisitor implements IVisitor
     {
         visit(expr.getLeft());
         visit(expr.getRight());
-        emit(new ISub());
+        emit(EnumInstructor.I_SUB);
     }
 
     @Override
@@ -276,7 +276,7 @@ public final class TranslatorVisitor implements IVisitor
     {
         visit(expr.getLeft());
         visit(expr.getRight());
-        emit(new IMul());
+        emit(EnumInstructor.I_MUL);
     }
 
     @Override
@@ -343,9 +343,9 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     /**
+     * @param stm
      * @TODO 要针对所有的expr操作判断写类型, 还是麻烦, 想个办法, 最好让抽象expr能返回类型;
      * @deprecated 目前大而化之只是权宜之计;
-     * @param stm
      */
     @Override
     public void visit(CvaWriteStatement stm)
@@ -357,24 +357,24 @@ public final class TranslatorVisitor implements IVisitor
         {
             case CvaExprClassName.CVA_CONST_INT_EXPR:
             {
-                emit(new WriteInstruction(mode, EnumCvaType.CVA_INT));
+                emit(new WriteInstructor(mode, EnumCvaType.CVA_INT));
                 break;
             }
             case CvaExprClassName.CVA_CONST_STRING_EXPR:
             {
-                emit(new WriteInstruction(mode, EnumCvaType.CVA_STRING));
+                emit(new WriteInstructor(mode, EnumCvaType.CVA_STRING));
                 break;
             }
             case CvaExprClassName.CVA_IDENTIFIER_EXPR:
             {
                 EnumCvaType type = ((CvaIdentifierExpr) expr).getType().toEnum();
-                emit(new WriteInstruction(mode, type));
+                emit(new WriteInstructor(mode, type));
                 break;
             }
             case CvaExprClassName.CVA_CALL_EXPR:
             {
                 EnumCvaType type = ((CvaCallExpr) expr).getRetType().toEnum();
-                emit(new WriteInstruction(mode, type));
+                emit(new WriteInstructor(mode, type));
                 break;
             }
             default:
@@ -384,7 +384,7 @@ public final class TranslatorVisitor implements IVisitor
                 // 目前可能遇到的情况有 idexpr, callfuncexpr, numberintexpr;
                 // 注释掉这个可以应对可能的异常;
 //                emit(new WriteInt());
-                emit(new WriteInstruction(mode, EnumCvaType.CVA_INT));
+                emit(new WriteInstructor(mode, EnumCvaType.CVA_INT));
                 break;
             }
         }
@@ -452,11 +452,11 @@ public final class TranslatorVisitor implements IVisitor
         visit(cvaMethod.getRetExpr());
         if (cvaMethod.getRetType() instanceof AbstractReferenceType)
         {
-            emit(new AReturn());
+            emit(EnumInstructor.A_RETURN);
         }
         else
         {
-            emit(new IReturn());
+            emit(EnumInstructor.I_RETURN);
         }
         targetMethod = new TargetMethod(
                 cvaMethod.name(),
@@ -538,7 +538,8 @@ public final class TranslatorVisitor implements IVisitor
 //        visit(entryClass.statement());
 
 //        entryClass..forEach(this::visit);
-        targetEntryClass = new TargetEntryClass(entryClass.name(),
+        targetEntryClass = new TargetEntryClass(
+                entryClass.name(),
                 this.linearInstrList);
         // 会重复使用, 赋给每个域;
         this.linearInstrList = new ArrayList<>();
@@ -589,12 +590,12 @@ public final class TranslatorVisitor implements IVisitor
         this.targetDecl = targetDecl;
     }
 
-    public List<BaseInstruction> getLinearInstrList()
+    public List<IInstructor> getLinearInstrList()
     {
         return linearInstrList;
     }
 
-    public void setLinearInstrList(List<BaseInstruction> linearInstrList)
+    public void setLinearInstrList(List<IInstructor> linearInstrList)
     {
         this.linearInstrList = linearInstrList;
     }

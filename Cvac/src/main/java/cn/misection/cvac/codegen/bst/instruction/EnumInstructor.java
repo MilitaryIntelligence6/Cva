@@ -1,5 +1,7 @@
 package cn.misection.cvac.codegen.bst.instruction;
 
+import cn.misection.cvac.codegen.bst.btype.Instructable;
+
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
@@ -7,14 +9,14 @@ package cn.misection.cvac.codegen.bst.instruction;
  * @Description TODO
  * @CreateTime 2021年02月20日 23:57:00
  */
-public enum EnumInstruction implements IInstruction
+public enum EnumInstructor implements IInstructor, Instructable
 {
     /**
      * JVM指令集;
      */
     A_LOAD,
 
-    A_RETURN,
+    A_RETURN("areturn"),
 
     A_STORE,
 
@@ -22,21 +24,21 @@ public enum EnumInstruction implements IInstruction
 
     GOTO,
 
-    I_ADD,
+    I_ADD("iadd"),
 
     IF_I_CMP_LT,
 
     I_LOAD,
 
-    I_MUL,
+    I_MUL("imul"),
 
     INVOKE_VIRTUAL,
 
-    I_RETURN,
+    I_RETURN("ireturn"),
 
     I_STORE,
 
-    I_SUB,
+    I_SUB("isub"),
 
     LABEL_J,
 
@@ -51,4 +53,19 @@ public enum EnumInstruction implements IInstruction
 
     WRITE_INSTRUCTION,
     ;
+
+    private String instruction;
+
+    EnumInstructor() {}
+
+    EnumInstructor(String instruction)
+    {
+        this.instruction = instruction;
+    }
+
+    @Override
+    public String instruct()
+    {
+        return instruction;
+    }
 }

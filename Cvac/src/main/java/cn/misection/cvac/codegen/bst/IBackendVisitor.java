@@ -61,18 +61,23 @@ public interface IBackendVisitor
      * statements
      * @param instruction linear inst;
      */
-    default void visit(BaseInstruction instruction)
+    default void visit(IInstructor instruction)
     {
         switch (instruction.getClass().getSimpleName())
         {
+            case Operator.ARETURN:
+            case Operator.IADD:
+            case Operator.IMUL:
+            case Operator.IRETURN:
+            case Operator.ISUB:
+            case "EnumInstructor":
+            {
+                visit((EnumInstructor) instruction);
+                break;
+            }
             case Operator.ALOAD:
             {
                 visit((ALoad) instruction);
-                break;
-            }
-            case Operator.ARETURN:
-            {
-                visit((AReturn) instruction);
                 break;
             }
             case Operator.ASTORE:
@@ -90,11 +95,6 @@ public interface IBackendVisitor
                 visit((GetField) instruction);
                 break;
             }
-            case Operator.IADD:
-            {
-                visit((IAdd) instruction);
-                break;
-            }
             case Operator.IFICMPLT:
             {
                 visit((Ificmplt) instruction);
@@ -105,29 +105,14 @@ public interface IBackendVisitor
                 visit((ILoad) instruction);
                 break;
             }
-            case Operator.IMUL:
-            {
-                visit((IMul) instruction);
-                break;
-            }
             case Operator.INVOKE_VIRTUAL:
             {
                 visit((InvokeVirtual) instruction);
                 break;
             }
-            case Operator.IRETURN:
-            {
-                visit((IReturn) instruction);
-                break;
-            }
             case Operator.ISTORE:
             {
                 visit((IStore) instruction);
-                break;
-            }
-            case Operator.ISUB:
-            {
-                visit((ISub) instruction);
                 break;
             }
             case Operator.LABEL_J:
@@ -145,9 +130,9 @@ public interface IBackendVisitor
                 visit((New) instruction);
                 break;
             }
-            case Operator.WRITE_INSTRUCTION:
+            case Operator.WRITE_INSTRUCTOR:
             {
-                visit((WriteInstruction) instruction);
+                visit((WriteInstructor) instruction);
                 break;
             }
             case Operator.PUT_FIELD:
@@ -163,9 +148,11 @@ public interface IBackendVisitor
         }
     }
 
+    void visit(EnumInstructor instructor);
+
     void visit(ALoad instruction);
 
-    void visit(AReturn instruction);
+//    void visit(AReturn instruction);
 
     void visit(AStore instruction);
 
@@ -173,21 +160,21 @@ public interface IBackendVisitor
 
     void visit(GetField instruction);
 
-    void visit(IAdd instruction);
+//    void visit(IAdd instruction);
 
     void visit(Ificmplt instruction);
 
     void visit(ILoad instruction);
 
-    void visit(IMul instruction);
+//    void visit(IMul instruction);
 
     void visit(InvokeVirtual instruction);
 
-    void visit(IReturn instruction);
+//    void visit(IReturn instruction);
 
     void visit(IStore instruction);
 
-    void visit(ISub instruction);
+//    void visit(ISub instruction);
 
     void visit(LabelJ instruction);
 
@@ -195,7 +182,7 @@ public interface IBackendVisitor
 
     void visit(New instruction);
 
-    void visit(WriteInstruction instruction);
+    void visit(WriteInstructor instruction);
 
     void visit(PutField instruction);
 

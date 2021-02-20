@@ -7,7 +7,7 @@ package cn.misection.cvac.codegen.bst.instruction;
  * @Description TODO
  * @CreateTime 2021年02月19日 01:06:00
  */
-public final class Ldc<T> extends BaseInstruction
+public final class Ldc<T> extends BaseInstructor
 {
     private T value;
 

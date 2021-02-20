@@ -7,7 +7,7 @@ package cn.misection.cvac.codegen.bst.instruction;
  * @Description TODO
  * @CreateTime 2021年02月16日 00:57:00
  */
-public final class IStore extends BaseInstruction
+public final class IStore extends BaseInstructor
 {
     private int index;
 

@@ -7,7 +7,7 @@ package cn.misection.cvac.codegen.bst.instruction;
  * @Description TODO
  * @CreateTime 2021年02月16日 00:49:00
  */
-public final class GetField extends BaseInstruction
+public final class GetField extends BaseInstructor
 {
     private String fieldSpec;
 
