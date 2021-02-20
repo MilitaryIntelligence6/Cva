@@ -8,3 +8,5 @@
 - 很多地方写instanceof或者getclass这种都不优雅, 最好用一个map或者用byte放常量池表达;
 
 - type改成枚举;  
+
+- instru 改成枚举;
