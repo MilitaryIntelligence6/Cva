@@ -1,7 +1,5 @@
 package cn.misection.cvac.ast.expr;
 
-import javafx.beans.property.BooleanProperty;
-
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
