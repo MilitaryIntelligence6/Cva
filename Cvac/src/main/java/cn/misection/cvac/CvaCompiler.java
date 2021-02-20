@@ -207,8 +207,7 @@ public final class CvaCompiler
     {
         try
         {
-            IBufferedQueue fStream = new BufferedHandler(fName);
-            return fStream;
+            return new BufferedHandler(fName);
         }
         catch (IOException e)
         {
