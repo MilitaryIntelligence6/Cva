@@ -12,10 +12,11 @@ import cn.misection.cvac.ast.method.CvaMainMethod;
 import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
-import cn.misection.cvac.ast.type.AbstractType;
+import cn.misection.cvac.ast.type.ICvaType;
+import cn.misection.cvac.ast.type.ICvaType;
 import cn.misection.cvac.ast.type.basic.*;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
-import cn.misection.cvac.ast.type.reference.CvaStringType;
+import cn.misection.cvac.ast.type.advance.CvaStringType;
 import cn.misection.cvac.constant.LexerCommon;
 import cn.misection.cvac.constant.WriteOptionCode;
 import cn.misection.cvac.io.IBufferedQueue;
@@ -499,55 +500,55 @@ public final class Parser
      *
      * @return Type;
      */
-    private AbstractType parseType()
+    private ICvaType parseType()
     {
-        AbstractType type = null;
+        ICvaType type = null;
         // 放map只能反射, 不放了还是;
         switch (curToken.getKind())
         {
             case VOID:
             {
-                type = new CvaVoidType();
+                type = EnumCvaType.CVA_VOID;
                 break;
             }
             case BYTE:
             {
-                type = new CvaByteType();
+                type = EnumCvaType.CVA_BYTE;
                 break;
             }
             case CHAR:
             {
-                type = new CvaCharType();
+                type = EnumCvaType.CVA_CHAR;
                 break;
             }
             case SHORT:
             {
-                type = new CvaShortType();
+                type = EnumCvaType.CVA_SHORT;
                 break;
             }
             case INT:
             {
-                type = new CvaIntType();
+                type = EnumCvaType.CVA_INT;
                 break;
             }
             case LONG:
             {
-                type = new CvaLongType();
+                type = EnumCvaType.CVA_LONG;
                 break;
             }
             case FLOAT:
             {
-                type = new CvaFloatType();
+                type = EnumCvaType.CVA_FLOAT;
                 break;
             }
             case DOUBLE:
             {
-                type = new CvaDoubleType();
+                type = EnumCvaType.CVA_DOUBLE;
                 break;
             }
             case BOOLEAN:
             {
-                type = new CvaBooleanType();
+                type = EnumCvaType.CVA_BOOLEAN;
                 break;
             }
             case STRING:
@@ -582,7 +583,7 @@ public final class Parser
     private AbstractDeclaration parseVarDecl()
     {
         this.mark();
-        AbstractType type = parseType();
+        ICvaType type = parseType();
         // maybe a assign statement in method;
         switch (curToken.getKind())
         {
@@ -669,13 +670,13 @@ public final class Parser
             // 这里非常坑. 必须要先parser;
             // parse的副作用是推一个token, 所以给new decl传参的时候先后顺序换了会导致意想不到的bug;
             // 保存上一个token的type, 拿取下一个token的literal;
-            AbstractType type = parseType();
+            ICvaType type = parseType();
             declList.add(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), type));
             eatToken(CvaKind.IDENTIFIER);
             while (curToken.getKind() == CvaKind.COMMA)
             {
                 advance();
-                AbstractType argType = parseType();
+                ICvaType argType = parseType();
                 declList.add(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), argType));
                 eatToken(CvaKind.IDENTIFIER);
             }
@@ -697,7 +698,7 @@ public final class Parser
     private AbstractMethod parseMethod()
     {
         // 第一个是返回值;
-        AbstractType retType = parseType();
+        ICvaType retType = parseType();
         // 解析函数名;
         String literal = curToken.getLiteral();
         // 吃掉函数名和开小括号;
@@ -714,7 +715,7 @@ public final class Parser
 
         // FIXME 隐患;
         AbstractExpression retExpr = null;
-        if (!(retType instanceof CvaVoidType))
+        if (retType != EnumCvaType.CVA_VOID)
         {
             eatToken(CvaKind.RETURN);
             retExpr = parseExpr();
@@ -733,7 +734,7 @@ public final class Parser
 
     private AbstractMethod parseMainMethod()
     {
-        AbstractType mainRetType = parseType();
+        ICvaType mainRetType = parseType();
         eatToken(CvaKind.MAIN);
 
         eatToken(CvaKind.OPEN_PAREN);
@@ -745,7 +746,7 @@ public final class Parser
         List<AbstractStatement> statementList = parseStatementList();
 
         AbstractExpression retExpr = null;
-        if (!(mainRetType instanceof CvaVoidType))
+        if (mainRetType != EnumCvaType.CVA_VOID)
         {
             eatToken(CvaKind.RETURN);
             retExpr = parseExpr();
@@ -951,7 +952,7 @@ public final class Parser
         {
             // 这里非常坑. 必须要先parser;
             // parse的副作用是推一个token, 所以给new decl传参的时候先后顺序换了会导致意想不到的bug;
-            AbstractType type = parseType();
+            ICvaType type = parseType();
             if (!(type instanceof CvaStringType))
             {
                 errorLog("Sting[] args in main func",

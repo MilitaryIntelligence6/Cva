@@ -3,7 +3,7 @@ package cn.misection.cvac.ast.method;
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.expr.AbstractExpression;
 import cn.misection.cvac.ast.statement.AbstractStatement;
-import cn.misection.cvac.ast.type.AbstractType;
+import cn.misection.cvac.ast.type.ICvaType;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
 public final class CvaMethod extends AbstractMethod
 {
     public CvaMethod(String name,
-                     AbstractType retType,
+                     ICvaType retType,
                      AbstractExpression retExpr,
                      List<AbstractDeclaration> argumentList,
                      List<AbstractDeclaration> localVarList,

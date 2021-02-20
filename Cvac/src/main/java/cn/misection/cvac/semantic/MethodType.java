@@ -1,7 +1,7 @@
 package cn.misection.cvac.semantic;
 
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
-import cn.misection.cvac.ast.type.AbstractType;
+import cn.misection.cvac.ast.type.ICvaType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,22 +11,22 @@ import java.util.List;
  */
 public final class MethodType
 {
-    private AbstractType retType;
+    private ICvaType retType;
     private List<AbstractDeclaration> argsType;
 
-    public MethodType(AbstractType retType,
+    public MethodType(ICvaType retType,
                       List<AbstractDeclaration> argsType)
     {
         this.setRetType(retType);
         this.setArgsType(argsType);
     }
 
-    public AbstractType getRetType()
+    public ICvaType getRetType()
     {
         return retType;
     }
 
-    public void setRetType(AbstractType retType)
+    public void setRetType(ICvaType retType)
     {
         this.retType = retType;
     }

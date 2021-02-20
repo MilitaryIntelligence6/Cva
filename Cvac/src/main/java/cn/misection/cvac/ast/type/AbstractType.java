@@ -7,14 +7,6 @@ package cn.misection.cvac.ast.type;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:52:00
  */
-public abstract class AbstractType implements IType
+public abstract class AbstractType implements ICvaType
 {
-    public AbstractType() {}
-
-    /**
-     * 转string;
-     * @return
-     */
-    @Override
-    public abstract String toString();
 }

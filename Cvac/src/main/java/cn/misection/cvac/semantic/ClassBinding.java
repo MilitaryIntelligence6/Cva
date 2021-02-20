@@ -2,7 +2,7 @@ package cn.misection.cvac.semantic;
 
 //import cn.misection.cvac.ast.FrontAst;
 
-import cn.misection.cvac.ast.type.AbstractType;
+import cn.misection.cvac.ast.type.ICvaType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +16,7 @@ public final class ClassBinding
      * // null for non-existing base class
      */
     public String parent;
-    public Map<String, AbstractType> fields;
+    public Map<String, ICvaType> fields;
     public Map<String, MethodType> methods;
 
     public ClassBinding(String parent)
@@ -27,7 +27,7 @@ public final class ClassBinding
     }
 
     public ClassBinding(String parent,
-                        Map<String, AbstractType> fields,
+                        Map<String, ICvaType> fields,
                         Map<String, MethodType> methods)
     {
         this.parent = parent;
@@ -35,7 +35,7 @@ public final class ClassBinding
         this.methods = methods;
     }
 
-    public void putField(String literal, AbstractType type)
+    public void putField(String literal, ICvaType type)
     {
         if (fields.get(literal) != null)
         {

@@ -1,7 +1,8 @@
 package cn.misection.cvac.ast.statement;
 
 import cn.misection.cvac.ast.expr.AbstractExpression;
-import cn.misection.cvac.ast.type.AbstractType;
+import cn.misection.cvac.ast.type.ICvaType;
+import cn.misection.cvac.ast.type.ICvaType;
 
 /**
  * @author Military Intelligence 6 root
@@ -16,7 +17,7 @@ public final class CvaAssignStatement extends AbstractStatement
 
     private AbstractExpression expr;
 
-    private AbstractType type;
+    private ICvaType type;
 
     public CvaAssignStatement(int lineNum, String literal, AbstractExpression expr)
     {
@@ -41,7 +42,7 @@ public final class CvaAssignStatement extends AbstractStatement
         return expr;
     }
 
-    public AbstractType getType()
+    public ICvaType getType()
     {
         return type;
     }
@@ -56,7 +57,7 @@ public final class CvaAssignStatement extends AbstractStatement
         this.expr = expr;
     }
 
-    public void setType(AbstractType type)
+    public void setType(ICvaType type)
     {
         this.type = type;
     }

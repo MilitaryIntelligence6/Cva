@@ -1,6 +1,7 @@
-package cn.misection.cvac.ast.type.basic;
+package cn.misection.cvac.ast.type.advance;
 
 import cn.misection.cvac.ast.type.AbstractType;
+import cn.misection.cvac.ast.type.basic.EnumCvaType;
 
 /**
  * @author Military Intelligence 6 root
@@ -9,7 +10,7 @@ import cn.misection.cvac.ast.type.AbstractType;
  * @Description TODO
  * @CreateTime 2021年02月19日 22:28:00
  */
-public final class CvaArrayType extends AbstractBasicType
+public final class CvaArrayType extends AbstractAdvanceType
 {
     public static final String TYPE_LITERAL = "@array";
 
@@ -17,10 +18,18 @@ public final class CvaArrayType extends AbstractBasicType
 
     private int size;
 
+    private static final EnumCvaType ENUM_TYPE = EnumCvaType.CVA_ARRAY;
+
     public CvaArrayType(AbstractType innerType, int size)
     {
         this.innerType = innerType;
         this.size = size;
+    }
+
+    @Override
+    public EnumCvaType toEnum()
+    {
+        return ENUM_TYPE;
     }
 
     @Override

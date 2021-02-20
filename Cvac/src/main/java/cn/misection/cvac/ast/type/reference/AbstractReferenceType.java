@@ -11,4 +11,5 @@ import cn.misection.cvac.ast.type.AbstractType;
  */
 public abstract class AbstractReferenceType extends AbstractType
 {
+
 }

@@ -1,5 +1,7 @@
 package cn.misection.cvac.ast.type.reference;
 
+import cn.misection.cvac.ast.type.basic.EnumCvaType;
+
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
@@ -11,21 +13,29 @@ public final class CvaClassType extends AbstractReferenceType
 {
     public static final String TYPE_LITERAL = "@class";
 
-    private String literal;
+    private static final EnumCvaType ENUM_TYPE = EnumCvaType.CVA_CLASS;
 
-    public CvaClassType(String literal)
+    private final String name;
+
+    public CvaClassType(String name)
     {
-        this.literal = literal;
+        this.name = name;
+    }
+
+    @Override
+    public EnumCvaType toEnum()
+    {
+        return ENUM_TYPE;
     }
 
     @Override
     public String toString()
     {
-        return String.format("@class:%s", literal);
+        return String.format("@class:%s", name);
     }
 
-    public String getLiteral()
+    public String getName()
     {
-        return literal;
+        return name;
     }
 }

@@ -1,4 +1,6 @@
-package cn.misection.cvac.ast.type.basic;
+package cn.misection.cvac.ast.type.advance;
+
+import cn.misection.cvac.ast.type.basic.EnumCvaType;
 
 /**
  * @author Military Intelligence 6 root
@@ -11,7 +13,15 @@ public final class CvaPointerType extends AbstractUnsafe
 {
     public static final String TYPE_LITERAL = "@pointer";
 
+    private static final EnumCvaType ENUM_TYPE = EnumCvaType.CVA_POINTER;
+
     public CvaPointerType() {}
+
+    @Override
+    public EnumCvaType toEnum()
+    {
+        return ENUM_TYPE;
+    }
 
     @Override
     public String toString()

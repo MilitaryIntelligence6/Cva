@@ -3,7 +3,7 @@ package cn.misection.cvac.ast.method;
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.expr.AbstractExpression;
 import cn.misection.cvac.ast.statement.AbstractStatement;
-import cn.misection.cvac.ast.type.AbstractType;
+import cn.misection.cvac.ast.type.ICvaType;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public abstract class AbstractMethod implements IMethod
 {
     protected String name;
 
-    protected AbstractType retType;
+    protected ICvaType retType;
 
     protected AbstractExpression retExpr;
 
@@ -34,7 +34,7 @@ public abstract class AbstractMethod implements IMethod
     }
 
     public AbstractMethod(String name,
-                     AbstractType retType,
+                     ICvaType retType,
                      AbstractExpression retExpr,
                      List<AbstractDeclaration> argumentList,
                      List<AbstractDeclaration> localVarList,
@@ -55,7 +55,7 @@ public abstract class AbstractMethod implements IMethod
     }
 
     @Override
-    public AbstractType getRetType()
+    public ICvaType getRetType()
     {
         return retType;
     }
@@ -89,7 +89,7 @@ public abstract class AbstractMethod implements IMethod
         this.name = name;
     }
 
-    public void setRetType(AbstractType retType)
+    public void setRetType(ICvaType retType)
     {
         this.retType = retType;
     }

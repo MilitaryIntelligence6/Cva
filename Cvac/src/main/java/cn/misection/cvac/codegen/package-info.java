@@ -8,8 +8,8 @@
 package cn.misection.cvac.codegen;
 
 
+import cn.misection.cvac.ast.type.basic.EnumCvaType;
 import cn.misection.cvac.codegen.bst.btype.reference.TargetStringType;
-import cn.misection.cvac.constant.CvaTypeCode;
 import cn.misection.cvac.constant.WriteOptionCode;
 
 import java.util.HashMap;
@@ -60,7 +60,7 @@ final class WriteModeMap extends HashMap<Byte, String>
 }
 
 
-final class WriteTypeMap extends HashMap<Byte, String>
+final class WriteTypeMap extends HashMap<EnumCvaType, String>
 {
     private static WriteTypeMap instance = null;
 
@@ -86,8 +86,8 @@ final class WriteTypeMap extends HashMap<Byte, String>
 
     private void init()
     {
-        this.put(CvaTypeCode.CVA_INT_TYPE, "I");
-        this.put(CvaTypeCode.CVA_STRING_TYPE, String.format("L%s;", TargetStringType.FULL_LITERAL));
+        this.put(EnumCvaType.CVA_INT, "I");
+        this.put(EnumCvaType.CVA_STRING, String.format("L%s;", TargetStringType.FULL_LITERAL));
 //        this.put(WriteILPool.WRITE_BOOLEAN, GenStringType.FULL_LITERAL);
     }
 }

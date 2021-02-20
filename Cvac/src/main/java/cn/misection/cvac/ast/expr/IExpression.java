@@ -1,8 +1,6 @@
 package cn.misection.cvac.ast.expr;
 
 import cn.misection.cvac.ast.ASTree;
-import cn.misection.cvac.ast.type.AbstractType;
-import cn.misection.cvac.ast.type.basic.CvaType;
 
 /**
  * @author Military Intelligence 6 root

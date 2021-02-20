@@ -1,12 +1,13 @@
 package cn.misection.cvac.semantic;
 
-import cn.misection.cvac.ast.type.AbstractType;
+import cn.misection.cvac.ast.type.ICvaType;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by MI6 root 1/13.
+ * @FIXME 改继承
  */
 public final class ClassTable
 {
@@ -30,7 +31,7 @@ public final class ClassTable
         }
     }
 
-    public void putFieldToClass(String c, String literal, AbstractType type)
+    public void putFieldToClass(String c, String literal, ICvaType type)
     {
         this.table.get(c).putField(literal, type);
     }
@@ -45,10 +46,10 @@ public final class ClassTable
         return this.table.get(c);
     }
 
-    public AbstractType getFieldType(String c, String literal)
+    public ICvaType getFieldType(String c, String literal)
     {
         ClassBinding cb = this.table.get(c);
-        AbstractType type = cb.fields.get(literal);
+        ICvaType type = cb.fields.get(literal);
         while (type == null)
         {
             if (cb.parent == null)

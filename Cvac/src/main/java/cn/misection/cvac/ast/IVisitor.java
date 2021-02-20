@@ -10,10 +10,9 @@ import cn.misection.cvac.ast.program.AbstractProgram;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.*;
-import cn.misection.cvac.ast.type.basic.CvaBooleanType;
-import cn.misection.cvac.ast.type.basic.CvaIntType;
+import cn.misection.cvac.ast.type.basic.EnumCvaType;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
-import cn.misection.cvac.ast.type.reference.CvaStringType;
+import cn.misection.cvac.ast.type.advance.CvaStringType;
 import cn.misection.cvac.constant.CvaExprClassName;
 
 /**
@@ -25,45 +24,79 @@ public interface IVisitor
      * type
      * @param type t;
      */
-    default void visit(AbstractType type)
+    default void visit(ICvaType type)
     {
-        switch (type.getClass().getSimpleName())
+//        switch (type.getClass().getSimpleName())
+//        {
+//            case CvaTypeClassName.CVA_BOOLEAN_TYPE:
+//            {
+//                visit((CvaBooleanType) type);
+//                break;
+//            }
+//            case CvaTypeClassName.CVA_CLASS_TYPE:
+//            {
+//                visit((CvaClassType) type);
+//                break;
+//            }
+//            case CvaTypeClassName.CVA_INT_TYPE:
+//            {
+//                visit((CvaIntType) type);
+//                break;
+//            }
+//            case CvaTypeClassName.CVA_STRING_TYPE:
+//            {
+//                visit((CvaStringType) type);
+//                break;
+//            }
+//            default:
+//            {
+//                System.err.println("unknown type");
+//                break;
+//            }
+//        }
+        // 不是枚举;
+        if (type instanceof AbstractType)
         {
-            case CvaTypeClassName.CVA_BOOLEAN_TYPE:
+            switch (((AbstractType) type).toEnum())
             {
-                visit((CvaBooleanType) type);
-                break;
+                case CVA_STRING:
+                {
+                    visit((CvaStringType) type);
+                    break;
+                }
+                case CVA_POINTER:
+                {
+                    // TODO;
+                    break;
+                }
+                case CVA_ARRAY:
+                {
+                    // TODO;
+                    break;
+                }
+                case CVA_CLASS:
+                {
+                    visit((CvaClassType) type);
+                }
+                default:
+                {
+                    break;
+                }
             }
-            case CvaTypeClassName.CVA_CLASS_TYPE:
-            {
-                visit((CvaClassType) type);
-                break;
-            }
-            case CvaTypeClassName.CVA_INT_TYPE:
-            {
-                visit((CvaIntType) type);
-                break;
-            }
-            case CvaTypeClassName.CVA_STRING_TYPE:
-            {
-                visit((CvaStringType) type);
-                break;
-            }
-            default:
-            {
-                System.err.println("unknown type");
-                break;
-            }
+        }
+        // 基本枚举类型;
+        else
+        {
+            visit((EnumCvaType) type);
         }
     }
 
-    void visit(CvaBooleanType type);
+    void visit(EnumCvaType basicType);
+
+    void visit(CvaStringType type);
 
     void visit(CvaClassType type);
 
-    void visit(CvaIntType type);
-
-    void visit(CvaStringType type);
 
     /**
      * decl

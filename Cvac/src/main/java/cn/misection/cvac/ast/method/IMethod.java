@@ -4,7 +4,7 @@ import cn.misection.cvac.ast.ASTree;
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.expr.AbstractExpression;
 import cn.misection.cvac.ast.statement.AbstractStatement;
-import cn.misection.cvac.ast.type.AbstractType;
+import cn.misection.cvac.ast.type.ICvaType;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public interface IMethod extends ASTree
      * 返回值;
      * @return
      */
-    AbstractType getRetType();
+    ICvaType getRetType();
 
     /**
      * 返回表达;

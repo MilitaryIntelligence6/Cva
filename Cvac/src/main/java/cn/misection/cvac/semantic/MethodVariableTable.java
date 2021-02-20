@@ -2,6 +2,7 @@ package cn.misection.cvac.semantic;
 
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.type.AbstractType;
+import cn.misection.cvac.ast.type.ICvaType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * @author  MI6 root
  */
 public final class MethodVariableTable
-        extends HashMap<String, AbstractType>
+        extends HashMap<String, ICvaType>
 {
     public MethodVariableTable()
     {

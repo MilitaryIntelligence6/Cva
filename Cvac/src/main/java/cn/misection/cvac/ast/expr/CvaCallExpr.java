@@ -1,6 +1,6 @@
 package cn.misection.cvac.ast.expr;
 
-import cn.misection.cvac.ast.type.AbstractType;
+import cn.misection.cvac.ast.type.ICvaType;
 
 import java.util.List;
 
@@ -30,9 +30,9 @@ public final class CvaCallExpr extends AbstractExpression
     /**
      * arg's type;
      */
-    private List<AbstractType> argTypeList;
+    private List<ICvaType> argTypeList;
 
-    public AbstractType retType;
+    public ICvaType retType;
 
     public CvaCallExpr(int lineNum,
                        String literal,
@@ -71,12 +71,12 @@ public final class CvaCallExpr extends AbstractExpression
         return type;
     }
 
-    public List<AbstractType> getArgTypeList()
+    public List<ICvaType> getArgTypeList()
     {
         return argTypeList;
     }
 
-    public AbstractType getRetType()
+    public ICvaType getRetType()
     {
         return retType;
     }
@@ -101,12 +101,12 @@ public final class CvaCallExpr extends AbstractExpression
         this.type = type;
     }
 
-    public void setArgTypeList(List<AbstractType> argTypeList)
+    public void setArgTypeList(List<ICvaType> argTypeList)
     {
         this.argTypeList = argTypeList;
     }
 
-    public void setRetType(AbstractType retType)
+    public void setRetType(ICvaType retType)
     {
         this.retType = retType;
     }

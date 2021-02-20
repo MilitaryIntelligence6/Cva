@@ -9,12 +9,11 @@ import cn.misection.cvac.ast.method.CvaMainMethod;
 import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
-import cn.misection.cvac.ast.type.AbstractType;
-import cn.misection.cvac.ast.type.basic.CvaBooleanType;
-import cn.misection.cvac.ast.type.basic.CvaIntType;
+import cn.misection.cvac.ast.type.ICvaType;
+import cn.misection.cvac.ast.type.basic.EnumCvaType;
 import cn.misection.cvac.ast.type.reference.AbstractReferenceType;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
-import cn.misection.cvac.ast.type.reference.CvaStringType;
+import cn.misection.cvac.ast.type.advance.CvaStringType;
 import cn.misection.cvac.codegen.bst.Label;
 import cn.misection.cvac.codegen.bst.bclas.TargetClass;
 import cn.misection.cvac.codegen.bst.bdecl.TargetDeclaration;
@@ -27,7 +26,6 @@ import cn.misection.cvac.codegen.bst.btype.reference.TargetClassType;
 import cn.misection.cvac.codegen.bst.btype.reference.TargetStringType;
 import cn.misection.cvac.codegen.bst.instruction.*;
 import cn.misection.cvac.constant.CvaExprClassName;
-import cn.misection.cvac.constant.CvaTypeCode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,22 +69,31 @@ public final class TranslatorVisitor implements IVisitor
         linearInstrList.add(instruction);
     }
 
-    @Override
-    public void visit(CvaBooleanType type)
-    {
-        genType = new TargetIntType();
-    }
 
     @Override
     public void visit(CvaClassType type)
     {
-        genType = new TargetClassType(type.getLiteral());
+        genType = new TargetClassType(type.getName());
     }
 
     @Override
-    public void visit(CvaIntType type)
+    public void visit(EnumCvaType type)
     {
-        genType = new TargetIntType();
+        switch (type)
+        {
+            case CVA_INT:
+            case CVA_BOOLEAN:
+            {
+                // FIXME 后端取消;
+                genType = new TargetIntType();
+                break;
+            }
+            default:
+            {
+                // FIXME 处理错误;
+                break;
+            }
+        }
     }
 
     @Override
@@ -162,11 +169,11 @@ public final class TranslatorVisitor implements IVisitor
         if (expr.isField())
         {
             emit(new ALoad(0));
-            AbstractType type = expr.getType();
+            ICvaType type = expr.getType();
             if (type instanceof CvaClassType)
             {
                 emit(new GetField(String.format("%s/%s", this.className, expr.getLiteral()),
-                        String.format("L%s;", ((CvaClassType) type).getLiteral())));
+                        String.format("L%s;", ((CvaClassType) type).getName())));
             }
             else
             {
@@ -177,13 +184,19 @@ public final class TranslatorVisitor implements IVisitor
         else
         {
             int index = this.indexTable.get(expr.getLiteral());
-            if (expr.getType() instanceof AbstractReferenceType)
+            switch (expr.getType().toEnum())
             {
-                emit(new ALoad(index));
-            }
-            else
-            {
-                emit(new ILoad(index));
+                // 后面其他类型也一样;
+                case CVA_INT:
+                {
+                    emit(new ILoad(index));
+                    break;
+                }
+                default:
+                {
+                    emit(new ALoad(index));
+                    break;
+                }
             }
         }
     }
@@ -293,7 +306,7 @@ public final class TranslatorVisitor implements IVisitor
             visit(stm.getExpr());
             emit(new PutField(String.format("%s/%s", this.className, stm.getLiteral()),
                     stm.getType() instanceof CvaClassType ?
-                            (String.format("L%s;", ((CvaClassType) stm.getType()).getLiteral()))
+                            (String.format("L%s;", ((CvaClassType) stm.getType()).getName()))
                             : "I"));
         }
     }
@@ -337,23 +350,23 @@ public final class TranslatorVisitor implements IVisitor
         {
             case CvaExprClassName.CVA_NUMBER_INT_EXPR:
             {
-                emit(new WriteInstruction(mode, CvaTypeCode.CVA_INT_TYPE));
+                emit(new WriteInstruction(mode, EnumCvaType.CVA_INT));
                 break;
             }
             case CvaExprClassName.CVA_STRING_EXPR:
             {
-                emit(new WriteInstruction(mode, CvaTypeCode.CVA_STRING_TYPE));
+                emit(new WriteInstruction(mode, EnumCvaType.CVA_STRING));
                 break;
             }
             case CvaExprClassName.CVA_IDENTIFIER_EXPR:
             {
-                byte type = parseEmitTypeCode(((CvaIdentifierExpr) expr).getType().toString());
+                EnumCvaType type = ((CvaIdentifierExpr) expr).getType().toEnum();
                 emit(new WriteInstruction(mode, type));
                 break;
             }
             case CvaExprClassName.CVA_CALL_EXPR:
             {
-                byte type = parseEmitTypeCode(((CvaCallExpr) expr).getRetType().toString());
+                EnumCvaType type = ((CvaCallExpr) expr).getRetType().toEnum();
                 emit(new WriteInstruction(mode, type));
                 break;
             }
@@ -364,32 +377,32 @@ public final class TranslatorVisitor implements IVisitor
                 // 目前可能遇到的情况有 idexpr, callfuncexpr, numberintexpr;
                 // 注释掉这个可以应对可能的异常;
 //                emit(new WriteInt());
-                emit(new WriteInstruction(mode, CvaTypeCode.CVA_INT_TYPE));
+                emit(new WriteInstruction(mode, EnumCvaType.CVA_INT));
                 break;
             }
         }
     }
 
-    private byte parseEmitTypeCode(String typeString)
-    {
-        switch (typeString)
-        {
-            case CvaIntType.TYPE_LITERAL:
-            {
-                return CvaTypeCode.CVA_INT_TYPE;
-            }
-            case CvaStringType.TYPE_LITERAL:
-            {
-                return CvaTypeCode.CVA_STRING_TYPE;
-            }
-            default:
-            {
-                // todo;
-                break;
-            }
-        }
-        return -1;
-    }
+//    private byte parseEmitTypeCode(String typeString)
+//    {
+//        switch (typeString)
+//        {
+//            case CvaIntType.TYPE_LITERAL:
+//            {
+//                return CvaTypeCode.CVA_INT_TYPE;
+//            }
+//            case CvaStringType.TYPE_LITERAL:
+//            {
+//                return CvaTypeCode.CVA_STRING_TYPE;
+//            }
+//            default:
+//            {
+//                // todo;
+//                break;
+//            }
+//        }
+//        return -1;
+//    }
 
     @Override
     public void visit(CvaWhileStatement stm)

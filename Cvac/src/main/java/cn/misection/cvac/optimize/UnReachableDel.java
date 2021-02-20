@@ -8,10 +8,9 @@ import cn.misection.cvac.ast.expr.*;
 import cn.misection.cvac.ast.method.*;
 import cn.misection.cvac.ast.program.*;
 import cn.misection.cvac.ast.statement.*;
-import cn.misection.cvac.ast.type.basic.CvaBooleanType;
-import cn.misection.cvac.ast.type.basic.CvaIntType;
+import cn.misection.cvac.ast.type.basic.EnumCvaType;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
-import cn.misection.cvac.ast.type.reference.CvaStringType;
+import cn.misection.cvac.ast.type.advance.CvaStringType;
 
 
 import java.util.ArrayList;
@@ -26,16 +25,13 @@ public final class UnReachableDel
     private boolean isOptimizing;
 
     @Override
-    public void visit(CvaBooleanType type) {}
-
-    @Override
-    public void visit(CvaClassType type) {}
-
-    @Override
-    public void visit(CvaIntType type) {}
+    public void visit(EnumCvaType basicType) {}
 
     @Override
     public void visit(CvaStringType type) {}
+
+    @Override
+    public void visit(CvaClassType type) {}
 
     @Override
     public void visit(CvaDeclaration decl) {}

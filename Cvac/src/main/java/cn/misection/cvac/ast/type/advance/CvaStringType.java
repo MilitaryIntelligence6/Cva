@@ -1,4 +1,6 @@
-package cn.misection.cvac.ast.type.reference;
+package cn.misection.cvac.ast.type.advance;
+
+import cn.misection.cvac.ast.type.basic.EnumCvaType;
 
 /**
  * @author Military Intelligence 6 root
@@ -7,11 +9,19 @@ package cn.misection.cvac.ast.type.reference;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:46:00
  */
-public final class CvaStringType extends AbstractReferenceType
+public final class CvaStringType extends AbstractAdvanceType
 {
     public static final String TYPE_LITERAL = "@string";
 
+    private static final EnumCvaType ENUM_TYPE = EnumCvaType.CVA_STRING;
+
     public CvaStringType() {}
+
+    @Override
+    public EnumCvaType toEnum()
+    {
+        return ENUM_TYPE;
+    }
 
     @Override
     public String toString()

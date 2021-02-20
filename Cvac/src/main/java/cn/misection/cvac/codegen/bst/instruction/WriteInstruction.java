@@ -1,6 +1,6 @@
 package cn.misection.cvac.codegen.bst.instruction;
 
-import cn.misection.cvac.codegen.bst.btype.BaseType;
+import cn.misection.cvac.ast.type.basic.EnumCvaType;
 
 /**
  * @author Military Intelligence 6 root
@@ -16,9 +16,9 @@ public final class WriteInstruction extends BaseInstruction
     /**
      * expr的type, 尽量早确定, 不然判定很丑, 判定时确定传入也行;
      */
-    private byte writeType;
+    private EnumCvaType writeType;
 
-    public WriteInstruction(byte writeMode, byte writeType)
+    public WriteInstruction(byte writeMode, EnumCvaType writeType)
     {
         this.writeMode = writeMode;
         this.writeType = writeType;
@@ -34,12 +34,12 @@ public final class WriteInstruction extends BaseInstruction
         this.writeMode = writeMode;
     }
 
-    public byte getWriteType()
+    public EnumCvaType getWriteType()
     {
         return writeType;
     }
 
-    public void setWriteType(byte writeType)
+    public void setWriteType(EnumCvaType writeType)
     {
         this.writeType = writeType;
     }

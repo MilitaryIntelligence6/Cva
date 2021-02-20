@@ -3,7 +3,7 @@ package cn.misection.cvac.ast.method;
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.expr.AbstractExpression;
 import cn.misection.cvac.ast.statement.AbstractStatement;
-import cn.misection.cvac.ast.type.AbstractType;
+import cn.misection.cvac.ast.type.ICvaType;
 import cn.misection.cvac.lexer.CvaKind;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public final class CvaMainMethod extends AbstractMethod
     }
 
     @Override
-    public AbstractType getRetType()
+    public ICvaType getRetType()
     {
         return retType;
     }
@@ -69,7 +69,7 @@ public final class CvaMainMethod extends AbstractMethod
     {
         private final String name = CvaKind.MAIN.getKindLiteral();
 
-        private AbstractType retType;
+        private ICvaType retType;
 
         private AbstractExpression retExpr;
 
@@ -84,7 +84,7 @@ public final class CvaMainMethod extends AbstractMethod
 
         public Builder() {}
 
-        public Builder(AbstractType retType,
+        public Builder(ICvaType retType,
                        AbstractExpression retExpr,
                        List<AbstractDeclaration> argumentList,
                        List<AbstractDeclaration> localVarList,
@@ -102,7 +102,7 @@ public final class CvaMainMethod extends AbstractMethod
             return new CvaMainMethod(this);
         }
 
-        public Builder putRetType(AbstractType retType)
+        public Builder putRetType(ICvaType retType)
         {
             this.retType = retType;
             return this;

@@ -10,3 +10,6 @@
 - type改成枚举;  
 
 - instru 改成枚举;
+
+- 把所有的取type操作都改成enumType();
+能换的icvatype都换掉;

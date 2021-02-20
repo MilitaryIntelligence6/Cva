@@ -1,6 +1,6 @@
 package cn.misection.cvac.ast.decl;
 
-import cn.misection.cvac.ast.type.AbstractType;
+import cn.misection.cvac.ast.type.ICvaType;
 
 /**
  * @author Military Intelligence 6 root
@@ -13,9 +13,9 @@ public final class CvaDeclaration extends AbstractDeclaration
 {
     private final String literal;
 
-    private final AbstractType type;
+    private final ICvaType type;
 
-    public CvaDeclaration(int lineNum, String literal, AbstractType type)
+    public CvaDeclaration(int lineNum, String literal, ICvaType type)
     {
         super(lineNum);
         this.literal = literal;
@@ -29,7 +29,7 @@ public final class CvaDeclaration extends AbstractDeclaration
     }
 
     @Override
-    public AbstractType type()
+    public ICvaType type()
     {
         return type;
     }
