@@ -179,11 +179,10 @@ public interface IVisitor
                     }
                     default:
                     {
+                        System.err.println("unknown expr");
                         break;
                     }
                 }
-                System.err.println("unknown expr");
-                break;
             }
         }
     }
