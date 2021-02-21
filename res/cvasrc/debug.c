@@ -9,18 +9,30 @@ call cva.std.console.*;
  */
 call cva.lang.type.String;
 
+class Increment
+{
+    int incre()
+    {
+        int i;
+        i = 0;
+        while (i < 10)
+        {
+            println i;
+            i++;
+            i = i + 1;
+        }
+        return i;
+    }
+}
+
 int main(string[] args)
 {
-    int num = 1;
     echo "hello, world!\n";
-    println 1;
-    println "String";
-    println 1 + 2;
-
+    println new Increment().incre();
     return 0;
 }
 
-//
+
 //// This is the entry point of the program
 //
 //pkg cn.misection.cva.test;
@@ -51,7 +63,8 @@ int main(string[] args)
 //        else if (num < 5)
 //        {
 //            total = num * (this.Compute(num-1));
-//            println num;
+//            echo num;
+//            echo "  ";
 //        }
 //        else
 //        {
@@ -59,16 +72,19 @@ int main(string[] args)
 //        }
 //        if (num < 7)
 //        {
-//            println(999);
+//            echo 999;
+//            echo "\t";
 ////            echo(999);
 //        }
 //        i = num;
 //        while (i < 5)
 //        {
-//            println(888);
+//            echo 888;
+//            echo "\t";
 ////            echo("hello, string");
 ////            echo(888);
 //            i = i + 1;
+//            i++;
 //        }
 //        println("hello, string");
 //        return total;

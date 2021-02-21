@@ -4,7 +4,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum CvaKind
+public enum EnumCvaToken
 {
     /**
      * +
@@ -561,12 +561,12 @@ public enum CvaKind
 
     private String kindLiteral;
 
-    CvaKind(String kindLiteral)
+    EnumCvaToken(String kindLiteral)
     {
         this.kindLiteral = kindLiteral;
     }
 
-    CvaKind()
+    EnumCvaToken()
     {
 
     }
@@ -576,11 +576,11 @@ public enum CvaKind
         return kindLiteral;
     }
 
-    private static final Map<String, CvaKind> lookup = new HashMap<>();
+    private static final Map<String, EnumCvaToken> lookup = new HashMap<>();
 
     static
     {
-        for (CvaKind kind : EnumSet.allOf(CvaKind.class))
+        for (EnumCvaToken kind : EnumSet.allOf(EnumCvaToken.class))
         {
             if (kind.kindLiteral != null)
             {
@@ -604,24 +604,24 @@ public enum CvaKind
         return lookup.containsKey(literal);
     }
 
-    public static CvaKind selectReverse(String literal)
+    public static EnumCvaToken selectReverse(String literal)
     {
         // 可能出null;
         return lookup.get(literal);
     }
 
-    public static boolean isBasicType(CvaKind kind)
+    public static boolean isBasicType(EnumCvaToken kind)
     {
-        return kind.ordinal() >= CvaKind.VOID.ordinal()
-                && kind.ordinal() <= CvaKind.POINTER.ordinal();
+        return kind.ordinal() >= EnumCvaToken.VOID.ordinal()
+                && kind.ordinal() <= EnumCvaToken.POINTER.ordinal();
     }
 
-    public static boolean isInternalRefType(CvaKind kind)
+    public static boolean isInternalRefType(EnumCvaToken kind)
     {
         return kind == STRING;
     }
 
-    public static boolean isType(CvaKind kind)
+    public static boolean isType(EnumCvaToken kind)
     {
         return isBasicType(kind) || isInternalRefType(kind);
     }

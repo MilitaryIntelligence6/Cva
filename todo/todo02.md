@@ -15,4 +15,8 @@
 - 把所有的取type操作都改成enumType();
 能换的icvatype都换掉;
 
-- ClassTable
+- 做支持int num = 1;的定义!!;
+
+前端解析语法糖 +=, -=;
+- 位操作;
+- 原子操作加入new;

@@ -28,6 +28,12 @@ public final class CvaWriteStatement extends AbstractStatement
         this.writeMode = writeMode;
     }
 
+    @Override
+    public EnumCvaStatement toEnum()
+    {
+        return EnumCvaStatement.WRITE;
+    }
+
     public AbstractExpression getExpr()
     {
         return expr;

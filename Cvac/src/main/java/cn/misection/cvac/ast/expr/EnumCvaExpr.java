@@ -18,14 +18,12 @@ public enum EnumCvaExpr
 
     BIT_NEGATE,
 
-    INCREMENT,
-
-    DECREMENT,
-
     /**
      * 应该是包括true false const int等等的;
      */
     CONST,
+
+    CONST_NULL,
 
     CONST_TRUE,
 

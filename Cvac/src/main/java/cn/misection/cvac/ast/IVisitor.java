@@ -229,33 +229,42 @@ public interface IVisitor
     // Stm
     default void visit(AbstractStatement abstStm)
     {
-        switch (abstStm.getClass().getSimpleName())
+        switch (abstStm.toEnum())
         {
-            case CvaStatementClassName.CVA_ASSIGN_STATEMENT:
+            case ASSIGN:
             {
                 visit((CvaAssignStatement) abstStm);
                 break;
             }
-            case CvaStatementClassName.CVA_BLOCK_STATEMENT:
+            case BLOCK:
             {
                 visit((CvaBlockStatement) abstStm);
                 break;
             }
-            case CvaStatementClassName.CVA_IF_STATEMENT:
+            case IF:
             {
                 visit((CvaIfStatement) abstStm);
                 break;
             }
-            case CvaStatementClassName.CVA_WRITE_STATEMENT:
+            case WRITE:
             {
                 visit((CvaWriteStatement) abstStm);
                 break;
             }
-            case CvaStatementClassName.CVA_WHILE_STATEMENT:
+            case WHILE:
             {
                 visit((CvaWhileStatement) abstStm);
                 break;
             }
+//            case INCREMENT:
+//            {
+//                visit((CvaIncreStatement) abstStm);
+//            }
+//            case DECREMENT:
+//            {
+//                visit((CvaDecreStatement) abstStm);
+//                break;
+//            }
             default:
             {
                 System.err.println("unknown statement");
@@ -273,6 +282,10 @@ public interface IVisitor
     void visit(CvaWriteStatement stm);
 
     void visit(CvaWhileStatement stm);
+
+//    void visit(CvaIncreStatement stm);
+//
+//    void visit(CvaDecreStatement stm);
 
     /**
      * Method

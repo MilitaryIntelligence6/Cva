@@ -32,6 +32,12 @@ public final class CvaAssignStatement extends AbstractStatement
         this.type = null;
     }
 
+    @Override
+    public EnumCvaStatement toEnum()
+    {
+        return EnumCvaStatement.ASSIGN;
+    }
+
     public String getLiteral()
     {
         return literal;

@@ -109,6 +109,6 @@ public final class BufferedHandler implements IBufferedQueue
     @Override
     public String toString()
     {
-        return String.format("BufferedHandler{buffer=%s}", buffer);
+        return String.format("BufferedHandler{buffer=\n\n%s}", buffer);
     }
 }

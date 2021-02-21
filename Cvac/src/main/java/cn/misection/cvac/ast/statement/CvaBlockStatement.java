@@ -20,6 +20,12 @@ public final class CvaBlockStatement extends AbstractStatement
         this.statementList = statementList;
     }
 
+    @Override
+    public EnumCvaStatement toEnum()
+    {
+        return EnumCvaStatement.BLOCK;
+    }
+
     public List<AbstractStatement> getStatementList()
     {
         return statementList;

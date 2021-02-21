@@ -8,7 +8,7 @@ public final class CvaToken
     /**
      * the kind of the token
      */
-    private CvaKind kind;
+    private final EnumCvaToken enumToken;
 
     /**
      * extra lexeme of the token
@@ -21,15 +21,15 @@ public final class CvaToken
     private int lineNum;
 
 
-    public CvaToken(CvaKind kind, int lineNum)
+    public CvaToken(EnumCvaToken enumToken, int lineNum)
     {
-        this.kind = kind;
+        this.enumToken = enumToken;
         this.lineNum = lineNum;
     }
 
-    public CvaToken(CvaKind kind, int lineNum, String literal)
+    public CvaToken(EnumCvaToken enumToken, int lineNum, String literal)
     {
-        this.kind = kind;
+        this.enumToken = enumToken;
         this.lineNum = lineNum;
         this.literal = literal;
     }
@@ -38,14 +38,14 @@ public final class CvaToken
     public String toString()
     {
         return String.format("Token {%s literal: %s : at line %d}",
-                this.kind.toString(),
+                this.enumToken.toString(),
                 literal == null ? "null" : this.literal,
                 this.lineNum);
     }
 
-    public CvaKind getKind()
+    public EnumCvaToken toEnum()
     {
-        return kind;
+        return enumToken;
     }
 
     public String getLiteral()

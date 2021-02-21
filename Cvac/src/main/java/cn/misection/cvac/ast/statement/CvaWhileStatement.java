@@ -22,6 +22,12 @@ public final class CvaWhileStatement extends AbstractStatement
         this.body = body;
     }
 
+    @Override
+    public EnumCvaStatement toEnum()
+    {
+        return EnumCvaStatement.WHILE;
+    }
+
     public AbstractExpression getCondition()
     {
         return condition;

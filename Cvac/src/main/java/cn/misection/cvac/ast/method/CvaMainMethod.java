@@ -4,7 +4,7 @@ import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.expr.AbstractExpression;
 import cn.misection.cvac.ast.statement.AbstractStatement;
 import cn.misection.cvac.ast.type.ICvaType;
-import cn.misection.cvac.lexer.CvaKind;
+import cn.misection.cvac.lexer.EnumCvaToken;
 
 import java.util.List;
 
@@ -67,7 +67,7 @@ public final class CvaMainMethod extends AbstractMethod
 
     public static class Builder
     {
-        private final String name = CvaKind.MAIN.getKindLiteral();
+        private final String name = EnumCvaToken.MAIN.getKindLiteral();
 
         private ICvaType retType;
 

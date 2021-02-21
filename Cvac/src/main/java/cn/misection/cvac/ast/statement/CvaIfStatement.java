@@ -39,6 +39,12 @@ public final class CvaIfStatement extends AbstractStatement
         this.elseStatement = null;
     }
 
+    @Override
+    public EnumCvaStatement toEnum()
+    {
+        return EnumCvaStatement.IF;
+    }
+
     public AbstractExpression getCondition()
     {
         return condition;

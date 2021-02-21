@@ -47,7 +47,7 @@ public final class Lexer
         switch (ch)
         {
             case LexerCommon.EOF:
-                return new CvaToken(CvaKind.EOF, lineNum);
+                return new CvaToken(EnumCvaToken.EOF, lineNum);
             case '+':
                 return handlePlus();
             case '-':
@@ -84,7 +84,7 @@ public final class Lexer
     private static boolean isSpecialCharacter(char ch)
     {
         // _ $ ' " 都没算;
-        return CvaKind.containsKind(String.valueOf(ch))
+        return EnumCvaToken.containsKind(String.valueOf(ch))
                 ||'+' == ch || '-' == ch || '*' == ch || ch == '/'
                 || '&' == ch || ch == '|' || ch == '~' || ch == '^'
                 || '=' == ch || '<' == ch || ch == '>'
@@ -121,12 +121,12 @@ public final class Lexer
                 {
                     // 截取两个;
                     stream.poll();
-                    return new CvaToken(CvaKind.INCREMENT, lineNum);
+                    return new CvaToken(EnumCvaToken.INCREMENT, lineNum);
                 }
                 case '=':
                 {
                     stream.poll();
-                    return new CvaToken(CvaKind.ADD_ASSIGN, lineNum);
+                    return new CvaToken(EnumCvaToken.ADD_ASSIGN, lineNum);
                 }
                 default:
                 {
@@ -134,7 +134,7 @@ public final class Lexer
                 }
             }
         }
-        return new CvaToken(CvaKind.ADD, lineNum);
+        return new CvaToken(EnumCvaToken.ADD, lineNum);
     }
 
     private CvaToken handleMinus()
@@ -146,17 +146,17 @@ public final class Lexer
                 case '>':
                 {
                     stream.poll();
-                    return new CvaToken(CvaKind.ARROW, lineNum);
+                    return new CvaToken(EnumCvaToken.ARROW, lineNum);
                 }
                 case '-':
                 {
                     stream.poll();
-                    return new CvaToken(CvaKind.DECREMENT, lineNum);
+                    return new CvaToken(EnumCvaToken.DECREMENT, lineNum);
                 }
                 case '=':
                 {
                     stream.poll();
-                    return new CvaToken(CvaKind.SUB_ASSIGN, lineNum);
+                    return new CvaToken(EnumCvaToken.SUB_ASSIGN, lineNum);
                 }
                 default:
                 {
@@ -165,7 +165,7 @@ public final class Lexer
                 }
             }
         }
-        return new CvaToken(CvaKind.SUB, lineNum);
+        return new CvaToken(EnumCvaToken.SUB, lineNum);
     }
 
     private CvaToken handleStar()
@@ -173,9 +173,9 @@ public final class Lexer
         if (stream.hasNext() && stream.peek() == '=')
         {
             stream.poll();
-            return new CvaToken(CvaKind.MULTIPLY_ASSIGN, lineNum);
+            return new CvaToken(EnumCvaToken.MULTIPLY_ASSIGN, lineNum);
         }
-        return new CvaToken(CvaKind.STAR, lineNum);
+        return new CvaToken(EnumCvaToken.STAR, lineNum);
     }
 
     private CvaToken handleEqual()
@@ -183,9 +183,9 @@ public final class Lexer
         if (stream.hasNext() && stream.peek() == '=')
         {
             stream.poll();
-            return new CvaToken(CvaKind.EQUALS, lineNum);
+            return new CvaToken(EnumCvaToken.EQUALS, lineNum);
         }
-        return new CvaToken(CvaKind.ASSIGN, lineNum);
+        return new CvaToken(EnumCvaToken.ASSIGN, lineNum);
     }
 
     private CvaToken handleAnd()
@@ -197,12 +197,12 @@ public final class Lexer
                 case '&':
                 {
                     stream.poll();
-                    return new CvaToken(CvaKind.AND_AND, lineNum);
+                    return new CvaToken(EnumCvaToken.AND_AND, lineNum);
                 }
                 case '=':
                 {
                     stream.poll();
-                    return new CvaToken(CvaKind.AND_ASSIGN, lineNum);
+                    return new CvaToken(EnumCvaToken.AND_ASSIGN, lineNum);
                 }
                 default:
                 {
@@ -211,7 +211,7 @@ public final class Lexer
             }
         }
 
-        return new CvaToken(CvaKind.AND, lineNum);
+        return new CvaToken(EnumCvaToken.AND, lineNum);
     }
 
     private CvaToken handleOr()
@@ -223,12 +223,12 @@ public final class Lexer
                 case '|':
                 {
                     stream.poll();
-                    return new CvaToken(CvaKind.OR_OR, lineNum);
+                    return new CvaToken(EnumCvaToken.OR_OR, lineNum);
                 }
                 case '=':
                 {
                     stream.poll();
-                    return new CvaToken(CvaKind.OR_ASSIGN, lineNum);
+                    return new CvaToken(EnumCvaToken.OR_ASSIGN, lineNum);
                 }
                 default:
                 {
@@ -237,7 +237,7 @@ public final class Lexer
             }
         }
 
-        return new CvaToken(CvaKind.OR, lineNum);
+        return new CvaToken(EnumCvaToken.OR, lineNum);
     }
 
     private CvaToken handleXOr()
@@ -246,10 +246,10 @@ public final class Lexer
                 && stream.peek() == '=')
         {
             stream.poll();
-            return new CvaToken(CvaKind.XOR_ASSIGN, lineNum);
+            return new CvaToken(EnumCvaToken.XOR_ASSIGN, lineNum);
         }
 
-        return new CvaToken(CvaKind.XOR, lineNum);
+        return new CvaToken(EnumCvaToken.XOR, lineNum);
     }
 
     private CvaToken handleSlash()
@@ -271,11 +271,11 @@ public final class Lexer
                 case '=':
                 {
                     stream.poll();
-                    return new CvaToken(CvaKind.DIV_ASSIGN, lineNum);
+                    return new CvaToken(EnumCvaToken.DIV_ASSIGN, lineNum);
                 }
                 default:
                 {
-                    return new CvaToken(CvaKind.DIV, lineNum);
+                    return new CvaToken(EnumCvaToken.DIV, lineNum);
                 }
             }
         }
@@ -289,10 +289,10 @@ public final class Lexer
                 && stream.peek() == '=')
         {
             stream.poll();
-            return new CvaToken(CvaKind.REMAINDER_ASSIGN, lineNum);
+            return new CvaToken(EnumCvaToken.REMAINDER_ASSIGN, lineNum);
         }
 
-        return new CvaToken(CvaKind.REMAINDER, lineNum);
+        return new CvaToken(EnumCvaToken.REMAINDER, lineNum);
     }
 
     private CvaToken handleBitNegate()
@@ -301,10 +301,10 @@ public final class Lexer
                 && stream.peek() == '=')
         {
             stream.poll();
-            return new CvaToken(CvaKind.BIT_NEGATE_ASSIGN, lineNum);
+            return new CvaToken(EnumCvaToken.BIT_NEGATE_ASSIGN, lineNum);
         }
 
-        return new CvaToken(CvaKind.BIT_NEGATE, lineNum);
+        return new CvaToken(EnumCvaToken.BIT_NEGATE, lineNum);
     }
 
     private CvaToken handleMoreThan()
@@ -316,7 +316,7 @@ public final class Lexer
                 case '=':
                 {
                     stream.poll();
-                    return new CvaToken(CvaKind.MORE_OR_EQUALS, lineNum);
+                    return new CvaToken(EnumCvaToken.MORE_OR_EQUALS, lineNum);
                 }
                 case '>':
                 {
@@ -330,31 +330,31 @@ public final class Lexer
                                         && stream.peek(3) == '=')
                                 {
                                     stream.poll(3);
-                                    return new CvaToken(CvaKind.UNSIGNED_RIGHT_SHIFT_ASSIGN, lineNum);
+                                    return new CvaToken(EnumCvaToken.UNSIGNED_RIGHT_SHIFT_ASSIGN, lineNum);
                                 }
                                 stream.poll(2);
-                                return new CvaToken(CvaKind.UNSIGNED_RIGHT_SHIFT, lineNum);
+                                return new CvaToken(EnumCvaToken.UNSIGNED_RIGHT_SHIFT, lineNum);
                             }
                             case '=':
                             {
                                 stream.poll(2);
-                                return new CvaToken(CvaKind.RIGHT_SHIFT_ASSIGN, lineNum);
+                                return new CvaToken(EnumCvaToken.RIGHT_SHIFT_ASSIGN, lineNum);
                             }
                             default:
                             {
                                 stream.poll();
-                                return new CvaToken(CvaKind.RIGHT_SHIFT, lineNum);
+                                return new CvaToken(EnumCvaToken.RIGHT_SHIFT, lineNum);
                             }
                         }
                     }
                 }
                 default:
                 {
-                    return new CvaToken(CvaKind.MORE_THAN, lineNum);
+                    return new CvaToken(EnumCvaToken.MORE_THAN, lineNum);
                 }
             }
         }
-        return new CvaToken(CvaKind.MORE_THAN, lineNum);
+        return new CvaToken(EnumCvaToken.MORE_THAN, lineNum);
     }
 
     private CvaToken handleLessThan()
@@ -367,7 +367,7 @@ public final class Lexer
                 {
                     stream.poll();
                     // TODO 看不懂???;
-                    return new CvaToken(CvaKind.LESS_OR_EQUALS, lineNum);
+                    return new CvaToken(EnumCvaToken.LESS_OR_EQUALS, lineNum);
                 }
                 case '<':
                 {
@@ -375,27 +375,27 @@ public final class Lexer
                             && stream.peek(2) == '=')
                     {
                         stream.poll(2);
-                        return new CvaToken(CvaKind.LEFT_SHIFT_ASSIGN, lineNum);
+                        return new CvaToken(EnumCvaToken.LEFT_SHIFT_ASSIGN, lineNum);
                     }
                     stream.poll();
-                    return new CvaToken(CvaKind.LEFT_SHIFT, lineNum);
+                    return new CvaToken(EnumCvaToken.LEFT_SHIFT, lineNum);
                 }
                 default:
                 {
                     // TODO 为啥?;
-                    return new CvaToken(CvaKind.LESS_THAN, lineNum);
+                    return new CvaToken(EnumCvaToken.LESS_THAN, lineNum);
                 }
             }
         }
-        return new CvaToken(CvaKind.LESS_THAN, lineNum);
+        return new CvaToken(EnumCvaToken.LESS_THAN, lineNum);
     }
 
     private CvaToken handleNorPrefOrIdOrNum(char ch)
     {
         // 先看c是否是非前缀字符, 这里是 int, 必须先转成char看在不在表中;
-        if (CvaKind.containsKind(String.valueOf(ch)))
+        if (EnumCvaToken.containsKind(String.valueOf(ch)))
         {
-            return new CvaToken(CvaKind.selectReverse(String.valueOf(ch)), lineNum);
+            return new CvaToken(EnumCvaToken.selectReverse(String.valueOf(ch)), lineNum);
         }
         StringBuilder builder = new StringBuilder();
         builder.append(ch);
@@ -415,9 +415,9 @@ public final class Lexer
         }
         String literal = builder.toString();
         // 关键字;
-        if (CvaKind.containsKind(literal))
+        if (EnumCvaToken.containsKind(literal))
         {
-            return new CvaToken(CvaKind.selectReverse(literal), lineNum);
+            return new CvaToken(EnumCvaToken.selectReverse(literal), lineNum);
         }
         else
         {
@@ -427,12 +427,12 @@ public final class Lexer
                 if (isInt(literal))
                 {
                     // FIXME 联系后端改成 INT;
-                    return new CvaToken(CvaKind.NUMBER, lineNum, builder.toString());
+                    return new CvaToken(EnumCvaToken.NUMBER, lineNum, builder.toString());
                 }
             }
             else if (isIdentifier(literal))
             {
-                return new CvaToken(CvaKind.IDENTIFIER, lineNum, builder.toString());
+                return new CvaToken(EnumCvaToken.IDENTIFIER, lineNum, builder.toString());
             }
             else
             {
@@ -456,7 +456,7 @@ public final class Lexer
             errorLog("end of char which refer to '",
                     String.valueOf(eoc));
         }
-        return new CvaToken(CvaKind.CHAR, lineNum, String.valueOf(chch));
+        return new CvaToken(EnumCvaToken.CHAR, lineNum, String.valueOf(chch));
     }
 
     private CvaToken handleDoubleQuotes()
@@ -498,7 +498,7 @@ public final class Lexer
             break;
         }
         String literal = String.valueOf(builder);
-        return new CvaToken(CvaKind.STRING, lineNum, literal);
+        return new CvaToken(EnumCvaToken.STRING, lineNum, literal);
     }
 
     private char handleWhiteSpace(char ch)

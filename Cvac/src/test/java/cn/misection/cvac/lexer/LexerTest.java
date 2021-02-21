@@ -145,7 +145,7 @@ try {
         {
             current = lexer.nextToken();
             System.out.printf("{%s}%n", current.toString());
-        } while (current.getKind() != CvaKind.EOF);
+        } while (current.toEnum() != EnumCvaToken.EOF);
 
     }
 } 
