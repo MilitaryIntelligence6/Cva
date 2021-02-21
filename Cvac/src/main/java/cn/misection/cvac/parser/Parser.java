@@ -164,7 +164,7 @@ public final class Parser
     /**
      * // parse methods
      * <p>
-     * // ExpList -> Exp ExpRest*
+     * // ExpList -> Expr ExpRest*
      * //         ->
      * // ExpRest -> , Exp
      *
@@ -333,9 +333,9 @@ public final class Parser
     }
 
     /**
-     * // LtExp -> AddSubExp + AddSubExp
-     * //  -> AddSubExp - AddSubExp
-     * //  -> AddSubExp
+     * LessThanExpr -> AddSubExpr + AddSubExpr
+     * -> AddSubExpr - AddSubExpr
+     * -> AddSubExpr
      *
      * @return LessThanExpr
      */
@@ -374,7 +374,7 @@ public final class Parser
     }
 
     /**
-     * // AndExp -> LtExp < LtExp
+     * AndExpr -> LtExpr < LtExp
      * // -> LtExp
      *
      * @return AndAndExpr;
@@ -392,9 +392,8 @@ public final class Parser
     }
 
     /**
-     * // Exp -> AndExp && AndExp
-     * //  -> AndExp
-     *
+     * Expr -> AndExpr && AndExpr
+     * -> AndExpr
      * @return Single Expr
      */
     private AbstractExpression parseExpr()
