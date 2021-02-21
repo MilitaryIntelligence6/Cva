@@ -285,6 +285,15 @@ public final class TranslatorVisitor implements IVisitor
         emit(new Ldc<>(1));
     }
 
+    @Override
+    public void visit(CvaOperandOperator expr)
+    {
+        visit(expr.getLeft());
+        visit(expr.getRight());
+        emit(expr.getInstType());
+        emit(expr.getInstOp());
+    }
+
     /**
      * @param stm statement;
      * @FIXME 类型添加String是1, 二是要用前面写的switch方法替换;

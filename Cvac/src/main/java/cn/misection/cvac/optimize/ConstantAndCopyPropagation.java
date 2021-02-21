@@ -237,6 +237,12 @@ public final class ConstantAndCopyPropagation
     }
 
     @Override
+    public void visit(CvaOperandOperator expr)
+    {
+        // TODO
+    }
+
+    @Override
     public void visit(CvaAssignStatement stm)
     {
         if (this.inWhile)

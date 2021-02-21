@@ -140,13 +140,31 @@ public interface IBackendVisitor
             }
             default:
             {
-                System.err.println("unknown operator");
-                break;
+                // 后面改进, 用enum指示判定;
+                if (instructor instanceof EnumOperandType)
+                {
+                    visit((EnumOperandType) instructor);
+                    break;
+                }
+                else if (instructor instanceof EnumOperator)
+                {
+                    visit((EnumOperator) instructor);
+                    break;
+                }
+                else
+                {
+                    System.err.println("unknown operator");
+                    break;
+                }
             }
         }
     }
 
     void visit(EnumInstructor instructor);
+
+    void visit(EnumOperandType instructor);
+
+    void visit(EnumOperator instructor);
 
     void visit(ALoad instructor);
 

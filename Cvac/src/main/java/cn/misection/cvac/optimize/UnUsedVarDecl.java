@@ -123,6 +123,12 @@ public final class UnUsedVarDecl
     public void visit(CvaConstTrueExpr expr) {}
 
     @Override
+    public void visit(CvaOperandOperator expr)
+    {
+        // TODO
+    }
+
+    @Override
     public void visit(CvaAssignStatement stm)
     {
         this.visit(new CvaIdentifierExpr(stm.getLineNum(), stm.getLiteral()));

@@ -7,6 +7,7 @@ import cn.misection.cvac.ast.decl.CvaDeclaration;
 import cn.misection.cvac.ast.entry.AbstractEntryClass;
 import cn.misection.cvac.ast.entry.CvaEntryClass;
 import cn.misection.cvac.ast.expr.AbstractExpression;
+import cn.misection.cvac.ast.expr.EnumCvaExpr;
 import cn.misection.cvac.ast.expr.binary.*;
 import cn.misection.cvac.ast.expr.unary.*;
 import cn.misection.cvac.ast.method.AbstractMethod;
@@ -18,6 +19,8 @@ import cn.misection.cvac.ast.type.ICvaType;
 import cn.misection.cvac.ast.type.advance.CvaStringType;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
+import cn.misection.cvac.codegen.bst.instructor.EnumOperandType;
+import cn.misection.cvac.codegen.bst.instructor.EnumOperator;
 import cn.misection.cvac.constant.EnumIncDirection;
 import cn.misection.cvac.constant.LexerCommon;
 import cn.misection.cvac.constant.WriteOptionCode;
@@ -322,7 +325,14 @@ public final class Parser
         {
             advance();
             tem = parseDivExpr();
-            expr = new CvaDivExpr(tem.getLineNum(), expr, tem);
+            expr = new CvaOperandOperator.Builder()
+                    .putLineNum(tem.getLineNum())
+                    .putEnumExpr(EnumCvaExpr.DIV)
+                    .putLeft(expr)
+                    .putRight(tem)
+                    .putInstType(EnumOperandType.INT)
+                    .putInstOp(EnumOperator.DIV)
+                    .build();
         }
         return expr;
     }

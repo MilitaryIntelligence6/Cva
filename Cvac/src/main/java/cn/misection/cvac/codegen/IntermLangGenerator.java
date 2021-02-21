@@ -59,6 +59,12 @@ public final class IntermLangGenerator implements IBackendVisitor
         write(String.format(format, args));
     }
 
+    private void iwrite(String s)
+    {
+        writeTabSpace();
+        write(s);
+    }
+
     /**
      * iwrite 是write instruction 的意思;
      * 避免和writefln混淆;
@@ -111,6 +117,18 @@ public final class IntermLangGenerator implements IBackendVisitor
     public void visit(EnumInstructor instructor)
     {
         iwriteLine(instructor.toInst());
+    }
+
+    @Override
+    public void visit(EnumOperandType instructor)
+    {
+        iwrite(instructor.toInst());
+    }
+
+    @Override
+    public void visit(EnumOperator instructor)
+    {
+        writeln(instructor.toInst());
     }
 
     @Override

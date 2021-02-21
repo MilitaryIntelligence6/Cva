@@ -360,6 +360,26 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
+    public void visit(CvaOperandOperator expr)
+    {
+        visit(expr.getLeft());
+        ICvaType leftType = this.type;
+        visit(expr.getRight());
+        if (type.toEnum() != leftType.toEnum())
+        {
+            errorLog(expr.getLineNum(),
+                    String.format("add expression the type of left is %s, but the type of right is %s",
+                            leftType.toString(), this.type.toString()));
+        }
+        else if (!EnumCvaType.isNumber(type.toEnum()))
+        {
+            errorLog(expr.getLineNum(), String.format(" only numeric type numbers can be %s. got %s",
+                    expr.getInstOp().toInst(),
+                    expr.getInstType().toInst()));
+        }
+    }
+
+    @Override
     public void visit(CvaAssignStatement stm)
     {
         visit(stm.getExpr());

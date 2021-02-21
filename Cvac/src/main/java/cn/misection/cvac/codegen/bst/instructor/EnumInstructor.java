@@ -54,6 +54,16 @@ public enum EnumInstructor implements IInstructor, Instructable
     PUT_FIELD,
 
     WRITE_INSTRUCTION,
+
+    /**
+     * 操作数yype;
+     */
+    OPERAND_TYPE,
+
+    /**
+     * 操作;
+     */
+    OPERATOR,
     ;
 
     private String instruction;

@@ -131,6 +131,12 @@ public final class DeadCodeDel
     }
 
     @Override
+    public void visit(CvaOperandOperator expr)
+    {
+        // TODO
+    }
+
+    @Override
     public void visit(CvaAssignStatement stm)
     {
         if (this.localLiveness.contains(stm.getLiteral())

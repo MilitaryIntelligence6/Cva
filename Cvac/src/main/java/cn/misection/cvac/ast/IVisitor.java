@@ -164,6 +164,24 @@ public interface IVisitor
             }
             default:
             {
+                // 将所有的都用绑定的enum判定;
+                switch (expr.toEnum())
+                {
+                    case DIV:
+                    case BIT_AND:
+                    case BIT_OR:
+                    case BIT_XOR:
+                    case LEFT_SHIFT:
+                    case RIGHT_SHIFT:
+                    {
+                        visit((CvaOperandOperator) expr);
+                        break;
+                    }
+                    default:
+                    {
+                        break;
+                    }
+                }
                 System.err.println("unknown expr");
                 break;
             }
@@ -198,7 +216,12 @@ public interface IVisitor
 
     void visit(CvaConstTrueExpr expr);
 
-    // Stm
+    void visit(CvaOperandOperator expr);
+
+    /**
+     * stm;
+     * @param abstStm stm;
+     */
     default void visit(AbstractStatement abstStm)
     {
         switch (abstStm.toEnum())

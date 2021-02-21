@@ -32,7 +32,7 @@ public class CvaOperandOperator
         super(lineNum, left, right);
     }
 
-    public CvaOperandOperator(Builder builder)
+    private CvaOperandOperator(Builder builder)
     {
         super();
         this.lineNum = builder.lineNum;
@@ -53,6 +53,16 @@ public class CvaOperandOperator
     public EnumCvaExpr toEnum()
     {
         return enumExpr;
+    }
+
+    public EnumOperandType getInstType()
+    {
+        return instType;
+    }
+
+    public EnumOperator getInstOp()
+    {
+        return instOp;
     }
 
     @Override
@@ -76,6 +86,11 @@ public class CvaOperandOperator
         private EnumOperator instOp;
 
         public Builder() {}
+
+        public CvaOperandOperator build()
+        {
+            return new CvaOperandOperator(this);
+        }
 
         public Builder putLineNum(int lineNum)
         {
