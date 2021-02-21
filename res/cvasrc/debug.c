@@ -14,11 +14,11 @@ class Increment
     int incre()
     {
         int i;
-        i = 10;
-        while (0 < i)
+        i = 0;
+        while (i < 10)
         {
             println i;
-            i--;
+            i += 1;
         }
         return i;
     }

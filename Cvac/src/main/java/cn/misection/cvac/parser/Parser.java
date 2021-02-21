@@ -270,8 +270,8 @@ public final class Parser
     }
 
     /**
-     * // NotExp -> AtomExp
-     * //  -> AtomExp.id(expList)
+     * NegateExpr -> AtomExpr
+     * -> AtomExpr.id(exprList)
      *
      * @return negateExpr
      */
@@ -296,9 +296,8 @@ public final class Parser
     }
 
     /**
-     * // MulExpr -> ! MulExpr
-     * //  -> NegateExpr
-     *
+     * MulExpr -> ! MulExpr
+     * -> NegateExpr
      * @return MulExpr
      */
     private AbstractExpression parseMulExpr()
@@ -316,8 +315,8 @@ public final class Parser
     }
 
     /**
-     * // AddSubExp -> TimesExp * TimesExp
-     * //  -> TimesExp
+     * AddSubExp -> TimesExp * TimesExp
+     * -> TimesExp
      *
      * @return AddSubExpr
      */
@@ -1163,6 +1162,37 @@ public final class Parser
                 AbstractExpression expr = parseExpr();
                 eatToken(EnumCvaToken.SEMI);
                 return new CvaAssignStatement(lineNum, idLiteral, expr);
+            }
+            // 语法糖;
+            case ADD_ASSIGN:
+            {
+                eatToken(EnumCvaToken.ADD_ASSIGN);
+                AbstractExpression addAssignExpr = new CvaAddExpr(
+                        lineNum,
+                        new CvaIdentifierExpr(lineNum, idLiteral),
+                        parseExpr());
+                eatToken(EnumCvaToken.SEMI);
+                return new CvaAssignStatement(lineNum, idLiteral, addAssignExpr);
+            }
+            case SUB_ASSIGN:
+            {
+                eatToken(EnumCvaToken.SUB_ASSIGN);
+                AbstractExpression subAssignExpr = new CvaSubExpr(
+                        lineNum,
+                        new CvaIdentifierExpr(lineNum, idLiteral),
+                        parseExpr());
+                eatToken(EnumCvaToken.SEMI);
+                return new CvaAssignStatement(lineNum, idLiteral, subAssignExpr);
+            }
+            case MULTIPLY_ASSIGN:
+            {
+                eatToken(EnumCvaToken.MULTIPLY_ASSIGN);
+                AbstractExpression mulAssignExpr = new CvaSubExpr(
+                        lineNum,
+                        new CvaIdentifierExpr(lineNum, idLiteral),
+                        parseExpr());
+                eatToken(EnumCvaToken.SEMI);
+                return new CvaAssignStatement(lineNum, idLiteral, mulAssignExpr);
             }
             case INCREMENT:
             {
