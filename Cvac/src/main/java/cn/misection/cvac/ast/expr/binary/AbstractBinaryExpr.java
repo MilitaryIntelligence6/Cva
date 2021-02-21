@@ -15,6 +15,8 @@ public abstract class AbstractBinaryExpr extends AbstractExpression
 
     protected AbstractExpression right;
 
+    protected AbstractBinaryExpr() {}
+
     public AbstractBinaryExpr(int lineNum,
                               AbstractExpression left,
                               AbstractExpression right)

@@ -29,6 +29,11 @@ int main(string[] args)
 {
     echo "hello, world!\n";
     println new Increment().incre();
+    echo "2 * 3 = ";
+    println 2 * 3;
+
+    echo "8 / 3 = ";
+    println 8 / 3;
     return 0;
 }
 

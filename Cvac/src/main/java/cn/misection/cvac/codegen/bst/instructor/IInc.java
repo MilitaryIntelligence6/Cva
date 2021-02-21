@@ -43,7 +43,7 @@ public final class IInc
     }
 
     @Override
-    public String instruction()
+    public String toInst()
     {
         return String.format("iinc %d %d",
                 index, direction.direction());

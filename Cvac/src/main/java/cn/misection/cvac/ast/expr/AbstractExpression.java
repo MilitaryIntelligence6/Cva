@@ -13,6 +13,8 @@ public abstract class AbstractExpression implements IExpression
 {
     protected int lineNum;
 
+    protected AbstractExpression() {}
+
     protected AbstractExpression(int lineNum)
     {
         this.lineNum = lineNum;

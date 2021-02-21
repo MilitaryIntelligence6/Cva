@@ -86,13 +86,13 @@ public final class IntermLangGenerator implements IBackendVisitor
     @Override
     public void visit(EnumTargetType type)
     {
-        write(type.instruction());
+        write(type.toInst());
     }
 
     @Override
     public void visit(BaseAdvanceType type)
     {
-        write(type.instruction());
+        write(type.toInst());
     }
 
     @Override
@@ -110,7 +110,7 @@ public final class IntermLangGenerator implements IBackendVisitor
     @Override
     public void visit(EnumInstructor instructor)
     {
-        iwriteLine(instructor.instruction());
+        iwriteLine(instructor.toInst());
     }
 
     @Override
@@ -204,7 +204,7 @@ public final class IntermLangGenerator implements IBackendVisitor
     @Override
     public void visit(IInc instructor)
     {
-        iwriteLine(instructor.instruction());
+        iwriteLine(instructor.toInst());
     }
 
     @Override

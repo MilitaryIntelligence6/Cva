@@ -25,7 +25,7 @@ public class TargetPointer extends BaseUnsafe
     }
 
     @Override
-    public String instruction()
+    public String toInst()
     {
         // FIXME;
         return null;

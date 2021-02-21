@@ -22,13 +22,9 @@ public enum EnumInstructor implements IInstructor, Instructable
 
     GOTO,
 
-    I_ADD("iadd"),
-
     IF_I_CMP_LT,
 
     I_LOAD,
-
-    I_MUL("imul"),
 
     INVOKE_VIRTUAL,
 
@@ -36,7 +32,15 @@ public enum EnumInstructor implements IInstructor, Instructable
 
     I_STORE,
 
+    I_ADD("iadd"),
+
     I_SUB("isub"),
+
+    I_MUL("imul"),
+
+    I_DIV("idiv"),
+
+    I_REM("irem"),
 
     LABEL_J,
 
@@ -62,7 +66,7 @@ public enum EnumInstructor implements IInstructor, Instructable
     }
 
     @Override
-    public String instruction()
+    public String toInst()
     {
         return instruction;
     }

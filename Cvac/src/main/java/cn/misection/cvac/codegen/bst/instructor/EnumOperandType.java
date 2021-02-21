@@ -40,7 +40,7 @@ public enum EnumOperandType implements IInstructor, Instructable
 
 
     @Override
-    public String instruction()
+    public String toInst()
     {
         return typeInst;
     }

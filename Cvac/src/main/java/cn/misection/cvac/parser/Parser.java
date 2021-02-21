@@ -295,12 +295,7 @@ public final class Parser
         return expr;
     }
 
-    /**
-     * MulExpr -> ! MulExpr
-     * -> NegateExpr
-     * @return MulExpr
-     */
-    private AbstractExpression parseMulExpr()
+    private AbstractExpression parseDivExpr()
     {
         int i = 0;
         while (curToken.toEnum() == EnumCvaToken.NEGATE)
@@ -312,6 +307,24 @@ public final class Parser
         AbstractExpression tem = new CvaNegateExpr(
                 expr.getLineNum(), expr);
         return i % 2 == 0 ? expr : tem;
+    }
+
+    /**
+     * MulExpr -> ! MulExpr
+     * -> NegateExpr
+     * @return MulExpr
+     */
+    private AbstractExpression parseMulExpr()
+    {
+        AbstractExpression tem = parseDivExpr();
+        AbstractExpression expr = tem;
+        while (curToken.toEnum() == EnumCvaToken.DIV)
+        {
+            advance();
+            tem = parseDivExpr();
+            expr = new CvaDivExpr(tem.getLineNum(), expr, tem);
+        }
+        return expr;
     }
 
     /**

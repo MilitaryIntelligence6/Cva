@@ -56,7 +56,7 @@ public enum EnumOperator implements IInstructor, Instructable
     }
 
     @Override
-    public String instruction()
+    public String toInst()
     {
         return opInst;
     }

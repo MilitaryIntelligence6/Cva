@@ -14,5 +14,5 @@ public interface Instructable
      * 获得该类型指令;
      * @return instruct;
      */
-    String instruction();
+    String toInst();
 }

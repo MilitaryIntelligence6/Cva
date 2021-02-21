@@ -38,7 +38,7 @@ public class TargetArrayType extends BaseAdvanceType
     }
 
     @Override
-    public String instruction()
+    public String toInst()
     {
         // FIXME 条件判断;
         return null;

@@ -76,7 +76,7 @@ public enum EnumTargetType
     }
 
     @Override
-    public String instruction()
+    public String toInst()
     {
         return instruction;
     }
