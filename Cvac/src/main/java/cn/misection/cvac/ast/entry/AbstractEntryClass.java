@@ -36,8 +36,8 @@ public abstract class AbstractEntryClass extends AbstractCvaClass
 
     /**
      * @deprecated
-     * @param name
-     * @param statement
+     * @param name name;
+     * @param statement stm;
      */
     public AbstractEntryClass(String name,
                               AbstractStatement statement)
@@ -52,10 +52,6 @@ public abstract class AbstractEntryClass extends AbstractCvaClass
         return name;
     }
 
-//    public AbstractStatement getStatement()
-//    {
-//        return statement;
-//    }
 
     public AbstractMethod getMainMethod()
     {

@@ -112,7 +112,6 @@ public final class Parser
     private void eatToken(EnumCvaToken kind)
     {
         // FIXME, 写成 遇到EOF就走, 尾巴上那个-1暂时还没解决;
-//        if (kind == curToken.getKind())// || kind == CvaKind.EOF)
         if (kind == curToken.toEnum())
         {
             advance();
@@ -460,7 +459,7 @@ public final class Parser
     }
 
     /**
-     * // Statements -> Statement Statements
+     * // StatementList -> Statement Statements
      * //  ->
      *
      * @return StatementList;
@@ -573,7 +572,6 @@ public final class Parser
         }
         // 因为有advance所以不能直接return;
         advance();
-//        handleArray();
         return type;
     }
 
@@ -687,8 +685,8 @@ public final class Parser
     }
 
     /**
-     * // Method -> Type id (FormalList)
-     * //          {VarDec* Statement* return Exp; }
+     * Method -> Type id (FormalList)
+     * {VarDec* Statement* return Exp; }
      *
      * @return Method;
      */
@@ -828,13 +826,13 @@ public final class Parser
     }
 
     /**
-     * // MainClass -> class id
-     * //    {
-     * //        void main()
-     * //        {
-     * //            Statement
-     * //        }
-     * //    }
+     * MainClass -> class id
+     * {
+     *     type main()
+     *     {
+     *         StatementList;
+     *     }
+     * }
      *
      * @return EntryClass;
      */

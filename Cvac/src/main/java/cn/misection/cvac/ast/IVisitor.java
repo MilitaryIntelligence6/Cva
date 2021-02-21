@@ -28,34 +28,6 @@ public interface IVisitor
      */
     default void visit(ICvaType type)
     {
-//        switch (type.getClass().getSimpleName())
-//        {
-//            case CvaTypeClassName.CVA_BOOLEAN_TYPE:
-//            {
-//                visit((CvaBooleanType) type);
-//                break;
-//            }
-//            case CvaTypeClassName.CVA_CLASS_TYPE:
-//            {
-//                visit((CvaClassType) type);
-//                break;
-//            }
-//            case CvaTypeClassName.CVA_INT_TYPE:
-//            {
-//                visit((CvaIntType) type);
-//                break;
-//            }
-//            case CvaTypeClassName.CVA_STRING_TYPE:
-//            {
-//                visit((CvaStringType) type);
-//                break;
-//            }
-//            default:
-//            {
-//                System.err.println("unknown type");
-//                break;
-//            }
-//        }
         // 不是枚举;
         if (type instanceof AbstractType)
         {

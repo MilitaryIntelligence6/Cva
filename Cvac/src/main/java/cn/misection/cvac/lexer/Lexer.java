@@ -473,7 +473,6 @@ public final class Lexer
             {
                 case '"':
                 {
-//                    builder.append('"');
                     break;
                 }
                 case '\\':
@@ -527,7 +526,7 @@ public final class Lexer
     }
 
     /**
-     * @return
+     * @return 转义char;
      * @TODO 转义处理;
      */
     private char handleEscape()
@@ -563,10 +562,9 @@ public final class Lexer
 
     private void handleLineComment()
     {
-        char commentChar;
         while (true)
         {
-            if ((commentChar = stream.poll()) == LexerCommon.NEW_LINE)
+            if (stream.poll() == LexerCommon.NEW_LINE)
             {
                 break;
             }
@@ -614,26 +612,4 @@ public final class Lexer
         // FIXME 修改;
         return true;
     }
-
-    /**
-     * 没有副作用;
-     * @return 下一个非空符;
-     * 基本可以不用了暂时, 以后要用再开;
-     */
-//    public char peekCh()
-//    {
-//        int peekedCount = 1;
-//        char ch = stream.peek();
-//        while (Character.isWhitespace(ch))
-//        {
-//            peekedCount++;
-//            ch = stream.peek(peekedCount);
-//            if (ch == LexerConst.EOF)
-//            {
-//                // peek完了全是白的, 瞎peek;
-//                break;
-//            }
-//        }
-//        return ch;
-//    }
 }

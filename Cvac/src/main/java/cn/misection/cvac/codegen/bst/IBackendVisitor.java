@@ -23,14 +23,6 @@ public interface IBackendVisitor
      */
     default void visit(ITargetType type)
     {
-//        if (type instanceof BaseReferenceType)
-//        {
-//            this.visit(((BaseReferenceType) type));
-//        }
-//        else
-//        {
-//            this.visit(((BaseBasicType) type));
-//        }
         EnumTargetType typeEnum = type.toEnum();
         if (EnumTargetType.isBasicType(typeEnum))
         {

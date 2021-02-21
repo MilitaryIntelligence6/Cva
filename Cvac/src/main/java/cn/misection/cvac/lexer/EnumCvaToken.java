@@ -587,16 +587,6 @@ public enum EnumCvaToken
                 lookup.put(kind.kindLiteral, kind);
             }
         }
-
-        /**
-         * 除了默认之外, 还有一些本来多义词;
-         * @TODO 后面应该将他们分离;
-         */
-        // printf 已经写入了;
-//        lookup.put("printf", CvaKind.WRITE);
-//        lookup.put("echof", CvaKind.WRITE);
-//        lookup.put("echoln", CvaKind.WRITE);
-//        lookup.put("println", CvaKind.WRITE);
     }
 
     public static boolean containsKind(String literal)
@@ -625,17 +615,4 @@ public enum EnumCvaToken
     {
         return isBasicType(kind) || isInternalRefType(kind);
     }
-
-
-    // class其实是声明, 而非type, 其type字面量是id;
-//    public static boolean isReferenceType(CvaKind kind)
-//    {
-//        return kind.ordinal() >= STRING.ordinal()
-//                && kind.ordinal() <= STRUCT.ordinal();
-//    }
-//
-//    public static boolean isType(CvaKind kind)
-//    {
-//        return isBasicType(kind) || isReferenceType(kind);
-//    }
 }

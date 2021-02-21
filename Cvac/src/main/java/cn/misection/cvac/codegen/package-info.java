@@ -88,6 +88,5 @@ final class WriteTypeMap extends HashMap<EnumCvaType, String>
     {
         this.put(EnumCvaType.CVA_INT, "I");
         this.put(EnumCvaType.CVA_STRING, String.format("L%s;", TargetStringType.FULL_LITERAL));
-//        this.put(WriteILPool.WRITE_BOOLEAN, GenStringType.FULL_LITERAL);
     }
 }

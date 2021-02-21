@@ -528,12 +528,6 @@ public final class TranslatorVisitor implements IVisitor
     public void visit(CvaEntryClass entryClass)
     {
         visit((CvaMainMethod) entryClass.getMainMethod());
-//        genEntry = new GenEntry(entryClass.name(),
-//                this.linearInstrList);
-//        setLinearInstrList(new ArrayList<>());
-//        visit(entryClass.statement());
-
-//        entryClass..forEach(this::visit);
         targetEntryClass = new TargetEntryClass(
                 entryClass.name(),
                 this.linearInstrList);
