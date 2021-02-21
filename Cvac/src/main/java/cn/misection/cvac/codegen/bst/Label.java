@@ -5,18 +5,19 @@ package cn.misection.cvac.codegen.bst;
  */
 public final class Label
 {
-    private int i;
-    private static int count = 0;
+    private static int globalLabelCount = 0;
+
+    private final int instanceCount;
 
     public Label()
     {
-        i = count++;
+        instanceCount = globalLabelCount++;
     }
 
     @Override
     public String toString()
     {
         // 这个地方是JVM汇编规范, 不能改!;
-        return String.format("Label_%d", i);
+        return String.format("Label_%d", instanceCount);
     }
 }

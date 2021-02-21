@@ -424,8 +424,8 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaMethod cvaMethod)
     {
-        this.index = 1;
-        this.indexMap = new HashMap<>();
+        index = 1;
+        indexMap = new HashMap<>();
         visit(cvaMethod.getRetType());
         ITargetType theRetType = this.targetType;
 
