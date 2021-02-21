@@ -351,8 +351,10 @@ public final class Parser
             {
                 expr = new CvaAddExpr(expr.getLineNum(), expr, tem);
             }
+            // 减法;
             else
             {
+                // 加的是常数就直接反过来;
                 if (tem instanceof CvaConstIntExpr)
                 {
                     expr = new CvaAddExpr(
@@ -363,6 +365,7 @@ public final class Parser
                 }
                 else
                 {
+                    // 否则用这个, 不是很统一;
                     expr = new CvaSubExpr(expr.getLineNum(), expr, tem);
                 }
             }
