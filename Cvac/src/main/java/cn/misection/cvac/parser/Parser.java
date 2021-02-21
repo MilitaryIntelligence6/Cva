@@ -315,9 +315,8 @@ public final class Parser
     }
 
     /**
-     * AddSubExp -> TimesExp * TimesExp
-     * -> TimesExp
-     *
+     * AddSubExpr -> MulExpr * MulExpr
+     * -> MulExpr
      * @return AddSubExpr
      */
     private AbstractExpression parseAddSubExpr()
