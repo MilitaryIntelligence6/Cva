@@ -1,6 +1,4 @@
-package cn.misection.cvac.codegen.bst.instruction;
-
-import cn.misection.cvac.codegen.bst.btype.Instructable;
+package cn.misection.cvac.codegen.bst.instructor;
 
 /**
  * @author Military Intelligence 6 root
@@ -64,7 +62,7 @@ public enum EnumInstructor implements IInstructor, Instructable
     }
 
     @Override
-    public String instruct()
+    public String instruction()
     {
         return instruction;
     }

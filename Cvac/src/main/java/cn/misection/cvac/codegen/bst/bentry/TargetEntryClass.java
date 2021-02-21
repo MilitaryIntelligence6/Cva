@@ -1,6 +1,6 @@
 package cn.misection.cvac.codegen.bst.bentry;
 
-import cn.misection.cvac.codegen.bst.instruction.IInstructor;
+import cn.misection.cvac.codegen.bst.instructor.IInstructor;
 
 import java.util.List;
 

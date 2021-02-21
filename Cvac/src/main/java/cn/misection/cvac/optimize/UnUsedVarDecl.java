@@ -71,7 +71,7 @@ public final class UnUsedVarDecl
         {
             this.unUsedLocals.remove(expr.getLiteral());
         }
-        else if (this.unUsedArgs.containsKey(expr.getLiteral()))
+        else
         {
             this.unUsedArgs.remove(expr.getLiteral());
         }
@@ -157,6 +157,18 @@ public final class UnUsedVarDecl
     {
         this.visit(stm.getCondition());
         this.visit(stm.getBody());
+    }
+
+    @Override
+    public void visit(CvaIncreStatement stm)
+    {
+        // TODO;
+    }
+
+    @Override
+    public void visit(CvaDecreStatement stm)
+    {
+        // TODO;
     }
 
     @Override

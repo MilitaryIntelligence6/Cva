@@ -1,7 +1,7 @@
 package cn.misection.cvac.codegen.bst.bmethod;
 
 import cn.misection.cvac.codegen.bst.bdecl.TargetDeclaration;
-import cn.misection.cvac.codegen.bst.instruction.IInstructor;
+import cn.misection.cvac.codegen.bst.instructor.IInstructor;
 import cn.misection.cvac.codegen.bst.btype.ITargetType;
 
 import java.util.List;
@@ -42,14 +42,14 @@ public final class TargetMethod extends BaseMethod
 
     /**
      * 顺序很多, 注意!;
-     * @param name
-     * @param retType
-     * @param className
-     * @param formalList
-     * @param localList
-     * @param statementList
-     * @param retExpr
-     * @param index
+     * @param name name;
+     * @param retType rett;
+     * @param className classN;
+     * @param formalList f
+     * @param localList l
+     * @param statementList s;
+     * @param retExpr re;
+     * @param index i;
      */
     public TargetMethod(
             String name,

@@ -28,14 +28,14 @@ public final class ConstantFolder
 
     private boolean isConstant()
     {
-        return lastExpr != null && this.isConstant(this.lastExpr);
+        return isConstant(lastExpr);
     }
 
-    private boolean isConstant(AbstractExpression exp)
+    private boolean isConstant(AbstractExpression expr)
     {
-        return exp instanceof CvaConstIntExpr
-                || exp instanceof CvaConstTrueExpr
-                || exp instanceof CvaConstFalseExpr;
+        return expr instanceof CvaConstIntExpr
+                || expr instanceof CvaConstTrueExpr
+                || expr instanceof CvaConstFalseExpr;
     }
 
 
@@ -312,6 +312,18 @@ public final class ConstantFolder
         this.visit(stm.getCondition());
         stm.setCondition(this.lastExpr);
         this.visit(stm.getBody());
+    }
+
+    @Override
+    public void visit(CvaIncreStatement stm)
+    {
+        // TODO;
+    }
+
+    @Override
+    public void visit(CvaDecreStatement stm)
+    {
+        // TODO
     }
 
     @Override

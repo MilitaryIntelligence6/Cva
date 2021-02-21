@@ -1,7 +1,7 @@
 package cn.misection.cvac.codegen.bst.btype.basic;
 
 import cn.misection.cvac.codegen.bst.btype.ITargetType;
-import cn.misection.cvac.codegen.bst.btype.Instructable;
+import cn.misection.cvac.codegen.bst.instructor.Instructable;
 
 /**
  * @author Military Intelligence 6 root
@@ -76,7 +76,7 @@ public enum EnumTargetType
     }
 
     @Override
-    public String instruct()
+    public String instruction()
     {
         return instruction;
     }
@@ -113,8 +113,8 @@ public enum EnumTargetType
 
     /**
      * 是否是整形, byte short等都是;
-     * @param type
-     * @return
+     * @param type t;
+     * @return 包括byte char short long 等;
      */
     public static boolean isInteger(EnumTargetType type)
     {
@@ -129,7 +129,7 @@ public enum EnumTargetType
 
     /**
      * 是否是前端的数字, boolean在后端是, 但在前端不是;
-     * @return
+     * @return isint;
      */
     public static boolean isNumber(EnumTargetType type)
     {

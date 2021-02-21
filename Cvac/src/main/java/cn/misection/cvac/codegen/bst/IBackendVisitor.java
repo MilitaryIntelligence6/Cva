@@ -8,7 +8,7 @@ import cn.misection.cvac.codegen.bst.bprogram.TargetProgram;
 import cn.misection.cvac.codegen.bst.btype.ITargetType;
 import cn.misection.cvac.codegen.bst.btype.advance.BaseAdvanceType;
 import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
-import cn.misection.cvac.codegen.bst.instruction.*;
+import cn.misection.cvac.codegen.bst.instructor.*;
 import cn.misection.cvac.codegen.bst.btype.reference.BaseReferenceType;
 
 /**
@@ -59,11 +59,11 @@ public interface IBackendVisitor
 
     /**
      * statements
-     * @param instruction linear inst;
+     * @param instructor linear inst;
      */
-    default void visit(IInstructor instruction)
+    default void visit(IInstructor instructor)
     {
-        switch (instruction.getClass().getSimpleName())
+        switch (instructor.getClass().getSimpleName())
         {
             case Operator.ARETURN:
             case Operator.IADD:
@@ -72,72 +72,82 @@ public interface IBackendVisitor
             case Operator.ISUB:
             case "EnumInstructor":
             {
-                visit((EnumInstructor) instruction);
+                visit((EnumInstructor) instructor);
                 break;
             }
             case Operator.ALOAD:
             {
-                visit((ALoad) instruction);
+                visit((ALoad) instructor);
                 break;
             }
             case Operator.ASTORE:
             {
-                visit((AStore) instruction);
+                visit((AStore) instructor);
                 break;
             }
             case Operator.GOTO:
             {
-                visit((Goto) instruction);
+                visit((Goto) instructor);
                 break;
             }
             case Operator.GET_FIELD:
             {
-                visit((GetField) instruction);
+                visit((GetField) instructor);
                 break;
             }
             case Operator.IF_ICMP_LT:
             {
-                visit((IfICmpLt) instruction);
+                visit((IfICmpLt) instructor);
                 break;
             }
             case Operator.ILOAD:
             {
-                visit((ILoad) instruction);
+                visit((ILoad) instructor);
                 break;
             }
             case Operator.INVOKE_VIRTUAL:
             {
-                visit((InvokeVirtual) instruction);
+                visit((InvokeVirtual) instructor);
                 break;
             }
             case Operator.ISTORE:
             {
-                visit((IStore) instruction);
+                visit((IStore) instructor);
                 break;
             }
             case Operator.LABEL_J:
             {
-                visit((LabelJ) instruction);
+                visit((LabelJ) instructor);
                 break;
             }
             case Operator.LDC:
             {
-                visit((Ldc) instruction);
+                visit((Ldc) instructor);
                 break;
             }
             case Operator.NEW:
             {
-                visit((New) instruction);
+                visit((New) instructor);
                 break;
             }
             case Operator.WRITE_INSTRUCTOR:
             {
-                visit((WriteInstructor) instruction);
+                visit((WriteInstructor) instructor);
                 break;
             }
             case Operator.PUT_FIELD:
             {
-                visit((PutField) instruction);
+                visit((PutField) instructor);
+                break;
+            }
+            case "IInc":
+            {
+                visit((IInc) instructor);
+                break;
+            }
+            case "IDec":
+            {
+                visit((IDec) instructor);
                 break;
             }
             default:
@@ -150,41 +160,35 @@ public interface IBackendVisitor
 
     void visit(EnumInstructor instructor);
 
-    void visit(ALoad instruction);
+    void visit(ALoad instructor);
 
-//    void visit(AReturn instruction);
+    void visit(AStore instructor);
 
-    void visit(AStore instruction);
+    void visit(Goto instructor);
 
-    void visit(Goto instruction);
+    void visit(GetField instructor);
 
-    void visit(GetField instruction);
+    void visit(IfICmpLt instructor);
 
-//    void visit(IAdd instruction);
+    void visit(ILoad instructor);
 
-    void visit(IfICmpLt instruction);
+    void visit(InvokeVirtual instructor);
 
-    void visit(ILoad instruction);
+    void visit(IStore instructor);
 
-//    void visit(IMul instruction);
+    void visit(LabelJ instructor);
 
-    void visit(InvokeVirtual instruction);
+    void visit(Ldc instructor);
 
-//    void visit(IReturn instruction);
+    void visit(New instructor);
 
-    void visit(IStore instruction);
+    void visit(WriteInstructor instructor);
 
-//    void visit(ISub instruction);
+    void visit(PutField instructor);
 
-    void visit(LabelJ instruction);
+    void visit(IInc instructor);
 
-    void visit(Ldc instruction);
-
-    void visit(New instruction);
-
-    void visit(WriteInstructor instruction);
-
-    void visit(PutField instruction);
+    void visit(IDec instructor);
 
     void visit(TargetMethod targetMethod);
 

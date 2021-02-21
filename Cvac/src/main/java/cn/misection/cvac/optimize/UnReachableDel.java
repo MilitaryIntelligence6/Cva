@@ -96,7 +96,7 @@ public final class UnReachableDel
             {
                 if (curStm instanceof CvaBlockStatement)
                 {
-                    ((CvaBlockStatement) curStm).getStatementList().forEach(stmList::add);
+                    stmList.addAll(((CvaBlockStatement) curStm).getStatementList());
                 }
                 else
                 {
@@ -153,7 +153,18 @@ public final class UnReachableDel
         {
             this.curStm = stm;
         }
+    }
 
+    @Override
+    public void visit(CvaIncreStatement stm)
+    {
+        // TODO;
+    }
+
+    @Override
+    public void visit(CvaDecreStatement stm)
+    {
+        // TODO
     }
 
     @Override
@@ -167,7 +178,7 @@ public final class UnReachableDel
             {
                 if (this.curStm instanceof CvaBlockStatement)
                 {
-                    ((CvaBlockStatement) this.curStm).getStatementList().forEach(stmList::add);
+                    stmList.addAll(((CvaBlockStatement) this.curStm).getStatementList());
                 }
                 else
                 {

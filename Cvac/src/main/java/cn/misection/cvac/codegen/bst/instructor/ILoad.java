@@ -1,17 +1,17 @@
-package cn.misection.cvac.codegen.bst.instruction;
+package cn.misection.cvac.codegen.bst.instructor;
 
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
- * @ClassName Aload
- * @Description load 引用类型的指令;
- * @CreateTime 2021年02月16日 00:43:00
+ * @ClassName ILoad
+ * @Description TODO
+ * @CreateTime 2021年02月16日 00:52:00
  */
-public final class ALoad extends BaseInstructor
+public final class ILoad extends BaseInstructor
 {
     private int index;
 
-    public ALoad(int index)
+    public ILoad(int index)
     {
         this.index = index;
     }

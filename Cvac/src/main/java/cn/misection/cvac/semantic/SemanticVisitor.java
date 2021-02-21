@@ -19,6 +19,7 @@ import cn.misection.cvac.ast.type.reference.CvaClassType;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -40,7 +41,7 @@ public final class SemanticVisitor implements IVisitor
     /**
      * //current method locals;
      */
-    private HashSet<String> curMethodLocalSet;
+    private Set<String> curMethodLocalSet;
 
     public SemanticVisitor()
     {
@@ -219,7 +220,7 @@ public final class SemanticVisitor implements IVisitor
     public void visit(CvaIdentifierExpr expr)
     {
         ICvaType varType = this.methodVarMap.get(expr.getLiteral());
-        boolean isField = varType == null;
+        boolean fieldFlag = varType == null;
         String className = currentClass;
         while (varType == null && className != null)
         {
@@ -245,7 +246,7 @@ public final class SemanticVisitor implements IVisitor
         }
         else
         {
-            expr.setField(isField);
+            expr.setField(fieldFlag);
             expr.setType(varType);
             this.type = varType;
         }
@@ -426,6 +427,18 @@ public final class SemanticVisitor implements IVisitor
                     "the condition's type should be a boolean.");
         }
         visit(stm.getBody());
+    }
+
+    @Override
+    public void visit(CvaIncreStatement stm)
+    {
+        // TODO 好像没啥事做;
+    }
+
+    @Override
+    public void visit(CvaDecreStatement stm)
+    {
+        // TODO;
     }
 
     @Override

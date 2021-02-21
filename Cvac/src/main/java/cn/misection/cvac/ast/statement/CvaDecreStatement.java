@@ -1,7 +1,5 @@
 package cn.misection.cvac.ast.statement;
 
-import cn.misection.cvac.ast.expr.EnumCvaExpr;
-
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
@@ -11,12 +9,17 @@ import cn.misection.cvac.ast.expr.EnumCvaExpr;
  */
 public class CvaDecreStatement extends AbstractStatement
 {
-    private String literal;
+    private final String literal;
 
     public CvaDecreStatement(int lineNum, String literal)
     {
         super(lineNum);
         this.literal = literal;
+    }
+
+    public String getLiteral()
+    {
+        return literal;
     }
 
     @Override

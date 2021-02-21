@@ -8,7 +8,7 @@ import cn.misection.cvac.codegen.bst.bmethod.TargetMethod;
 import cn.misection.cvac.codegen.bst.bprogram.TargetProgram;
 import cn.misection.cvac.codegen.bst.btype.advance.BaseAdvanceType;
 import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
-import cn.misection.cvac.codegen.bst.instruction.*;
+import cn.misection.cvac.codegen.bst.instructor.*;
 import cn.misection.cvac.codegen.bst.btype.reference.BaseReferenceType;
 import cn.misection.cvac.constant.IntermLangCommon;
 
@@ -61,7 +61,7 @@ public final class IntermLangGenerator implements IBackendVisitor
     /**
      * iwrite 是write instruction 的意思;
      * 避免和writefln混淆;
-     * @param s
+     * @param s s;
      */
     private void iwriteLine(String s)
     {
@@ -85,13 +85,13 @@ public final class IntermLangGenerator implements IBackendVisitor
     @Override
     public void visit(EnumTargetType type)
     {
-        write(type.instruct());
+        write(type.instruction());
     }
 
     @Override
     public void visit(BaseAdvanceType type)
     {
-        write(type.instruct());
+        write(type.instruction());
     }
 
     @Override
@@ -109,125 +109,107 @@ public final class IntermLangGenerator implements IBackendVisitor
     @Override
     public void visit(EnumInstructor instructor)
     {
-        iwriteLine(instructor.instruct());
+        iwriteLine(instructor.instruction());
     }
 
     @Override
-    public void visit(ALoad instruction)
+    public void visit(ALoad instructor)
     {
-        iwritefln("aload %d", instruction.getIndex());
-    }
-
-//    @Override
-//    public void visit(AReturn instruction)
-//    {
-//        iwriteLine("areturn");
-//    }
-
-    @Override
-    public void visit(AStore instruction)
-    {
-        iwritefln("astore %d", instruction.getIndex());
+        iwritefln("aload %d", instructor.getIndex());
     }
 
     @Override
-    public void visit(Goto instruction)
+    public void visit(AStore instructor)
     {
-        iwritefln("goto %s", instruction.getLabel().toString());
+        iwritefln("astore %d", instructor.getIndex());
     }
 
     @Override
-    public void visit(GetField instruction)
+    public void visit(Goto instructor)
     {
-        iwritefln("getfield %s %s", instruction.getFieldSpec(), instruction.getDescriptor());
-    }
-
-//    @Override
-//    public void visit(IAdd instruction)
-//    {
-//        iwriteLine("iadd");
-//    }
-
-    @Override
-    public void visit(IfICmpLt instruction)
-    {
-        iwritefln("if_icmplt %s", instruction.getLabel().toString());
+        iwritefln("goto %s", instructor.getLabel().toString());
     }
 
     @Override
-    public void visit(ILoad instruction)
+    public void visit(GetField instructor)
     {
-        iwritefln("iload %d", instruction.getIndex());
+        iwritefln("getfield %s %s", instructor.getFieldSpec(), instructor.getDescriptor());
     }
 
-//    @Override
-//    public void visit(IMul instruction)
-//    {
-//        iwriteLine("imul");
-//    }
+    @Override
+    public void visit(IfICmpLt instructor)
+    {
+        iwritefln("if_icmplt %s", instructor.getLabel().toString());
+    }
 
     @Override
-    public void visit(InvokeVirtual instruction)
+    public void visit(ILoad instructor)
     {
-        iwritef("invokevirtual %s/%s(", instruction.getFirstFieldType(), instruction.getFuncName());
-        instruction.getArgTypeList().forEach(this::visit);
+        iwritefln("iload %d", instructor.getIndex());
+    }
+
+    @Override
+    public void visit(InvokeVirtual instructor)
+    {
+        iwritef("invokevirtual %s/%s(", instructor.getFirstFieldType(), instructor.getFuncName());
+        instructor.getArgTypeList().forEach(this::visit);
         write(")");
-        visit(instruction.getRetType());
+        visit(instructor.getRetType());
         writeln();
     }
 
-//    @Override
-//    public void visit(IReturn instruction)
-//    {
-//        iwriteLine("ireturn");
-//    }
-
     @Override
-    public void visit(IStore instruction)
+    public void visit(IStore instructor)
     {
-        iwritefln("istore %d", instruction.getIndex());
-    }
-
-//    @Override
-//    public void visit(ISub instruction)
-//    {
-//        iwriteLine("isub");
-//    }
-
-    @Override
-    public void visit(LabelJ instruction)
-    {
-        writef("%s:\n", instruction.getLabel().toString());
+        iwritefln("istore %d", instructor.getIndex());
     }
 
     @Override
-    public void visit(Ldc instruction)
+    public void visit(LabelJ instructor)
     {
-        iwritefln("ldc %s", instruction.value());
+        writef("%s:\n", instructor.getLabel().toString());
     }
 
     @Override
-    public void visit(New instruction)
+    public void visit(Ldc instructor)
     {
-        iwritefln("new %s", instruction.getNewClassName());
+        iwritefln("ldc %s", instructor.value());
+    }
+
+    @Override
+    public void visit(New instructor)
+    {
+        iwritefln("new %s", instructor.getNewClassName());
         iwriteLine("dup");
-        iwritefln("invokespecial %s/<init>()V", instruction.getNewClassName());
+        iwritefln("invokespecial %s/<init>()V", instructor.getNewClassName());
     }
 
     @Override
-    public void visit(WriteInstructor instruction)
+    public void visit(WriteInstructor instructor)
     {
-        String mode = writeModeMap.get(instruction.getWriteMode());
-        String type = writeTypeMap.get(instruction.getWriteType());
+        String mode = writeModeMap.get(instructor.getWriteMode());
+        String type = writeTypeMap.get(instructor.getWriteType());
         iwriteLine("getstatic java/lang/System/out Ljava/io/PrintStream;");
         iwriteLine("swap");
         iwritefln("invokevirtual java/io/PrintStream/%s(%s)V", mode, type);
     }
 
     @Override
-    public void visit(PutField instruction)
+    public void visit(PutField instructor)
     {
-        iwritefln("putfield %s %s", instruction.getFieldSpec(), instruction.getDescriptor());
+        iwritefln("putfield %s %s", instructor.getFieldSpec(), instructor.getDescriptor());
+    }
+
+    @Override
+    public void visit(IInc instructor)
+    {
+        iwriteLine(instructor.instruction());
+    }
+
+    @Override
+    public void visit(IDec instructor)
+    {
+        iwriteLine(instructor.instruction());
     }
 
     @Override

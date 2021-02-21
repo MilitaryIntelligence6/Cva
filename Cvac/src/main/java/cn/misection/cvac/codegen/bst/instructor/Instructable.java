@@ -1,4 +1,4 @@
-package cn.misection.cvac.codegen.bst.btype;
+package cn.misection.cvac.codegen.bst.instructor;
 
 /**
  * @author Military Intelligence 6 root
@@ -12,7 +12,7 @@ public interface Instructable
 {
     /**
      * 获得该类型指令;
-     * @return
+     * @return instruct;
      */
-    String instruct();
+    String instruction();
 }

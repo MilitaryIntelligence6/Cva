@@ -1,4 +1,4 @@
-package cn.misection.cvac.codegen.bst.instruction;
+package cn.misection.cvac.codegen.bst.instructor;
 
 import cn.misection.cvac.codegen.bst.Label;
 

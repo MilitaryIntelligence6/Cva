@@ -1,7 +1,7 @@
 package cn.misection.cvac.codegen.bst.btype.advance;
 
 import cn.misection.cvac.codegen.bst.btype.BaseType;
-import cn.misection.cvac.codegen.bst.btype.Instructable;
+import cn.misection.cvac.codegen.bst.instructor.Instructable;
 
 /**
  * @author Military Intelligence 6 root

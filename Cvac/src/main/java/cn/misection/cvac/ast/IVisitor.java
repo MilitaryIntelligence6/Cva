@@ -59,7 +59,7 @@ public interface IVisitor
         // 不是枚举;
         if (type instanceof AbstractType)
         {
-            switch (((AbstractType) type).toEnum())
+            switch ((type.toEnum()))
             {
                 case CVA_STRING:
                 {
@@ -256,15 +256,16 @@ public interface IVisitor
                 visit((CvaWhileStatement) abstStm);
                 break;
             }
-//            case INCREMENT:
-//            {
-//                visit((CvaIncreStatement) abstStm);
-//            }
-//            case DECREMENT:
-//            {
-//                visit((CvaDecreStatement) abstStm);
-//                break;
-//            }
+            case INCREMENT:
+            {
+                visit((CvaIncreStatement) abstStm);
+                break;
+            }
+            case DECREMENT:
+            {
+                visit((CvaDecreStatement) abstStm);
+                break;
+            }
             default:
             {
                 System.err.println("unknown statement");
@@ -283,9 +284,9 @@ public interface IVisitor
 
     void visit(CvaWhileStatement stm);
 
-//    void visit(CvaIncreStatement stm);
-//
-//    void visit(CvaDecreStatement stm);
+    void visit(CvaIncreStatement stm);
+
+    void visit(CvaDecreStatement stm);
 
     /**
      * Method

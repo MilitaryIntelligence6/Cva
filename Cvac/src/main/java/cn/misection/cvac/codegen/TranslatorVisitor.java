@@ -26,7 +26,7 @@ import cn.misection.cvac.codegen.bst.btype.ITargetType;
 import cn.misection.cvac.codegen.bst.btype.advance.TargetStringType;
 import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
 import cn.misection.cvac.codegen.bst.btype.reference.TargetClassType;
-import cn.misection.cvac.codegen.bst.instruction.*;
+import cn.misection.cvac.codegen.bst.instructor.*;
 import cn.misection.cvac.constant.CvaExprClassName;
 
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ public final class TranslatorVisitor implements IVisitor
     private String className;
     private int index;
 
-    private Map<String, Integer> indexTable;
+    private Map<String, Integer> indexMap;
 
     private ITargetType targetType;
     private TargetDeclaration targetDecl;
@@ -56,7 +56,7 @@ public final class TranslatorVisitor implements IVisitor
     public TranslatorVisitor()
     {
         this.className = null;
-        this.indexTable = null;
+        this.indexMap = null;
         this.targetType = null;
         this.targetDecl = null;
         this.linearInstrList = new ArrayList<>();
@@ -112,9 +112,9 @@ public final class TranslatorVisitor implements IVisitor
                 decl.literal(),
                 this.targetType);
         // if it is field;
-        if (indexTable != null)
+        if (indexMap != null)
         {
-            indexTable.put(decl.literal(), index++);
+            indexMap.put(decl.literal(), index++);
         }
     }
 
@@ -132,15 +132,15 @@ public final class TranslatorVisitor implements IVisitor
         Label f = new Label();
         Label r = new Label();
         visit(expr.getLeft());
-        emit(new Ldc<Integer>(1));
+        emit(new Ldc<>(1));
         emit(new IfICmpLt(f));
         visit(expr.getRight());
-        emit(new Ldc<Integer>(1));
+        emit(new Ldc<>(1));
         emit(new IfICmpLt(f));
-        emit(new Ldc<Integer>(1));
+        emit(new Ldc<>(1));
         emit(new Goto(r));
         emit(new LabelJ(f));
-        emit(new Ldc<Integer>(0));
+        emit(new Ldc<>(0));
         emit(new LabelJ(r));
     }
 
@@ -167,7 +167,7 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaConstFalseExpr expr)
     {
-        emit(new Ldc<Integer>(0));
+        emit(new Ldc<>(0));
     }
 
     @Override
@@ -190,7 +190,7 @@ public final class TranslatorVisitor implements IVisitor
         }
         else
         {
-            int index = this.indexTable.get(expr.getLiteral());
+            int index = this.indexMap.get(expr.getLiteral());
             switch (expr.getType().toEnum())
             {
                 // 后面其他类型也一样;
@@ -216,10 +216,10 @@ public final class TranslatorVisitor implements IVisitor
         visit(expr.getLeft());
         visit(expr.getRight());
         emit(new IfICmpLt(t));
-        emit(new Ldc<Integer>(0));
+        emit(new Ldc<>(0));
         emit(new Goto(r));
         emit(new LabelJ(t));
-        emit(new Ldc<Integer>(1));
+        emit(new Ldc<>(1));
         emit(new LabelJ(r));
     }
 
@@ -235,26 +235,26 @@ public final class TranslatorVisitor implements IVisitor
         Label f = new Label();
         Label r = new Label();
         visit(expr.getExpr());
-        emit(new Ldc<Integer>(1));
+        emit(new Ldc<>(1));
         emit(new IfICmpLt(f));
-        emit(new Ldc<Integer>(1));
+        emit(new Ldc<>(1));
         emit(new Goto(r));
         emit(new LabelJ(f));
-        emit(new Ldc<Integer>(0));
+        emit(new Ldc<>(0));
         emit(new LabelJ(r));
     }
 
     @Override
     public void visit(CvaConstIntExpr expr)
     {
-        emit(new Ldc<Integer>(expr.getValue()));
+        emit(new Ldc<>(expr.getValue()));
     }
 
     @Override
     public void visit(CvaConstStringExpr expr)
     {
         // FIXME;
-        emit(new Ldc<String>(String.format("\"%s\"", expr.getLiteral())));
+        emit(new Ldc<>(String.format("\"%s\"", expr.getLiteral())));
     }
 
     @Override
@@ -282,7 +282,7 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaConstTrueExpr expr)
     {
-        emit(new Ldc<Integer>(1));
+        emit(new Ldc<>(1));
     }
 
     /**
@@ -295,9 +295,9 @@ public final class TranslatorVisitor implements IVisitor
     {
         try
         {
-            int index = this.indexTable.get(stm.getLiteral());
+            int index = this.indexMap.get(stm.getLiteral());
             visit(stm.getExpr());
-//            if (assignSta.getType() instanceof CvaClassType)
+            // todo 用枚举;
             if (stm.getType() instanceof AbstractReferenceType)
             {
                 emit(new AStore(index));
@@ -311,10 +311,20 @@ public final class TranslatorVisitor implements IVisitor
         {
             emit(new ALoad(0));
             visit(stm.getExpr());
-            emit(new PutField(String.format("%s/%s", this.className, stm.getLiteral()),
-                    stm.getType() instanceof CvaClassType ?
-                            (String.format("L%s;", ((CvaClassType) stm.getType()).getName()))
-                            : "I"));
+            if (stm.getType() instanceof CvaClassType)
+            {
+                emit(new PutField(String.format("%s/%s", this.className,
+                        stm.getLiteral()),
+                        String.format("L%s;",
+                                ((CvaClassType) stm.getType()).getName())));
+            }
+            else
+            {
+                emit(new PutField(String.format("%s/%s",
+                        this.className,
+                        stm.getLiteral()),
+                        "I"));
+            }
         }
     }
 
@@ -330,7 +340,7 @@ public final class TranslatorVisitor implements IVisitor
         Label l = new Label();
         Label r = new Label();
         visit(stm.getCondition());
-        emit(new Ldc<Integer>(1));
+        emit(new Ldc<>(1));
         emit(new IfICmpLt(l));
         visit(stm.getThenStatement());
         emit(new Goto(r));
@@ -397,7 +407,7 @@ public final class TranslatorVisitor implements IVisitor
         Label end = new Label();
         emit(new LabelJ(con));
         visit(stm.getCondition());
-        emit(new Ldc<Integer>(1));
+        emit(new Ldc<>(1));
         emit(new IfICmpLt(end));
         visit(stm.getBody());
         emit(new Goto(con));
@@ -405,10 +415,22 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
+    public void visit(CvaIncreStatement stm)
+    {
+        emit(new IInc(indexMap.get(stm.getLiteral())));
+    }
+
+    @Override
+    public void visit(CvaDecreStatement stm)
+    {
+        emit(new IDec(indexMap.get(stm.getLiteral())));
+    }
+
+    @Override
     public void visit(CvaMethod cvaMethod)
     {
         this.index = 1;
-        this.indexTable = new HashMap<>();
+        this.indexMap = new HashMap<>();
         visit(cvaMethod.getRetType());
         ITargetType theRetType = this.targetType;
 
@@ -452,7 +474,7 @@ public final class TranslatorVisitor implements IVisitor
     public void visit(CvaMainMethod mainMethod)
     {
         this.index = 1;
-        this.indexTable = new HashMap<>();
+        this.indexMap = new HashMap<>();
         visit(mainMethod.getRetType());
         ITargetType theRetType = this.targetType;
 

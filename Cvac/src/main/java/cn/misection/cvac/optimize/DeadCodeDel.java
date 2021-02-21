@@ -15,6 +15,7 @@ import cn.misection.cvac.ast.type.advance.CvaStringType;
 
 
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by MI6 root 1/27.
@@ -22,9 +23,9 @@ import java.util.HashSet;
 public final class DeadCodeDel
         implements IVisitor, Optimizable
 {
-    private HashSet<String> curFields;  // the fields of current class
-    private HashSet<String> localVars;  // the local variables and formals in current method
-    private HashSet<String> localLiveness;  // the living id in current statement
+    private Set<String> curFields;  // the fields of current class
+    private Set<String> localVars;  // the local variables and formals in current method
+    private Set<String> localLiveness;  // the living id in current statement
     // private boolean isAssign;   // current id is in the left of assign(true), or is being evaluated(false)
     private boolean containsCall;   // current statement contains method call?
     private boolean shouldDel;  // should delete current statement?
@@ -167,14 +168,13 @@ public final class DeadCodeDel
     @Override
     public void visit(CvaIfStatement stm)
     {
-        HashSet<String> temOriginal = new HashSet<>();
-        this.localLiveness.forEach(temOriginal::add);
+        Set<String> temOriginal = new HashSet<>(localLiveness);
         this.visit(stm.getThenStatement());
         if (this.shouldDel)
         {
             stm.setThenStatement(null);
         }
-        HashSet<String> tehLeftLiveness = this.localLiveness;
+        Set<String> tehLeftLiveness = this.localLiveness;
 
         this.localLiveness = temOriginal;
         if (stm.getElseStatement() != null)
@@ -185,7 +185,7 @@ public final class DeadCodeDel
         {
             stm.setElseStatement(null);
         }
-        tehLeftLiveness.forEach(this.localLiveness::add);
+        this.localLiveness.addAll(tehLeftLiveness);
 
 //        this.shouldDel = s.getThenStatement() == null && s.getThenStatement() == null;
         this.shouldDel = stm.getThenStatement() == null;
@@ -209,8 +209,7 @@ public final class DeadCodeDel
     @Override
     public void visit(CvaWhileStatement stm)
     {
-        HashSet<String> temOriginal = new HashSet<>();
-        this.localLiveness.forEach(temOriginal::add);
+        Set<String> temOriginal = new HashSet<>(localLiveness);
         this.visit(stm.getBody());
         if (this.shouldDel) // this statement will be deleted totally
         {
@@ -222,18 +221,30 @@ public final class DeadCodeDel
     }
 
     @Override
+    public void visit(CvaIncreStatement stm)
+    {
+        // TODO;
+    }
+
+    @Override
+    public void visit(CvaDecreStatement stm)
+    {
+        // TODO
+    }
+
+    @Override
     public void visit(CvaMethod m)
     {
         this.localVars = new HashSet<>();
         m.getArgumentList().forEach(f ->
-                this.localVars.add(((CvaDeclaration) f).literal()));
+                localVars.add((f.literal())));
+
         m.getLocalVarList().forEach(l ->
-                this.localVars.add(((CvaDeclaration) l).literal()));
-        this.localLiveness = new HashSet<>();
+                localVars.add((l.literal())));
 
-        // this.isAssign = false;
+        localLiveness = new HashSet<>();
+
         this.visit(m.getRetExpr());
-
         for (int i = m.getStatementList().size() - 1; i >= 0; i--)
         {
             this.visit(m.getStatementList().get(i));
@@ -256,7 +267,7 @@ public final class DeadCodeDel
     {
         this.curFields = new HashSet<>();
         c.getFieldList().forEach(f ->
-                this.curFields.add(((CvaDeclaration) f).literal()));
+                this.curFields.add((f.literal())));
 
         c.getMethodList().forEach(this::visit);
     }

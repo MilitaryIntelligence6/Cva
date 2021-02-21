@@ -240,10 +240,7 @@ public final class ConstantAndCopyPropagation
     {
         if (this.inWhile)
         {
-            if (this.conorcopy.containsKey(stm.getLiteral()))
-            {
-                this.conorcopy.remove(stm.getLiteral());
-            }
+            this.conorcopy.remove(stm.getLiteral());
             return;
         }
 
@@ -321,6 +318,18 @@ public final class ConstantAndCopyPropagation
 
         this.visit(stm.getCondition());
         this.visit(stm.getBody());
+    }
+
+    @Override
+    public void visit(CvaIncreStatement stm)
+    {
+        // TODO;
+    }
+
+    @Override
+    public void visit(CvaDecreStatement stm)
+    {
+        // TODO
     }
 
     @Override

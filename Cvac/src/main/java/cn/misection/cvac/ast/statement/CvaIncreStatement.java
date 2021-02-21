@@ -1,6 +1,5 @@
 package cn.misection.cvac.ast.statement;
 
-import cn.misection.cvac.ast.expr.EnumCvaExpr;
 
 /**
  * @author Military Intelligence 6 root
@@ -9,14 +8,19 @@ import cn.misection.cvac.ast.expr.EnumCvaExpr;
  * @Description TODO
  * @CreateTime 2021年02月20日 21:53:00
  */
-public class CvaIncreStatement extends AbstractStatement
+public final class CvaIncreStatement extends AbstractStatement
 {
-    private String literal;
+    private final String literal;
 
     public CvaIncreStatement(int lineNum, String literal)
     {
         super(lineNum);
         this.literal = literal;
+    }
+
+    public String getLiteral()
+    {
+        return literal;
     }
 
     @Override
