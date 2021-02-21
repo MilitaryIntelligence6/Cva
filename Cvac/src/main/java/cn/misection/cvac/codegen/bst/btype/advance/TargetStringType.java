@@ -24,7 +24,7 @@ public final class TargetStringType extends BaseAdvanceType
     }
 
     @Override
-    public String instruct()
+    public String instruction()
     {
         return FULL_LITERAL;
     }
