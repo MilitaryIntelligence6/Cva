@@ -1,5 +1,7 @@
 package cn.misection.cvac.codegen.bst.instructor;
 
+import cn.misection.cvac.constant.EnumIncDirection;
+
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
@@ -10,13 +12,14 @@ package cn.misection.cvac.codegen.bst.instructor;
 public final class IInc
         extends BaseInstructor implements Instructable
 {
-    private static final int INCREMENT_SIZE = 1;
-
     private int index;
 
-    public IInc(int index)
+    private EnumIncDirection direction;
+
+    public IInc(int index, EnumIncDirection direction)
     {
         this.index = index;
+        this.direction = direction;
     }
 
     public int getIndex()
@@ -29,9 +32,20 @@ public final class IInc
         this.index = index;
     }
 
+    public EnumIncDirection getDirection()
+    {
+        return direction;
+    }
+
+    public void setDirection(EnumIncDirection direction)
+    {
+        this.direction = direction;
+    }
+
     @Override
     public String instruction()
     {
-        return String.format("iinc %d %d", index, INCREMENT_SIZE);
+        return String.format("iinc %d %d",
+                index, direction.direction());
     }
 }

@@ -436,12 +436,6 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaDecreStatement stm)
-    {
-        // TODO;
-    }
-
-    @Override
     public void visit(CvaMethod cvaMethod)
     {
         this.methodVarMap = new MethodVarMap();

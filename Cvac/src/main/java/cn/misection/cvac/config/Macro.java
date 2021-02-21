@@ -14,4 +14,8 @@ public final class Macro
     public static final boolean RELEASE_LINUX = false;
 
     public static final boolean DEBUG = true;
+
+    public static final boolean DEBUG_OPTIMIZE_FLAG = false;
+
+    public Macro() {}
 }

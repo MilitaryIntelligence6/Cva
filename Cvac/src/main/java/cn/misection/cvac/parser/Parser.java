@@ -18,6 +18,7 @@ import cn.misection.cvac.ast.type.ICvaType;
 import cn.misection.cvac.ast.type.advance.CvaStringType;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
+import cn.misection.cvac.constant.EnumIncDirection;
 import cn.misection.cvac.constant.LexerCommon;
 import cn.misection.cvac.constant.WriteOptionCode;
 import cn.misection.cvac.io.IBufferedQueue;
@@ -1169,13 +1170,15 @@ public final class Parser
             {
                 eatToken(EnumCvaToken.INCREMENT);
                 eatToken(EnumCvaToken.SEMI);
-                return new CvaIncreStatement(lineNum, idLiteral);
+                return new CvaIncreStatement(
+                        lineNum, idLiteral, EnumIncDirection.INCREMENT);
             }
             case DECREMENT:
             {
                 eatToken(EnumCvaToken.DECREMENT);
                 eatToken(EnumCvaToken.SEMI);
-                return new CvaDecreStatement(lineNum, idLiteral);
+                return new CvaIncreStatement(
+                        lineNum, idLiteral, EnumIncDirection.DECREMENT);
             }
             default:
             {

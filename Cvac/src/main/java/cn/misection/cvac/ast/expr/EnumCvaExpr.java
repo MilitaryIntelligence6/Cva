@@ -37,6 +37,10 @@ public enum EnumCvaExpr
 
     IDENTIFIER,
 
+    INCREMENT,
+
+    DECREMENT,
+
     NEW,
 
     THIS,

@@ -227,12 +227,6 @@ public final class DeadCodeDel
     }
 
     @Override
-    public void visit(CvaDecreStatement stm)
-    {
-        // TODO
-    }
-
-    @Override
     public void visit(CvaMethod m)
     {
         this.localVars = new HashSet<>();

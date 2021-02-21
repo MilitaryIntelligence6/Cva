@@ -166,12 +166,6 @@ public final class UnUsedVarDecl
     }
 
     @Override
-    public void visit(CvaDecreStatement stm)
-    {
-        // TODO;
-    }
-
-    @Override
     public void visit(CvaMethod m)
     {
         this.unUsedLocals = new HashMap<>();

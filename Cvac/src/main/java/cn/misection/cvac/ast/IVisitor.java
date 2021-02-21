@@ -113,7 +113,7 @@ public interface IVisitor
 
     /**
      * 做成map之后, 可以精简代码分散, 但是这里要用反射, 算了;
-     * @param expr
+     * @param expr e;
      */
     default void visit(AbstractExpression expr)
     {
@@ -261,11 +261,6 @@ public interface IVisitor
                 visit((CvaIncreStatement) abstStm);
                 break;
             }
-            case DECREMENT:
-            {
-                visit((CvaDecreStatement) abstStm);
-                break;
-            }
             default:
             {
                 System.err.println("unknown statement");
@@ -285,8 +280,6 @@ public interface IVisitor
     void visit(CvaWhileStatement stm);
 
     void visit(CvaIncreStatement stm);
-
-    void visit(CvaDecreStatement stm);
 
     /**
      * Method

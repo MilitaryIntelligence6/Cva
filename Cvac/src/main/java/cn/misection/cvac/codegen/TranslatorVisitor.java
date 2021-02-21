@@ -286,7 +286,7 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     /**
-     * @param stm
+     * @param stm statement;
      * @FIXME 类型添加String是1, 二是要用前面写的switch方法替换;
      * 添加string应该只需要ref type就行;
      */
@@ -353,7 +353,7 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     /**
-     * @param stm
+     * @param stm statement;
      * @TODO 要针对所有的expr操作判断写类型, 还是麻烦, 想个办法, 最好让抽象expr能返回类型;
      * @deprecated 目前大而化之只是权宜之计;
      */
@@ -417,13 +417,8 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaIncreStatement stm)
     {
-        emit(new IInc(indexMap.get(stm.getLiteral())));
-    }
-
-    @Override
-    public void visit(CvaDecreStatement stm)
-    {
-        emit(new IDec(indexMap.get(stm.getLiteral())));
+        emit(new IInc(indexMap.get(stm.getLiteral()),
+                stm.getDirection()));
     }
 
     @Override

@@ -14,6 +14,7 @@ import cn.misection.cvac.codegen.bst.btype.reference.BaseReferenceType;
 /**
  * Created by MI6 root 1/17.
  */
+@SuppressWarnings("rawtypes")
 public interface IBackendVisitor
 {
     /**
@@ -145,11 +146,6 @@ public interface IBackendVisitor
                 visit((IInc) instructor);
                 break;
             }
-            case "IDec":
-            {
-                visit((IDec) instructor);
-                break;
-            }
             default:
             {
                 System.err.println("unknown operator");
@@ -187,8 +183,6 @@ public interface IBackendVisitor
     void visit(PutField instructor);
 
     void visit(IInc instructor);
-
-    void visit(IDec instructor);
 
     void visit(TargetMethod targetMethod);
 

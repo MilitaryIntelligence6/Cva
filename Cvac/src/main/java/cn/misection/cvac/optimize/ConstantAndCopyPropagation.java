@@ -327,12 +327,6 @@ public final class ConstantAndCopyPropagation
     }
 
     @Override
-    public void visit(CvaDecreStatement stm)
-    {
-        // TODO
-    }
-
-    @Override
     public void visit(CvaMethod cvaMethod)
     {
         this.conorcopy = new HashMap<>();

@@ -1,6 +1,8 @@
 package cn.misection.cvac.ast.statement;
 
 
+import cn.misection.cvac.constant.EnumIncDirection;
+
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
@@ -12,15 +14,25 @@ public final class CvaIncreStatement extends AbstractStatement
 {
     private final String literal;
 
-    public CvaIncreStatement(int lineNum, String literal)
+    private final EnumIncDirection direction;
+
+    public CvaIncreStatement(int lineNum,
+                             String literal,
+                             EnumIncDirection direction)
     {
         super(lineNum);
         this.literal = literal;
+        this.direction = direction;
     }
 
     public String getLiteral()
     {
         return literal;
+    }
+
+    public EnumIncDirection getDirection()
+    {
+        return direction;
     }
 
     @Override

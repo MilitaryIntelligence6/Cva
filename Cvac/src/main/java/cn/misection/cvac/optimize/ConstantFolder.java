@@ -321,12 +321,6 @@ public final class ConstantFolder
     }
 
     @Override
-    public void visit(CvaDecreStatement stm)
-    {
-        // TODO
-    }
-
-    @Override
     public void visit(CvaMethod cvaMethod)
     {
         cvaMethod.getStatementList().forEach(this::visit);

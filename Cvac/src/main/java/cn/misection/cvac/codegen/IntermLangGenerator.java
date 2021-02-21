@@ -19,6 +19,7 @@ import java.io.*;
  * @author MI6 root;
  * @date 
  */
+@SuppressWarnings("rawtypes")
 public final class IntermLangGenerator implements IBackendVisitor
 {
     private BufferedWriter writer;
@@ -202,12 +203,6 @@ public final class IntermLangGenerator implements IBackendVisitor
 
     @Override
     public void visit(IInc instructor)
-    {
-        iwriteLine(instructor.instruction());
-    }
-
-    @Override
-    public void visit(IDec instructor)
     {
         iwriteLine(instructor.instruction());
     }

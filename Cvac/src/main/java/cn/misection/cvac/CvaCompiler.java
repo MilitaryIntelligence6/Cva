@@ -40,7 +40,6 @@ public final class CvaCompiler
     /**
      * 用户选择;
      */
-    private static boolean optimizeFlag = true;
 
     public static void main(String[] args)
     {
@@ -61,7 +60,7 @@ public final class CvaCompiler
 
     private static void geneCode(AbstractProgram program)
     {
-        if (optimizeFlag)
+        if (Macro.DEBUG_OPTIMIZE_FLAG)
         {
             optimize(program);
         }

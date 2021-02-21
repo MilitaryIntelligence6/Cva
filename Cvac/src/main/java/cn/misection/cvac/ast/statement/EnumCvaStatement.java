@@ -23,7 +23,5 @@ public enum EnumCvaStatement
     WRITE,
 
     INCREMENT,
-
-    DECREMENT,
     ;
 }
