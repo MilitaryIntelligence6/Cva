@@ -30,20 +30,20 @@ public enum EnumOperator implements IInstructor, Instructable
      */
     REM("rem"),
 
-    AND("and"),
+    BIT_AND("and"),
 
-    OR("or"),
+    BIT_OR("or"),
 
-    XOR("xor"),
+    BIT_XOR("xor"),
 
-    SHL("shl"),
+    LEFT_SHIFT("shl"),
 
-    SHR("shr"),
+    RIGHT_SHIFT("shr"),
 
     /**
      * 无符号右移;
      */
-    USHR("ushr"),
+    UNSIGNED_RIGHT_SHIFT("ushr"),
 
     RETURN("return"),
     ;

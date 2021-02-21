@@ -24,5 +24,4 @@ public interface ICvaType extends ASTree
      * @return
      */
     EnumCvaType toEnum();
-
 }

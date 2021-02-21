@@ -211,7 +211,7 @@ public final class Lexer
             }
         }
 
-        return new CvaToken(EnumCvaToken.AND, lineNum);
+        return new CvaToken(EnumCvaToken.BIT_AND, lineNum);
     }
 
     private CvaToken handleOr()
@@ -237,7 +237,7 @@ public final class Lexer
             }
         }
 
-        return new CvaToken(EnumCvaToken.OR, lineNum);
+        return new CvaToken(EnumCvaToken.BIT_OR, lineNum);
     }
 
     private CvaToken handleXOr()
@@ -249,7 +249,7 @@ public final class Lexer
             return new CvaToken(EnumCvaToken.XOR_ASSIGN, lineNum);
         }
 
-        return new CvaToken(EnumCvaToken.XOR, lineNum);
+        return new CvaToken(EnumCvaToken.BIT_XOR, lineNum);
     }
 
     private CvaToken handleSlash()

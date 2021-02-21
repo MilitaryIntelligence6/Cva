@@ -16,7 +16,7 @@ class Increment
     {
         int i;
         i = 0;
-        while (i < 10)
+        while (10 > i)
         {
             println i;
             i += 1;

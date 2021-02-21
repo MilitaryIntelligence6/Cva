@@ -13,11 +13,11 @@ import cn.misection.cvac.ast.type.basic.EnumCvaType;
  * @TODO 这是啥;
  * @CreateTime 2021年02月14日 19:22:00
  */
-public final class CvaLessThanExpr extends AbstractBinaryExpr
+public final class CvaLessOrMoreThanExpr extends AbstractBinaryExpr
 {
-    public CvaLessThanExpr(int lineNum,
-                           AbstractExpression left,
-                           AbstractExpression right)
+    public CvaLessOrMoreThanExpr(int lineNum,
+                                 AbstractExpression left,
+                                 AbstractExpression right)
     {
         super(lineNum, left, right);
     }

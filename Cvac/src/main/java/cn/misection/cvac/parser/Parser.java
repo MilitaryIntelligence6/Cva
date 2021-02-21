@@ -33,6 +33,7 @@ import java.util.*;
 
 /**
  * @author MI6 root
+ * @TODO 把所有带判断的eatToken改成advance;
  */
 public final class Parser
 {
@@ -298,7 +299,7 @@ public final class Parser
         return expr;
     }
 
-    private AbstractExpression parseDivExpr()
+    private AbstractExpression parseUnsignedRightShiftExpr()
     {
         int i = 0;
         while (curToken.toEnum() == EnumCvaToken.NEGATE)
@@ -310,6 +311,149 @@ public final class Parser
         AbstractExpression tem = new CvaNegateExpr(
                 expr.getLineNum(), expr);
         return i % 2 == 0 ? expr : tem;
+    }
+
+    private AbstractExpression parseRightShiftExpr()
+    {
+        AbstractExpression tem = parseUnsignedRightShiftExpr();
+        AbstractExpression expr = tem;
+        while (curToken.toEnum() == EnumCvaToken.UNSIGNED_RIGHT_SHIFT_ASSIGN)
+        {
+            advance();
+            tem = parseUnsignedRightShiftExpr();
+            expr = new CvaOperandOperator.Builder()
+                    .putLineNum(tem.getLineNum())
+                    .putEnumExpr(EnumCvaExpr.UNSIGNED_RIGHT_SHIFT)
+                    .putLeft(expr)
+                    .putRight(tem)
+                    .putInstType(EnumOperandType.INT)
+                    .putInstOp(EnumOperator.UNSIGNED_RIGHT_SHIFT)
+                    .build();
+        }
+        return expr;
+    }
+
+    private AbstractExpression parseLeftShiftExpr()
+    {
+        AbstractExpression tem = parseRightShiftExpr();
+        AbstractExpression expr = tem;
+        while (curToken.toEnum() == EnumCvaToken.RIGHT_SHIFT)
+        {
+            advance();
+            tem = parseRightShiftExpr();
+            expr = new CvaOperandOperator.Builder()
+                    .putLineNum(tem.getLineNum())
+                    .putEnumExpr(EnumCvaExpr.RIGHT_SHIFT)
+                    .putLeft(expr)
+                    .putRight(tem)
+                    .putInstType(EnumOperandType.INT)
+                    .putInstOp(EnumOperator.RIGHT_SHIFT)
+                    .build();
+        }
+        return expr;
+    }
+
+    private AbstractExpression parseBitXOrExpr()
+    {
+        AbstractExpression tem = parseLeftShiftExpr();
+        AbstractExpression expr = tem;
+        while (curToken.toEnum() == EnumCvaToken.LEFT_SHIFT)
+        {
+            advance();
+            tem = parseLeftShiftExpr();
+            expr = new CvaOperandOperator.Builder()
+                    .putLineNum(tem.getLineNum())
+                    .putEnumExpr(EnumCvaExpr.LEFT_SHIFT)
+                    .putLeft(expr)
+                    .putRight(tem)
+                    .putInstType(EnumOperandType.INT)
+                    .putInstOp(EnumOperator.LEFT_SHIFT)
+                    .build();
+        }
+        return expr;
+    }
+
+    private AbstractExpression parseBitOrExpr()
+    {
+        AbstractExpression tem = parseBitXOrExpr();
+        AbstractExpression expr = tem;
+        while (curToken.toEnum() == EnumCvaToken.BIT_XOR)
+        {
+            advance();
+            tem = parseBitXOrExpr();
+            expr = new CvaOperandOperator.Builder()
+                    .putLineNum(tem.getLineNum())
+                    .putEnumExpr(EnumCvaExpr.BIT_XOR)
+                    .putLeft(expr)
+                    .putRight(tem)
+                    .putInstType(EnumOperandType.INT)
+                    .putInstOp(EnumOperator.BIT_XOR)
+                    .build();
+        }
+        return expr;
+    }
+
+    private AbstractExpression parseBitAndExpr()
+    {
+        AbstractExpression tem = parseBitOrExpr();
+        AbstractExpression expr = tem;
+        while (curToken.toEnum() == EnumCvaToken.BIT_OR)
+        {
+            advance();
+            tem = parseBitOrExpr();
+            expr = new CvaOperandOperator.Builder()
+                    .putLineNum(tem.getLineNum())
+                    .putEnumExpr(EnumCvaExpr.BIT_OR)
+                    .putLeft(expr)
+                    .putRight(tem)
+                    .putInstType(EnumOperandType.INT)
+                    .putInstOp(EnumOperator.BIT_OR)
+                    .build();
+        }
+        return expr;
+    }
+
+
+    private AbstractExpression parseRemExpr()
+    {
+        AbstractExpression tem = parseBitAndExpr();
+        AbstractExpression expr = tem;
+        while (curToken.toEnum() == EnumCvaToken.BIT_AND)
+        {
+            advance();
+            tem = parseBitAndExpr();
+            expr = new CvaOperandOperator.Builder()
+                    .putLineNum(tem.getLineNum())
+                    .putEnumExpr(EnumCvaExpr.BIT_AND)
+                    .putLeft(expr)
+                    .putRight(tem)
+                    .putInstType(EnumOperandType.INT)
+                    .putInstOp(EnumOperator.BIT_AND)
+                    .build();
+        }
+        return expr;
+    }
+
+
+    private AbstractExpression parseDivExpr()
+    {
+        AbstractExpression tem = parseRemExpr();
+        AbstractExpression expr = tem;
+        while (curToken.toEnum() == EnumCvaToken.REMAINDER)
+        {
+            advance();
+            tem = parseRemExpr();
+            expr = new CvaOperandOperator.Builder()
+                    .putLineNum(tem.getLineNum())
+                    .putEnumExpr(EnumCvaExpr.REMAINDER)
+                    .putLeft(expr)
+                    .putRight(tem)
+                    // FIXME, 后面改成从表达式获取;
+                    .putInstType(EnumOperandType.INT)
+                    .putInstOp(EnumOperator.REM)
+                    .build();
+        }
+        return expr;
     }
 
     /**
@@ -405,11 +549,41 @@ public final class Parser
     private AbstractExpression parseAndAndExpr()
     {
         AbstractExpression expr = parseLessThanExpr();
-        while (curToken.toEnum() == EnumCvaToken.LESS_THAN)
+        while (true)
         {
-            advance();
-            AbstractExpression tem = parseLessThanExpr();
-            expr = new CvaLessThanExpr(expr.getLineNum(), expr, tem);
+            switch (curToken.toEnum())
+            {
+                case LESS_THAN:
+                {
+                    advance();
+                    AbstractExpression tem = parseLessThanExpr();
+                    expr = new CvaLessOrMoreThanExpr(expr.getLineNum(), expr, tem);
+                    continue;
+                }
+                case MORE_THAN:
+                {
+                    // more than 倒一下即可;
+                    advance();
+                    AbstractExpression tem = parseLessThanExpr();
+                    expr = new CvaLessOrMoreThanExpr(expr.getLineNum(), tem, expr);
+                    continue;
+                }
+                case MORE_OR_EQUALS:
+                {
+                    // >=;
+                    break;
+                }
+                case LESS_OR_EQUALS:
+                {
+                    // <=
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+            }
+            break;
         }
         return expr;
     }

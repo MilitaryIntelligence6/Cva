@@ -78,7 +78,7 @@ public final class UnUsedVarDecl
     }
 
     @Override
-    public void visit(CvaLessThanExpr expr)
+    public void visit(CvaLessOrMoreThanExpr expr)
     {
         this.visit(expr.getLeft());
         this.visit(expr.getRight());

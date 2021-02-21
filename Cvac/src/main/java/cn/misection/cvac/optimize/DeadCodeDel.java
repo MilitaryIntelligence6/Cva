@@ -80,7 +80,7 @@ public final class DeadCodeDel
     }
 
     @Override
-    public void visit(CvaLessThanExpr expr)
+    public void visit(CvaLessOrMoreThanExpr expr)
     {
         visit(expr.getLeft());
         visit(expr.getRight());

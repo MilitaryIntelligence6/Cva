@@ -146,7 +146,7 @@ public final class ConstantAndCopyPropagation
     }
 
     @Override
-    public void visit(CvaLessThanExpr expr)
+    public void visit(CvaLessOrMoreThanExpr expr)
     {
         this.visit(expr.getLeft());
         if (this.canChange)

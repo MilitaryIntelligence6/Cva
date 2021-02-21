@@ -117,9 +117,9 @@ public interface IVisitor
                 visit((CvaIdentifierExpr) expr);
                 break;
             }
-            case CvaExprClassName.CVA_LESS_THAN_EXPR:
+            case CvaExprClassName.CVA_LESS_OR_MORE_THAN_EXPR:
             {
-                visit((CvaLessThanExpr) expr);
+                visit((CvaLessOrMoreThanExpr) expr);
                 break;
             }
             case CvaExprClassName.CVA_NEW_EXPR:
@@ -197,7 +197,7 @@ public interface IVisitor
 
     void visit(CvaIdentifierExpr expr);
 
-    void visit(CvaLessThanExpr expr);
+    void visit(CvaLessOrMoreThanExpr expr);
 
     void visit(CvaNewExpr expr);
 

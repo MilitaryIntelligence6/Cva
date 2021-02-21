@@ -44,11 +44,11 @@ public enum EnumCvaToken
      */
     OR_OR,
 
-    AND,
+    BIT_AND,
 
-    OR,
+    BIT_OR,
 
-    XOR,
+    BIT_XOR,
 
     /**
      * &&

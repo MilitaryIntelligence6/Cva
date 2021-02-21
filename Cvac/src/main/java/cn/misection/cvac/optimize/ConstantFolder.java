@@ -141,7 +141,7 @@ public final class ConstantFolder
     }
 
     @Override
-    public void visit(CvaLessThanExpr expr)
+    public void visit(CvaLessOrMoreThanExpr expr)
     {
         this.visit(expr.getLeft());
         if (isConstant())
@@ -157,7 +157,7 @@ public final class ConstantFolder
             }
             else
             {
-                this.lastExpr = new CvaLessThanExpr(
+                this.lastExpr = new CvaLessOrMoreThanExpr(
                         this.lastExpr.getLineNum(),
                         temLeft,
                         this.lastExpr);

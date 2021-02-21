@@ -74,8 +74,6 @@ public enum EnumCvaExpr
 
     UNSIGNED_RIGHT_SHIFT,
 
-    XOR,
-
     LESS_THAN,
 
     MORE_THAN,

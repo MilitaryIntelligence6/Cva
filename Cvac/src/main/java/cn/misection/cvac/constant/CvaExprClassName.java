@@ -32,7 +32,7 @@ public final class CvaExprClassName
     /**
      * CvaLTExpr
      */
-    public static final String CVA_LESS_THAN_EXPR = "CvaLessThanExpr";
+    public static final String CVA_LESS_OR_MORE_THAN_EXPR = "CvaLessOrMoreThanExpr";
 
     /**
      * CvaNewExpr

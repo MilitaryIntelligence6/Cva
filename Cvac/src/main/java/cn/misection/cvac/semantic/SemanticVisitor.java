@@ -253,7 +253,7 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaLessThanExpr expr)
+    public void visit(CvaLessOrMoreThanExpr expr)
     {
         visit(expr.getLeft());
         ICvaType leftType = this.type;
@@ -440,7 +440,6 @@ public final class SemanticVisitor implements IVisitor
     public void visit(CvaWhileStatement stm)
     {
         visit(stm.getCondition());
-//        if (!this.type.toString().equals(new CvaBoolean().toString()))
         if (this.type != EnumCvaType.CVA_BOOLEAN)
         {
             errorLog(stm.getCondition().getLineNum(),
