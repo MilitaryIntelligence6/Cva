@@ -19,7 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by MI6 root 1/28.
+ * @author MI6 root
+ * @FIXME  常量折叠引起了对i++的折叠, 需要改;
  */
 public final class ConstantAndCopyPropagation
         implements IVisitor, Optimizable
