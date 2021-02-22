@@ -84,6 +84,12 @@ public final class CvaMainMethod extends AbstractMethod
 
         public Builder() {}
 
+        /**
+         * 类似原型模式的builder;
+         * @param prototype
+         */
+        public Builder(CvaMethod prototype) {}
+
         public Builder(ICvaType retType,
                        AbstractExpression retExpr,
                        List<AbstractDeclaration> argumentList,

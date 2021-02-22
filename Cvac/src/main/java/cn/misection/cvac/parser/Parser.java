@@ -15,7 +15,6 @@ import cn.misection.cvac.ast.method.CvaMainMethod;
 import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
-import cn.misection.cvac.ast.type.AbstractType;
 import cn.misection.cvac.ast.type.ICvaType;
 import cn.misection.cvac.ast.type.advance.CvaStringType;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
@@ -29,7 +28,6 @@ import cn.misection.cvac.io.IBufferedQueue;
 import cn.misection.cvac.lexer.CvaToken;
 import cn.misection.cvac.lexer.EnumCvaToken;
 import cn.misection.cvac.lexer.Lexer;
-import com.sun.xml.internal.fastinfoset.util.CharArray;
 
 import java.util.*;
 
@@ -935,7 +933,7 @@ public final class Parser
         // 第一个是返回值;
         ICvaType retType = parseType();
         // 解析函数名;
-        String methodLiteral = curToken.getLiteral();
+        String methodName = curToken.getLiteral();
         // 吃掉函数名和开小括号;
         eatToken(EnumCvaToken.IDENTIFIER);
         eatToken(EnumCvaToken.OPEN_PAREN);
@@ -1057,13 +1055,14 @@ public final class Parser
         }
         eatToken(EnumCvaToken.CLOSE_CURLY_BRACE);
 
-        return new CvaMethod(
-                methodLiteral,
-                retType,
-                retExpr,
-                formalList,
-                localVarDecls,
-                statementList);
+        return new CvaMethod.Builder()
+                .putName(methodName)
+                .putRetType(retType)
+                .putRetExpr(retExpr)
+                .putArgList(formalList)
+                .putLocalVarList(localVarDecls)
+                .putStatementList(statementList)
+                .build();
     }
 
     private AbstractDeclaration handleMethodVarDecl(
