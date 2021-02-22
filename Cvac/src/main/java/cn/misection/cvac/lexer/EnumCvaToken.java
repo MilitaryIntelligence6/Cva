@@ -371,80 +371,6 @@ public enum EnumCvaToken
     EOF,
 
     /*
-     * 新的还未支持的;
-     */
-    /**
-     * end of line;
-     */
-    EOL,
-
-    /*
-     * struct;
-     */
-    /**
-     * 专门用来定义结构体;
-     */
-    STRUCT_SPECIFIER,
-
-    /**
-     * struct名字;
-     */
-    STRUCT_OPT_TAG_NAME,
-
-    /**
-     * 结构体内变量列表;
-     */
-    STRUCT_DEFINE_LIST,
-
-    TAG,
-
-    DEFINE,
-
-    DECLARATION_LIST,
-
-    DECLARATION,
-
-    /**
-     * function
-     */
-    FUNCTION_DECLARATION,
-
-    /**
-     * VAR_LIST;
-     */
-    ARGUMENTS_LIST,
-
-    PARAM_DECLARATION,
-
-    /**
-     * enum;
-     */
-    ENUM_SPECIFIER,
-
-    OPT_ENUM_LIST,
-
-    ENUMERATOR_LIST,
-
-    ENUMERATOR,
-
-    ENUM_NT,
-
-
-    /**
-     *
-     */
-    CONST_EXPR,
-
-    ARGUMENTS,
-
-    /**
-     *
-     */
-    COMPOUND_STATEMENT,
-
-    LOCAL_DEFINES,
-
-    /*
      * ternimal;
      * 终结符, 右值;
      */
@@ -467,8 +393,6 @@ public enum EnumCvaToken
      */
 
     WHITE_SPACE,
-
-    T_TYPE,
 
     UNKNOWN_TOKEN,
     // end ternimal;
