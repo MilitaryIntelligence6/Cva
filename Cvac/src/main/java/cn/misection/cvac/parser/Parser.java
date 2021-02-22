@@ -1038,14 +1038,16 @@ public final class Parser
             }
             break;
         }
-//        List<AbstractDeclaration> localVarDecls = parseVarDeclList();
-//        List<AbstractStatement> statementList = parseStatementList();
-
         // FIXME 隐患;
         AbstractExpression retExpr;
         if (retType.toEnum() == EnumCvaType.CVA_VOID)
         {
             retExpr = new CvaConstNullExpr(curToken.getLineNum());
+            if (curToken.toEnum() == EnumCvaToken.RETURN)
+            {
+                eatToken(EnumCvaToken.RETURN);
+                eatToken(EnumCvaToken.SEMI);
+            }
         }
         else
         {
@@ -1094,7 +1096,15 @@ public final class Parser
         List<AbstractStatement> statementList = parseStatementList();
 
         AbstractExpression retExpr = null;
-        if (mainRetType != EnumCvaType.CVA_VOID)
+        if (mainRetType == EnumCvaType.CVA_VOID)
+        {
+            if (curToken.toEnum() == EnumCvaToken.RETURN)
+            {
+                eatToken(EnumCvaToken.RETURN);
+                eatToken(EnumCvaToken.SEMI);
+            }
+        }
+        else
         {
             eatToken(EnumCvaToken.RETURN);
             retExpr = parseLinkedExpr();
