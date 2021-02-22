@@ -15,6 +15,7 @@ import cn.misection.cvac.ast.method.CvaMainMethod;
 import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
+import cn.misection.cvac.ast.type.AbstractType;
 import cn.misection.cvac.ast.type.ICvaType;
 import cn.misection.cvac.ast.type.advance.CvaStringType;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
@@ -28,6 +29,7 @@ import cn.misection.cvac.io.IBufferedQueue;
 import cn.misection.cvac.lexer.CvaToken;
 import cn.misection.cvac.lexer.EnumCvaToken;
 import cn.misection.cvac.lexer.Lexer;
+import com.sun.xml.internal.fastinfoset.util.CharArray;
 
 import java.util.*;
 
@@ -44,7 +46,7 @@ public final class Parser
     /**
      * for varDecl cn.misection.cvac.parser;
      */
-    private boolean valDeclFlag;
+    private boolean varDeclFlag;
 
     private boolean markingFlag;
 
@@ -84,6 +86,11 @@ public final class Parser
         {
             curToken = lexer.nextToken();
         }
+    }
+
+    private char peekCh()
+    {
+        return lexer.peekCh();
     }
 
     /**
@@ -822,7 +829,7 @@ public final class Parser
             case ASSIGN:
             {
                 this.reset();
-                valDeclFlag = false;
+                varDeclFlag = false;
                 return null;
             }
             case IDENTIFIER:
@@ -834,15 +841,16 @@ public final class Parser
                     case SEMI:
                     {
                         this.deMark();
-                        valDeclFlag = true;
-                        AbstractDeclaration decl = new CvaDeclaration(curToken.getLineNum(), literal, type);
+                        varDeclFlag = true;
+                        AbstractDeclaration decl = new CvaDeclaration(
+                                curToken.getLineNum(), literal, type);
                         eatToken(EnumCvaToken.SEMI);
                         return decl;
                     }
                     // maybe a method in class;
                     case OPEN_PAREN:
                     {
-                        valDeclFlag = false;
+                        varDeclFlag = false;
                         this.reset();
                         return null;
                     }
@@ -870,7 +878,7 @@ public final class Parser
     private List<AbstractDeclaration> parseVarDeclList()
     {
         List<AbstractDeclaration> declList = new ArrayList<>();
-        valDeclFlag = true;
+        varDeclFlag = true;
         while (EnumCvaToken.isType(curToken.toEnum())
                 || curToken.toEnum() == EnumCvaToken.IDENTIFIER)
         {
@@ -879,7 +887,7 @@ public final class Parser
             {
                 declList.add(decl);
             }
-            if (!valDeclFlag)
+            if (!varDeclFlag)
             {
                 break;
             }
@@ -927,7 +935,7 @@ public final class Parser
         // 第一个是返回值;
         ICvaType retType = parseType();
         // 解析函数名;
-        String literal = curToken.getLiteral();
+        String methodLiteral = curToken.getLiteral();
         // 吃掉函数名和开小括号;
         eatToken(EnumCvaToken.IDENTIFIER);
         eatToken(EnumCvaToken.OPEN_PAREN);
@@ -937,8 +945,94 @@ public final class Parser
         eatToken(EnumCvaToken.CLOSE_PAREN);
         // 吃掉大括号;
         eatToken(EnumCvaToken.OPEN_CURLY_BRACE);
-        List<AbstractDeclaration> localVarDecls = parseVarDeclList();
-        List<AbstractStatement> statementList = parseStatementList();
+        List<AbstractDeclaration> localVarDecls = new ArrayList<>();
+        List<AbstractStatement> statementList = new ArrayList<>();
+
+        while (true)
+        {
+            EnumCvaToken memTokenEnum = curToken.toEnum();
+            if (EnumCvaToken.isType(memTokenEnum))
+            {
+                // 吃掉type, cur是id, 下一个看是分号还是assign;
+                ICvaType declType = parseType();
+                switch (peekCh())
+                {
+                    case ';':
+                    {
+                        String idLiteral = curToken.getLiteral();
+                        localVarDecls.add(handleMethodVarDecl(idLiteral, declType));
+                        eatToken(EnumCvaToken.SEMI);
+                        continue;
+                    }
+                    case '=':
+                    {
+                        String idLiteral = curToken.getLiteral();
+                        localVarDecls.add(handleMethodVarDecl(idLiteral, declType));
+                        eatToken(EnumCvaToken.ASSIGN);
+                        statementList.add(handleMethodAssign(idLiteral));
+                        eatToken(EnumCvaToken.SEMI);
+                        continue;
+                    }
+                    default:
+                    {
+                        errorLog("semi or assign", lexer.nextToken());
+                        break;
+                    }
+                }
+            }
+            else if (memTokenEnum == EnumCvaToken.IDENTIFIER)
+            {
+                char pCh = peekCh();
+                if (Character.isAlphabetic(pCh)
+                || pCh == '_' || pCh == '$')
+                {
+                    // 2连 identifier, 说明是定义;
+                    ICvaType declType = parseType();
+                    switch (peekCh())
+                    {
+                        case ';':
+                        {
+                            String idLiteral = curToken.getLiteral();
+                            localVarDecls.add(handleMethodVarDecl(idLiteral, declType));
+                            eatToken(EnumCvaToken.SEMI);
+                            continue;
+                        }
+                        case '=':
+                        {
+                            String idLiteral = curToken.getLiteral();
+                            localVarDecls.add(handleMethodVarDecl(idLiteral, declType));
+                            eatToken(EnumCvaToken.ASSIGN);
+                            statementList.add(handleMethodAssign(idLiteral));
+                            eatToken(EnumCvaToken.SEMI);
+                            continue;
+                        }
+                        default:
+                        {
+                            errorLog("semi or assign", lexer.nextToken());
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    // 说明是普通statement;
+                    statementList.add(parseStatement());
+                    continue;
+                }
+            }
+            else if (memTokenEnum == EnumCvaToken.RETURN)
+            {
+                break;
+            }
+            else
+            {
+                statementList.add(parseStatement());
+                continue;
+            }
+            break;
+        }
+//        List<AbstractDeclaration> localVarDecls = parseVarDeclList();
+//        List<AbstractStatement> statementList = parseStatementList();
 
         // FIXME 隐患;
         AbstractExpression retExpr;
@@ -955,12 +1049,28 @@ public final class Parser
         eatToken(EnumCvaToken.CLOSE_CURLY_BRACE);
 
         return new CvaMethod(
-                literal,
+                methodLiteral,
                 retType,
                 retExpr,
                 formalList,
                 localVarDecls,
                 statementList);
+    }
+
+    private AbstractDeclaration handleMethodVarDecl(
+            String literal, ICvaType declType)
+    {
+        eatToken(EnumCvaToken.IDENTIFIER);
+        return new CvaDeclaration(
+                curToken.getLineNum(), literal, declType);
+    }
+
+    private AbstractStatement handleMethodAssign(
+            String idLiteral)
+    {
+        AbstractExpression expr = parseLinkedExpr();
+        return new CvaAssignStatement(
+                curToken.getLineNum(), idLiteral, expr);
     }
 
     private AbstractMethod parseMainMethod()
@@ -1167,7 +1277,7 @@ public final class Parser
             }
         }
         errorLog("a main method",
-                "null, deny to compile the file!");
+                "null, deny to compile this file!");
         return null;
     }
 

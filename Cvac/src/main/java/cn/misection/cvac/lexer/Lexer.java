@@ -612,4 +612,17 @@ public final class Lexer
         // FIXME 修改;
         return true;
     }
+
+    public char peekCh()
+    {
+        for (int i = 1; stream.hasNext(); i++)
+        {
+            char peeked = stream.peek(i);
+            if (!Character.isWhitespace(peeked))
+            {
+                return peeked;
+            }
+        }
+        return 0;
+    }
 }
