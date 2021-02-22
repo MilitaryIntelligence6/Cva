@@ -21,4 +21,6 @@
 - 位操作;
 - 原子操作加入new;
 - 常量识别目前很蠢, 不识别++;
-- ++ 应该从statement变成装饰者expr;
+- ++ 应该从statement变成装饰者expr;  
+- 优化, 数值小于指定值的都换成iconst_0, 霍夫曼树 Byte.MAX_VALUE bipush;
+  sipush;

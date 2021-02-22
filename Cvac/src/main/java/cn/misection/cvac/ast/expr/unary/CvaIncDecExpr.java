@@ -10,11 +10,11 @@ import cn.misection.cvac.ast.type.basic.EnumCvaType;
  * @Description TODO
  * @CreateTime 2021年02月21日 12:44:00
  */
-public class CvaIncrementExpr extends AbstractUnaryExpr
+public final class CvaIncDecExpr extends AbstractUnaryExpr
 {
     private String literal;
 
-    public CvaIncrementExpr(int lineNum)
+    public CvaIncDecExpr(int lineNum)
     {
         super(lineNum);
     }
