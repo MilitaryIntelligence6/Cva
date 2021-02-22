@@ -287,12 +287,6 @@ public enum EnumCvaToken
      */
     CLOSE_PAREN(")"),
 
-
-    /**
-     * main
-     */
-    MAIN("main"),
-
     /**
      * new
      */
@@ -407,7 +401,7 @@ public enum EnumCvaToken
 
     EnumCvaToken() {}
 
-    public String getKindLiteral()
+    public String literal()
     {
         return kindLiteral;
     }

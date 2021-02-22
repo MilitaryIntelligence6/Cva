@@ -16,12 +16,14 @@ import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.ICvaType;
+import cn.misection.cvac.ast.type.advance.CvaArrayType;
 import cn.misection.cvac.ast.type.advance.CvaStringType;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
 import cn.misection.cvac.codegen.bst.instructor.EnumOperandType;
 import cn.misection.cvac.codegen.bst.instructor.EnumOperator;
 import cn.misection.cvac.constant.EnumIncDirection;
+import cn.misection.cvac.constant.EnumLexerCommon;
 import cn.misection.cvac.constant.LexerCommon;
 import cn.misection.cvac.constant.WriteOptionCode;
 import cn.misection.cvac.io.IBufferedQueue;
@@ -809,6 +811,30 @@ public final class Parser
         }
         // 因为有advance所以不能直接return;
         advance();
+        if (curToken.toEnum() == EnumCvaToken.OPEN_BRACKETS)
+        {
+            advance();
+            switch (curToken.toEnum())
+            {
+                case CLOSE_BRACKETS:
+                {
+                    advance();
+                    return new CvaArrayType(type);
+                }
+                case CONST_INT:
+                {
+                    int size = Integer.parseInt(curToken.getLiteral());
+                    advance();
+                    eatToken(EnumCvaToken.CLOSE_BRACKETS);
+                    return new CvaArrayType(type, size);
+                }
+                default:
+                {
+                    errorLog("] or int array size whith ]", curToken);
+                    break;
+                }
+            }
+        }
         return type;
     }
 
@@ -1081,44 +1107,44 @@ public final class Parser
                 curToken.getLineNum(), idLiteral, expr);
     }
 
-    private AbstractMethod parseMainMethod()
-    {
-        ICvaType mainRetType = parseType();
-        eatToken(EnumCvaToken.MAIN);
-
-        eatToken(EnumCvaToken.OPEN_PAREN);
-        List<AbstractDeclaration> mainArgs = parseMainArgs();
-        eatToken(EnumCvaToken.CLOSE_PAREN);
-
-        eatToken(EnumCvaToken.OPEN_CURLY_BRACE);
-        List<AbstractDeclaration> localVarDecls = parseVarDeclList();
-        List<AbstractStatement> statementList = parseStatementList();
-
-        AbstractExpression retExpr = null;
-        if (mainRetType == EnumCvaType.CVA_VOID)
-        {
-            if (curToken.toEnum() == EnumCvaToken.RETURN)
-            {
-                eatToken(EnumCvaToken.RETURN);
-                eatToken(EnumCvaToken.SEMI);
-            }
-        }
-        else
-        {
-            eatToken(EnumCvaToken.RETURN);
-            retExpr = parseLinkedExpr();
-            eatToken(EnumCvaToken.SEMI);
-        }
-        eatToken(EnumCvaToken.CLOSE_CURLY_BRACE);
-
-        return new CvaMainMethod.Builder()
-                .putRetType(mainRetType)
-                .putRetExpr(retExpr)
-                .putMainArgList(mainArgs)
-                .putLocalVarList(localVarDecls)
-                .putStatementList(statementList)
-                .build();
-    }
+//    private AbstractMethod parseMainMethod()
+//    {
+//        ICvaType mainRetType = parseType();
+//        eatToken(EnumCvaToken.MAIN);
+//
+//        eatToken(EnumCvaToken.OPEN_PAREN);
+//        List<AbstractDeclaration> mainArgs = parseMainArgs();
+//        eatToken(EnumCvaToken.CLOSE_PAREN);
+//
+//        eatToken(EnumCvaToken.OPEN_CURLY_BRACE);
+//        List<AbstractDeclaration> localVarDecls = parseVarDeclList();
+//        List<AbstractStatement> statementList = parseStatementList();
+//
+//        AbstractExpression retExpr = null;
+//        if (mainRetType == EnumCvaType.CVA_VOID)
+//        {
+//            if (curToken.toEnum() == EnumCvaToken.RETURN)
+//            {
+//                eatToken(EnumCvaToken.RETURN);
+//                eatToken(EnumCvaToken.SEMI);
+//            }
+//        }
+//        else
+//        {
+//            eatToken(EnumCvaToken.RETURN);
+//            retExpr = parseLinkedExpr();
+//            eatToken(EnumCvaToken.SEMI);
+//        }
+//        eatToken(EnumCvaToken.CLOSE_CURLY_BRACE);
+//
+//        return new CvaMainMethod.Builder()
+//                .putRetType(mainRetType)
+//                .putRetExpr(retExpr)
+//                .putMainArgList(mainArgs)
+//                .putLocalVarList(localVarDecls)
+//                .putStatementList(statementList)
+//                .build();
+//    }
 
     /**
      * // MethodDecls -> MethodDecl MethodDecls*
@@ -1203,7 +1229,9 @@ public final class Parser
             eatToken(EnumCvaToken.IDENTIFIER);
             eatToken(EnumCvaToken.OPEN_CURLY_BRACE);
 //            AbstractStatement statement = parseMainMethod();
-            AbstractMethod mainMethod = parseMainMethod();
+            AbstractMethod mainMethod = new CvaMainMethod.Builder(
+                    parseMethod())
+                    .build();
 
             eatToken(EnumCvaToken.CLOSE_CURLY_BRACE);
 //            return new CvaEntryClass(entryName, statement);
@@ -1214,7 +1242,9 @@ public final class Parser
         }
         String mainName = LexerCommon.DEFAULT_MAIN_CLASS_NAME;
 //        AbstractStatement statement = parseMainMethod();
-        AbstractMethod mainMethod = parseMainMethod();
+        AbstractMethod mainMethod = new CvaMainMethod.Builder(
+                parseMethod())
+                .build();
         return new CvaEntryClass.Builder()
                 .putName(mainName)
                 .putEntryMethod(mainMethod)
@@ -1285,7 +1315,8 @@ public final class Parser
             for (AbstractMethod absMethod : absClass.getMethodList())
             {
                 // null 安全的equals;
-                if (Objects.equals(absMethod.name(), EnumCvaToken.MAIN.getKindLiteral()))
+                if (Objects.equals(absMethod.name(),
+                        EnumLexerCommon.MAIN_METHOD_NAME.string()))
                 {
                     // return 打断多重循环, 如果重复定义main, 只执行第一个;
                     return absClass;

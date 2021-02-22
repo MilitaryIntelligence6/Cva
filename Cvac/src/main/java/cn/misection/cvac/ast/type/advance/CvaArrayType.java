@@ -1,6 +1,6 @@
 package cn.misection.cvac.ast.type.advance;
 
-import cn.misection.cvac.ast.type.AbstractType;
+import cn.misection.cvac.ast.type.ICvaType;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
 
 /**
@@ -14,16 +14,21 @@ public final class CvaArrayType extends AbstractAdvanceType
 {
     public static final String TYPE_LITERAL = "@array";
 
-    private AbstractType innerType;
+    private ICvaType innerType;
 
     private int size;
 
     private static final EnumCvaType ENUM_TYPE = EnumCvaType.CVA_ARRAY;
 
-    public CvaArrayType(AbstractType innerType, int size)
+    public CvaArrayType(ICvaType innerType, int size)
     {
         this.innerType = innerType;
         this.size = size;
+    }
+
+    public CvaArrayType(ICvaType innerType)
+    {
+        this.innerType = innerType;
     }
 
     @Override
@@ -38,12 +43,12 @@ public final class CvaArrayType extends AbstractAdvanceType
         return String.format("@array%s", innerType.toString());
     }
 
-    public AbstractType getInnerType()
+    public ICvaType getInnerType()
     {
         return innerType;
     }
 
-    public void setInnerType(AbstractType innerType)
+    public void setInnerType(ICvaType innerType)
     {
         this.innerType = innerType;
     }

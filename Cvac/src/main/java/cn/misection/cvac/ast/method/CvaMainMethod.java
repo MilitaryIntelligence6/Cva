@@ -4,6 +4,7 @@ import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.expr.AbstractExpression;
 import cn.misection.cvac.ast.statement.AbstractStatement;
 import cn.misection.cvac.ast.type.ICvaType;
+import cn.misection.cvac.constant.EnumLexerCommon;
 import cn.misection.cvac.lexer.EnumCvaToken;
 
 import java.util.List;
@@ -28,6 +29,8 @@ public final class CvaMainMethod extends AbstractMethod
         this.localVarList = builder.localVarList;
         this.statementList = builder.statementList;
     }
+
+
 
     @Override
     public String name()
@@ -67,7 +70,7 @@ public final class CvaMainMethod extends AbstractMethod
 
     public static class Builder
     {
-        private final String name = EnumCvaToken.MAIN.getKindLiteral();
+        private final String name = EnumLexerCommon.MAIN_METHOD_NAME.string();
 
         private ICvaType retType;
 
@@ -88,7 +91,14 @@ public final class CvaMainMethod extends AbstractMethod
          * 类似原型模式的builder;
          * @param prototype
          */
-        public Builder(CvaMethod prototype) {}
+        public Builder(AbstractMethod prototype)
+        {
+            this.retType = prototype.retType;
+            this.retExpr = prototype.retExpr;
+            this.argumentList = prototype.argumentList;
+            this.localVarList = prototype.localVarList;
+            this.statementList = prototype.statementList;
+        }
 
         public Builder(ICvaType retType,
                        AbstractExpression retExpr,

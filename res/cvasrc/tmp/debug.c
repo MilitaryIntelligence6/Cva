@@ -11,13 +11,10 @@ call cva.std.console.*;
 call cva.lang.type.String;
 
 
-
 int main(string[] args)
 {
-    echo "hello, world!\n";
-    println new Increment().incre();
-//    int num = 888;
-//    println num;
+    int num = 888;
+    println num;
     return 0;
 }
 
