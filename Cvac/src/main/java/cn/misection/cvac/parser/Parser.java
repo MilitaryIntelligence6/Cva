@@ -115,7 +115,6 @@ public final class Parser
 
     private void eatToken(EnumCvaToken kind)
     {
-        // FIXME, 写成 遇到EOF就走, 尾巴上那个-1暂时还没解决;
         if (kind == curToken.toEnum())
         {
             advance();
@@ -220,7 +219,7 @@ public final class Parser
                 eatToken(EnumCvaToken.CLOSE_PAREN);
                 return expr;
             }
-            case NUMBER:
+            case CONST_INT:
             {
                 expr = new CvaConstIntExpr(curToken.getLineNum(), Integer.parseInt(curToken.getLiteral()));
                 advance();
@@ -281,6 +280,7 @@ public final class Parser
      */
     private AbstractExpression parseNegateExpr()
     {
+        // FIXME, 这里不要先给终结符!!有问题的是;
         AbstractExpression expr = parseAtomExpr();
         while (curToken.toEnum() == EnumCvaToken.DOT)
         {
@@ -317,7 +317,7 @@ public final class Parser
     {
         AbstractExpression tem = parseUnsignedRightShiftExpr();
         AbstractExpression expr = tem;
-        while (curToken.toEnum() == EnumCvaToken.UNSIGNED_RIGHT_SHIFT_ASSIGN)
+        while (curToken.toEnum() == EnumCvaToken.UNSIGNED_RIGHT_SHIFT)
         {
             advance();
             tem = parseUnsignedRightShiftExpr();
@@ -506,7 +506,7 @@ public final class Parser
      *
      * @return LessThanExpr
      */
-    private AbstractExpression parseLessThanExpr()
+    private AbstractExpression parseLessOrMoreThanExpr()
     {
         AbstractExpression expr = parseAddSubExpr();
         while (curToken.toEnum() == EnumCvaToken.ADD || curToken.toEnum() == EnumCvaToken.SUB)
@@ -548,7 +548,7 @@ public final class Parser
      */
     private AbstractExpression parseAndAndExpr()
     {
-        AbstractExpression expr = parseLessThanExpr();
+        AbstractExpression expr = parseLessOrMoreThanExpr();
         while (true)
         {
             switch (curToken.toEnum())
@@ -556,7 +556,7 @@ public final class Parser
                 case LESS_THAN:
                 {
                     advance();
-                    AbstractExpression tem = parseLessThanExpr();
+                    AbstractExpression tem = parseLessOrMoreThanExpr();
                     expr = new CvaLessOrMoreThanExpr(expr.getLineNum(), expr, tem);
                     continue;
                 }
@@ -564,7 +564,7 @@ public final class Parser
                 {
                     // more than 倒一下即可;
                     advance();
-                    AbstractExpression tem = parseLessThanExpr();
+                    AbstractExpression tem = parseLessOrMoreThanExpr();
                     expr = new CvaLessOrMoreThanExpr(expr.getLineNum(), tem, expr);
                     continue;
                 }

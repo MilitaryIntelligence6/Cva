@@ -427,7 +427,7 @@ public final class Lexer
                 if (isInt(literal))
                 {
                     // FIXME 联系后端改成 INT;
-                    return new CvaToken(EnumCvaToken.NUMBER, lineNum, builder.toString());
+                    return new CvaToken(EnumCvaToken.CONST_INT, lineNum, builder.toString());
                 }
             }
             else if (isIdentifier(literal))

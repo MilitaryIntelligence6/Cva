@@ -280,7 +280,7 @@ public enum EnumCvaToken
     /**
      * Integer literal
      */
-    NUMBER,
+    CONST_INT,
 
     /*
      * 由于暂时没有完善native包机制;

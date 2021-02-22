@@ -34,6 +34,25 @@ int main(string[] args)
 
     echo "8 / 3 = ";
     println 8 / 3;
+
+    echo "8 & 2 = ";
+    println 8 & 2;
+
+    echo "8 | 2 = ";
+    println 8 | 2;
+
+    echo "8 ^ 2 = ";
+    println 8 ^ 2;
+
+    echo "8 << 2 = ";
+    println 8 << 2;
+
+    echo "8 >> 2 = ";
+    println 8 >> 2;
+
+    echo "8 >>> 2 = ";
+    println 8 >>> 2;
+
     return 0;
 }
 
