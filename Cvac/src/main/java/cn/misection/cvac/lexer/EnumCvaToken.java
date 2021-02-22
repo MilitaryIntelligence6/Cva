@@ -26,23 +26,7 @@ public enum EnumCvaToken
     /**
      * 加的求余;
      */
-    REMAINDER,
-
-    /**
-     * ;
-     */
-    SEMI(";"),
-
-    /**
-     * :
-     * 以后可能有 :: ;
-     */
-    COLON(":"),
-
-    /**
-     * 新加的;
-     */
-    OR_OR,
+    REM,
 
     BIT_AND,
 
@@ -50,10 +34,81 @@ public enum EnumCvaToken
 
     BIT_XOR,
 
+
+    /**
+     * 新加的求反;
+     */
+    BIT_NEGATE,
+
+    /**
+     * 加了左右;
+     */
+    LEFT_SHIFT,
+
+    RIGHT_SHIFT,
+
+    UNSIGNED_RIGHT_SHIFT,
+
+    /*
+     * 加入的 += -= &= |= ~= >>= <<= !求反
+     */
+    /**
+     * +=;
+     */
+    ADD_ASSIGN,
+
+    /**
+     * -=;
+     */
+    SUB_ASSIGN,
+
+    MULTIPLY_ASSIGN,
+
+    /**
+     * /=
+     */
+    DIV_ASSIGN,
+
+    REM_ASSIGN,
+
+    /**
+     * &=
+     */
+    BIT_AND_ASSIGN,
+
+    /**
+     * |=
+     */
+    BIT_OR_ASSIGN,
+
+    BIT_XOR_ASSIGN,
+
+    /**
+     * ~=, ~ =
+     */
+    BIT_NEGATE_ASSIGN,
+
+    /**
+     * >>=
+     */
+    LEFT_SHIFT_ASSIGN,
+
+    /**
+     * <<=
+     */
+    RIGHT_SHIFT_ASSIGN,
+
+    /**
+     * >>>=
+     */
+    UNSIGNED_RIGHT_SHIFT_ASSIGN,
+
     /**
      * &&
      */
     AND_AND,
+
+    OR_OR,
 
     /**
      * =
@@ -81,6 +136,17 @@ public enum EnumCvaToken
      * >=
      */
     MORE_OR_EQUALS,
+
+    /**
+     * ;
+     */
+    SEMI(";"),
+
+    /**
+     * :
+     * 以后可能有 :: ;
+     */
+    COLON(":"),
 
     QUEST("?"),
     /**
@@ -312,30 +378,6 @@ public enum EnumCvaToken
      */
     EOL,
 
-    PROGRAM,
-
-    EXT_DEFINE_LIST,
-
-    EXT_DEFINE,
-
-    OPT_SPECIFIERS,
-
-    EXT_DECLARATION_LIST,
-
-    EXT_DECLARATION,
-
-    VARIABLE_DECLARATION,
-
-    SPECIFIERS,
-
-
-    /**
-     * 新加的;
-     */
-//    TYPE_DEF,
-
-    TYPE_NT,
-
     /*
      * struct;
      */
@@ -402,151 +444,24 @@ public enum EnumCvaToken
 
     LOCAL_DEFINES,
 
-    STATEMENT_LIST,
-
-    INITIALIZER,
-
-    EXPR,
-
-    NO_COMMA_EXPR,
-
-    /**
-     * ?二元运算符;
-     */
-    BINARY,
-
-    /**
-     * 一元运算符;
-     */
-    UNARY,
-
-    STATEMENT,
-
-
-    /**
-     *
-     */
-    TEST,
-
-    OPT_EXPR,
-
-    END_OPT_EXPR,
-
-    TARGET,
-
-    /**
-     *
-     */
-    TYPE_SPECIFIER,
-
-    /**
-     * 结构体尾部别名;
-     */
-    STRUCT_NEW_NAME,
-
-    IDENTIFIER_NT,
-
-
     /*
      * ternimal;
      * 终结符, 右值;
      */
-
-    TYPE,
-
     EQUALS,
-
-    /**
-     * 新加的求反;
-     */
-    BIT_NEGATE,
-
-    /**
-     * 加了左右;
-     */
-    LEFT_SHIFT,
-
-    RIGHT_SHIFT,
-
-    UNSIGNED_RIGHT_SHIFT,
-
-
-    /*
-     * 乘法, 原来无, 由于要和指针混淆, 所以暂时难以处理;
-     */
-//    MULTIPLY_OPERATOR,
 
     /**
      * 新加, *=, /=
      */
-    MULTIPLY_ASSIGN,
-
-    /**
-     * /=
-     */
-    DIV_ASSIGN,
-
     INCREMENT,
 
     DECREMENT,
 
     ARROW,
 
-    /*
-     * 加入的 += -= &= |= ~= >>= <<= !求反
-     */
-    /**
-     * !;
-     */
-    NEGATE_OPERATOR,
-
-    /**
-     * +=;
-     */
-    ADD_ASSIGN,
-
-    /**
-     * -=;
-     */
-    SUB_ASSIGN,
-
-    /**
-     * &=
-     */
-    AND_ASSIGN,
-
-    /**
-     * |=
-     */
-    OR_ASSIGN,
-
-    XOR_ASSIGN,
-
-    /**
-     * ~=, ~ =
-     */
-    BIT_NEGATE_ASSIGN,
-
-    /**
-     * >>=
-     */
-    LEFT_SHIFT_ASSIGN,
-
-    /**
-     * <<=
-     */
-    RIGHT_SHIFT_ASSIGN,
-
-    /**
-     * >>>=
-     */
-    UNSIGNED_RIGHT_SHIFT_ASSIGN,
-
     /**
      * %=
      */
-    REMAINDER_ASSIGN,
-
     /**
      * SIGN;
      */
@@ -566,10 +481,7 @@ public enum EnumCvaToken
         this.kindLiteral = kindLiteral;
     }
 
-    EnumCvaToken()
-    {
-
-    }
+    EnumCvaToken() {}
 
     public String getKindLiteral()
     {

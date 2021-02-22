@@ -131,7 +131,7 @@ public final class DeadCodeDel
     }
 
     @Override
-    public void visit(CvaOperandOperator expr)
+    public void visit(CvaOperandOperatorExpr expr)
     {
         // TODO
     }

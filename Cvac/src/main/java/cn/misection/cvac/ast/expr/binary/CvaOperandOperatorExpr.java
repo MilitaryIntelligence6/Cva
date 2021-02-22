@@ -14,7 +14,7 @@ import cn.misection.cvac.codegen.bst.instructor.Instructable;
  * @Description TODO
  * @CreateTime 2021年02月21日 22:53:00
  */
-public class CvaOperandOperator
+public class CvaOperandOperatorExpr
         extends AbstractBinaryExpr implements Instructable
 {
     private EnumCvaType resType;
@@ -25,14 +25,14 @@ public class CvaOperandOperator
 
     private EnumOperator instOp;
 
-    private CvaOperandOperator(int lineNum,
-                              AbstractExpression left,
-                              AbstractExpression right)
+    private CvaOperandOperatorExpr(int lineNum,
+                                   AbstractExpression left,
+                                   AbstractExpression right)
     {
         super(lineNum, left, right);
     }
 
-    private CvaOperandOperator(Builder builder)
+    private CvaOperandOperatorExpr(Builder builder)
     {
         super();
         this.lineNum = builder.lineNum;
@@ -87,9 +87,9 @@ public class CvaOperandOperator
 
         public Builder() {}
 
-        public CvaOperandOperator build()
+        public CvaOperandOperatorExpr build()
         {
-            return new CvaOperandOperator(this);
+            return new CvaOperandOperatorExpr(this);
         }
 
         public Builder putLineNum(int lineNum)

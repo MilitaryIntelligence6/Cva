@@ -2,7 +2,6 @@ package cn.misection.cvac.ast.expr.binary;
 
 import cn.misection.cvac.ast.expr.AbstractExpression;
 import cn.misection.cvac.ast.expr.EnumCvaExpr;
-import cn.misection.cvac.ast.expr.binary.AbstractBinaryExpr;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
 
 /**
@@ -30,6 +29,6 @@ public class CvaRemainderExpr extends AbstractBinaryExpr
     @Override
     public EnumCvaExpr toEnum()
     {
-        return EnumCvaExpr.REMAINDER;
+        return EnumCvaExpr.REM;
     }
 }

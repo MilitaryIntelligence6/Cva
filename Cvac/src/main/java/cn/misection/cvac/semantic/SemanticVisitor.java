@@ -360,7 +360,7 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaOperandOperator expr)
+    public void visit(CvaOperandOperatorExpr expr)
     {
         visit(expr.getLeft());
         ICvaType leftType = this.type;

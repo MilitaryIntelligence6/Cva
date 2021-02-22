@@ -237,7 +237,7 @@ public final class ConstantAndCopyPropagation
     }
 
     @Override
-    public void visit(CvaOperandOperator expr)
+    public void visit(CvaOperandOperatorExpr expr)
     {
         // TODO
     }

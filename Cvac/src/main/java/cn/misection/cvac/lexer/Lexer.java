@@ -202,7 +202,7 @@ public final class Lexer
                 case '=':
                 {
                     stream.poll();
-                    return new CvaToken(EnumCvaToken.AND_ASSIGN, lineNum);
+                    return new CvaToken(EnumCvaToken.BIT_AND_ASSIGN, lineNum);
                 }
                 default:
                 {
@@ -228,7 +228,7 @@ public final class Lexer
                 case '=':
                 {
                     stream.poll();
-                    return new CvaToken(EnumCvaToken.OR_ASSIGN, lineNum);
+                    return new CvaToken(EnumCvaToken.BIT_OR_ASSIGN, lineNum);
                 }
                 default:
                 {
@@ -246,7 +246,7 @@ public final class Lexer
                 && stream.peek() == '=')
         {
             stream.poll();
-            return new CvaToken(EnumCvaToken.XOR_ASSIGN, lineNum);
+            return new CvaToken(EnumCvaToken.BIT_XOR_ASSIGN, lineNum);
         }
 
         return new CvaToken(EnumCvaToken.BIT_XOR, lineNum);
@@ -289,10 +289,10 @@ public final class Lexer
                 && stream.peek() == '=')
         {
             stream.poll();
-            return new CvaToken(EnumCvaToken.REMAINDER_ASSIGN, lineNum);
+            return new CvaToken(EnumCvaToken.REM_ASSIGN, lineNum);
         }
 
-        return new CvaToken(EnumCvaToken.REMAINDER, lineNum);
+        return new CvaToken(EnumCvaToken.REM, lineNum);
     }
 
     private CvaToken handleBitNegate()

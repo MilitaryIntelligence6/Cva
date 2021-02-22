@@ -12,10 +12,6 @@ public enum EnumOperator implements IInstructor, Instructable
     /**
      * 底层操作符;
      */
-    /*
-     * neg 其实不应该出现, 其是一元的;
-     */
-    NEG("neg"),
 
     ADD("add"),
 
@@ -28,6 +24,11 @@ public enum EnumOperator implements IInstructor, Instructable
     /**
      * 求余;
      */
+    /*
+     * neg 其实不应该出现, 其是一元的;
+     */
+    BIT_NEG("neg"),
+
     REM("rem"),
 
     BIT_AND("and"),

@@ -19,8 +19,49 @@ class Increment
         while (10 > i)
         {
             println i;
-            i += 1;
+            i++;
         }
+        println "i += 2";
+        i += 2;
+        println i;
+
+        println "i -= 2";
+        i -= 2;
+        println i;
+
+        println "i *= 2";
+        i *= 2;
+        println i;
+
+        println "i /= 2";
+        i /= 2;
+        println i;
+
+        println "i ~= 2";
+        i += 2;
+        println i;
+
+        println "i += 2";
+        i += 2;
+        println i;
+
+        println "i += 2";
+        i += 2;
+        println i;
+
+        println "i += 2";
+        i += 2;
+        println i;
+
+        println "i += 2";
+        i += 2;
+        println i;
+
+        println "i += 2";
+        i += 2;
+        println i;
+
+
         return i;
     }
 }
@@ -29,29 +70,30 @@ int main(string[] args)
 {
     echo "hello, world!\n";
     println new Increment().incre();
-    echo "2 * 3 = ";
-    println 2 * 3;
+//    echo "2 * 3 = ";
+//    println 2 * 3;
+//
+//    echo "8 / 3 = ";
+//    println 8 / 3;
+//
+//    echo "8 & 2 = ";
+//    println 8 & 2;
+//
+//    echo "8 | 2 = ";
+//    println 8 | 2;
+//
+//    echo "8 ^ 2 = ";
+//    println 8 ^ 2;
+//
+//    echo "8 << 2 = ";
+//    println 8 << 2;
+//
+//    echo "8 >> 2 = ";
+//    println 8 >> 2;
+//
+//    echo "8 >>> 2 = ";
+//    println 8 >>> 2;
 
-    echo "8 / 3 = ";
-    println 8 / 3;
-
-    echo "8 & 2 = ";
-    println 8 & 2;
-
-    echo "8 | 2 = ";
-    println 8 | 2;
-
-    echo "8 ^ 2 = ";
-    println 8 ^ 2;
-
-    echo "8 << 2 = ";
-    println 8 << 2;
-
-    echo "8 >> 2 = ";
-    println 8 >> 2;
-
-    echo "8 >>> 2 = ";
-    println 8 >>> 2;
 
     return 0;
 }

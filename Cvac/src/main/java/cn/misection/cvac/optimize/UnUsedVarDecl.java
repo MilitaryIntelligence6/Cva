@@ -123,7 +123,7 @@ public final class UnUsedVarDecl
     public void visit(CvaConstTrueExpr expr) {}
 
     @Override
-    public void visit(CvaOperandOperator expr)
+    public void visit(CvaOperandOperatorExpr expr)
     {
         // TODO
     }

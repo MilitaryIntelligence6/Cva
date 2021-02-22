@@ -167,7 +167,11 @@ public interface IVisitor
                 // 将所有的都用绑定的enum判定;
                 switch (expr.toEnum())
                 {
+                    case ADD:
+                    case SUB:
+                    case MUL:
                     case DIV:
+                    case REM:
                     case BIT_AND:
                     case BIT_OR:
                     case BIT_XOR:
@@ -175,7 +179,7 @@ public interface IVisitor
                     case RIGHT_SHIFT:
                     case UNSIGNED_RIGHT_SHIFT:
                     {
-                        visit((CvaOperandOperator) expr);
+                        visit((CvaOperandOperatorExpr) expr);
                         break;
                     }
                     default:
@@ -216,7 +220,7 @@ public interface IVisitor
 
     void visit(CvaConstTrueExpr expr);
 
-    void visit(CvaOperandOperator expr);
+    void visit(CvaOperandOperatorExpr expr);
 
     /**
      * stm;

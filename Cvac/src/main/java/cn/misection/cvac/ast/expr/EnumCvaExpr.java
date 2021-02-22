@@ -60,7 +60,7 @@ public enum EnumCvaExpr
 
     DIV,
 
-    REMAINDER,
+    REM,
 
     BIT_AND,
 

@@ -286,7 +286,7 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaOperandOperator expr)
+    public void visit(CvaOperandOperatorExpr expr)
     {
         visit(expr.getLeft());
         visit(expr.getRight());

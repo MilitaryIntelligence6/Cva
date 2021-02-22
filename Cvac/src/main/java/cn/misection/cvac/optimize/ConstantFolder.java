@@ -275,7 +275,7 @@ public final class ConstantFolder
     }
 
     @Override
-    public void visit(CvaOperandOperator expr)
+    public void visit(CvaOperandOperatorExpr expr)
     {
         // TODO
     }
