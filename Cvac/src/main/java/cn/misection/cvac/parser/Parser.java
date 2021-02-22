@@ -951,83 +951,90 @@ public final class Parser
         while (true)
         {
             EnumCvaToken memTokenEnum = curToken.toEnum();
-            if (EnumCvaToken.isType(memTokenEnum))
+            switch (memTokenEnum)
             {
-                // 吃掉type, cur是id, 下一个看是分号还是assign;
-                ICvaType declType = parseType();
-                switch (peekCh())
+                case IDENTIFIER:
                 {
-                    case ';':
+                    char pCh = peekCh();
+                    if (Character.isAlphabetic(pCh) || pCh == '_' || pCh == '$')
                     {
-                        String idLiteral = curToken.getLiteral();
-                        localVarDecls.add(handleMethodVarDecl(idLiteral, declType));
-                        eatToken(EnumCvaToken.SEMI);
+                        // 2连 identifier, 说明是定义;
+                        ICvaType declType = parseType();
+                        switch (peekCh())
+                        {
+                            case ';':
+                            {
+                                String idLiteral = curToken.getLiteral();
+                                localVarDecls.add(handleMethodVarDecl(idLiteral, declType));
+                                eatToken(EnumCvaToken.SEMI);
+                                continue;
+                            }
+                            case '=':
+                            {
+                                String idLiteral = curToken.getLiteral();
+                                localVarDecls.add(handleMethodVarDecl(idLiteral, declType));
+                                eatToken(EnumCvaToken.ASSIGN);
+                                statementList.add(handleMethodAssign(idLiteral));
+                                eatToken(EnumCvaToken.SEMI);
+                                continue;
+                            }
+                            default:
+                            {
+                                errorLog("semi or assign", lexer.nextToken());
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // 说明是普通statement;
+                        statementList.add(parseStatement());
                         continue;
                     }
-                    case '=':
+                    break;
+                }
+                case RETURN:
+                {
+                    break;
+                }
+                default:
+                {
+                    if (EnumCvaToken.isType(memTokenEnum))
                     {
-                        String idLiteral = curToken.getLiteral();
-                        localVarDecls.add(handleMethodVarDecl(idLiteral, declType));
-                        eatToken(EnumCvaToken.ASSIGN);
-                        statementList.add(handleMethodAssign(idLiteral));
-                        eatToken(EnumCvaToken.SEMI);
-                        continue;
-                    }
-                    default:
-                    {
-                        errorLog("semi or assign", lexer.nextToken());
+                        // 吃掉type, cur是id, 下一个看是分号还是assign;
+                        ICvaType declType = parseType();
+                        switch (peekCh())
+                        {
+                            case ';':
+                            {
+                                String idLiteral = curToken.getLiteral();
+                                localVarDecls.add(handleMethodVarDecl(idLiteral, declType));
+                                eatToken(EnumCvaToken.SEMI);
+                                continue;
+                            }
+                            case '=':
+                            {
+                                String idLiteral = curToken.getLiteral();
+                                localVarDecls.add(handleMethodVarDecl(idLiteral, declType));
+                                eatToken(EnumCvaToken.ASSIGN);
+                                statementList.add(handleMethodAssign(idLiteral));
+                                eatToken(EnumCvaToken.SEMI);
+                                continue;
+                            }
+                            default:
+                            {
+                                errorLog("semi or assign", lexer.nextToken());
+                                break;
+                            }
+                        }
                         break;
                     }
-                }
-            }
-            else if (memTokenEnum == EnumCvaToken.IDENTIFIER)
-            {
-                char pCh = peekCh();
-                if (Character.isAlphabetic(pCh)
-                || pCh == '_' || pCh == '$')
-                {
-                    // 2连 identifier, 说明是定义;
-                    ICvaType declType = parseType();
-                    switch (peekCh())
+                    else
                     {
-                        case ';':
-                        {
-                            String idLiteral = curToken.getLiteral();
-                            localVarDecls.add(handleMethodVarDecl(idLiteral, declType));
-                            eatToken(EnumCvaToken.SEMI);
-                            continue;
-                        }
-                        case '=':
-                        {
-                            String idLiteral = curToken.getLiteral();
-                            localVarDecls.add(handleMethodVarDecl(idLiteral, declType));
-                            eatToken(EnumCvaToken.ASSIGN);
-                            statementList.add(handleMethodAssign(idLiteral));
-                            eatToken(EnumCvaToken.SEMI);
-                            continue;
-                        }
-                        default:
-                        {
-                            errorLog("semi or assign", lexer.nextToken());
-                            break;
-                        }
+                        statementList.add(parseStatement());
+                        continue;
                     }
                 }
-                else
-                {
-                    // 说明是普通statement;
-                    statementList.add(parseStatement());
-                    continue;
-                }
-            }
-            else if (memTokenEnum == EnumCvaToken.RETURN)
-            {
-                break;
-            }
-            else
-            {
-                statementList.add(parseStatement());
-                continue;
             }
             break;
         }
