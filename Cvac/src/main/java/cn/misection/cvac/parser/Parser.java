@@ -10,8 +10,11 @@ import cn.misection.cvac.ast.entry.CvaEntryClass;
 import cn.misection.cvac.ast.expr.AbstractExpression;
 import cn.misection.cvac.ast.expr.EnumCvaExpr;
 import cn.misection.cvac.ast.expr.nonterminal.binary.*;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaCallExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaIncDecExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaNegateExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaNewExpr;
 import cn.misection.cvac.ast.expr.terminator.*;
-import cn.misection.cvac.ast.expr.nonterminal.unary.*;
 import cn.misection.cvac.ast.method.AbstractMethod;
 import cn.misection.cvac.ast.method.CvaMainMethod;
 import cn.misection.cvac.ast.method.CvaMethod;
@@ -176,8 +179,9 @@ public final class Parser
     /**
      * parse methods
      * ExprList -> Expr ExprRest*
-     *          ->
+     * ->
      * ExprRest -> , Expr
+     *
      * @return Exprlist;
      */
     private List<AbstractExpression> parseExprList()
@@ -209,6 +213,7 @@ public final class Parser
      * -> this
      * -> id
      * -> new id()
+     *
      * @return atom expr;
      */
     private AbstractExpression parseAtomExpr()
@@ -258,7 +263,18 @@ public final class Parser
             {
                 AbstractExpression expr = new CvaIdentifierExpr(curToken.getLineNum(), curToken.getLiteral());
                 advance();
-                return expr;
+                switch (curToken.toEnum())
+                {
+                    case INCREMENT:
+                    case DECREMENT:
+                    {
+                        return handleIncDecExpr(expr);
+                    }
+                    default:
+                    {
+                        return expr;
+                    }
+                }
             }
             case NEW:
             {
@@ -303,27 +319,9 @@ public final class Parser
 
     private AbstractExpression parseIncDecExpr()
     {
-        while (true)
-        {
-            switch (curToken.toEnum())
-            {
-                case INCREMENT:
-                {
-
-                    continue;
-                }
-                case DECREMENT:
-                {
-                    break;
-                }
-                default:
-                {
-                    break;
-                }
-            }
-            break;
-        }
-        return null;
+        AbstractExpression expr = parseAtomExpr();
+        // 目前不允许混乱的嵌套++ --;
+        return handleIncDecExpr(expr);
     }
 
     /**
@@ -335,7 +333,7 @@ public final class Parser
     private AbstractExpression parseCallExpr()
     {
         // FIXME, 这里不要先给终结符!!有问题的是;
-        AbstractExpression expr = parseAtomExpr();
+        AbstractExpression expr = parseIncDecExpr();
         while (curToken.toEnum() == EnumCvaToken.DOT)
         {
             advance();
@@ -368,8 +366,8 @@ public final class Parser
     }
 
     /**
-     * @TODO 给几个枚举做反查map, 可以直接查;
      * @return p;
+     * @TODO 给几个枚举做反查map, 可以直接查;
      */
     private AbstractExpression parseUnsignedRightShiftExpr()
     {
@@ -1143,6 +1141,7 @@ public final class Parser
     /**
      * MethodDecls -> MethodDecl MethodDecls*
      * ->
+     *
      * @return MethodDeclList;
      */
     private List<AbstractMethod> parseMethodDeclList()
@@ -1160,6 +1159,7 @@ public final class Parser
     /**
      * ClassDecl -> class id { VarDecl* MethodDecl* }
      * -> class id : id { VarDecl* Method* }
+     *
      * @return single ClassDecl;
      */
     private AbstractCvaClass parseClassDecl()
@@ -1263,6 +1263,7 @@ public final class Parser
 
     /**
      * Program -> MainClass ClassDecl*
+     *
      * @return Program tree;
      */
     private CvaProgram parseProgram()
@@ -1501,7 +1502,6 @@ public final class Parser
         if (curToken.toEnum() == EnumCvaToken.ELSE_STATEMENT)
         {
             advance();
-            AbstractStatement elseStm = handleElse();
             return parseStatement();
         }
         return CvaNullStatement.getInstance();
@@ -1519,8 +1519,8 @@ public final class Parser
     }
 
     /**
-     * @TODO for 中实现本地变量;
      * @return statement;
+     * @TODO for 中实现本地变量;
      */
     private AbstractStatement handleFor()
     {
@@ -1530,7 +1530,7 @@ public final class Parser
         AbstractStatement forInit = parseStatement();
         AbstractExpression condition = parseLinkedExpr();
         eatToken(EnumCvaToken.SEMI);
-        AbstractStatement afterBody = parseStatement();
+        AbstractExpression afterBody = parseLinkedExpr();
         eatToken(EnumCvaToken.CLOSE_PAREN);
         AbstractStatement body = parseStatement();
         return new CvaWhileForStatement.Builder()
@@ -1764,5 +1764,37 @@ public final class Parser
         AbstractStatement statement = new CvaBlockStatement(lineNum, parseStatementList());
         eatToken(EnumCvaToken.CLOSE_CURLY_BRACE);
         return statement;
+    }
+
+    private AbstractExpression handleIncDecExpr(AbstractExpression expr)
+    {
+        if (expr instanceof CvaIdentifierExpr)
+        {
+            CvaIdentifierExpr idExpr = (CvaIdentifierExpr) expr;
+            switch (curToken.toEnum())
+            {
+                case INCREMENT:
+                {
+                    advance();
+                    return new CvaIncDecExpr(
+                            curToken.getLineNum(),
+                            idExpr,
+                            EnumIncDirection.INCREMENT);
+                }
+                case DECREMENT:
+                {
+                    advance();
+                    return new CvaIncDecExpr(
+                            curToken.getLineNum(),
+                            idExpr,
+                            EnumIncDirection.DECREMENT);
+                }
+                default:
+                {
+                    break;
+                }
+            }
+        }
+        return expr;
     }
 }

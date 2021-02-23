@@ -12,7 +12,7 @@ public enum EnumCvaStatement
     /**
      * statement;
      */
-    NULL,
+    NULL_POINTER,
 
     ASSIGN,
 
@@ -26,6 +26,6 @@ public enum EnumCvaStatement
 
     INCREMENT,
 
-    EXPR_STATEMENT
+    EXPR_STATEMENT,
     ;
 }

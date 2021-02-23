@@ -180,18 +180,18 @@ public final class TranslatorVisitor implements IVisitor
             ICvaType type = expr.getType();
             if (type instanceof CvaClassType)
             {
-                emit(new GetField(String.format("%s/%s", this.className, expr.getLiteral()),
+                emit(new GetField(String.format("%s/%s", this.className, expr.literal()),
                         String.format("L%s;", ((CvaClassType) type).getName())));
             }
             else
             {
-                emit(new GetField(String.format("%s/%s", this.className, expr.getLiteral()),
+                emit(new GetField(String.format("%s/%s", this.className, expr.literal()),
                         "I"));
             }
         }
         else
         {
-            int index = this.indexMap.get(expr.getLiteral());
+            int index = this.indexMap.get(expr.literal());
             switch (expr.getType().toEnum())
             {
                 // 后面其他类型也一样;
@@ -293,6 +293,15 @@ public final class TranslatorVisitor implements IVisitor
         visit(expr.getRight());
         emit(expr.getInstType());
         emit(expr.getInstOp());
+    }
+
+    @Override
+    public void visit(CvaIncDecExpr expr)
+    {
+        // 这一行一定不能要, 但不知为啥;
+//        visit(expr.getIdentifier());
+        emit(new IInc(indexMap.get(expr.literal()),
+                expr.getDirection()));
     }
 
     /**

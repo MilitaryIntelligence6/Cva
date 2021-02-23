@@ -28,7 +28,10 @@ public final class CvaIdentifierExpr extends AbstractTerminator
         this.literal = literal;
     }
 
-    public CvaIdentifierExpr(int lineNum, String literal, ICvaType type, boolean fieldFlag)
+    public CvaIdentifierExpr(int lineNum,
+                             String literal,
+                             ICvaType type,
+                             boolean fieldFlag)
     {
         super(lineNum);
         this.literal = literal;
@@ -48,7 +51,7 @@ public final class CvaIdentifierExpr extends AbstractTerminator
         return EnumCvaExpr.IDENTIFIER;
     }
 
-    public String getLiteral()
+    public String literal()
     {
         return literal;
     }

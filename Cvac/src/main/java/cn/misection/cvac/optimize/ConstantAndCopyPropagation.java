@@ -46,7 +46,7 @@ public final class ConstantAndCopyPropagation
                 && ((CvaConstIntExpr) fir).getValue() == ((CvaConstIntExpr) sec).getValue())
                 || (fir instanceof CvaIdentifierExpr
                 && sec instanceof CvaIdentifierExpr
-                && ((CvaIdentifierExpr) fir).getLiteral().equals(((CvaIdentifierExpr) sec).getLiteral()));
+                && ((CvaIdentifierExpr) fir).literal().equals(((CvaIdentifierExpr) sec).literal()));
 
     }
 
@@ -134,11 +134,11 @@ public final class ConstantAndCopyPropagation
     @Override
     public void visit(CvaIdentifierExpr expr)
     {
-        if (this.conorcopy.containsKey(expr.getLiteral()))
+        if (this.conorcopy.containsKey(expr.literal()))
         {
             this.isOptimizing = true;
             this.canChange = true;
-            this.curExpr = this.conorcopy.get(expr.getLiteral());
+            this.curExpr = this.conorcopy.get(expr.literal());
         }
         else
         {
@@ -241,6 +241,12 @@ public final class ConstantAndCopyPropagation
     public void visit(CvaOperandOperatorExpr expr)
     {
         // TODO
+    }
+
+    @Override
+    public void visit(CvaIncDecExpr expr)
+    {
+        // TODO;
     }
 
     @Override

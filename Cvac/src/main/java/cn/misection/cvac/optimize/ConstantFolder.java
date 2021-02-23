@@ -282,6 +282,12 @@ public final class ConstantFolder
     }
 
     @Override
+    public void visit(CvaIncDecExpr expr)
+    {
+        // TODO;
+    }
+
+    @Override
     public void visit(CvaAssignStatement stm)
     {
         this.visit(stm.getExpr());

@@ -16,6 +16,7 @@ import cn.misection.cvac.ast.type.ICvaType;
 import cn.misection.cvac.ast.type.advance.CvaStringType;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
+import cn.misection.cvac.lexer.EnumCvaToken;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -220,27 +221,27 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaIdentifierExpr expr)
     {
-        ICvaType varType = this.methodVarMap.get(expr.getLiteral());
+        ICvaType varType = this.methodVarMap.get(expr.literal());
         boolean fieldFlag = varType == null;
         String className = curClassName;
         while (varType == null && className != null)
         {
-            varType = classMap.getFieldType(className, expr.getLiteral());
+            varType = classMap.getFieldType(className, expr.literal());
             className = classMap.getClassBinding(className).getParent();
         }
 
-        if (curMethodLocalSet.contains(expr.getLiteral()))
+        if (curMethodLocalSet.contains(expr.literal()))
         {
             errorLog(expr.getLineNum(),
                     String.format("you should assign \"%s\" a value before use it.",
-                            expr.getLiteral()));
+                            expr.literal()));
         }
 
         if (varType == null)
         {
             errorLog(expr.getLineNum(),
                     String.format("you should declare \"%s\" before use it.",
-                            expr.getLiteral()));
+                            expr.literal()));
             // 不可达;
             expr.setType(EnumCvaType.UNKNOWN);
             this.type = expr.getType();
@@ -377,6 +378,17 @@ public final class SemanticVisitor implements IVisitor
             errorLog(expr.getLineNum(), String.format(" only numeric type numbers can be %s. got %s",
                     expr.getInstOp().toInst(),
                     expr.getInstType().toInst()));
+        }
+    }
+
+    @Override
+    public void visit(CvaIncDecExpr expr)
+    {
+        visit(expr.getIdentifier());
+        if (expr.getIdentifier().getType().toEnum() != EnumCvaType.INT)
+        {
+            errorLog(expr.getLineNum(),
+                    "inc and dec only can operate on int");
         }
     }
 

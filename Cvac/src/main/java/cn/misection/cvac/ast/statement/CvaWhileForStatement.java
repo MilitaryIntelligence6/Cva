@@ -1,6 +1,7 @@
 package cn.misection.cvac.ast.statement;
 
 import cn.misection.cvac.ast.expr.AbstractExpression;
+import cn.misection.cvac.ast.expr.nullptr.CvaNullExpr;
 import cn.misection.cvac.ast.statement.nullptr.CvaNullStatement;
 
 /**
@@ -18,8 +19,7 @@ public final class CvaWhileForStatement extends AbstractStatement
 
     private AbstractStatement body;
 
-    private AbstractStatement afterBody;
-
+    private AbstractExpression afterBody;
 
     public CvaWhileForStatement(int lineNum,
                                 AbstractExpression condition,
@@ -43,7 +43,7 @@ public final class CvaWhileForStatement extends AbstractStatement
     private void initWhile()
     {
         this.forInit = CvaNullStatement.getInstance();
-        this.afterBody = CvaNullStatement.getInstance();
+        this.afterBody = CvaNullExpr.getInstance();
     }
 
     @Override
@@ -67,7 +67,7 @@ public final class CvaWhileForStatement extends AbstractStatement
         return body;
     }
 
-    public AbstractStatement getAfterBody()
+    public AbstractExpression getAfterBody()
     {
         return afterBody;
     }
@@ -95,7 +95,7 @@ public final class CvaWhileForStatement extends AbstractStatement
 
         private AbstractStatement body;
 
-        private AbstractStatement afterBody = CvaNullStatement.getInstance();
+        private AbstractExpression afterBody = CvaNullExpr.getInstance();
 
         public Builder() {}
 
@@ -128,7 +128,7 @@ public final class CvaWhileForStatement extends AbstractStatement
             return this;
         }
 
-        public Builder putAfterBody(AbstractStatement afterBody)
+        public Builder putAfterBody(AbstractExpression afterBody)
         {
             this.afterBody = afterBody;
             return this;

@@ -14,7 +14,7 @@ public enum EnumCvaType implements ICvaType
     /**
      * enum type;
      */
-    NULL("nullPointer"),
+    NULL_POINTER("nullPointer"),
 
     VOID("@void"),
 

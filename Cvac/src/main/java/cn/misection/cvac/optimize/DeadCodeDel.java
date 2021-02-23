@@ -75,9 +75,9 @@ public final class DeadCodeDel
     @Override
     public void visit(CvaIdentifierExpr expr)
     {
-        if (this.localVars.contains(expr.getLiteral()))
+        if (this.localVars.contains(expr.literal()))
         {
-            this.localLiveness.add(expr.getLiteral());
+            this.localLiveness.add(expr.literal());
         }
     }
 
@@ -136,6 +136,12 @@ public final class DeadCodeDel
     public void visit(CvaOperandOperatorExpr expr)
     {
         // TODO
+    }
+
+    @Override
+    public void visit(CvaIncDecExpr expr)
+    {
+        // TODO;
     }
 
     @Override

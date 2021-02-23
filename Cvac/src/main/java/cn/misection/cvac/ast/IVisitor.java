@@ -187,7 +187,13 @@ public interface IVisitor
                         visit((CvaOperandOperatorExpr) expr);
                         break;
                     }
-                    case NULL:
+                    case INCREMENT:
+                    case DECREMENT:
+                    {
+                        visit((CvaIncDecExpr) expr);
+                        break;
+                    }
+                    case NULL_POINTER:
                     {
                         // 直接忽略, 转都不转;
                         break;
@@ -232,6 +238,8 @@ public interface IVisitor
 
     void visit(CvaOperandOperatorExpr expr);
 
+    void visit(CvaIncDecExpr expr);
+
     /**
      * stm;
      * @param abstStm stm;
@@ -274,7 +282,7 @@ public interface IVisitor
             {
                 switch (abstStm.toEnum())
                 {
-                    case NULL:
+                    case NULL_POINTER:
                     {
                         // 直接忽略, 转都不用转;
                         break;

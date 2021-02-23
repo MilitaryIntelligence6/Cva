@@ -12,7 +12,7 @@ public enum EnumCvaExpr
     /**
      * 单目;
      */
-    NULL,
+    NULL_POINTER,
 
     CALL,
 

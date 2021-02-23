@@ -68,13 +68,13 @@ public final class UnUsedVarDecl
     @Override
     public void visit(CvaIdentifierExpr expr)
     {
-        if (this.unUsedLocals.containsKey(expr.getLiteral()))
+        if (this.unUsedLocals.containsKey(expr.literal()))
         {
-            this.unUsedLocals.remove(expr.getLiteral());
+            this.unUsedLocals.remove(expr.literal());
         }
         else
         {
-            this.unUsedArgs.remove(expr.getLiteral());
+            this.unUsedArgs.remove(expr.literal());
         }
     }
 
@@ -127,6 +127,12 @@ public final class UnUsedVarDecl
     public void visit(CvaOperandOperatorExpr expr)
     {
         // TODO
+    }
+
+    @Override
+    public void visit(CvaIncDecExpr expr)
+    {
+        // TODO;
     }
 
     @Override

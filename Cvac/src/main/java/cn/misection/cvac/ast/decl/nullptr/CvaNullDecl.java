@@ -17,7 +17,7 @@ public final class CvaNullDecl extends AbstractDeclaration
 
     private CvaNullDecl()
     {
-        super(0, "nullDecl", EnumCvaType.NULL);
+        super(0, "nullDecl", EnumCvaType.NULL_POINTER);
     }
 
     public static CvaNullDecl getInstance()
@@ -44,6 +44,6 @@ public final class CvaNullDecl extends AbstractDeclaration
     @Override
     public ICvaType type()
     {
-        return EnumCvaType.NULL;
+        return EnumCvaType.NULL_POINTER;
     }
 }

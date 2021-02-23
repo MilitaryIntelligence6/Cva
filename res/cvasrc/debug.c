@@ -48,7 +48,7 @@ class Increment
 //        }
         println "for test";
         int k;
-        for (k = 0; k < 10; k++;)
+        for (k = 0; k < 10; k++)
         {
             echo k;
             echo "  ";

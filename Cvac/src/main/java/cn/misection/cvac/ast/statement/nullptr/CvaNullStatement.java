@@ -44,6 +44,6 @@ public final class CvaNullStatement extends AbstractStatement
     @Override
     public EnumCvaStatement toEnum()
     {
-        return EnumCvaStatement.NULL;
+        return EnumCvaStatement.NULL_POINTER;
     }
 }
