@@ -1,6 +1,7 @@
 package cn.misection.cvac.ast.statement;
 
 import cn.misection.cvac.ast.expr.AbstractExpression;
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 
 /**
  * @author Military Intelligence 6 root
@@ -11,13 +12,18 @@ import cn.misection.cvac.ast.expr.AbstractExpression;
  */
 public class CvaExprStatement extends AbstractStatement
 {
-    private AbstractExpression expr;
+    private final AbstractExpression expr;
 
     public CvaExprStatement(int lineNum,
                             AbstractExpression expr)
     {
         super(lineNum);
         this.expr = expr;
+    }
+
+    public AbstractExpression getExpr()
+    {
+        return expr;
     }
 
     @Override

@@ -27,5 +27,10 @@ public enum EnumCvaStatement
     INCREMENT,
 
     EXPR_STATEMENT,
+
+    /**
+     * 包含声明的statement;
+     */
+    DECL_STATEMENT,
     ;
 }

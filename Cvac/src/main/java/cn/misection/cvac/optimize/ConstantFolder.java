@@ -331,6 +331,13 @@ public final class ConstantFolder
     }
 
     @Override
+    public void visit(CvaExprStatement stm)
+    {
+        visit(stm.getExpr());
+    }
+
+
+    @Override
     public void visit(CvaMethod cvaMethod)
     {
         cvaMethod.getStatementList().forEach(this::visit);

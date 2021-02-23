@@ -442,6 +442,13 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
+    public void visit(CvaExprStatement stm)
+    {
+        visit(stm.getExpr());
+    }
+
+
+    @Override
     public void visit(CvaMethod cvaMethod)
     {
         index = 1;

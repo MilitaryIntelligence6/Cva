@@ -175,6 +175,13 @@ public final class UnReachableDel
     }
 
     @Override
+    public void visit(CvaExprStatement stm)
+    {
+        visit(stm.getExpr());
+    }
+
+
+    @Override
     public void visit(CvaMethod m)
     {
         ArrayList<AbstractStatement> stmList = new ArrayList<>();

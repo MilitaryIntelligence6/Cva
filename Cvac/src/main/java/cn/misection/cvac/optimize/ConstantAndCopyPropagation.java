@@ -338,6 +338,12 @@ public final class ConstantAndCopyPropagation
     }
 
     @Override
+    public void visit(CvaExprStatement stm)
+    {
+        visit(stm.getExpr());
+    }
+
+    @Override
     public void visit(CvaMethod cvaMethod)
     {
         this.conorcopy = new HashMap<>();

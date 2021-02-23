@@ -261,7 +261,8 @@ public final class Parser
             }
             case IDENTIFIER:
             {
-                AbstractExpression expr = new CvaIdentifierExpr(curToken.getLineNum(), curToken.getLiteral());
+                AbstractExpression expr = new CvaIdentifierExpr(
+                        curToken.getLineNum(), curToken.getLiteral());
                 advance();
                 switch (curToken.toEnum())
                 {
@@ -274,6 +275,38 @@ public final class Parser
                     {
                         return expr;
                     }
+                }
+            }
+            case INCREMENT:
+            {
+                advance();
+                if (curToken.toEnum() == EnumCvaToken.IDENTIFIER)
+                {
+                    CvaIdentifierExpr expr = new CvaIdentifierExpr(
+                            curToken.getLineNum(), curToken.getLiteral());
+                    advance();
+                    return new CvaIncDecExpr(
+                            curToken.getLineNum(), expr, EnumIncDirection.INCREMENT);
+                }
+                else
+                {
+                    errorLog("identifier after ++", curToken);
+                }
+            }
+            case DECREMENT:
+            {
+                advance();
+                if (curToken.toEnum() == EnumCvaToken.IDENTIFIER)
+                {
+                    CvaIdentifierExpr expr = new CvaIdentifierExpr(
+                            curToken.getLineNum(), curToken.getLiteral());
+                    advance();
+                    return new CvaIncDecExpr(
+                            curToken.getLineNum(), expr, EnumIncDirection.DECREMENT);
+                }
+                else
+                {
+                    errorLog("identifier after --", curToken);
                 }
             }
             case NEW:
@@ -317,12 +350,6 @@ public final class Parser
 //        return expr;
 //    }
 
-    private AbstractExpression parseIncDecExpr()
-    {
-        AbstractExpression expr = parseAtomExpr();
-        // 目前不允许混乱的嵌套++ --;
-        return handleIncDecExpr(expr);
-    }
 
     /**
      * NegateExpr -> AtomExpr
@@ -333,7 +360,7 @@ public final class Parser
     private AbstractExpression parseCallExpr()
     {
         // FIXME, 这里不要先给终结符!!有问题的是;
-        AbstractExpression expr = parseIncDecExpr();
+        AbstractExpression expr = parseAtomExpr();
         while (curToken.toEnum() == EnumCvaToken.DOT)
         {
             advance();
@@ -429,7 +456,7 @@ public final class Parser
         return expr;
     }
 
-    private AbstractExpression afparseBitXOrExpr()
+    private AbstractExpression parseBitXOrExpr()
     {
         AbstractExpression tem = parseLeftShiftExpr();
         AbstractExpression expr = tem;
@@ -451,12 +478,12 @@ public final class Parser
 
     private AbstractExpression parseBitOrExpr()
     {
-        AbstractExpression tem = afparseBitXOrExpr();
+        AbstractExpression tem = parseBitXOrExpr();
         AbstractExpression expr = tem;
         while (curToken.toEnum() == EnumCvaToken.BIT_OR)
         {
             advance();
-            tem = afparseBitXOrExpr();
+            tem = parseBitXOrExpr();
             expr = new CvaOperandOperatorExpr.Builder()
                     .putLineNum(tem.getLineNum())
                     .putEnumExpr(EnumCvaExpr.BIT_OR)
@@ -717,11 +744,22 @@ public final class Parser
             {
                 return handleIdentifier();
             }
-//            case NEW:
-//            {
-////                return
-//                break;
-//            }
+            case INCREMENT:
+            case DECREMENT:
+            case NEW:
+            {
+                // 有副作用, 小心顺序;
+                AbstractStatement statement = new CvaExprStatement(
+                        curToken.getLineNum(), parseLinkedExpr());
+                eatToken(EnumCvaToken.SEMI);
+                return statement;
+            }
+            case SEMI:
+            {
+                // 有时候要注释掉这个来看会不会漏检查分号;
+                eatToken(EnumCvaToken.SEMI);
+                return CvaNullStatement.getInstance();
+            }
             default:
             {
                 errorLog();
@@ -1738,15 +1776,15 @@ public final class Parser
             {
                 eatToken(EnumCvaToken.INCREMENT);
                 eatToken(EnumCvaToken.SEMI);
-                return new CvaIncreStatement(
-                        lineNum, idLiteral, EnumIncDirection.INCREMENT);
+                return new CvaExprStatement(
+                        lineNum, parseLinkedExpr());
             }
             case DECREMENT:
             {
                 eatToken(EnumCvaToken.DECREMENT);
                 eatToken(EnumCvaToken.SEMI);
-                return new CvaIncreStatement(
-                        lineNum, idLiteral, EnumIncDirection.DECREMENT);
+                return new CvaExprStatement(
+                    lineNum, parseLinkedExpr());
             }
             default:
             {

@@ -12,15 +12,6 @@ call cva.lang.type.String;
 
 
 
-int main(string[] args)
-{
-    echo "hello, world!\n";
-    println new Increment().incre();
-//    int num = 888;
-//    println num;
-    return 0;
-}
-
 class Increment
 {
     int incre()
@@ -46,13 +37,24 @@ class Increment
 //            echo "  ";
 //            echo j;
 //        }
-        println "for test";
-        int k;
-        for (k = 0; k < 10; k++)
+//        println "for test";
+        int k = 0;
+        for (k = 0; k < 10; ++k)
         {
             echo k;
             echo "  ";
         }
-        return k;
+        ;
+        return 0;
     }
+}
+
+
+int main(string[] args)
+{
+    echo "hello, world!\n";
+    println new Increment().incre();
+//    int num = 888;
+//    println num;
+    return 0;
 }
