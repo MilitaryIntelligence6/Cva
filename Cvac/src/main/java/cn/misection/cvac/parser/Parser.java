@@ -1110,49 +1110,9 @@ public final class Parser
                 curToken.getLineNum(), idLiteral, expr);
     }
 
-//    private AbstractMethod parseMainMethod()
-//    {
-//        ICvaType mainRetType = parseType();
-//        eatToken(EnumCvaToken.MAIN);
-//
-//        eatToken(EnumCvaToken.OPEN_PAREN);
-//        List<AbstractDeclaration> mainArgs = parseMainArgs();
-//        eatToken(EnumCvaToken.CLOSE_PAREN);
-//
-//        eatToken(EnumCvaToken.OPEN_CURLY_BRACE);
-//        List<AbstractDeclaration> localVarDecls = parseVarDeclList();
-//        List<AbstractStatement> statementList = parseStatementList();
-//
-//        AbstractExpression retExpr = null;
-//        if (mainRetType == EnumCvaType.CVA_VOID)
-//        {
-//            if (curToken.toEnum() == EnumCvaToken.RETURN)
-//            {
-//                eatToken(EnumCvaToken.RETURN);
-//                eatToken(EnumCvaToken.SEMI);
-//            }
-//        }
-//        else
-//        {
-//            eatToken(EnumCvaToken.RETURN);
-//            retExpr = parseLinkedExpr();
-//            eatToken(EnumCvaToken.SEMI);
-//        }
-//        eatToken(EnumCvaToken.CLOSE_CURLY_BRACE);
-//
-//        return new CvaMainMethod.Builder()
-//                .putRetType(mainRetType)
-//                .putRetExpr(retExpr)
-//                .putMainArgList(mainArgs)
-//                .putLocalVarList(localVarDecls)
-//                .putStatementList(statementList)
-//                .build();
-//    }
-
     /**
-     * // MethodDecls -> MethodDecl MethodDecls*
-     * //  ->
-     *
+     * MethodDecls -> MethodDecl MethodDecls*
+     * ->
      * @return MethodDeclList;
      */
     private List<AbstractMethod> parseMethodDeclList()
@@ -1168,9 +1128,8 @@ public final class Parser
     }
 
     /**
-     * // ClassDecl -> class id { VarDecl* MethodDecl* }
-     * //  -> class id : id { VarDecl* Method* }
-     *
+     * ClassDecl -> class id { VarDecl* MethodDecl* }
+     * -> class id : id { VarDecl* Method* }
      * @return single ClassDecl;
      */
     private AbstractCvaClass parseClassDecl()
@@ -1242,7 +1201,7 @@ public final class Parser
         }
         else
         {
-            mainClassName = LexerCommon.DEFAULT_MAIN_CLASS_NAME;
+            mainClassName = EnumLexerCommon.MAIN_CLASS_NAME.string();
             mainMethod = new CvaMainMethod.Builder(
                     parseMethod())
                     .build();

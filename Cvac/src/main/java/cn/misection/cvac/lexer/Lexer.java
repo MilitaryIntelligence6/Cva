@@ -1,5 +1,6 @@
 package cn.misection.cvac.lexer;
 
+import cn.misection.cvac.constant.EnumLexerCommon;
 import cn.misection.cvac.constant.LexerCommon;
 import cn.misection.cvac.io.IBufferedQueue;
 

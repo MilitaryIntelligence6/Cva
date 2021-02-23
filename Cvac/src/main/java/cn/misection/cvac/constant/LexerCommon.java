@@ -16,7 +16,5 @@ public final class LexerCommon
 
     public static final char NEW_LINE = '\n';
 
-    public static final String DEFAULT_MAIN_CLASS_NAME = "Application";
-
     private LexerCommon() {}
 }
