@@ -11,7 +11,7 @@ import cn.misection.cvac.ast.type.ICvaType;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:58:00
  */
-public interface IDeclaration extends ASTree
+public interface ICvaDeclaration extends ASTree
 {
     /**
      * 字面量;

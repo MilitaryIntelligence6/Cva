@@ -13,29 +13,29 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:01:00
  */
-public interface IClass extends ASTree
+public interface ICvaClass extends ASTree
 {
     /**
      * 类名;
-     * @return
+     * @return name;
      */
     String name();
 
     /**
      * 父类;
-     * @return
+     * @return parent;
      */
     String parent();
 
     /**
      * field;
-     * @return
+     * @return field;
      */
     List<AbstractDeclaration> getFieldList();
 
     /**
      * 方法;
-     * @return
+     * @return methodList;
      */
     List<AbstractMethod> getMethodList();
 }

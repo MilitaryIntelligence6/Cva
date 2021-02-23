@@ -309,7 +309,10 @@ public interface IVisitor
 
     void visit(CvaMethod cvaMethod);
 
-    // Class
+    /**
+     * class;
+     * @param abstClass class;
+     */
     default void visit(AbstractCvaClass abstClass)
     {
         visit(((CvaClass) abstClass));

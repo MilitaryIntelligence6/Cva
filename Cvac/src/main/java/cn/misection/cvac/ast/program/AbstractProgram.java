@@ -12,7 +12,7 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:56:00
  */
-public abstract class AbstractProgram implements IProgram
+public abstract class AbstractProgram implements ICvaProgram
 {
     protected AbstractEntryClass entryClass;
 

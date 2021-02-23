@@ -409,6 +409,7 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaWhileForStatement stm)
     {
+        visit(stm.getForInit());
         // 条件体;
         Label cond = new Label();
         // 结束跳转;
@@ -418,6 +419,7 @@ public final class TranslatorVisitor implements IVisitor
         emit(new Ldc<>(1));
         emit(new IfICmpLt(end));
         visit(stm.getBody());
+        visit(stm.getAfterBody());
         emit(new Goto(cond));
         emit(new LabelJ(end));
     }

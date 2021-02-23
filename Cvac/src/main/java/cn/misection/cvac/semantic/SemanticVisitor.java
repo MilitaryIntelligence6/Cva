@@ -30,7 +30,7 @@ public final class SemanticVisitor implements IVisitor
 {
     private final ClassMap classMap;
     private MethodVarMap methodVarMap;
-    private String currentClass;
+    private String curClassName;
     private ICvaType type;
 
     /**
@@ -47,7 +47,7 @@ public final class SemanticVisitor implements IVisitor
     {
         this.classMap = new ClassMap();
         this.methodVarMap = new MethodVarMap();
-        this.currentClass = null;
+        this.curClassName = null;
         this.type = null;
         this.okFlag = true;
     }
@@ -221,14 +221,14 @@ public final class SemanticVisitor implements IVisitor
     {
         ICvaType varType = this.methodVarMap.get(expr.getLiteral());
         boolean fieldFlag = varType == null;
-        String className = currentClass;
+        String className = curClassName;
         while (varType == null && className != null)
         {
             varType = classMap.getFieldType(className, expr.getLiteral());
             className = classMap.getClassBinding(className).getParent();
         }
 
-        if (this.curMethodLocalSet.contains(expr.getLiteral()))
+        if (curMethodLocalSet.contains(expr.getLiteral()))
         {
             errorLog(expr.getLineNum(),
                     String.format("you should assign \"%s\" a value before use it.",
@@ -331,7 +331,7 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaThisExpr expr)
     {
-        this.type = new CvaClassType(currentClass);
+        this.type = new CvaClassType(curClassName);
     }
 
     @Override
@@ -384,10 +384,8 @@ public final class SemanticVisitor implements IVisitor
     {
         visit(stm.getExpr());
         stm.setType(this.type);
-
         // 移除了不必要的检查;
-        this.curMethodLocalSet.remove(stm.getLiteral());
-
+        curMethodLocalSet.remove(stm.getLiteral());
         CvaIdentifierExpr cvaIdentifierExpr = new CvaIdentifierExpr(stm.getLineNum(), stm.getLiteral());
         visit(cvaIdentifierExpr);
         ICvaType idType = this.type;
@@ -439,6 +437,7 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaWhileForStatement stm)
     {
+        visit(stm.getForInit());
         visit(stm.getCondition());
         if (this.type != EnumCvaType.BOOLEAN)
         {
@@ -446,6 +445,7 @@ public final class SemanticVisitor implements IVisitor
                     "the condition's type should be a boolean.");
         }
         visit(stm.getBody());
+        visit(stm.getAfterBody());
     }
 
     @Override
@@ -506,14 +506,14 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaClass cvaClass)
     {
-        this.currentClass = cvaClass.name();
+        this.curClassName = cvaClass.name();
         cvaClass.getMethodList().forEach(this::visit);
     }
 
     @Override
     public void visit(CvaEntryClass entryClass)
     {
-        this.currentClass = entryClass.name();
+        this.curClassName = entryClass.name();
         visit((CvaMainMethod) entryClass.getMainMethod());
     }
 

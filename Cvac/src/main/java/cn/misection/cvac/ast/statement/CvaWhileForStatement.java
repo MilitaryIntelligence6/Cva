@@ -51,6 +51,11 @@ public class CvaWhileForStatement extends AbstractStatement
         return EnumCvaStatement.WHILE_FOR;
     }
 
+    public AbstractStatement getForInit()
+    {
+        return forInit;
+    }
+
     public AbstractExpression getCondition()
     {
         return condition;
@@ -59,6 +64,11 @@ public class CvaWhileForStatement extends AbstractStatement
     public AbstractStatement getBody()
     {
         return body;
+    }
+
+    public AbstractStatement getAfterBody()
+    {
+        return afterBody;
     }
 
     public void setCondition(AbstractExpression condition)

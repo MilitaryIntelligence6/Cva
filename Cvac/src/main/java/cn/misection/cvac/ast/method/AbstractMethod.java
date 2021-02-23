@@ -14,7 +14,7 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:54:00
  */
-public abstract class AbstractMethod implements IMethod
+public abstract class AbstractMethod implements ICvaMethod
 {
     protected String name;
 

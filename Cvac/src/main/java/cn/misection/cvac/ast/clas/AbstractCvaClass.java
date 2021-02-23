@@ -12,7 +12,7 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:54:00
  */
-public abstract class AbstractCvaClass implements IClass
+public abstract class AbstractCvaClass implements ICvaClass
 {
     protected final String name;
 

@@ -15,41 +15,41 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:01:00
  */
-public interface IMethod extends ASTree
+public interface ICvaMethod extends ASTree
 {
     /**
      * getName;
-     * @return
+     * @return name;
      */
     String name();
 
     /**
      * 返回值;
-     * @return
+     * @return retType;
      */
     ICvaType getRetType();
 
     /**
      * 返回表达;
-     * @return
+     * @return retExpr;
      */
     AbstractExpression getRetExpr();
 
     /**
      * 形参List;
-     * @return
+     * @return argList;
      */
     List<AbstractDeclaration> getArgumentList();
 
     /**
      * 局部变量List;
-     * @return
+     * @return localVar;
      */
     List<AbstractDeclaration> getLocalVarList();
 
     /**
      * 操作List;
-     * @return
+     * @return stmList;
      */
     List<AbstractStatement> getStatementList();
 }

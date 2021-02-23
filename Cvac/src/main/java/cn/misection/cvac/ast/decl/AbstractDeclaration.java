@@ -10,7 +10,7 @@ import cn.misection.cvac.ast.type.ICvaType;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:53:00
  */
-public abstract class AbstractDeclaration implements IDeclaration, CvaNullable
+public abstract class AbstractDeclaration implements ICvaDeclaration, CvaNullable
 {
     protected int lineNum;
 

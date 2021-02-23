@@ -9,6 +9,6 @@ import cn.misection.cvac.ast.ASTree;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:01:00
  */
-public interface IProgram extends ASTree
+public interface ICvaProgram extends ASTree
 {
 }

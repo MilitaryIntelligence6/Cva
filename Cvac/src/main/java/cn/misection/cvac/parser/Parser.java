@@ -32,7 +32,6 @@ import cn.misection.cvac.lexer.CvaToken;
 import cn.misection.cvac.lexer.EnumCvaToken;
 import cn.misection.cvac.lexer.Lexer;
 
-import java.lang.annotation.ElementType;
 import java.util.*;
 
 /**
@@ -670,10 +669,10 @@ public final class Parser
             {
                 return handleWhile();
             }
-//            case FOR_STATEMENT:
-//            {
-//                return handleFor();
-//            }
+            case FOR_STATEMENT:
+            {
+                return handleFor();
+            }
             case WRITE:
             {
                 return handleWriteOp(WriteOptionCode.CONSOLE_WRITE);
@@ -1349,41 +1348,6 @@ public final class Parser
         return null;
     }
 
-    /**
-     * @TODO 目前是eat, 以后要传入;
-     * 应返回参数List;
-     */
-    private List<AbstractDeclaration> parseMainArgs()
-    {
-        // 保持统一用list;
-        List<AbstractDeclaration> cmdArgsDeclList = new ArrayList<>();
-        if (EnumCvaToken.isType(curToken.toEnum()))
-        {
-            // 这里非常坑. 必须要先parser;
-            // parse的副作用是推一个token, 所以给new decl传参的时候先后顺序换了会导致意想不到的bug;
-            ICvaType type = parseType();
-            if (!(type instanceof CvaStringType))
-            {
-                errorLog("Sting[] args in main func",
-                        String.valueOf(type));
-            }
-            eatToken(EnumCvaToken.OPEN_BRACKETS);
-            eatToken(EnumCvaToken.CLOSE_BRACKETS);
-            cmdArgsDeclList.add(
-                    new CvaDeclaration(
-                            curToken.getLineNum(),
-                            curToken.getLiteral(),
-                            type));
-            eatToken(EnumCvaToken.IDENTIFIER);
-        }
-        else
-        {
-            errorLog("String[] in main formal args list",
-                    curToken.toEnum());
-        }
-        return cmdArgsDeclList;
-    }
-
     private void parsePackage()
     {
         if (curToken.toEnum() == EnumCvaToken.PACKAGE_DECL)
@@ -1565,17 +1529,29 @@ public final class Parser
         return new CvaWhileForStatement(lineNum, condition, body);
     }
 
-//    private AbstractStatement handleFor()
-//    {
-//        int lineNum = curToken.getLineNum();
-//        advance();
-//        eatToken(EnumCvaToken.OPEN_PAREN);
-//
-//        AbstractExpression condition = parseLinkedExpr();
-//        eatToken(EnumCvaToken.CLOSE_PAREN);
-//        AbstractStatement body = parseStatement();
-//        return new CvaWhileStatement(lineNum, condition, body);
-//    }
+    /**
+     * @TODO for 中实现本地变量;
+     * @return statement;
+     */
+    private AbstractStatement handleFor()
+    {
+        int lineNum = curToken.getLineNum();
+        advance();
+        eatToken(EnumCvaToken.OPEN_PAREN);
+        AbstractStatement forInit = parseStatement();
+        AbstractExpression condition = parseLinkedExpr();
+        eatToken(EnumCvaToken.SEMI);
+        AbstractStatement afterBody = parseStatement();
+        eatToken(EnumCvaToken.CLOSE_PAREN);
+        AbstractStatement body = parseStatement();
+        return new CvaWhileForStatement.Builder()
+                .putLineNum(lineNum)
+                .putForInit(forInit)
+                .putCondition(condition)
+                .putAfterBody(afterBody)
+                .putBody(body)
+                .build();
+    }
 
     private AbstractStatement handleIdentifier()
     {

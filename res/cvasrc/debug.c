@@ -25,26 +25,34 @@ class Increment
 {
     int incre()
     {
-        int i = 0;
-
-        while(i < 10)
+//        int i = 0;
+//        println "while test";
+//        while(i < 10)
+//        {
+//            echo i;
+//            echo "\t";
+//            i++;
+//        }
+//        int j = 10;
+//        while(j > 0)
+//        {
+//            echo j;
+//            echo "  ";
+//            j--;
+//        }
+//        println "if test";
+//        if (j < 5)
+//        {
+//            echo "  ";
+//            echo j;
+//        }
+        println "for test";
+        int k;
+        for (k = 0; k < 10; k++;)
         {
-            echo i;
-            echo "\t";
-            i++;
-        }
-        int j = 10;
-        while(j > 0)
-        {
-            echo j;
+            echo k;
             echo "  ";
-            j--;
         }
-        if (j < 5)
-        {
-            echo "  ";
-            echo j;
-        }
-        return i;
+        return k;
     }
 }
