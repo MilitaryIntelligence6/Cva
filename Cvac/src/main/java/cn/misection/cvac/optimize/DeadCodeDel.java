@@ -45,12 +45,6 @@ public final class DeadCodeDel
     @Override
     public void visit(CvaDeclaration decl) {}
 
-    @Override
-    public void visit(CvaAddExpr expr)
-    {
-        visit(expr.getLeft());
-        visit(expr.getRight());
-    }
 
     @Override
     public void visit(CvaAndAndExpr expr)
@@ -109,13 +103,6 @@ public final class DeadCodeDel
     }
 
     @Override
-    public void visit(CvaSubExpr expr)
-    {
-        visit(expr.getLeft());
-        visit(expr.getRight());
-    }
-
-    @Override
     public void visit(CvaThisExpr expr)
     {
     }
@@ -135,7 +122,20 @@ public final class DeadCodeDel
     @Override
     public void visit(CvaOperandOperatorExpr expr)
     {
-        // TODO
+        switch (expr.toEnum())
+        {
+            case ADD:
+            case SUB:
+            {
+                visit(expr.getLeft());
+                visit(expr.getRight());
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
     }
 
     @Override

@@ -77,21 +77,6 @@ public final class ConstantAndCopyPropagation
     @Override
     public void visit(CvaDeclaration decl) {}
 
-    @Override
-    public void visit(CvaAddExpr expr)
-    {
-        this.visit(expr.getLeft());
-        if (this.canChange)
-        {
-            expr.setLeft(this.curExpr);
-        }
-        this.visit(expr.getRight());
-        if (this.canChange)
-        {
-            expr.setRight(this.curExpr);
-        }
-        this.canChange = false;
-    }
 
     @Override
     public void visit(CvaAndAndExpr expr)
@@ -192,21 +177,6 @@ public final class ConstantAndCopyPropagation
         // FIXME
     }
 
-    @Override
-    public void visit(CvaSubExpr expr)
-    {
-        this.visit(expr.getLeft());
-        if (this.canChange)
-        {
-            expr.setLeft(this.curExpr);
-        }
-        this.visit(expr.getRight());
-        if (this.canChange)
-        {
-            expr.setRight(this.curExpr);
-        }
-        this.canChange = false;
-    }
 
     @Override
     public void visit(CvaThisExpr expr)
@@ -240,7 +210,29 @@ public final class ConstantAndCopyPropagation
     @Override
     public void visit(CvaOperandOperatorExpr expr)
     {
-        // TODO
+        switch (expr.toEnum())
+        {
+            case ADD:
+            case SUB:
+            {
+                this.visit(expr.getLeft());
+                if (this.canChange)
+                {
+                    expr.setLeft(this.curExpr);
+                }
+                this.visit(expr.getRight());
+                if (this.canChange)
+                {
+                    expr.setRight(this.curExpr);
+                }
+                this.canChange = false;
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
     }
 
     @Override

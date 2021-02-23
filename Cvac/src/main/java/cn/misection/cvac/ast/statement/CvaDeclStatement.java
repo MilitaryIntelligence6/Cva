@@ -1,6 +1,8 @@
 package cn.misection.cvac.ast.statement;
 
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
+import cn.misection.cvac.ast.decl.nullptr.CvaNullDecl;
+import cn.misection.cvac.ast.statement.nullptr.CvaNullStatement;
 
 /**
  * @author Military Intelligence 6 root
@@ -13,16 +15,64 @@ public class CvaDeclStatement extends AbstractStatement
 {
     private AbstractDeclaration decl;
 
-    private CvaAssignStatement assign;
+    private AbstractStatement assign;
 
-    protected CvaDeclStatement(int lineNum)
+    private CvaDeclStatement(Builder builder)
     {
-        super(lineNum);
+        super(builder.lineNum);
+        this.decl = builder.decl;
+        this.assign = builder.assign;
+    }
+
+    public AbstractDeclaration getDecl()
+    {
+        return decl;
+    }
+
+    public AbstractStatement getAssign()
+    {
+        return assign;
     }
 
     @Override
     public EnumCvaStatement toEnum()
     {
         return EnumCvaStatement.DECL_STATEMENT;
+    }
+
+    public static class Builder
+    {
+        private int lineNum;
+
+        private AbstractDeclaration decl = CvaNullDecl.getInstance();
+
+        private AbstractStatement assign = CvaNullStatement.getInstance();
+
+        public Builder()
+        {
+        }
+
+        public CvaDeclStatement build()
+        {
+            return new CvaDeclStatement(this);
+        }
+
+        public Builder putLineNum(int lineNum)
+        {
+            this.lineNum = lineNum;
+            return this;
+        }
+
+        public Builder putDecl(AbstractDeclaration decl)
+        {
+            this.decl = decl;
+            return this;
+        }
+
+        public Builder putAssign(AbstractStatement assign)
+        {
+            this.assign = assign;
+            return this;
+        }
     }
 }

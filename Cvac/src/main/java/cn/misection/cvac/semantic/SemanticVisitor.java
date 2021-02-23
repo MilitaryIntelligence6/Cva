@@ -16,7 +16,6 @@ import cn.misection.cvac.ast.type.ICvaType;
 import cn.misection.cvac.ast.type.advance.CvaStringType;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
-import cn.misection.cvac.lexer.EnumCvaToken;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -116,28 +115,6 @@ public final class SemanticVisitor implements IVisitor
     {
     }
 
-    /**
-     * expr
-     *
-     * @param expr e;
-     */
-    @Override
-    public void visit(CvaAddExpr expr)
-    {
-        visit(expr.getLeft());
-        ICvaType leftType = this.type;
-        visit(expr.getRight());
-        if (type.toEnum() != leftType.toEnum())
-        {
-            errorLog(expr.getLineNum(),
-                    String.format("add expression the type of left is %s, but the type of right is %s",
-                            leftType.toString(), this.type.toString()));
-        }
-        else if (!EnumCvaType.isNumber(type.toEnum()))
-        {
-            errorLog(expr.getLineNum(), " only numeric type numbers can be added.");
-        }
-    }
 
     @Override
     public void visit(CvaAndAndExpr expr)
@@ -313,24 +290,6 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaSubExpr expr)
-    {
-        visit(expr.getLeft());
-        ICvaType leftType = this.type;
-        visit(expr.getRight());
-        if (type.toEnum() != leftType.toEnum())
-        {
-            errorLog(expr.getLineNum(),
-                    String.format("sub expression the type of left is %s, but the type of right is %s",
-                            leftType.toString(), this.type.toString()));
-        }
-        else if (!EnumCvaType.isNumber(type.toEnum()))
-        {
-            errorLog(expr.getLineNum(), " only basic numbers can be subbed.");
-        }
-    }
-
-    @Override
     public void visit(CvaThisExpr expr)
     {
         this.type = new CvaClassType(curClassName);
@@ -364,21 +323,63 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaOperandOperatorExpr expr)
     {
-        visit(expr.getLeft());
-        ICvaType leftType = this.type;
-        visit(expr.getRight());
-        if (type.toEnum() != leftType.toEnum())
+        switch (expr.toEnum())
         {
-            errorLog(expr.getLineNum(),
-                    String.format("add expression the type of left is %s, but the type of right is %s",
-                            leftType.toString(), this.type.toString()));
+            case ADD:
+            {
+                visit(expr.getLeft());
+                ICvaType leftType = this.type;
+                visit(expr.getRight());
+                if (type.toEnum() != leftType.toEnum())
+                {
+                    errorLog(expr.getLineNum(),
+                            String.format("add expression the type of left is %s, but the type of right is %s",
+                                    leftType.toString(), this.type.toString()));
+                }
+                else if (!EnumCvaType.isNumber(type.toEnum()))
+                {
+                    errorLog(expr.getLineNum(), " only numeric type numbers can be added.");
+                }
+                break;
+            }
+            case SUB:
+            {
+                visit(expr.getLeft());
+                ICvaType leftType = this.type;
+                visit(expr.getRight());
+                if (type.toEnum() != leftType.toEnum())
+                {
+                    errorLog(expr.getLineNum(),
+                            String.format("sub expression the type of left is %s, but the type of right is %s",
+                                    leftType.toString(), this.type.toString()));
+                }
+                else if (!EnumCvaType.isNumber(type.toEnum()))
+                {
+                    errorLog(expr.getLineNum(), " only basic numbers can be subbed.");
+                }
+                break;
+            }
+            default:
+            {
+                visit(expr.getLeft());
+                ICvaType leftType = this.type;
+                visit(expr.getRight());
+                if (type.toEnum() != leftType.toEnum())
+                {
+                    errorLog(expr.getLineNum(),
+                            String.format("add expression the type of left is %s, but the type of right is %s",
+                                    leftType.toString(), this.type.toString()));
+                }
+                else if (!EnumCvaType.isNumber(type.toEnum()))
+                {
+                    errorLog(expr.getLineNum(), String.format(" only numeric type numbers can be %s. got %s",
+                            expr.getInstOp().toInst(),
+                            expr.getInstType().toInst()));
+                }
+                break;
+            }
         }
-        else if (!EnumCvaType.isNumber(type.toEnum()))
-        {
-            errorLog(expr.getLineNum(), String.format(" only numeric type numbers can be %s. got %s",
-                    expr.getInstOp().toInst(),
-                    expr.getInstType().toInst()));
-        }
+
     }
 
     @Override

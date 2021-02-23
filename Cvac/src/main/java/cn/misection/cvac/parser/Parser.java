@@ -602,25 +602,27 @@ public final class Parser
             AbstractExpression tem = parseMulExpr();
             if (addFlag)
             {
-                expr = new CvaAddExpr(expr.getLineNum(), expr, tem);
+//                expr = new CvaAddExpr(expr.getLineNum(), expr, tem);
+                expr = new CvaOperandOperatorExpr.Builder()
+                        .putLineNum(curToken.getLineNum())
+                        .putEnumExpr(EnumCvaExpr.ADD)
+                        .putInstOp(EnumOperator.ADD)
+                        .putInstType(EnumOperandType.INT)
+                        .putLeft(expr)
+                        .putRight(tem)
+                        .build();
             }
             // 减法;
             else
             {
-                // 加的是常数就直接反过来;
-                if (tem instanceof CvaConstIntExpr)
-                {
-                    expr = new CvaAddExpr(
-                            tem.getLineNum(),
-                            expr,
-                            new CvaConstIntExpr(tem.getLineNum(),
-                                    -((CvaConstIntExpr) tem).getValue()));
-                }
-                else
-                {
-                    // 否则用这个, 不是很统一;
-                    expr = new CvaSubExpr(expr.getLineNum(), expr, tem);
-                }
+                expr = new CvaOperandOperatorExpr.Builder()
+                        .putLineNum(curToken.getLineNum())
+                        .putEnumExpr(EnumCvaExpr.SUB)
+                        .putInstOp(EnumOperator.SUB)
+                        .putInstType(EnumOperandType.INT)
+                        .putLeft(expr)
+                        .putRight(tem)
+                        .build();
             }
         }
         return expr;
@@ -1038,7 +1040,7 @@ public final class Parser
         eatToken(EnumCvaToken.CLOSE_PAREN);
         // 吃掉大括号;
         eatToken(EnumCvaToken.OPEN_CURLY_BRACE);
-        List<AbstractDeclaration> localVarDecls = new ArrayList<>();
+        List<AbstractDeclaration> localVarDeclList = new ArrayList<>();
         List<AbstractStatement> statementList = new ArrayList<>();
 
         while (true)
@@ -1052,39 +1054,17 @@ public final class Parser
                     if (Character.isAlphabetic(pCh) || pCh == '_' || pCh == '$')
                     {
                         // 2连 identifier, 说明是定义;
-                        ICvaType declType = parseType();
-                        switch (peekCh())
-                        {
-                            case ';':
-                            {
-                                String idLiteral = curToken.getLiteral();
-                                localVarDecls.add(handleMethodVarDecl(idLiteral, declType));
-                                eatToken(EnumCvaToken.SEMI);
-                                continue;
-                            }
-                            case '=':
-                            {
-                                String idLiteral = curToken.getLiteral();
-                                localVarDecls.add(handleMethodVarDecl(idLiteral, declType));
-                                eatToken(EnumCvaToken.ASSIGN);
-                                statementList.add(handleMethodAssign(idLiteral));
-                                eatToken(EnumCvaToken.SEMI);
-                                continue;
-                            }
-                            default:
-                            {
-                                errorLog("semi or assign", lexer.nextToken());
-                                break;
-                            }
-                        }
+                        CvaDeclStatement stm = parseDeclStatement();
+                        // 不可能为空;
+                        localVarDeclList.add(stm.getDecl());
+                        statementList.add(stm.getAssign());
                     }
                     else
                     {
                         // 说明是普通statement;
                         statementList.add(parseStatement());
-                        continue;
                     }
-                    break;
+                    continue;
                 }
                 case CLOSE_CURLY_BRACE:
                 case RETURN:
@@ -1096,32 +1076,11 @@ public final class Parser
                     if (EnumCvaToken.isType(memTokenEnum))
                     {
                         // 吃掉type, cur是id, 下一个看是分号还是assign;
-                        ICvaType declType = parseType();
-                        switch (peekCh())
-                        {
-                            case ';':
-                            {
-                                String idLiteral = curToken.getLiteral();
-                                localVarDecls.add(handleMethodVarDecl(idLiteral, declType));
-                                eatToken(EnumCvaToken.SEMI);
-                                continue;
-                            }
-                            case '=':
-                            {
-                                String idLiteral = curToken.getLiteral();
-                                localVarDecls.add(handleMethodVarDecl(idLiteral, declType));
-                                eatToken(EnumCvaToken.ASSIGN);
-                                statementList.add(handleMethodAssign(idLiteral));
-                                eatToken(EnumCvaToken.SEMI);
-                                continue;
-                            }
-                            default:
-                            {
-                                errorLog("semi or assign", lexer.nextToken());
-                                break;
-                            }
-                        }
-                        break;
+                        CvaDeclStatement stm = parseDeclStatement();
+                        // 不可能为空;
+                        localVarDeclList.add(stm.getDecl());
+                        statementList.add(stm.getAssign());
+                        continue;
                     }
                     else
                     {
@@ -1156,7 +1115,7 @@ public final class Parser
                 .putRetType(retType)
                 .putRetExpr(retExpr)
                 .putArgList(formalList)
-                .putLocalVarList(localVarDecls)
+                .putLocalVarList(localVarDeclList)
                 .putStatementList(statementList)
                 .build();
     }
@@ -1775,17 +1734,23 @@ public final class Parser
             }
             case INCREMENT:
             {
-                eatToken(EnumCvaToken.INCREMENT);
+                CvaIdentifierExpr idExpr = new CvaIdentifierExpr(
+                        lineNum, idLiteral);
+                advance();
                 eatToken(EnumCvaToken.SEMI);
                 return new CvaExprStatement(
-                        lineNum, parseLinkedExpr());
+                        lineNum, new CvaIncDecExpr(
+                        lineNum, idExpr, EnumIncDirection.INCREMENT));
             }
             case DECREMENT:
             {
-                eatToken(EnumCvaToken.DECREMENT);
+                CvaIdentifierExpr idExpr = new CvaIdentifierExpr(
+                        lineNum, idLiteral);
+                advance();
                 eatToken(EnumCvaToken.SEMI);
                 return new CvaExprStatement(
-                    lineNum, parseLinkedExpr());
+                        lineNum, new CvaIncDecExpr(
+                        lineNum, idExpr, EnumIncDirection.DECREMENT));
             }
             default:
             {
@@ -1835,5 +1800,41 @@ public final class Parser
             }
         }
         return expr;
+    }
+
+    private CvaDeclStatement parseDeclStatement()
+    {
+        ICvaType declType = parseType();
+        switch (peekCh())
+        {
+            case ';':
+            {
+                String idLiteral = curToken.getLiteral();
+                AbstractDeclaration decl = handleMethodVarDecl(idLiteral, declType);
+                eatToken(EnumCvaToken.SEMI);
+                return new CvaDeclStatement.Builder()
+                        .putLineNum(curToken.getLineNum())
+                        .putDecl(decl)
+                        .build();
+            }
+            case '=':
+            {
+                String idLiteral = curToken.getLiteral();
+                AbstractDeclaration decl = handleMethodVarDecl(idLiteral, declType);
+                eatToken(EnumCvaToken.ASSIGN);
+                AbstractStatement statement = handleMethodAssign(idLiteral);
+                eatToken(EnumCvaToken.SEMI);
+                return new CvaDeclStatement.Builder()
+                        .putLineNum(curToken.getLineNum())
+                        .putDecl(decl)
+                        .putAssign(statement)
+                        .build();
+            }
+            default:
+            {
+                errorLog("semi or assign", lexer.nextToken());
+                return null;
+            }
+        }
     }
 }

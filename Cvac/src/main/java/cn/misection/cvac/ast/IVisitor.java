@@ -97,11 +97,6 @@ public interface IVisitor
         // 用typeCode代替, 可以避免反射以及改名麻烦;
         switch (expr.getClass().getSimpleName())
         {
-            case CvaExprClassName.CVA_ADD_EXPR:
-            {
-                visit((CvaAddExpr) expr);
-                break;
-            }
             case CvaExprClassName.CVA_AND_AND_EXPR:
             {
                 visit((CvaAndAndExpr) expr);
@@ -145,11 +140,6 @@ public interface IVisitor
             case CvaExprClassName.CVA_CONST_STRING_EXPR:
             {
                 visit((CvaConstStringExpr) expr);
-                break;
-            }
-            case CvaExprClassName.CVA_SUB_EXPR:
-            {
-                visit((CvaSubExpr) expr);
                 break;
             }
             case CvaExprClassName.CVA_THIS_EXPR:
@@ -213,8 +203,6 @@ public interface IVisitor
         }
     }
 
-    void visit(CvaAddExpr expr);
-
     void visit(CvaAndAndExpr expr);
 
     void visit(CvaCallExpr expr);
@@ -232,8 +220,6 @@ public interface IVisitor
     void visit(CvaConstIntExpr expr);
 
     void visit(CvaConstStringExpr expr);
-
-    void visit(CvaSubExpr expr);
 
     void visit(CvaThisExpr expr);
 

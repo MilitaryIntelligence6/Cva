@@ -14,6 +14,8 @@ import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
 import cn.misection.cvac.ast.type.advance.CvaStringType;
+import cn.misection.cvac.codegen.bst.instructor.EnumOperandType;
+import cn.misection.cvac.codegen.bst.instructor.EnumOperator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,38 +51,9 @@ public final class ConstantFolder
     @Override
     public void visit(CvaClassType type) {}
 
-
     @Override
     public void visit(CvaDeclaration decl) {}
 
-    @Override
-    public void visit(CvaAddExpr expr)
-    {
-        this.visit(expr.getLeft());
-        if (isConstant())
-        {
-            CvaConstIntExpr temLeft = (CvaConstIntExpr) this.lastExpr;
-            this.visit(expr.getRight());
-            if (isConstant())
-            {
-                this.isOptimizing = true;
-                this.lastExpr = new CvaConstIntExpr(
-                        temLeft.getValue() + ((CvaConstIntExpr) this.lastExpr).getValue(),
-                        this.lastExpr.getLineNum());
-            }
-            else
-            {
-                this.lastExpr = new CvaAddExpr(
-                        this.lastExpr.getLineNum(),
-                        temLeft,
-                        this.lastExpr);
-            }
-        }
-        else
-        {
-            this.lastExpr = expr;
-        }
-    }
 
     @Override
     public void visit(CvaAndAndExpr expr)
@@ -206,35 +179,6 @@ public final class ConstantFolder
     }
 
     @Override
-    public void visit(CvaSubExpr expr)
-    {
-        this.visit(expr.getLeft());
-        if (isConstant())
-        {
-            CvaConstIntExpr temLeft = (CvaConstIntExpr) this.lastExpr;
-            this.visit(expr.getRight());
-            if (isConstant())
-            {
-                this.isOptimizing = true;
-                this.lastExpr = new CvaConstIntExpr(
-                        temLeft.getValue() - ((CvaConstIntExpr) this.lastExpr).getValue(),
-                        this.lastExpr.getLineNum());
-            }
-            else
-            {
-                this.lastExpr = new CvaSubExpr(
-                        this.lastExpr.getLineNum(),
-                        temLeft,
-                        this.lastExpr);
-            }
-        }
-        else
-        {
-            this.lastExpr = expr;
-        }
-    }
-
-    @Override
     public void visit(CvaThisExpr expr)
     {
         this.lastExpr = expr;
@@ -278,7 +222,85 @@ public final class ConstantFolder
     @Override
     public void visit(CvaOperandOperatorExpr expr)
     {
-        // TODO
+        switch (expr.toEnum())
+        {
+            case ADD:
+            {
+                this.visit(expr.getLeft());
+                if (isConstant())
+                {
+                    CvaConstIntExpr temLeft = (CvaConstIntExpr) this.lastExpr;
+                    this.visit(expr.getRight());
+                    if (isConstant())
+                    {
+                        this.isOptimizing = true;
+                        this.lastExpr = new CvaConstIntExpr(
+                                temLeft.getValue() + ((CvaConstIntExpr) this.lastExpr).getValue(),
+                                this.lastExpr.getLineNum());
+                    }
+                    else
+                    {
+//                this.lastExpr = new CvaAddExpr(
+//                        this.lastExpr.getLineNum(),
+//                        temLeft,
+//                        this.lastExpr);
+                        lastExpr = new CvaOperandOperatorExpr.Builder()
+                                .putLineNum(lastExpr.getLineNum())
+                                .putLeft(temLeft)
+                                .putRight(lastExpr)
+                                .putInstType(EnumOperandType.INT)
+                                .putInstOp(EnumOperator.ADD)
+                                .putEnumExpr(EnumCvaExpr.ADD)
+                                .build();
+                    }
+                }
+                else
+                {
+                    this.lastExpr = expr;
+                }
+                break;
+            }
+            case SUB:
+            {
+                this.visit(expr.getLeft());
+                if (isConstant())
+                {
+                    CvaConstIntExpr temLeft = (CvaConstIntExpr) this.lastExpr;
+                    this.visit(expr.getRight());
+                    if (isConstant())
+                    {
+                        this.isOptimizing = true;
+                        this.lastExpr = new CvaConstIntExpr(
+                                temLeft.getValue() - ((CvaConstIntExpr) this.lastExpr).getValue(),
+                                this.lastExpr.getLineNum());
+                    }
+                    else
+                    {
+//                this.lastExpr = new CvaSubExpr(
+//                        this.lastExpr.getLineNum(),
+//                        temLeft,
+//                        this.lastExpr);
+                        lastExpr = new CvaOperandOperatorExpr.Builder()
+                                .putLineNum(lastExpr.getLineNum())
+                                .putLeft(temLeft)
+                                .putRight(lastExpr)
+                                .putInstType(EnumOperandType.INT)
+                                .putInstOp(EnumOperator.SUB)
+                                .putEnumExpr(EnumCvaExpr.SUB)
+                                .build();
+                    }
+                }
+                else
+                {
+                    this.lastExpr = expr;
+                }
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
     }
 
     @Override

@@ -127,14 +127,6 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaAddExpr expr)
-    {
-        visit(expr.getLeft());
-        visit(expr.getRight());
-        emit(EnumInstructor.I_ADD);
-    }
-
-    @Override
     public void visit(CvaAndAndExpr expr)
     {
         Label f = new Label();
@@ -263,14 +255,6 @@ public final class TranslatorVisitor implements IVisitor
     {
         // FIXME;
         emit(new Ldc<>(String.format("\"%s\"", expr.getLiteral())));
-    }
-
-    @Override
-    public void visit(CvaSubExpr expr)
-    {
-        visit(expr.getLeft());
-        visit(expr.getRight());
-        emit(EnumInstructor.I_SUB);
     }
 
     @Override
