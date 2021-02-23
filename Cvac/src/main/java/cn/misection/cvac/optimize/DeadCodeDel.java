@@ -183,13 +183,10 @@ public final class DeadCodeDel
         Set<String> tehLeftLiveness = this.localLiveness;
 
         this.localLiveness = temOriginal;
-        if (stm.getElseStatement() != null)
-        {
-            visit(stm.getElseStatement());
-        }
+        visit(stm.getElseStatement());
         if (this.shouldDel)
         {
-            stm.setElseStatement(null);
+            stm.setElseStatement(CvaNullStatement.getInstance());
         }
         this.localLiveness.addAll(tehLeftLiveness);
 

@@ -354,10 +354,7 @@ public final class TranslatorVisitor implements IVisitor
         visit(stm.getThenStatement());
         emit(new Goto(r));
         emit(new LabelJ(l));
-        if (stm.getElseStatement() != null)
-        {
-            visit(stm.getElseStatement());
-        }
+        visit(stm.getElseStatement());
         emit(new LabelJ(r));
     }
 

@@ -291,10 +291,7 @@ public final class ConstantAndCopyPropagation
 
         Map<String, AbstractExpression> leftMap = this.conorcopy;
         this.conorcopy = originalMap;
-        if (stm.getElseStatement() != null)
-        {
-            this.visit(stm.getElseStatement());
-        }
+        this.visit(stm.getElseStatement());
         this.conorcopy = intersection(leftMap, this.conorcopy);
     }
 

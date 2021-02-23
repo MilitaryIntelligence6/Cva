@@ -4,6 +4,7 @@ import cn.misection.cvac.ast.clas.AbstractCvaClass;
 import cn.misection.cvac.ast.clas.CvaClass;
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.decl.CvaDeclaration;
+import cn.misection.cvac.ast.decl.CvaNullDecl;
 import cn.misection.cvac.ast.entry.AbstractEntryClass;
 import cn.misection.cvac.ast.entry.CvaEntryClass;
 import cn.misection.cvac.ast.expr.AbstractExpression;
@@ -31,6 +32,7 @@ import cn.misection.cvac.lexer.CvaToken;
 import cn.misection.cvac.lexer.EnumCvaToken;
 import cn.misection.cvac.lexer.Lexer;
 
+import java.lang.annotation.ElementType;
 import java.util.*;
 
 /**
@@ -881,7 +883,7 @@ public final class Parser
                     {
                         varDeclFlag = false;
                         this.reset();
-                        return null;
+                        return CvaNullDecl.getInstance();
                     }
                     default:
                     {
@@ -912,10 +914,7 @@ public final class Parser
                 || curToken.toEnum() == EnumCvaToken.IDENTIFIER)
         {
             AbstractDeclaration decl = parseVarDecl();
-            if (decl != null)
-            {
-                declList.add(decl);
-            }
+            declList.add(decl);
             if (!varDeclFlag)
             {
                 break;
@@ -1227,38 +1226,55 @@ public final class Parser
      */
     private CvaEntryClass parseEntryClass()
     {
+        String mainClassName;
+        AbstractMethod mainMethod;
         if (curToken.toEnum() == EnumCvaToken.CLASS_DECL)
         {
             eatToken(EnumCvaToken.CLASS_DECL);
-            String entryName = curToken.getLiteral();
+            mainClassName = curToken.getLiteral();
             eatToken(EnumCvaToken.IDENTIFIER);
             eatToken(EnumCvaToken.OPEN_CURLY_BRACE);
 //            AbstractStatement statement = parseMainMethod();
-            AbstractMethod mainMethod = new CvaMainMethod.Builder(
+            mainMethod = new CvaMainMethod.Builder(
                     parseMethod())
                     .build();
 
             eatToken(EnumCvaToken.CLOSE_CURLY_BRACE);
-//            return new CvaEntryClass(entryName, statement);
-            return new CvaEntryClass.Builder()
-                    .putName(entryName)
-                    .putEntryMethod(mainMethod)
+        }
+        else
+        {
+            mainClassName = LexerCommon.DEFAULT_MAIN_CLASS_NAME;
+            mainMethod = new CvaMainMethod.Builder(
+                    parseMethod())
                     .build();
         }
-        String mainName = LexerCommon.DEFAULT_MAIN_CLASS_NAME;
-//        AbstractStatement statement = parseMainMethod();
-        AbstractMethod mainMethod = new CvaMainMethod.Builder(
-                parseMethod())
-                .build();
+
+        List<AbstractDeclaration> argList = mainMethod.getArgumentList();
+        if (argList.size() == 1)
+        {
+            ICvaType argType = argList.get(0).type();
+            // && 是短路的;
+            if (argType.toEnum() != EnumCvaType.ARRAY ||
+                    ((CvaArrayType) argType).getInnerType().toEnum() != EnumCvaType.STRING)
+            {
+                errorLog("only accexpt main func's arg string[]",
+                        String.valueOf(argList));
+            }
+        }
+        else
+        {
+            errorLog("main func's arg decl length should be 1 means string[]",
+                    String.valueOf(argList));
+        }
+
         return new CvaEntryClass.Builder()
-                .putName(mainName)
-                .putEntryMethod(mainMethod)
+                .putName(mainClassName)
+                .putMainMethod(mainMethod)
                 .build();
     }
 
     /**
      * Program -> MainClass ClassDecl*
-     *
      * @return Program tree;
      */
     private CvaProgram parseProgram()
@@ -1266,8 +1282,6 @@ public final class Parser
         parsePackage();
         parseCallStatement();
         // 直接解析;
-//        CvaEntryClass entryClass = parseEntryClass();
-//        List<AbstractCvaClass> classList = parseClassDeclList();
         AbstractEntryClass entryClass = null;
         List<AbstractCvaClass> classList = new ArrayList<>();
         while (true)
@@ -1324,6 +1338,8 @@ public final class Parser
                         EnumLexerCommon.MAIN_METHOD_NAME.string()))
                 {
                     // return 打断多重循环, 如果重复定义main, 只执行第一个;
+                    // 没有测试过行不行;
+                    classList.remove(absClass);
                     return absClass;
                 }
             }

@@ -11,26 +11,10 @@ import cn.misection.cvac.ast.type.ICvaType;
  */
 public final class CvaDeclaration extends AbstractDeclaration
 {
-    private final String literal;
-
-    private final ICvaType type;
-
-    public CvaDeclaration(int lineNum, String literal, ICvaType type)
+    public CvaDeclaration(int lineNum,
+                          String literal,
+                          ICvaType type)
     {
-        super(lineNum);
-        this.literal = literal;
-        this.type = type;
-    }
-
-    @Override
-    public String literal()
-    {
-        return literal;
-    }
-
-    @Override
-    public ICvaType type()
-    {
-        return type;
+        super(lineNum, literal, type);
     }
 }

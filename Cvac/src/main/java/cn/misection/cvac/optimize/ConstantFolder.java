@@ -299,10 +299,7 @@ public final class ConstantFolder
         this.visit(stm.getCondition());
         stm.setCondition(this.lastExpr);
         this.visit(stm.getThenStatement());
-        if (stm.getElseStatement() != null)
-        {
-            this.visit(stm.getElseStatement());
-        }
+        this.visit(stm.getElseStatement());
     }
 
     @Override

@@ -19,16 +19,7 @@ public final class CvaEntryClass extends AbstractEntryClass
     private CvaEntryClass(Builder builder)
     {
         this.name = builder.name;
-        this.mainMethod = builder.entryMethod;
-    }
-    /**
-     * @deprecated
-     * @param name
-     * @param statement
-     */
-    public CvaEntryClass(String name, AbstractStatement statement)
-    {
-        super(name, statement);
+        this.mainMethod = builder.mainMethod;
     }
 
     @Override
@@ -54,16 +45,16 @@ public final class CvaEntryClass extends AbstractEntryClass
     {
         private String name = LexerCommon.DEFAULT_MAIN_CLASS_NAME;
 
-        private AbstractMethod entryMethod;
+        private AbstractMethod mainMethod;
 
         public Builder()
         {
 
         }
 
-        public Builder(AbstractMethod entryMethod)
+        public Builder(AbstractMethod mainMethod)
         {
-            this.entryMethod = entryMethod;
+            this.mainMethod = mainMethod;
         }
 
         public CvaEntryClass build()
@@ -77,9 +68,9 @@ public final class CvaEntryClass extends AbstractEntryClass
             return this;
         }
 
-        public Builder putEntryMethod(AbstractMethod entryMethod)
+        public Builder putMainMethod(AbstractMethod entryMethod)
         {
-            this.entryMethod = entryMethod;
+            this.mainMethod = entryMethod;
             return this;
         }
     }

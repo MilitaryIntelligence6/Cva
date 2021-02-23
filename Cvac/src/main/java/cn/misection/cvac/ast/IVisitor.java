@@ -78,7 +78,10 @@ public interface IVisitor
      */
     default void visit(AbstractDeclaration abstDecl)
     {
-        visit(((CvaDeclaration) abstDecl));
+        if (!(abstDecl instanceof CvaNullDecl))
+        {
+            visit(((CvaDeclaration) abstDecl));
+        }
     }
 
     void visit(CvaDeclaration decl);
