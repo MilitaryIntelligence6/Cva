@@ -260,6 +260,15 @@ public final class Parser
                 advance();
                 return expr;
             }
+            case INCREMENT:
+            {
+//                expr =
+                break;
+            }
+            case DECREMENT:
+            {
+                break;
+            }
             case NEW:
             {
                 advance();
@@ -272,6 +281,7 @@ public final class Parser
             default:
             {
                 errorLog();
+                return null;
             }
         }
         return null;
@@ -644,11 +654,12 @@ public final class Parser
     }
 
     /**
-     * // Statement -> { Statement* }
-     * //  -> if (Exp) Statement else Statement
-     * //  -> while (Exp) Statement
-     * //  -> print(Exp);
-     * //  -> id = Exp;
+     * Statement -> { Statement* }
+     * -> if (Expr) Statement else Statement
+     * -> while (Expr) Statement
+     * -> for )
+     * -> write(Expr);
+     * -> id = Expr;
      *
      * @return single Statement;
      */
