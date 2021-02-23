@@ -16,33 +16,33 @@ public enum EnumTargetType
     /**
      * void;
      */
-    TARGET_VOID("@void", "V"),
+    VOID("@void", "V"),
 
-    TARGET_BYTE("@byte"),
+    BYTE("@byte"),
 
-    TARGET_CHAR("@char"),
+    CHAR("@char"),
 
-    TARGET_SHORT("@short"),
+    SHORT("@short"),
 
-    TARGET_INT("@int", "I"),
+    INT("@int", "I"),
 
-    TARGET_LONG("@long"),
+    LONG("@long"),
 
-    TARGET_FLOAT("@float"),
+    FLOAT("@float"),
 
-    TARGET_DOUBLE("@double"),
+    DOUBLE("@double"),
 
-    TARGET_POINTER("@pointer"),
+    POINTER("@pointer"),
 
-    TARGET_STRING("@string"),
+    STRING("@string"),
 
-    TARGET_ARRAY("@array"),
+    ARRAY("@array"),
 
-    TARGET_STRUCT("@struct"),
+    STRUCT("@struct"),
 
-    TARGET_CLASS("@class"),
+    CLASS("@class"),
 
-    TARGET_ENUM("@enum"),
+    ENUM("@enum"),
     ;
 
     /**
@@ -96,19 +96,19 @@ public enum EnumTargetType
      */
     public static boolean isBasicType(EnumTargetType type)
     {
-        return type.ordinal() >= TARGET_VOID.ordinal()
-                && type.ordinal() <= TARGET_DOUBLE.ordinal();
+        return type.ordinal() >= VOID.ordinal()
+                && type.ordinal() <= DOUBLE.ordinal();
     }
 
     public static boolean isAdvanceType(EnumTargetType type)
     {
-        return type.ordinal() >= TARGET_POINTER.ordinal()
-                && type.ordinal() <= TARGET_ARRAY.ordinal();
+        return type.ordinal() >= POINTER.ordinal()
+                && type.ordinal() <= ARRAY.ordinal();
     }
 
     public static boolean isReferenceType(EnumTargetType type)
     {
-        return type.ordinal() >= TARGET_STRUCT.ordinal();
+        return type.ordinal() >= STRUCT.ordinal();
     }
 
     /**
@@ -118,13 +118,13 @@ public enum EnumTargetType
      */
     public static boolean isInteger(EnumTargetType type)
     {
-        return type.ordinal() >= TARGET_BYTE.ordinal()
-                && type.ordinal() <= TARGET_LONG.ordinal();
+        return type.ordinal() >= BYTE.ordinal()
+                && type.ordinal() <= LONG.ordinal();
     }
 
     public static boolean isFloatPoint(EnumTargetType type)
     {
-        return type == TARGET_FLOAT || type == TARGET_DOUBLE;
+        return type == FLOAT || type == DOUBLE;
     }
 
     /**
