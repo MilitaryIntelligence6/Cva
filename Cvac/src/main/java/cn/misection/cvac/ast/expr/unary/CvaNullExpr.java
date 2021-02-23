@@ -35,7 +35,7 @@ public final class CvaNullExpr extends AbstractExpression
     @Override
     public EnumCvaType resType()
     {
-        return null;
+        return EnumCvaType.NULL;
     }
 
     @Override

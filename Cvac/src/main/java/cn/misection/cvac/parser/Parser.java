@@ -1519,18 +1519,23 @@ public final class Parser
         AbstractExpression condition = parseLinkedExpr();
         eatToken(EnumCvaToken.CLOSE_PAREN);
         AbstractStatement thenStm = parseStatement();
-        if (curToken.toEnum() == EnumCvaToken.ELSE_STATEMENT)
-        {
-            AbstractStatement elseStm = handleElse();
-            return new CvaIfStatement(lineNum, condition, thenStm, elseStm);
-        }
-        return new CvaIfStatement(lineNum, condition, thenStm);
+        AbstractStatement elseStm = handleElse();
+        return new CvaIfStatement(
+                lineNum,
+                condition,
+                thenStm,
+                elseStm);
     }
 
     private AbstractStatement handleElse()
     {
-        advance();
-        return parseStatement();
+        if (curToken.toEnum() == EnumCvaToken.ELSE_STATEMENT)
+        {
+            advance();
+            AbstractStatement elseStm = handleElse();
+            return parseStatement();
+        }
+        return CvaNullStatement.getInstance();
     }
 
     private AbstractStatement handleWhile()

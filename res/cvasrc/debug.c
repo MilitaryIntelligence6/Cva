@@ -40,6 +40,11 @@ class Increment
             echo "  ";
             j--;
         }
+        if (j < 5)
+        {
+            echo "  ";
+            echo j;
+        }
         return i;
     }
 }

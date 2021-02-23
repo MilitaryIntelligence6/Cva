@@ -28,16 +28,16 @@ public final class CvaIfStatement extends AbstractStatement
         this.elseStatement = elseStatement;
     }
 
-    public CvaIfStatement(int lineNum,
-                          AbstractExpression condition,
-                          AbstractStatement thenStatement)
-    {
-        super(lineNum);
-        this.condition = condition;
-        this.thenStatement = thenStatement;
-        // FIXME 可能空指针;
-        this.elseStatement = null;
-    }
+//    public CvaIfStatement(int lineNum,
+//                          AbstractExpression condition,
+//                          AbstractStatement thenStatement)
+//    {
+//        super(lineNum);
+//        this.condition = condition;
+//        this.thenStatement = thenStatement;
+//        // FIXME 可能空指针;
+//        this.elseStatement = null;
+//    }
 
 //    private void initNullElse()
 //    {

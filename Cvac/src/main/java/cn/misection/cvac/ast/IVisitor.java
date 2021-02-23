@@ -182,6 +182,11 @@ public interface IVisitor
                         visit((CvaOperandOperatorExpr) expr);
                         break;
                     }
+                    case NULL:
+                    {
+                        // 直接忽略, 转都不转;
+                        break;
+                    }
                     default:
                     {
                         System.err.println("unknown expr");
@@ -262,8 +267,19 @@ public interface IVisitor
             }
             default:
             {
-                System.err.println("unknown statement");
-                break;
+                switch (abstStm.toEnum())
+                {
+                    case NULL:
+                    {
+                        // 直接忽略, 转都不用转;
+                        break;
+                    }
+                    default:
+                    {
+                        System.err.println("unknown statement");
+                        break;
+                    }
+                }
             }
         }
     }

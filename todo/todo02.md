@@ -31,3 +31,5 @@
   sipush;
   
  - 直接在ldc压命令中改, 改成iconst_1, bipush, sipush;
+ 
+ - 实现 == <= >=
