@@ -989,9 +989,9 @@ public final class Parser
     }
 
     /**
-     * // FormalList -> Type id FormalRest*
-     * //  ->
-     * // FormalRest -> , Type id
+     * FormalList -> Type id FormalRest*
+     * ->
+     * FormalRest -> , Type id
      *
      * @return FormalList;
      */
