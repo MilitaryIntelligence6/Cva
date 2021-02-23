@@ -14,7 +14,7 @@ call cva.lang.type.String;
 
 class Increment
 {
-    int incre()
+    void incre()
     {
 //        int i = 0;
 //        println "while test";
@@ -44,8 +44,7 @@ class Increment
             echo k;
             echo "  ";
         }
-        ;
-        return 0;
+        return;
     }
 }
 
@@ -53,7 +52,7 @@ class Increment
 int main(string[] args)
 {
     echo "hello, world!\n";
-    println new Increment().incre();
+    new Increment().incre();
 //    int num = 888;
 //    println num;
     return 0;
