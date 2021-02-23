@@ -406,7 +406,6 @@ public final class Parser
             tem = parseNegateExpr();
             expr = new CvaOperandOperatorExpr.Builder()
                     .putLineNum(tem.getLineNum())
-                    .putEnumExpr(EnumCvaExpr.UNSIGNED_RIGHT_SHIFT)
                     .putLeft(expr)
                     .putRight(tem)
                     .putInstType(EnumOperandType.INT)
@@ -426,7 +425,6 @@ public final class Parser
             tem = parseUnsignedRightShiftExpr();
             expr = new CvaOperandOperatorExpr.Builder()
                     .putLineNum(tem.getLineNum())
-                    .putEnumExpr(EnumCvaExpr.RIGHT_SHIFT)
                     .putLeft(expr)
                     .putRight(tem)
                     .putInstType(EnumOperandType.INT)
@@ -446,7 +444,6 @@ public final class Parser
             tem = parseRightShiftExpr();
             expr = new CvaOperandOperatorExpr.Builder()
                     .putLineNum(tem.getLineNum())
-                    .putEnumExpr(EnumCvaExpr.LEFT_SHIFT)
                     .putLeft(expr)
                     .putRight(tem)
                     .putInstType(EnumOperandType.INT)
@@ -466,7 +463,6 @@ public final class Parser
             tem = parseLeftShiftExpr();
             expr = new CvaOperandOperatorExpr.Builder()
                     .putLineNum(tem.getLineNum())
-                    .putEnumExpr(EnumCvaExpr.BIT_XOR)
                     .putLeft(expr)
                     .putRight(tem)
                     .putInstType(EnumOperandType.INT)
@@ -486,7 +482,6 @@ public final class Parser
             tem = parseBitXOrExpr();
             expr = new CvaOperandOperatorExpr.Builder()
                     .putLineNum(tem.getLineNum())
-                    .putEnumExpr(EnumCvaExpr.BIT_OR)
                     .putLeft(expr)
                     .putRight(tem)
                     .putInstType(EnumOperandType.INT)
@@ -507,7 +502,6 @@ public final class Parser
             tem = parseBitOrExpr();
             expr = new CvaOperandOperatorExpr.Builder()
                     .putLineNum(tem.getLineNum())
-                    .putEnumExpr(EnumCvaExpr.BIT_AND)
                     .putLeft(expr)
                     .putRight(tem)
                     .putInstType(EnumOperandType.INT)
@@ -528,7 +522,6 @@ public final class Parser
             tem = parseBitAndExpr();
             expr = new CvaOperandOperatorExpr.Builder()
                     .putLineNum(tem.getLineNum())
-                    .putEnumExpr(EnumCvaExpr.REM)
                     .putLeft(expr)
                     .putRight(tem)
                     // FIXME, 后面改成从表达式获取;
@@ -555,7 +548,6 @@ public final class Parser
             tem = parseRemExpr();
             expr = new CvaOperandOperatorExpr.Builder()
                     .putLineNum(tem.getLineNum())
-                    .putEnumExpr(EnumCvaExpr.DIV)
                     .putLeft(expr)
                     .putRight(tem)
                     .putInstType(EnumOperandType.INT)
@@ -581,7 +573,6 @@ public final class Parser
             tem = parseDivExpr();
             expr = new CvaOperandOperatorExpr.Builder()
                     .putLineNum(tem.getLineNum())
-                    .putEnumExpr(EnumCvaExpr.MUL)
                     .putLeft(expr)
                     .putRight(tem)
                     .putInstType(EnumOperandType.INT)
@@ -612,7 +603,6 @@ public final class Parser
 //                expr = new CvaAddExpr(expr.getLineNum(), expr, tem);
                 expr = new CvaOperandOperatorExpr.Builder()
                         .putLineNum(curToken.getLineNum())
-                        .putEnumExpr(EnumCvaExpr.ADD)
                         .putInstOp(EnumOperator.ADD)
                         .putInstType(EnumOperandType.INT)
                         .putLeft(expr)
@@ -624,7 +614,6 @@ public final class Parser
             {
                 expr = new CvaOperandOperatorExpr.Builder()
                         .putLineNum(curToken.getLineNum())
-                        .putEnumExpr(EnumCvaExpr.SUB)
                         .putInstOp(EnumOperator.SUB)
                         .putInstType(EnumOperandType.INT)
                         .putLeft(expr)
@@ -1569,7 +1558,6 @@ public final class Parser
                 AbstractExpression addAssignExpr =
                         new CvaOperandOperatorExpr.Builder()
                                 .putLineNum(lineNum)
-                                .putEnumExpr(EnumCvaExpr.ADD)
                                 .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
                                 .putRight(parseLinkedExpr())
                                 // 改成获得expr的type, 枚举重指向;
@@ -1585,7 +1573,6 @@ public final class Parser
                 AbstractExpression subAssignExpr =
                         new CvaOperandOperatorExpr.Builder()
                                 .putLineNum(lineNum)
-                                .putEnumExpr(EnumCvaExpr.SUB)
                                 .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
                                 .putRight(parseLinkedExpr())
                                 // 改成获得expr的type, 枚举重指向;
@@ -1601,7 +1588,6 @@ public final class Parser
                 AbstractExpression mulAssignExpr =
                         new CvaOperandOperatorExpr.Builder()
                                 .putLineNum(lineNum)
-                                .putEnumExpr(EnumCvaExpr.MUL)
                                 .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
                                 .putRight(parseLinkedExpr())
                                 // 改成获得expr的type, 枚举重指向;
@@ -1617,7 +1603,6 @@ public final class Parser
                 AbstractExpression divAssignExpr =
                         new CvaOperandOperatorExpr.Builder()
                                 .putLineNum(lineNum)
-                                .putEnumExpr(EnumCvaExpr.DIV)
                                 .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
                                 .putRight(parseLinkedExpr())
                                 // 改成获得expr的type, 枚举重指向;
@@ -1633,7 +1618,6 @@ public final class Parser
                 AbstractExpression remAssignExpr =
                         new CvaOperandOperatorExpr.Builder()
                                 .putLineNum(lineNum)
-                                .putEnumExpr(EnumCvaExpr.REM)
                                 .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
                                 .putRight(parseLinkedExpr())
                                 // 改成获得expr的type, 枚举重指向;
@@ -1649,7 +1633,6 @@ public final class Parser
                 AbstractExpression bitAndAssignExpr =
                         new CvaOperandOperatorExpr.Builder()
                                 .putLineNum(lineNum)
-                                .putEnumExpr(EnumCvaExpr.BIT_AND)
                                 .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
                                 .putRight(parseLinkedExpr())
                                 // 改成获得expr的type, 枚举重指向;
@@ -1665,7 +1648,6 @@ public final class Parser
                 AbstractExpression bitOrAssignExpr =
                         new CvaOperandOperatorExpr.Builder()
                                 .putLineNum(lineNum)
-                                .putEnumExpr(EnumCvaExpr.BIT_OR)
                                 .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
                                 .putRight(parseLinkedExpr())
                                 // 改成获得expr的type, 枚举重指向;
@@ -1681,7 +1663,6 @@ public final class Parser
                 AbstractExpression bitXorAssignExpr =
                         new CvaOperandOperatorExpr.Builder()
                                 .putLineNum(lineNum)
-                                .putEnumExpr(EnumCvaExpr.BIT_XOR)
                                 .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
                                 .putRight(parseLinkedExpr())
                                 // 改成获得expr的type, 枚举重指向;
@@ -1697,7 +1678,6 @@ public final class Parser
                 AbstractExpression leftShiftAssignExpr =
                         new CvaOperandOperatorExpr.Builder()
                                 .putLineNum(lineNum)
-                                .putEnumExpr(EnumCvaExpr.LEFT_SHIFT)
                                 .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
                                 .putRight(parseLinkedExpr())
                                 // 改成获得expr的type, 枚举重指向;
@@ -1713,7 +1693,6 @@ public final class Parser
                 AbstractExpression rightShiftAssignExpr =
                         new CvaOperandOperatorExpr.Builder()
                                 .putLineNum(lineNum)
-                                .putEnumExpr(EnumCvaExpr.RIGHT_SHIFT)
                                 .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
                                 .putRight(parseLinkedExpr())
                                 // 改成获得expr的type, 枚举重指向;
@@ -1729,7 +1708,6 @@ public final class Parser
                 AbstractExpression unsRightShiftAssignExpr =
                         new CvaOperandOperatorExpr.Builder()
                                 .putLineNum(lineNum)
-                                .putEnumExpr(EnumCvaExpr.UNSIGNED_RIGHT_SHIFT)
                                 .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
                                 .putRight(parseLinkedExpr())
                                 // 改成获得expr的type, 枚举重指向;

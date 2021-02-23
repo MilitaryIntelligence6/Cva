@@ -221,7 +221,6 @@ public final class ConstantFolder
                                 .putRight(lastExpr)
                                 .putInstType(EnumOperandType.INT)
                                 .putInstOp(EnumOperator.ADD)
-                                .putEnumExpr(EnumCvaExpr.ADD)
                                 .build();
                     }
                 }
@@ -257,7 +256,6 @@ public final class ConstantFolder
                                 .putRight(lastExpr)
                                 .putInstType(EnumOperandType.INT)
                                 .putInstOp(EnumOperator.SUB)
-                                .putEnumExpr(EnumCvaExpr.SUB)
                                 .build();
                     }
                 }
@@ -293,7 +291,6 @@ public final class ConstantFolder
                                 .putRight(lastExpr)
                                 .putInstType(EnumOperandType.INT)
                                 .putInstOp(EnumOperator.MUL)
-                                .putEnumExpr(EnumCvaExpr.MUL)
                                 .build();
                     }
                 }

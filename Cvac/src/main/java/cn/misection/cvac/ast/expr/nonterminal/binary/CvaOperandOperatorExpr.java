@@ -19,8 +19,6 @@ public final class CvaOperandOperatorExpr
 {
     private EnumCvaType resType;
 
-    private EnumCvaExpr enumExpr;
-
     private EnumOperandType instType;
 
     private EnumOperator instOp;
@@ -38,7 +36,6 @@ public final class CvaOperandOperatorExpr
         this.lineNum = builder.lineNum;
         this.left = builder.left;
         this.right = builder.right;
-        this.enumExpr = builder.enumExpr;
         this.instType = builder.instType;
         this.instOp = builder.instOp;
     }
@@ -52,7 +49,7 @@ public final class CvaOperandOperatorExpr
     @Override
     public EnumCvaExpr toEnum()
     {
-        return enumExpr;
+        return EnumCvaExpr.BINARY_OPERAND_OP;
     }
 
     public EnumOperandType getInstType()
@@ -78,8 +75,6 @@ public final class CvaOperandOperatorExpr
         private AbstractExpression left;
 
         private AbstractExpression right;
-
-        private EnumCvaExpr enumExpr;
 
         private EnumOperandType instType;
 
@@ -110,11 +105,6 @@ public final class CvaOperandOperatorExpr
             return this;
         }
 
-        public Builder putEnumExpr(EnumCvaExpr enumExpr)
-        {
-            this.enumExpr = enumExpr;
-            return this;
-        }
 
         public Builder putInstType(EnumOperandType instType)
         {

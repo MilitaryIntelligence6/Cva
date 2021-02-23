@@ -16,9 +16,9 @@ public enum EnumCvaExpr
 
     CALL,
 
-    NEGATE,
+    NEGATE("negate"),
 
-    BIT_NEGATE,
+    BIT_NEGATE("neg"),
 
     /**
      * 应该是包括true false const int等等的;
@@ -54,27 +54,29 @@ public enum EnumCvaExpr
     /**
      * 双目;
      */
-    ADD,
+    BINARY_OPERAND_OP,
 
-    SUB,
+    ADD("add"),
 
-    MUL,
+    SUB("sub"),
 
-    DIV,
+    MUL("mul"),
 
-    REM,
+    DIV("div"),
 
-    BIT_AND,
+    REM("rem"),
 
-    BIT_OR,
+    BIT_AND("and"),
 
-    BIT_XOR,
+    BIT_OR("or"),
 
-    LEFT_SHIFT,
+    BIT_XOR("xor"),
 
-    RIGHT_SHIFT,
+    LEFT_SHIFT("shl"),
 
-    UNSIGNED_RIGHT_SHIFT,
+    RIGHT_SHIFT("shr"),
+
+    UNSIGNED_RIGHT_SHIFT("ushr"),
 
     LESS_THAN,
 
@@ -95,6 +97,17 @@ public enum EnumCvaExpr
      */
     CONDITION_CALC,
     ;
+
+    private String string;
+
+    private byte hashKey;
+
+    EnumCvaExpr() {}
+
+    EnumCvaExpr(String string)
+    {
+        this.string = string;
+    }
 
     public static boolean isUnary(EnumCvaExpr expr)
     {

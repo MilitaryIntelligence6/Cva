@@ -46,3 +46,5 @@
  现在在外部new className() 反而在类内部创建一个className属性, 这不对;
  
  - 目前只要声明string就会报错, 后面修复;
+ 
+ - 把所有前端类型type直接换后端;
