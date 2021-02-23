@@ -8,8 +8,9 @@ import cn.misection.cvac.ast.decl.nullptr.CvaNullDecl;
 import cn.misection.cvac.ast.entry.AbstractEntryClass;
 import cn.misection.cvac.ast.entry.CvaEntryClass;
 import cn.misection.cvac.ast.expr.AbstractExpression;
-import cn.misection.cvac.ast.expr.EnumCvaExpr;
-import cn.misection.cvac.ast.expr.nonterminal.binary.*;
+import cn.misection.cvac.ast.expr.nonterminal.binary.CvaAndAndExpr;
+import cn.misection.cvac.ast.expr.nonterminal.binary.CvaLessOrMoreThanExpr;
+import cn.misection.cvac.ast.expr.nonterminal.binary.CvaOperandOperatorExpr;
 import cn.misection.cvac.ast.expr.nonterminal.unary.CvaCallExpr;
 import cn.misection.cvac.ast.expr.nonterminal.unary.CvaIncDecExpr;
 import cn.misection.cvac.ast.expr.nonterminal.unary.CvaNegateExpr;
@@ -1554,168 +1555,47 @@ public final class Parser
             // 语法糖;
             case ADD_ASSIGN:
             {
-                advance();
-                AbstractExpression addAssignExpr =
-                        new CvaOperandOperatorExpr.Builder()
-                                .putLineNum(lineNum)
-                                .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
-                                .putRight(parseLinkedExpr())
-                                // 改成获得expr的type, 枚举重指向;
-                                .putInstType(EnumOperandType.INT)
-                                .putInstOp(EnumOperator.ADD)
-                                .build();
-                eatToken(EnumCvaToken.SEMI);
-                return new CvaAssignStatement(lineNum, idLiteral, addAssignExpr);
+                return parseSyntacticSugar(idLiteral, EnumOperandType.INT, EnumOperator.ADD);
             }
             case SUB_ASSIGN:
             {
-                advance();
-                AbstractExpression subAssignExpr =
-                        new CvaOperandOperatorExpr.Builder()
-                                .putLineNum(lineNum)
-                                .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
-                                .putRight(parseLinkedExpr())
-                                // 改成获得expr的type, 枚举重指向;
-                                .putInstType(EnumOperandType.INT)
-                                .putInstOp(EnumOperator.SUB)
-                                .build();
-                eatToken(EnumCvaToken.SEMI);
-                return new CvaAssignStatement(lineNum, idLiteral, subAssignExpr);
+                return parseSyntacticSugar(idLiteral, EnumOperandType.INT, EnumOperator.SUB);
             }
             case MULTIPLY_ASSIGN:
             {
-                advance();
-                AbstractExpression mulAssignExpr =
-                        new CvaOperandOperatorExpr.Builder()
-                                .putLineNum(lineNum)
-                                .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
-                                .putRight(parseLinkedExpr())
-                                // 改成获得expr的type, 枚举重指向;
-                                .putInstType(EnumOperandType.INT)
-                                .putInstOp(EnumOperator.MUL)
-                                .build();
-                eatToken(EnumCvaToken.SEMI);
-                return new CvaAssignStatement(lineNum, idLiteral, mulAssignExpr);
+                return parseSyntacticSugar(idLiteral, EnumOperandType.INT, EnumOperator.MUL);
             }
             case DIV_ASSIGN:
             {
-                advance();
-                AbstractExpression divAssignExpr =
-                        new CvaOperandOperatorExpr.Builder()
-                                .putLineNum(lineNum)
-                                .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
-                                .putRight(parseLinkedExpr())
-                                // 改成获得expr的type, 枚举重指向;
-                                .putInstType(EnumOperandType.INT)
-                                .putInstOp(EnumOperator.DIV)
-                                .build();
-                eatToken(EnumCvaToken.SEMI);
-                return new CvaAssignStatement(lineNum, idLiteral, divAssignExpr);
+                return parseSyntacticSugar(idLiteral, EnumOperandType.INT, EnumOperator.DIV);
             }
             case REM_ASSIGN:
             {
-                advance();
-                AbstractExpression remAssignExpr =
-                        new CvaOperandOperatorExpr.Builder()
-                                .putLineNum(lineNum)
-                                .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
-                                .putRight(parseLinkedExpr())
-                                // 改成获得expr的type, 枚举重指向;
-                                .putInstType(EnumOperandType.INT)
-                                .putInstOp(EnumOperator.REM)
-                                .build();
-                eatToken(EnumCvaToken.SEMI);
-                return new CvaAssignStatement(lineNum, idLiteral, remAssignExpr);
+                return parseSyntacticSugar(idLiteral, EnumOperandType.INT, EnumOperator.REM);
             }
             case BIT_AND_ASSIGN:
             {
-                advance();
-                AbstractExpression bitAndAssignExpr =
-                        new CvaOperandOperatorExpr.Builder()
-                                .putLineNum(lineNum)
-                                .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
-                                .putRight(parseLinkedExpr())
-                                // 改成获得expr的type, 枚举重指向;
-                                .putInstType(EnumOperandType.INT)
-                                .putInstOp(EnumOperator.BIT_AND)
-                                .build();
-                eatToken(EnumCvaToken.SEMI);
-                return new CvaAssignStatement(lineNum, idLiteral, bitAndAssignExpr);
+                return parseSyntacticSugar(idLiteral, EnumOperandType.INT, EnumOperator.BIT_AND);
             }
             case BIT_OR_ASSIGN:
             {
-                advance();
-                AbstractExpression bitOrAssignExpr =
-                        new CvaOperandOperatorExpr.Builder()
-                                .putLineNum(lineNum)
-                                .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
-                                .putRight(parseLinkedExpr())
-                                // 改成获得expr的type, 枚举重指向;
-                                .putInstType(EnumOperandType.INT)
-                                .putInstOp(EnumOperator.BIT_OR)
-                                .build();
-                eatToken(EnumCvaToken.SEMI);
-                return new CvaAssignStatement(lineNum, idLiteral, bitOrAssignExpr);
+                return parseSyntacticSugar(idLiteral, EnumOperandType.INT, EnumOperator.BIT_OR);
             }
             case BIT_XOR_ASSIGN:
             {
-                advance();
-                AbstractExpression bitXorAssignExpr =
-                        new CvaOperandOperatorExpr.Builder()
-                                .putLineNum(lineNum)
-                                .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
-                                .putRight(parseLinkedExpr())
-                                // 改成获得expr的type, 枚举重指向;
-                                .putInstType(EnumOperandType.INT)
-                                .putInstOp(EnumOperator.BIT_XOR)
-                                .build();
-                eatToken(EnumCvaToken.SEMI);
-                return new CvaAssignStatement(lineNum, idLiteral, bitXorAssignExpr);
+                return parseSyntacticSugar(idLiteral, EnumOperandType.INT, EnumOperator.BIT_XOR);
             }
             case LEFT_SHIFT_ASSIGN:
             {
-                advance();
-                AbstractExpression leftShiftAssignExpr =
-                        new CvaOperandOperatorExpr.Builder()
-                                .putLineNum(lineNum)
-                                .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
-                                .putRight(parseLinkedExpr())
-                                // 改成获得expr的type, 枚举重指向;
-                                .putInstType(EnumOperandType.INT)
-                                .putInstOp(EnumOperator.LEFT_SHIFT)
-                                .build();
-                eatToken(EnumCvaToken.SEMI);
-                return new CvaAssignStatement(lineNum, idLiteral, leftShiftAssignExpr);
+                return parseSyntacticSugar(idLiteral, EnumOperandType.INT, EnumOperator.LEFT_SHIFT);
             }
             case RIGHT_SHIFT_ASSIGN:
             {
-                advance();
-                AbstractExpression rightShiftAssignExpr =
-                        new CvaOperandOperatorExpr.Builder()
-                                .putLineNum(lineNum)
-                                .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
-                                .putRight(parseLinkedExpr())
-                                // 改成获得expr的type, 枚举重指向;
-                                .putInstType(EnumOperandType.INT)
-                                .putInstOp(EnumOperator.RIGHT_SHIFT)
-                                .build();
-                eatToken(EnumCvaToken.SEMI);
-                return new CvaAssignStatement(lineNum, idLiteral, rightShiftAssignExpr);
+                return parseSyntacticSugar(idLiteral, EnumOperandType.INT, EnumOperator.RIGHT_SHIFT);
             }
             case UNSIGNED_RIGHT_SHIFT_ASSIGN:
             {
-                advance();
-                AbstractExpression unsRightShiftAssignExpr =
-                        new CvaOperandOperatorExpr.Builder()
-                                .putLineNum(lineNum)
-                                .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
-                                .putRight(parseLinkedExpr())
-                                // 改成获得expr的type, 枚举重指向;
-                                .putInstType(EnumOperandType.INT)
-                                .putInstOp(EnumOperator.UNSIGNED_RIGHT_SHIFT)
-                                .build();
-                eatToken(EnumCvaToken.SEMI);
-                return new CvaAssignStatement(lineNum, idLiteral, unsRightShiftAssignExpr);
+                return parseSyntacticSugar(idLiteral, EnumOperandType.INT, EnumOperator.UNSIGNED_RIGHT_SHIFT);
             }
             case INCREMENT:
             {
@@ -1744,6 +1624,32 @@ public final class Parser
             }
         }
         return null;
+    }
+
+    /**
+     * 相当于工厂;
+     * @param idLiteral   id;
+     * @param operandType op;
+     * @param operator    op;
+     * @return re;
+     */
+    private CvaAssignStatement parseSyntacticSugar(String idLiteral,
+                                                   EnumOperandType operandType,
+                                                   EnumOperator operator)
+    {
+        int lineNum = curToken.getLineNum();
+        advance();
+        AbstractExpression addAssignExpr =
+                new CvaOperandOperatorExpr.Builder()
+                        .putLineNum(lineNum)
+                        .putLeft(new CvaIdentifierExpr(lineNum, idLiteral))
+                        .putRight(parseLinkedExpr())
+                        // 改成获得expr的type, 枚举重指向;
+                        .putInstType(operandType)
+                        .putInstOp(operator)
+                        .build();
+        eatToken(EnumCvaToken.SEMI);
+        return new CvaAssignStatement(lineNum, idLiteral, addAssignExpr);
     }
 
     private AbstractStatement handleOpenCurly()
