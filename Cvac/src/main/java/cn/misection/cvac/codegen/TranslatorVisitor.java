@@ -12,6 +12,7 @@ import cn.misection.cvac.ast.method.CvaMainMethod;
 import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
+import cn.misection.cvac.ast.type.AbstractType;
 import cn.misection.cvac.ast.type.ICvaType;
 import cn.misection.cvac.ast.type.advance.CvaStringType;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
@@ -80,15 +81,21 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(EnumCvaType type)
+    public void visit(EnumCvaType basicType)
     {
-        switch (type)
+        // TODO 这种都改成枚举中的map, 自动匹配;
+        switch (basicType)
         {
+            case VOID:
+            {
+                targetType = EnumTargetType.VOID;
+                break;
+            }
             case INT:
             case BOOLEAN:
             {
                 // FIXME 后端取消;
-                targetType = EnumTargetType.TARGET_INT;
+                targetType = EnumTargetType.INT;
                 break;
             }
             default:
@@ -473,14 +480,57 @@ public final class TranslatorVisitor implements IVisitor
         cvaMethod.getStatementList().forEach(this::visit);
 
         visit(cvaMethod.getRetExpr());
-        if (cvaMethod.getRetType() instanceof AbstractReferenceType)
+
+        switch (cvaMethod.getRetType().toEnum())
         {
-            emit(EnumInstructor.A_RETURN);
+            case VOID:
+            {
+                emit(EnumOperandType.VOID);
+                emit(EnumOperator.RETURN);
+                break;
+            }
+            case BYTE:
+            {
+                // TODO;
+                break;
+            }
+            case CHAR:
+            {
+                break;
+            }
+            case SHORT:
+            {
+                break;
+            }
+            case INT:
+            {
+                emit(EnumInstructor.I_RETURN);
+                break;
+            }
+            case LONG:
+            {
+                break;
+            }
+            case FLOAT:
+            {
+                break;
+            }
+            case DOUBLE:
+            {
+                break;
+            }
+            default:
+            {
+                if (cvaMethod.getRetType() instanceof AbstractType)
+                {
+                    emit(EnumInstructor.A_RETURN);
+                    break;
+                }
+                // thr;
+                break;
+            }
         }
-        else
-        {
-            emit(EnumInstructor.I_RETURN);
-        }
+
         targetMethod = new TargetMethod(
                 cvaMethod.name(),
                 theRetType,

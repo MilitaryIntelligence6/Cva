@@ -1086,6 +1086,7 @@ public final class Parser
                     }
                     break;
                 }
+                case CLOSE_CURLY_BRACE:
                 case RETURN:
                 {
                     break;

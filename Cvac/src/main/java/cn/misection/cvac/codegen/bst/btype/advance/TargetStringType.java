@@ -38,6 +38,6 @@ public final class TargetStringType extends BaseAdvanceType
     @Override
     public EnumTargetType toEnum()
     {
-        return EnumTargetType.TARGET_STRING;
+        return EnumTargetType.STRING;
     }
 }

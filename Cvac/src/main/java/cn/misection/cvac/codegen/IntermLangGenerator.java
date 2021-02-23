@@ -98,7 +98,7 @@ public final class IntermLangGenerator implements IBackendVisitor
     @Override
     public void visit(BaseAdvanceType type)
     {
-        write(type.toInst());
+        writef("L%s;", type.toInst());
     }
 
     @Override

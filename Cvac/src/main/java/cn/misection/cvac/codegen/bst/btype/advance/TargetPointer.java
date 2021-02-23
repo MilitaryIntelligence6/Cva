@@ -21,7 +21,7 @@ public class TargetPointer extends BaseUnsafe
     @Override
     public EnumTargetType toEnum()
     {
-        return EnumTargetType.TARGET_POINTER;
+        return EnumTargetType.POINTER;
     }
 
     @Override

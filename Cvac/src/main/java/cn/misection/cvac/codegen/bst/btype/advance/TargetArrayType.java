@@ -34,7 +34,7 @@ public class TargetArrayType extends BaseAdvanceType
     @Override
     public EnumTargetType toEnum()
     {
-        return EnumTargetType.TARGET_ARRAY;
+        return EnumTargetType.ARRAY;
     }
 
     @Override

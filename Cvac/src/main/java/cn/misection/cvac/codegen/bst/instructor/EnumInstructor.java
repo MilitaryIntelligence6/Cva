@@ -11,6 +11,7 @@ public enum EnumInstructor implements IInstructor, Instructable
 {
     /**
      * JVM指令集;
+     * @TODO 重构成桥接模式;
      */
     A_LOAD,
 

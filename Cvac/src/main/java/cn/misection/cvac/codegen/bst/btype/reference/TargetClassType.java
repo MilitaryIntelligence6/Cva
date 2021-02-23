@@ -31,7 +31,7 @@ public final class TargetClassType extends BaseReferenceType
     @Override
     public EnumTargetType toEnum()
     {
-        return EnumTargetType.TARGET_CLASS;
+        return EnumTargetType.CLASS;
     }
 
     @Override

@@ -198,6 +198,11 @@ public interface IVisitor
                         // 直接忽略, 转都不转;
                         break;
                     }
+                    case CONST_NULL:
+                    {
+                        // TODO;
+                        break;
+                    }
                     default:
                     {
                         System.err.println("unknown expr");
