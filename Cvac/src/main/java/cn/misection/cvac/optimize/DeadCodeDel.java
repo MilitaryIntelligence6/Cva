@@ -210,7 +210,7 @@ public final class DeadCodeDel
     }
 
     @Override
-    public void visit(CvaWhileStatement stm)
+    public void visit(CvaWhileForStatement stm)
     {
         Set<String> temOriginal = new HashSet<>(localLiveness);
         visit(stm.getBody());

@@ -1,6 +1,6 @@
 package cn.misection.cvac.ast.expr;
 
-import cn.misection.cvac.ast.type.basic.EnumCvaType;
+import cn.misection.cvac.ast.CvaNullable;
 
 /**
  * @author Military Intelligence 6 root
@@ -9,7 +9,7 @@ import cn.misection.cvac.ast.type.basic.EnumCvaType;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:53:00
  */
-public abstract class AbstractExpression implements IExpression
+public abstract class AbstractExpression implements ICvaExpression, CvaNullable
 {
     protected int lineNum;
 
@@ -28,5 +28,11 @@ public abstract class AbstractExpression implements IExpression
     public void setLineNum(int lineNum)
     {
         this.lineNum = lineNum;
+    }
+
+    @Override
+    public boolean isNull()
+    {
+        return false;
     }
 }

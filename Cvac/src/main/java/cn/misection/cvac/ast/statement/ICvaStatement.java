@@ -10,11 +10,11 @@ import cn.misection.cvac.ast.ASTree;
  * @CreateTime 2021年02月14日 18:02:00
  */
 @FunctionalInterface
-public interface IStatement extends ASTree
+public interface ICvaStatement extends ASTree
 {
     /**
      * 拿到enum;
-     * @return
+     * @return toEnum;
      */
     EnumCvaStatement toEnum();
 }

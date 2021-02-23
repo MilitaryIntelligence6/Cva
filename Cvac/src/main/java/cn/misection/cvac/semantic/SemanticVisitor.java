@@ -437,7 +437,7 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaWhileStatement stm)
+    public void visit(CvaWhileForStatement stm)
     {
         visit(stm.getCondition());
         if (this.type != EnumCvaType.CVA_BOOLEAN)

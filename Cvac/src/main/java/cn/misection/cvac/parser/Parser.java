@@ -277,7 +277,7 @@ public final class Parser
         return null;
     }
 
-    /**
+    /*
      * TODO;
      */
 //    private AbstractExpression parseBitNegateExpr()
@@ -688,13 +688,18 @@ public final class Parser
             {
                 return handleIdentifier();
             }
+//            case NEW:
+//            {
+////                return
+//                break;
+//            }
             default:
             {
                 errorLog();
+                // 不可达, 做成抛错;
+                return null;
             }
         }
-        // 做成抛错;
-        return null;
     }
 
     /**
@@ -1536,7 +1541,7 @@ public final class Parser
         AbstractExpression condition = parseLinkedExpr();
         eatToken(EnumCvaToken.CLOSE_PAREN);
         AbstractStatement body = parseStatement();
-        return new CvaWhileStatement(lineNum, condition, body);
+        return new CvaWhileForStatement(lineNum, condition, body);
     }
 
 //    private AbstractStatement handleFor()

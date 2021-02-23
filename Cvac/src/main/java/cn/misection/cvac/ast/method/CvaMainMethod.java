@@ -30,8 +30,6 @@ public final class CvaMainMethod extends AbstractMethod
         this.statementList = builder.statementList;
     }
 
-
-
     @Override
     public String name()
     {
@@ -89,7 +87,7 @@ public final class CvaMainMethod extends AbstractMethod
 
         /**
          * 类似原型模式的builder;
-         * @param prototype
+         * @param prototype 创建原型;
          */
         public Builder(AbstractMethod prototype)
         {
@@ -98,19 +96,6 @@ public final class CvaMainMethod extends AbstractMethod
             this.argumentList = prototype.argumentList;
             this.localVarList = prototype.localVarList;
             this.statementList = prototype.statementList;
-        }
-
-        public Builder(ICvaType retType,
-                       AbstractExpression retExpr,
-                       List<AbstractDeclaration> argumentList,
-                       List<AbstractDeclaration> localVarList,
-                       List<AbstractStatement> statementList)
-        {
-            this.retType = retType;
-            this.retExpr = retExpr;
-            this.argumentList = argumentList;
-            this.localVarList = localVarList;
-            this.statementList = statementList;
         }
 
         public CvaMainMethod build()

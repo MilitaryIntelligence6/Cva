@@ -17,7 +17,7 @@ import java.util.List;
  */
 public final class CvaMethod extends AbstractMethod
 {
-    public CvaMethod(String name,
+    private CvaMethod(String name,
                      ICvaType retType,
                      AbstractExpression retExpr,
                      List<AbstractDeclaration> argumentList,
@@ -60,21 +60,6 @@ public final class CvaMethod extends AbstractMethod
         private List<AbstractStatement> statementList;
 
         public Builder() {}
-
-        public Builder(String name,
-                       ICvaType retType,
-                       AbstractExpression retExpr,
-                       List<AbstractDeclaration> argumentList,
-                       List<AbstractDeclaration> localVarList,
-                       List<AbstractStatement> statementList)
-        {
-            this.name = name;
-            this.retType = retType;
-            this.retExpr = retExpr;
-            this.argumentList = argumentList;
-            this.localVarList = localVarList;
-            this.statementList = statementList;
-        }
 
         public CvaMethod build()
         {

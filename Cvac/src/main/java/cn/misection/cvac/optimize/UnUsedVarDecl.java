@@ -159,7 +159,7 @@ public final class UnUsedVarDecl
     }
 
     @Override
-    public void visit(CvaWhileStatement stm)
+    public void visit(CvaWhileForStatement stm)
     {
         this.visit(stm.getCondition());
         this.visit(stm.getBody());

@@ -39,6 +39,11 @@ public final class CvaIfStatement extends AbstractStatement
         this.elseStatement = null;
     }
 
+//    private void initNullElse()
+//    {
+//        this.elseStatement = NullExpr.getInstance();
+//    }
+
     @Override
     public EnumCvaStatement toEnum()
     {

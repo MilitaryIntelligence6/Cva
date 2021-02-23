@@ -142,7 +142,7 @@ public final class UnReachableDel
     }
 
     @Override
-    public void visit(CvaWhileStatement stm)
+    public void visit(CvaWhileForStatement stm)
     {
         if (stm.getCondition() instanceof CvaConstFalseExpr)
         {

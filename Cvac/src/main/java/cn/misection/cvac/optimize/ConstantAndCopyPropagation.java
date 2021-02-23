@@ -315,7 +315,7 @@ public final class ConstantAndCopyPropagation
     }
 
     @Override
-    public void visit(CvaWhileStatement stm)
+    public void visit(CvaWhileForStatement stm)
     {
         // TODO: it is wrong when in multi-layer-loop
         // delete the var which be changed

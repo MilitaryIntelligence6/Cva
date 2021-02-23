@@ -12,16 +12,20 @@ public enum EnumCvaStatement
     /**
      * statement;
      */
+    NULL,
+
     ASSIGN,
 
     BLOCK,
 
     IF,
 
-    WHILE,
+    WHILE_FOR,
 
     WRITE,
 
     INCREMENT,
+
+    EXPR_STATEMENT
     ;
 }

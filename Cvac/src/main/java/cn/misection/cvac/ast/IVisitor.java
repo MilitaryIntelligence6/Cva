@@ -250,9 +250,9 @@ public interface IVisitor
                 visit((CvaWriteStatement) abstStm);
                 break;
             }
-            case WHILE:
+            case WHILE_FOR:
             {
-                visit((CvaWhileStatement) abstStm);
+                visit((CvaWhileForStatement) abstStm);
                 break;
             }
             case INCREMENT:
@@ -276,7 +276,7 @@ public interface IVisitor
 
     void visit(CvaWriteStatement stm);
 
-    void visit(CvaWhileStatement stm);
+    void visit(CvaWhileForStatement stm);
 
     void visit(CvaIncreStatement stm);
 

@@ -410,16 +410,18 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaWhileStatement stm)
+    public void visit(CvaWhileForStatement stm)
     {
-        Label con = new Label();
+        // 条件体;
+        Label cond = new Label();
+        // 结束跳转;
         Label end = new Label();
-        emit(new LabelJ(con));
+        emit(new LabelJ(cond));
         visit(stm.getCondition());
         emit(new Ldc<>(1));
         emit(new IfICmpLt(end));
         visit(stm.getBody());
-        emit(new Goto(con));
+        emit(new Goto(cond));
         emit(new LabelJ(end));
     }
 

@@ -313,7 +313,7 @@ public final class ConstantFolder
     }
 
     @Override
-    public void visit(CvaWhileStatement stm)
+    public void visit(CvaWhileForStatement stm)
     {
         this.visit(stm.getCondition());
         stm.setCondition(this.lastExpr);

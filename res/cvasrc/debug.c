@@ -6,7 +6,7 @@ call cva.native.io.*;
 call cva.std.console.*;
 /**
  * 原生string导入;
- *  由于是java StringBuffer读的, 所以支持中文注释;
+ *  由于是StringBuffer读的, 所以支持中文注释;
  */
 call cva.lang.type.String;
 

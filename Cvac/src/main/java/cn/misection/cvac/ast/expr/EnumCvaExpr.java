@@ -12,6 +12,8 @@ public enum EnumCvaExpr
     /**
      * 单目;
      */
+    NULL,
+
     CALL,
 
     NEGATE,

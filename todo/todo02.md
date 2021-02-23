@@ -29,3 +29,5 @@
 - ++ 应该从statement变成装饰者expr;  
 - 优化, 数值小于指定值的都换成iconst_0, 霍夫曼树 Byte.MAX_VALUE bipush;
   sipush;
+  
+ - 直接在ldc压命令中改, 改成iconst_1, bipush, sipush;
