@@ -4,7 +4,7 @@ import cn.misection.cvac.ast.clas.AbstractCvaClass;
 import cn.misection.cvac.ast.clas.CvaClass;
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.decl.CvaDeclaration;
-import cn.misection.cvac.ast.decl.CvaNullDecl;
+import cn.misection.cvac.ast.decl.nullptr.CvaNullDecl;
 import cn.misection.cvac.ast.entry.AbstractEntryClass;
 import cn.misection.cvac.ast.entry.CvaEntryClass;
 import cn.misection.cvac.ast.expr.AbstractExpression;
@@ -17,6 +17,7 @@ import cn.misection.cvac.ast.method.CvaMainMethod;
 import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
+import cn.misection.cvac.ast.statement.nullptr.CvaNullStatement;
 import cn.misection.cvac.ast.type.ICvaType;
 import cn.misection.cvac.ast.type.advance.CvaArrayType;
 import cn.misection.cvac.ast.type.advance.CvaStringType;
@@ -368,7 +369,7 @@ public final class Parser
 
     /**
      * @TODO 给几个枚举做反查map, 可以直接查;
-     * @return
+     * @return p;
      */
     private AbstractExpression parseUnsignedRightShiftExpr()
     {

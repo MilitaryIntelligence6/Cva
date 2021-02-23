@@ -1,6 +1,6 @@
-package cn.misection.cvac.ast.decl;
+package cn.misection.cvac.ast.decl.nullptr;
 
-import cn.misection.cvac.ast.CvaNullable;
+import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.type.ICvaType;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
 
