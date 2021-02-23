@@ -65,5 +65,7 @@ int main(string[] args)
 //    println num;
     echo "5 + 7 = "; println 5 + 7;
     echo "5 - 7 = "; println 5 - 7;
+    echo "5 * 7 = "; println 5 * 7;
+    echo "15 / 4 = "; println 15 / 4;
     return 0;
 }

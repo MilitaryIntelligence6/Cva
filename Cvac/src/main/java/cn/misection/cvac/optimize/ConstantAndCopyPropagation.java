@@ -185,22 +185,6 @@ public final class ConstantAndCopyPropagation
     }
 
     @Override
-    public void visit(CvaMulExpr expr)
-    {
-        this.visit(expr.getLeft());
-        if (this.canChange)
-        {
-            expr.setLeft(this.curExpr);
-        }
-        this.visit(expr.getRight());
-        if (this.canChange)
-        {
-            expr.setRight(this.curExpr);
-        }
-        this.canChange = false;
-    }
-
-    @Override
     public void visit(CvaConstTrueExpr expr)
     {
         this.curExpr = expr;
@@ -214,6 +198,7 @@ public final class ConstantAndCopyPropagation
         {
             case ADD:
             case SUB:
+            case MUL:
             {
                 this.visit(expr.getLeft());
                 if (this.canChange)

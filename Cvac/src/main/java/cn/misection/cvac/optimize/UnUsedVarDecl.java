@@ -100,13 +100,6 @@ public final class UnUsedVarDecl
     public void visit(CvaThisExpr expr) {}
 
     @Override
-    public void visit(CvaMulExpr expr)
-    {
-        visit(expr.getLeft());
-        visit(expr.getRight());
-    }
-
-    @Override
     public void visit(CvaConstTrueExpr expr) {}
 
     @Override

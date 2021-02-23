@@ -264,14 +264,6 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaMulExpr expr)
-    {
-        visit(expr.getLeft());
-        visit(expr.getRight());
-        emit(EnumInstructor.I_MUL);
-    }
-
-    @Override
     public void visit(CvaConstTrueExpr expr)
     {
         emit(new Ldc<>(1));

@@ -579,7 +579,14 @@ public final class Parser
         {
             advance();
             tem = parseDivExpr();
-            expr = new CvaMulExpr(tem.getLineNum(), expr, tem);
+            expr = new CvaOperandOperatorExpr.Builder()
+                    .putLineNum(tem.getLineNum())
+                    .putEnumExpr(EnumCvaExpr.MUL)
+                    .putLeft(expr)
+                    .putRight(tem)
+                    .putInstType(EnumOperandType.INT)
+                    .putInstOp(EnumOperator.MUL)
+                    .build();
         }
         return expr;
     }

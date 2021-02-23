@@ -103,21 +103,10 @@ public final class DeadCodeDel
     }
 
     @Override
-    public void visit(CvaThisExpr expr)
-    {
-    }
+    public void visit(CvaThisExpr expr) {}
 
     @Override
-    public void visit(CvaMulExpr expr)
-    {
-        visit(expr.getLeft());
-        visit(expr.getRight());
-    }
-
-    @Override
-    public void visit(CvaConstTrueExpr expr)
-    {
-    }
+    public void visit(CvaConstTrueExpr expr) {}
 
     @Override
     public void visit(CvaOperandOperatorExpr expr)
@@ -126,6 +115,7 @@ public final class DeadCodeDel
         {
             case ADD:
             case SUB:
+            case MUL:
             {
                 visit(expr.getLeft());
                 visit(expr.getRight());

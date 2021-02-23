@@ -185,35 +185,6 @@ public final class ConstantFolder
     }
 
     @Override
-    public void visit(CvaMulExpr expr)
-    {
-        this.visit(expr.getLeft());
-        if (isConstant())
-        {
-            CvaConstIntExpr temLeft = (CvaConstIntExpr) this.lastExpr;
-            this.visit(expr.getRight());
-            if (isConstant())
-            {
-                this.isOptimizing = true;
-                this.lastExpr = new CvaConstIntExpr(
-                        temLeft.getValue() * ((CvaConstIntExpr) this.lastExpr).getValue(),
-                        this.lastExpr.getLineNum());
-            }
-            else
-            {
-                this.lastExpr = new CvaMulExpr(
-                        this.lastExpr.getLineNum(),
-                        temLeft,
-                        this.lastExpr);
-            }
-        }
-        else
-        {
-            this.lastExpr = expr;
-        }
-    }
-
-    @Override
     public void visit(CvaConstTrueExpr expr)
     {
         this.lastExpr = expr;
@@ -287,6 +258,42 @@ public final class ConstantFolder
                                 .putInstType(EnumOperandType.INT)
                                 .putInstOp(EnumOperator.SUB)
                                 .putEnumExpr(EnumCvaExpr.SUB)
+                                .build();
+                    }
+                }
+                else
+                {
+                    this.lastExpr = expr;
+                }
+                break;
+            }
+            case MUL:
+            {
+                this.visit(expr.getLeft());
+                if (isConstant())
+                {
+                    CvaConstIntExpr temLeft = (CvaConstIntExpr) this.lastExpr;
+                    this.visit(expr.getRight());
+                    if (isConstant())
+                    {
+                        this.isOptimizing = true;
+                        this.lastExpr = new CvaConstIntExpr(
+                                temLeft.getValue() * ((CvaConstIntExpr) this.lastExpr).getValue(),
+                                this.lastExpr.getLineNum());
+                    }
+                    else
+                    {
+//                this.lastExpr = new CvaMulExpr(
+//                        this.lastExpr.getLineNum(),
+//                        temLeft,
+//                        this.lastExpr);
+                        lastExpr = new CvaOperandOperatorExpr.Builder()
+                                .putLineNum(lastExpr.getLineNum())
+                                .putLeft(temLeft)
+                                .putRight(lastExpr)
+                                .putInstType(EnumOperandType.INT)
+                                .putInstOp(EnumOperator.MUL)
+                                .putEnumExpr(EnumCvaExpr.MUL)
                                 .build();
                     }
                 }

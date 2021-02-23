@@ -147,11 +147,6 @@ public interface IVisitor
                 visit((CvaThisExpr) expr);
                 break;
             }
-            case CvaExprClassName.CVA_MUL_EXPR:
-            {
-                visit((CvaMulExpr) expr);
-                break;
-            }
             case CvaExprClassName.CVA_CONST_TRUE_EXPR:
             {
                 visit((CvaConstTrueExpr) expr);
@@ -222,8 +217,6 @@ public interface IVisitor
     void visit(CvaConstStringExpr expr);
 
     void visit(CvaThisExpr expr);
-
-    void visit(CvaMulExpr expr);
 
     void visit(CvaConstTrueExpr expr);
 

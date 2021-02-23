@@ -296,25 +296,6 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaMulExpr expr)
-    {
-        visit(expr.getLeft());
-        ICvaType leftType = this.type;
-        visit(expr.getRight());
-//        if (!this.type.toString().equals(leftType.toString()))
-        if (type.toEnum() != leftType.toEnum())
-        {
-            errorLog(expr.getLineNum(),
-                    String.format("times expression the type of left is %s, but the type of right is %s",
-                            leftType.toString(), this.type.toString()));
-        }
-        else if (!EnumCvaType.isNumber(type.toEnum()))
-        {
-            errorLog(expr.getLineNum(), "only basic type  can be multiply.");
-        }
-    }
-
-    @Override
     public void visit(CvaConstTrueExpr expr)
     {
         this.type = EnumCvaType.BOOLEAN;
@@ -326,60 +307,33 @@ public final class SemanticVisitor implements IVisitor
         switch (expr.toEnum())
         {
             case ADD:
-            {
-                visit(expr.getLeft());
-                ICvaType leftType = this.type;
-                visit(expr.getRight());
-                if (type.toEnum() != leftType.toEnum())
-                {
-                    errorLog(expr.getLineNum(),
-                            String.format("add expression the type of left is %s, but the type of right is %s",
-                                    leftType.toString(), this.type.toString()));
-                }
-                else if (!EnumCvaType.isNumber(type.toEnum()))
-                {
-                    errorLog(expr.getLineNum(), " only numeric type numbers can be added.");
-                }
-                break;
-            }
             case SUB:
-            {
-                visit(expr.getLeft());
-                ICvaType leftType = this.type;
-                visit(expr.getRight());
-                if (type.toEnum() != leftType.toEnum())
-                {
-                    errorLog(expr.getLineNum(),
-                            String.format("sub expression the type of left is %s, but the type of right is %s",
-                                    leftType.toString(), this.type.toString()));
-                }
-                else if (!EnumCvaType.isNumber(type.toEnum()))
-                {
-                    errorLog(expr.getLineNum(), " only basic numbers can be subbed.");
-                }
-                break;
-            }
+            case MUL:
             default:
             {
-                visit(expr.getLeft());
-                ICvaType leftType = this.type;
-                visit(expr.getRight());
-                if (type.toEnum() != leftType.toEnum())
-                {
-                    errorLog(expr.getLineNum(),
-                            String.format("add expression the type of left is %s, but the type of right is %s",
-                                    leftType.toString(), this.type.toString()));
-                }
-                else if (!EnumCvaType.isNumber(type.toEnum()))
-                {
-                    errorLog(expr.getLineNum(), String.format(" only numeric type numbers can be %s. got %s",
-                            expr.getInstOp().toInst(),
-                            expr.getInstType().toInst()));
-                }
+                handleOperandOp(expr.toEnum().name(), expr);
                 break;
             }
         }
 
+    }
+
+    private void handleOperandOp(String op,
+            CvaOperandOperatorExpr expr)
+    {
+        visit(expr.getLeft());
+        ICvaType leftType = this.type;
+        visit(expr.getRight());
+        if (type.toEnum() != leftType.toEnum())
+        {
+            errorLog(expr.getLineNum(),
+                    String.format("%s expression the type of left is %s, but the type of right is %s",
+                            op, leftType.toString(), this.type.toString()));
+        }
+        else if (!EnumCvaType.isNumber(type.toEnum()))
+        {
+            errorLog(expr.getLineNum(), String.format(" only numeric type numbers can %s.", op));
+        }
     }
 
     @Override

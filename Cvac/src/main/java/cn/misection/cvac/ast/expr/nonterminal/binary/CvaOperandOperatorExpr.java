@@ -14,7 +14,7 @@ import cn.misection.cvac.codegen.bst.instructor.Instructable;
  * @Description TODO
  * @CreateTime 2021年02月21日 22:53:00
  */
-public class CvaOperandOperatorExpr
+public final class CvaOperandOperatorExpr
         extends AbstractBinaryExpr implements Instructable
 {
     private EnumCvaType resType;
