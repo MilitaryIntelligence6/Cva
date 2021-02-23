@@ -208,7 +208,6 @@ public final class Parser
      * -> this
      * -> id
      * -> new id()
-     *
      * @return atom expr;
      */
     private AbstractExpression parseAtomExpr()
