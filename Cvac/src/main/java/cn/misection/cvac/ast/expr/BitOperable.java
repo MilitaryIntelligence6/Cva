@@ -19,6 +19,6 @@ public interface BitOperable extends ICvaExpression
     @Override
     default EnumCvaType resType()
     {
-        return EnumCvaType.CVA_INT;
+        return EnumCvaType.INT;
     }
 }

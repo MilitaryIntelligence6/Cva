@@ -18,7 +18,7 @@ public final class CvaArrayType extends AbstractAdvanceType
 
     private int size;
 
-    private static final EnumCvaType ENUM_TYPE = EnumCvaType.CVA_ARRAY;
+    private static final EnumCvaType ENUM_TYPE = EnumCvaType.ARRAY;
 
     public CvaArrayType(ICvaType innerType, int size)
     {

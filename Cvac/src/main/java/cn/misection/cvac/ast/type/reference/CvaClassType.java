@@ -13,7 +13,7 @@ public final class CvaClassType extends AbstractReferenceType
 {
     public static final String TYPE_LITERAL = "@class";
 
-    private static final EnumCvaType ENUM_TYPE = EnumCvaType.CVA_CLASS;
+    private static final EnumCvaType ENUM_TYPE = EnumCvaType.CLASS;
 
     private final String name;
 

@@ -33,22 +33,22 @@ public interface IVisitor
         {
             switch ((type.toEnum()))
             {
-                case CVA_STRING:
+                case STRING:
                 {
                     visit((CvaStringType) type);
                     break;
                 }
-                case CVA_POINTER:
+                case POINTER:
                 {
                     // TODO;
                     break;
                 }
-                case CVA_ARRAY:
+                case ARRAY:
                 {
                     // TODO;
                     break;
                 }
-                case CVA_CLASS:
+                case CLASS:
                 {
                     visit((CvaClassType) type);
                 }

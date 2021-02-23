@@ -22,7 +22,7 @@ public final class CvaIncDecExpr extends AbstractUnaryExpr
     @Override
     public EnumCvaType resType()
     {
-        return EnumCvaType.CVA_INT;
+        return EnumCvaType.INT;
     }
 
     @Override

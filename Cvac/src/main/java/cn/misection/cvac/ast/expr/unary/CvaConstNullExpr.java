@@ -20,7 +20,7 @@ public final class CvaConstNullExpr extends AbstractUnaryExpr
     @Override
     public EnumCvaType resType()
     {
-        return EnumCvaType.CVA_VOID;
+        return EnumCvaType.VOID;
     }
 
     @Override

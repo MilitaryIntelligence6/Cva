@@ -753,47 +753,47 @@ public final class Parser
         {
             case VOID:
             {
-                type = EnumCvaType.CVA_VOID;
+                type = EnumCvaType.VOID;
                 break;
             }
             case BYTE:
             {
-                type = EnumCvaType.CVA_BYTE;
+                type = EnumCvaType.BYTE;
                 break;
             }
             case CHAR:
             {
-                type = EnumCvaType.CVA_CHAR;
+                type = EnumCvaType.CHAR;
                 break;
             }
             case SHORT:
             {
-                type = EnumCvaType.CVA_SHORT;
+                type = EnumCvaType.SHORT;
                 break;
             }
             case INT:
             {
-                type = EnumCvaType.CVA_INT;
+                type = EnumCvaType.INT;
                 break;
             }
             case LONG:
             {
-                type = EnumCvaType.CVA_LONG;
+                type = EnumCvaType.LONG;
                 break;
             }
             case FLOAT:
             {
-                type = EnumCvaType.CVA_FLOAT;
+                type = EnumCvaType.FLOAT;
                 break;
             }
             case DOUBLE:
             {
-                type = EnumCvaType.CVA_DOUBLE;
+                type = EnumCvaType.DOUBLE;
                 break;
             }
             case BOOLEAN:
             {
-                type = EnumCvaType.CVA_BOOLEAN;
+                type = EnumCvaType.BOOLEAN;
                 break;
             }
             case STRING:
@@ -1069,7 +1069,7 @@ public final class Parser
         }
         // FIXME 隐患;
         AbstractExpression retExpr;
-        if (retType.toEnum() == EnumCvaType.CVA_VOID)
+        if (retType.toEnum() == EnumCvaType.VOID)
         {
             retExpr = new CvaConstNullExpr(curToken.getLineNum());
             if (curToken.toEnum() == EnumCvaToken.RETURN)

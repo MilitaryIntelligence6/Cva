@@ -1,7 +1,6 @@
 package cn.misection.cvac.ast.expr.unary;
 
 import cn.misection.cvac.ast.expr.EnumCvaExpr;
-import cn.misection.cvac.ast.expr.unary.AbstractUnaryExpr;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
 
 /**
@@ -21,7 +20,7 @@ public final class CvaThisExpr extends AbstractUnaryExpr
     @Override
     public EnumCvaType resType()
     {
-        return EnumCvaType.CVA_CLASS;
+        return EnumCvaType.CLASS;
     }
 
     @Override

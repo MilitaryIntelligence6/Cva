@@ -7,7 +7,7 @@ package cn.misection.cvac.ast.statement;
  * @Description TODO
  * @CreateTime 2021年02月23日 13:52:00
  */
-public class CvaNullStatement extends AbstractStatement
+public final class CvaNullStatement extends AbstractStatement
 {
     private static CvaNullStatement instance = null;
 

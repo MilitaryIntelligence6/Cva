@@ -12,37 +12,39 @@ import cn.misection.cvac.ast.type.ICvaType;
 public enum EnumCvaType implements ICvaType
 {
     /**
-     * void;
+     * enum type;
      */
-    CVA_VOID("@void"),
+    NULL("null"),
 
-    CVA_BYTE("@byte"),
+    VOID("@void"),
 
-    CVA_CHAR("@char"),
+    BYTE("@byte"),
 
-    CVA_SHORT("@short"),
+    CHAR("@char"),
 
-    CVA_INT("@int"),
+    SHORT("@short"),
 
-    CVA_LONG("@long"),
+    INT("@int"),
 
-    CVA_BOOLEAN("@boolean"),
+    LONG("@long"),
 
-    CVA_FLOAT("@float"),
+    BOOLEAN("@boolean"),
 
-    CVA_DOUBLE("@double"),
+    FLOAT("@float"),
 
-    CVA_POINTER("@pointer"),
+    DOUBLE("@double"),
 
-    CVA_STRING("@string"),
+    POINTER("@pointer"),
 
-    CVA_ARRAY("@array"),
+    STRING("@string"),
 
-    CVA_STRUCT("@struct"),
+    ARRAY("@array"),
 
-    CVA_CLASS("@class"),
+    STRUCT("@struct"),
 
-    CVA_ENUM("@enum"),
+    CLASS("@class"),
+
+    ENUM("@enum"),
 
     UNKNOWN("unknown"),
     ;
@@ -81,44 +83,44 @@ public enum EnumCvaType implements ICvaType
     /**
      * class static domain;
      * @param type t
-     * @return
+     * @return isBasic;
      */
     public static boolean isBasicType(EnumCvaType type)
     {
-        return type.ordinal() >= CVA_VOID.ordinal()
-                && type.ordinal() <= CVA_DOUBLE.ordinal();
+        return type.ordinal() >= VOID.ordinal()
+                && type.ordinal() <= DOUBLE.ordinal();
     }
 
     public static boolean isAdvanceType(EnumCvaType type)
     {
-        return type.ordinal() >= CVA_POINTER.ordinal()
-                && type.ordinal() <= CVA_ARRAY.ordinal();
+        return type.ordinal() >= POINTER.ordinal()
+                && type.ordinal() <= ARRAY.ordinal();
     }
 
     public static boolean isReferenceType(EnumCvaType type)
     {
-        return type.ordinal() >= CVA_STRUCT.ordinal();
+        return type.ordinal() >= STRUCT.ordinal();
     }
 
     /**
      * 是否是整形, byte short等都是;
-     * @param type
-     * @return
+     * @param type t;
+     * @return isInt;
      */
     public static boolean isInteger(EnumCvaType type)
     {
-        return type.ordinal() >= CVA_BYTE.ordinal()
-                && type.ordinal() <= CVA_LONG.ordinal();
+        return type.ordinal() >= BYTE.ordinal()
+                && type.ordinal() <= LONG.ordinal();
     }
 
     public static boolean isFloatPoint(EnumCvaType type)
     {
-        return type == CVA_FLOAT || type == CVA_DOUBLE;
+        return type == FLOAT || type == DOUBLE;
     }
 
     /**
      * 是否是前端的数字, boolean在后端是, 但在前端不是;
-     * @return
+     * @return isNumber;
      */
     public static boolean isNumber(EnumCvaType type)
     {

@@ -148,7 +148,7 @@ public final class SemanticVisitor implements IVisitor
             errorLog(expr.getLineNum(),
                     String.format("and expression the type of left is %s, but the type of right is %s", leftType.toString(), this.type.toString()));
         }
-        else if (type != EnumCvaType.CVA_BOOLEAN)
+        else if (type != EnumCvaType.BOOLEAN)
         {
             errorLog(expr.getLineNum(), "only boolean can be ");
         }
@@ -213,7 +213,7 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaConstFalseExpr expr)
     {
-        this.type = EnumCvaType.CVA_BOOLEAN;
+        this.type = EnumCvaType.BOOLEAN;
     }
 
     @Override
@@ -268,7 +268,7 @@ public final class SemanticVisitor implements IVisitor
         {
             errorLog(expr.getLineNum(), "only numeric type can be compared.");
         }
-        this.type = EnumCvaType.CVA_BOOLEAN;
+        this.type = EnumCvaType.BOOLEAN;
     }
 
     @Override
@@ -291,17 +291,17 @@ public final class SemanticVisitor implements IVisitor
     public void visit(CvaNegateExpr expr)
     {
         visit(expr.getExpr());
-        if (type.toEnum() != EnumCvaType.CVA_BOOLEAN)
+        if (type.toEnum() != EnumCvaType.BOOLEAN)
         {
             errorLog(expr.getLineNum(), "the exp cannot calculate to a boolean.");
         }
-        this.type = EnumCvaType.CVA_BOOLEAN;
+        this.type = EnumCvaType.BOOLEAN;
     }
 
     @Override
     public void visit(CvaConstIntExpr expr)
     {
-        this.type = EnumCvaType.CVA_INT;
+        this.type = EnumCvaType.INT;
     }
 
     @Override
@@ -356,7 +356,7 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaConstTrueExpr expr)
     {
-        this.type = EnumCvaType.CVA_BOOLEAN;
+        this.type = EnumCvaType.BOOLEAN;
     }
 
     @Override
@@ -409,7 +409,7 @@ public final class SemanticVisitor implements IVisitor
     public void visit(CvaIfStatement stm)
     {
         visit(stm.getCondition());
-        if (type != EnumCvaType.CVA_BOOLEAN)
+        if (type != EnumCvaType.BOOLEAN)
         {
             errorLog(stm.getCondition().getLineNum(),
                     "the condition's type should be a boolean.");
@@ -427,7 +427,7 @@ public final class SemanticVisitor implements IVisitor
     {
         visit(stm.getExpr());
         if (EnumCvaType.isNumber(type.toEnum())
-                || type.toEnum() == EnumCvaType.CVA_STRING)
+                || type.toEnum() == EnumCvaType.STRING)
         {
             return;
         }
@@ -440,7 +440,7 @@ public final class SemanticVisitor implements IVisitor
     public void visit(CvaWhileForStatement stm)
     {
         visit(stm.getCondition());
-        if (this.type != EnumCvaType.CVA_BOOLEAN)
+        if (this.type != EnumCvaType.BOOLEAN)
         {
             errorLog(stm.getCondition().getLineNum(),
                     "the condition's type should be a boolean.");
@@ -468,7 +468,7 @@ public final class SemanticVisitor implements IVisitor
         cvaMethod.getStatementList().forEach(this::visit);
         visit(cvaMethod.getRetExpr());
         // if (!this.type.toString().equals(m.retType.toString()))
-        if (cvaMethod.getRetType() != EnumCvaType.CVA_VOID)
+        if (cvaMethod.getRetType() != EnumCvaType.VOID)
         {
             if (isNotMatch(cvaMethod.getRetType(), this.type))
             {
@@ -491,7 +491,7 @@ public final class SemanticVisitor implements IVisitor
         mainMethod.getLocalVarList().forEach(local ->
                 this.curMethodLocalSet.add((local.literal())));
         mainMethod.getStatementList().forEach(this::visit);
-        if (mainMethod.getRetType() != EnumCvaType.CVA_VOID)
+        if (mainMethod.getRetType() != EnumCvaType.VOID)
         {
             visit(mainMethod.getRetExpr());
             if (isNotMatch(mainMethod.getRetType(), type))

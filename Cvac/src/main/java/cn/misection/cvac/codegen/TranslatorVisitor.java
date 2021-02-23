@@ -83,8 +83,8 @@ public final class TranslatorVisitor implements IVisitor
     {
         switch (type)
         {
-            case CVA_INT:
-            case CVA_BOOLEAN:
+            case INT:
+            case BOOLEAN:
             {
                 // FIXME 后端取消;
                 targetType = EnumTargetType.TARGET_INT;
@@ -194,7 +194,7 @@ public final class TranslatorVisitor implements IVisitor
             switch (expr.getType().toEnum())
             {
                 // 后面其他类型也一样;
-                case CVA_INT:
+                case INT:
                 {
                     emit(new ILoad(index));
                     break;
@@ -376,12 +376,12 @@ public final class TranslatorVisitor implements IVisitor
         {
             case CvaExprClassName.CVA_CONST_INT_EXPR:
             {
-                emit(new WriteInstructor(mode, EnumCvaType.CVA_INT));
+                emit(new WriteInstructor(mode, EnumCvaType.INT));
                 break;
             }
             case CvaExprClassName.CVA_CONST_STRING_EXPR:
             {
-                emit(new WriteInstructor(mode, EnumCvaType.CVA_STRING));
+                emit(new WriteInstructor(mode, EnumCvaType.STRING));
                 break;
             }
             case CvaExprClassName.CVA_IDENTIFIER_EXPR:
@@ -403,7 +403,7 @@ public final class TranslatorVisitor implements IVisitor
                 // 目前可能遇到的情况有 idexpr, callfuncexpr, numberintexpr;
                 // 注释掉这个可以应对可能的异常;
 //                emit(new WriteInt());
-                emit(new WriteInstructor(mode, EnumCvaType.CVA_INT));
+                emit(new WriteInstructor(mode, EnumCvaType.INT));
                 break;
             }
         }

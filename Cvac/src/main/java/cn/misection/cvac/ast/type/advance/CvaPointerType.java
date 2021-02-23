@@ -13,7 +13,7 @@ public final class CvaPointerType extends AbstractUnsafe
 {
     public static final String TYPE_LITERAL = "@pointer";
 
-    private static final EnumCvaType ENUM_TYPE = EnumCvaType.CVA_POINTER;
+    private static final EnumCvaType ENUM_TYPE = EnumCvaType.POINTER;
 
     public CvaPointerType() {}
 

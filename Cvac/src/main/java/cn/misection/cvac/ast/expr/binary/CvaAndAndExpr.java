@@ -2,7 +2,6 @@ package cn.misection.cvac.ast.expr.binary;
 
 import cn.misection.cvac.ast.expr.AbstractExpression;
 import cn.misection.cvac.ast.expr.EnumCvaExpr;
-import cn.misection.cvac.ast.expr.binary.AbstractBinaryExpr;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
 
 /**
@@ -24,7 +23,7 @@ public final class CvaAndAndExpr extends AbstractBinaryExpr
     @Override
     public EnumCvaType resType()
     {
-        return EnumCvaType.CVA_BOOLEAN;
+        return EnumCvaType.BOOLEAN;
     }
 
     @Override

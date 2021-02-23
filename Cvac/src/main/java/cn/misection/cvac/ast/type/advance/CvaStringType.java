@@ -13,7 +13,7 @@ public final class CvaStringType extends AbstractAdvanceType
 {
     public static final String TYPE_LITERAL = "@string";
 
-    private static final EnumCvaType ENUM_TYPE = EnumCvaType.CVA_STRING;
+    private static final EnumCvaType ENUM_TYPE = EnumCvaType.STRING;
 
     public CvaStringType() {}
 
