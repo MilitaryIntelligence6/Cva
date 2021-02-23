@@ -10,7 +10,7 @@ import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
  * @Description TODO
  * @CreateTime 2021年02月23日 12:19:00
  */
-public class CvaExprStatement extends AbstractStatement
+public final class CvaExprStatement extends AbstractStatement
 {
     private final AbstractExpression expr;
 

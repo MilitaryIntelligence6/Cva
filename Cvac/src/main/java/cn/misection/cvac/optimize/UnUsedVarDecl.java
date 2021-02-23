@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by MI6 root 1/24.
+ * @author MI6 root
  */
 public final class UnUsedVarDecl
         implements IVisitor, Optimizable

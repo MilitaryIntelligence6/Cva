@@ -1,17 +1,19 @@
-package cn.misection.cvac.ast.statement;
+package cn.misection.cvac.parser;
 
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.decl.nullptr.CvaNullDecl;
+import cn.misection.cvac.ast.statement.AbstractStatement;
+import cn.misection.cvac.ast.statement.EnumCvaStatement;
 import cn.misection.cvac.ast.statement.nullptr.CvaNullStatement;
 
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
  * @ClassName CvaDeclStatement
- * @Description TODO
+ * @Description 纯粹的工具类, 生命周期只在Parser中;
  * @CreateTime 2021年02月23日 19:52:00
  */
-public class CvaDeclStatement extends AbstractStatement
+public final class CvaDeclStatement extends AbstractStatement
 {
     private AbstractDeclaration decl;
 

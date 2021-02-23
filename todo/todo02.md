@@ -17,6 +17,9 @@
 - ~~++ 应该从statement变成装饰者expr;~~
 - ~~type改成枚举;~~  
 - ~~原子操作加入new;~~
+- ~~去掉所有的add, sub;~~
+ - ~~完成decl statement;~~
+
 
 - 很多地方写instanceof或者getclass这种都不优雅, 最好用一个map或者用byte放常量池表达;
 
@@ -38,10 +41,6 @@
  - !运算目前有问题;
  
  - */放在一起, 位操作放在一起;
- 
- - 去掉所有的add, sub;
- 
- - 完成decl statement;
  
  - 下一步, 做支持ClassName cla = new ClassName();, 
  现在在外部new className() 反而在类内部创建一个className属性, 这不对;
