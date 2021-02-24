@@ -1,6 +1,7 @@
 package cn.misection.cvac.ast.type.basic;
 
 import cn.misection.cvac.ast.type.ICvaType;
+import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
 
 /**
  * @author Military Intelligence 6 root
@@ -16,35 +17,35 @@ public enum EnumCvaType implements ICvaType
      */
     NULL_POINTER("nullPointer"),
 
-    VOID("@void"),
+    VOID("@void", EnumTargetType.VOID),
 
-    BYTE("@byte"),
+    BYTE("@byte", EnumTargetType.BYTE),
 
-    CHAR("@char"),
+    CHAR("@char", EnumTargetType.CHAR),
 
-    SHORT("@short"),
+    SHORT("@short", EnumTargetType.SHORT),
 
-    INT("@int"),
+    INT("@int", EnumTargetType.INT),
 
-    LONG("@long"),
+    LONG("@long", EnumTargetType.LONG),
 
-    BOOLEAN("@boolean"),
+    BOOLEAN("@boolean", EnumTargetType.INT),
 
-    FLOAT("@float"),
+    FLOAT("@float", EnumTargetType.FLOAT),
 
-    DOUBLE("@double"),
+    DOUBLE("@double", EnumTargetType.DOUBLE),
 
-    POINTER("@pointer"),
+    POINTER("@pointer", EnumTargetType.POINTER),
 
-    STRING("@string"),
+    STRING("@string", EnumTargetType.STRING),
 
-    ARRAY("@array"),
+    ARRAY("@array", EnumTargetType.ARRAY),
 
-    STRUCT("@struct"),
+    STRUCT("@struct", EnumTargetType.STRUCT),
 
-    CLASS("@class"),
+    CLASS("@class", EnumTargetType.CLASS),
 
-    ENUM("@enum"),
+    ENUM("@enum", EnumTargetType.ENUM),
 
     UNKNOWN("unknown"),
     ;
@@ -54,9 +55,22 @@ public enum EnumCvaType implements ICvaType
      */
     private final String literal;
 
+    private EnumTargetType targetType;
+
     EnumCvaType(String literal)
     {
         this.literal = literal;
+    }
+
+    EnumCvaType(String literal, EnumTargetType targetType)
+    {
+        this.literal = literal;
+        this.targetType = targetType;
+    }
+
+    public EnumTargetType toTarget()
+    {
+        return targetType;
     }
 
     public String getLiteral()
