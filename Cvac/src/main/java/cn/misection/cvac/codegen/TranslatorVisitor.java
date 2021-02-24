@@ -362,25 +362,25 @@ public final class TranslatorVisitor implements IVisitor
         byte mode = stm.getWriteMode();
         AbstractExpression expr = stm.getExpr();
         visit(expr);
-        switch (expr.getClass().getSimpleName())
+        switch (expr.toEnum())
         {
-            case CvaExprClassName.CVA_CONST_INT_EXPR:
+            case CONST_INT:
             {
                 emit(new WriteInstructor(mode, EnumCvaType.INT));
                 break;
             }
-            case CvaExprClassName.CVA_CONST_STRING_EXPR:
+            case CONST_STRING:
             {
                 emit(new WriteInstructor(mode, EnumCvaType.STRING));
                 break;
             }
-            case CvaExprClassName.CVA_IDENTIFIER_EXPR:
+            case IDENTIFIER:
             {
                 EnumCvaType type = ((CvaIdentifierExpr) expr).getType().toEnum();
                 emit(new WriteInstructor(mode, type));
                 break;
             }
-            case CvaExprClassName.CVA_CALL_EXPR:
+            case CALL:
             {
                 EnumCvaType type = ((CvaCallExpr) expr).getRetType().toEnum();
                 emit(new WriteInstructor(mode, type));
