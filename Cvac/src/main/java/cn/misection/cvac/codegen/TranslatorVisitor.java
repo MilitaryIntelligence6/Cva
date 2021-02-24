@@ -29,7 +29,6 @@ import cn.misection.cvac.codegen.bst.btype.advance.TargetStringType;
 import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
 import cn.misection.cvac.codegen.bst.btype.reference.TargetClassType;
 import cn.misection.cvac.codegen.bst.instructor.*;
-import cn.misection.cvac.constant.CvaExprClassName;
 
 import java.util.ArrayList;
 import java.util.HashMap;

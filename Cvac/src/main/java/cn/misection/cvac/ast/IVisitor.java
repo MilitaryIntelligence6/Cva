@@ -17,7 +17,6 @@ import cn.misection.cvac.ast.type.*;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
 import cn.misection.cvac.ast.type.advance.CvaStringType;
-import cn.misection.cvac.constant.CvaExprClassName;
 
 /**
  * Created by MI6 root 1/7.
