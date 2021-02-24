@@ -18,11 +18,11 @@ public enum EnumTargetType
      */
     VOID("@void", "V"),
 
-    BYTE("@byte"),
+    BYTE("@byte", "B"),
 
     CHAR("@char", "C"),
 
-    SHORT("@short"),
+    SHORT("@short", "S"),
 
     INT("@int", "I"),
 

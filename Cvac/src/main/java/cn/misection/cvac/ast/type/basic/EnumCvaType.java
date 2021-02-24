@@ -2,6 +2,7 @@ package cn.misection.cvac.ast.type.basic;
 
 import cn.misection.cvac.ast.type.ICvaType;
 import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
+import cn.misection.cvac.codegen.bst.instructor.EnumOperandType;
 
 /**
  * @author Military Intelligence 6 root
@@ -17,33 +18,33 @@ public enum EnumCvaType implements ICvaType
      */
     NULL_POINTER("nullPointer"),
 
-    VOID("@void", EnumTargetType.VOID),
+    VOID("@void", EnumTargetType.VOID, EnumOperandType.VOID),
 
-    BYTE("@byte", EnumTargetType.BYTE),
+    BYTE("@byte", EnumTargetType.BYTE, EnumOperandType.BYTE),
 
-    CHAR("@char", EnumTargetType.CHAR),
+    CHAR("@char", EnumTargetType.CHAR, EnumOperandType.CHAR),
 
-    SHORT("@short", EnumTargetType.SHORT),
+    SHORT("@short", EnumTargetType.SHORT, EnumOperandType.SHORT),
 
-    INT("@int", EnumTargetType.INT),
+    INT("@int", EnumTargetType.INT, EnumOperandType.INT),
 
-    LONG("@long", EnumTargetType.LONG),
+    LONG("@long", EnumTargetType.LONG, EnumOperandType.LONG),
 
     BOOLEAN("@boolean", EnumTargetType.INT),
 
-    FLOAT("@float", EnumTargetType.FLOAT),
+    FLOAT("@float", EnumTargetType.FLOAT, EnumOperandType.FLOAT),
 
-    DOUBLE("@double", EnumTargetType.DOUBLE),
+    DOUBLE("@double", EnumTargetType.DOUBLE, EnumOperandType.DOUBLE),
 
     POINTER("@pointer", EnumTargetType.POINTER),
 
-    STRING("@string", EnumTargetType.STRING),
+    STRING("@string", EnumTargetType.STRING, EnumOperandType.REFERENCE),
 
     ARRAY("@array", EnumTargetType.ARRAY),
 
     STRUCT("@struct", EnumTargetType.STRUCT),
 
-    CLASS("@class", EnumTargetType.CLASS),
+    CLASS("@class", EnumTargetType.CLASS, EnumOperandType.REFERENCE),
 
     ENUM("@enum", EnumTargetType.ENUM),
 
@@ -57,6 +58,8 @@ public enum EnumCvaType implements ICvaType
 
     private EnumTargetType targetType;
 
+    private EnumOperandType operandType;
+
     EnumCvaType(String literal)
     {
         this.literal = literal;
@@ -68,9 +71,23 @@ public enum EnumCvaType implements ICvaType
         this.targetType = targetType;
     }
 
+    EnumCvaType(String literal,
+                EnumTargetType targetType,
+                EnumOperandType operandType)
+    {
+        this.literal = literal;
+        this.targetType = targetType;
+        this.operandType = operandType;
+    }
+
     public EnumTargetType toTarget()
     {
         return targetType;
+    }
+
+    public EnumOperandType toOperand()
+    {
+        return operandType;
     }
 
     public String getLiteral()
