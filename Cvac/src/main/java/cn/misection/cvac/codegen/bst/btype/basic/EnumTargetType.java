@@ -34,7 +34,7 @@ public enum EnumTargetType
 
     POINTER("@pointer"),
 
-    STRING("@string"),
+    STRING("@string", "Ljava/lang/String;"),
 
     ARRAY("@array"),
 
