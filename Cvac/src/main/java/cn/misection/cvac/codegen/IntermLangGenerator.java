@@ -26,11 +26,6 @@ public final class IntermLangGenerator implements IBackendVisitor
 
     private final StringBuffer buffer = new StringBuffer();
 
-    private WriteTypeMap writeTypeMap = WriteTypeMap.getInstance();
-
-    private WriteModeMap writeModeMap = WriteModeMap.getInstance();
-
-
     private void write(String s)
     {
         buffer.append(s);
