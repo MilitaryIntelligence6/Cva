@@ -1,6 +1,7 @@
 package cn.misection.cvac.ast.statement;
 
 import cn.misection.cvac.ast.expr.AbstractExpression;
+import cn.misection.cvac.codegen.bst.instructor.write.EnumWriteMode;
 
 /**
  * @author Military Intelligence 6 root
@@ -13,7 +14,16 @@ public final class CvaWriteStatement extends AbstractStatement
 {
     private AbstractExpression expr;
 
-    private byte writeMode;
+    private EnumWriteMode writeMode;
+
+    public CvaWriteStatement(int lineNum,
+                             AbstractExpression expr,
+                             EnumWriteMode writeMode)
+    {
+        super(lineNum);
+        this.expr = expr;
+        this.writeMode = writeMode;
+    }
 
     /**
      * FIXME ,后面尽量早确定;
@@ -21,12 +31,6 @@ public final class CvaWriteStatement extends AbstractStatement
      */
 //    private AbstractType writeType;
 
-    public CvaWriteStatement(int lineNum, AbstractExpression expr, byte writeMode)
-    {
-        super(lineNum);
-        this.expr = expr;
-        this.writeMode = writeMode;
-    }
 
     @Override
     public EnumCvaStatement toEnum()
@@ -44,12 +48,12 @@ public final class CvaWriteStatement extends AbstractStatement
         this.expr = expr;
     }
 
-    public byte getWriteMode()
+    public EnumWriteMode getWriteMode()
     {
         return writeMode;
     }
 
-    public void setWriteMode(byte writeMode)
+    public void setWriteMode(EnumWriteMode writeMode)
     {
         this.writeMode = writeMode;
     }

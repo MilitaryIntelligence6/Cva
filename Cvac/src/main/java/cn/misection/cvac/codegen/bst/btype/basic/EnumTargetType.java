@@ -20,23 +20,23 @@ public enum EnumTargetType
 
     BYTE("@byte"),
 
-    CHAR("@char"),
+    CHAR("@char", "C"),
 
     SHORT("@short"),
 
     INT("@int", "I"),
 
-    LONG("@long"),
+    LONG("@long", "J"),
 
-    FLOAT("@float"),
+    FLOAT("@float", "F"),
 
-    DOUBLE("@double"),
+    DOUBLE("@double", "D"),
 
     POINTER("@pointer"),
 
     STRING("@string", "Ljava/lang/String;"),
 
-    ARRAY("@array"),
+    ARRAY("@array", "["),
 
     STRUCT("@struct"),
 

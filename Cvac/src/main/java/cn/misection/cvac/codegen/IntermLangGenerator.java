@@ -206,11 +206,9 @@ public final class IntermLangGenerator implements IBackendVisitor
     @Override
     public void visit(WriteInstructor instructor)
     {
-        String mode = writeModeMap.get(instructor.getWriteMode());
-        String type = writeTypeMap.get(instructor.getWriteType());
         iwriteLine("getstatic java/lang/System/out Ljava/io/PrintStream;");
         iwriteLine("swap");
-        iwritefln("invokevirtual java/io/PrintStream/%s(%s)V", mode, type);
+        iwritefln("invokevirtual java/io/PrintStream/%s", instructor.requireInvoke());
     }
 
     @Override

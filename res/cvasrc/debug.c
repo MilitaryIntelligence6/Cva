@@ -10,17 +10,17 @@ call cva.std.console.*;
  */
 call cva.lang.type.String;
 
-class Rec
-{
-    int fib(int n)
-    {
-        // 暂时没有实现解析句中return;
-        if (i < 1)
-        {
-
-        }
-    }
-}
+//class Rec
+//{
+//    int fib(int n)
+//    {
+//        // 暂时没有实现解析句中return;
+//        if (i < 1)
+//        {
+//
+//        }
+//    }
+//}
 
 class Increment
 {

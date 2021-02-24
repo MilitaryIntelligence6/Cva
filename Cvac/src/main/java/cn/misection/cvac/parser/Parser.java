@@ -27,8 +27,10 @@ import cn.misection.cvac.ast.type.advance.CvaArrayType;
 import cn.misection.cvac.ast.type.advance.CvaStringType;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
+import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
 import cn.misection.cvac.codegen.bst.instructor.EnumOperandType;
 import cn.misection.cvac.codegen.bst.instructor.EnumOperator;
+import cn.misection.cvac.codegen.bst.instructor.write.EnumWriteMode;
 import cn.misection.cvac.constant.EnumIncDirection;
 import cn.misection.cvac.constant.EnumLexerCommon;
 import cn.misection.cvac.constant.WriteOptionCode;
@@ -729,15 +731,15 @@ public final class Parser
             }
             case WRITE:
             {
-                return handleWriteOp(WriteOptionCode.CONSOLE_WRITE);
+                return handleWriteOp(EnumWriteMode.PRINT);
             }
             case WRITE_LINE:
             {
-                return handleWriteOp(WriteOptionCode.CONSOLE_WRITELN);
+                return handleWriteOp(EnumWriteMode.PRINT_LINE);
             }
             case WRITE_FORMAT:
             {
-                return handleWriteOp(WriteOptionCode.CONSOLE_WRITE_FORMAT);
+                return handleWriteOp(EnumWriteMode.PRINT_FORMAT);
             }
             case IDENTIFIER:
             {
@@ -1448,7 +1450,7 @@ public final class Parser
         }
     }
 
-    private AbstractStatement handleWriteOp(byte writeMode)
+    private AbstractStatement handleWriteOp(EnumWriteMode writeMode)
     {
         // 目前 echo expr 实现还稍麻烦, 后面再想法;
         int lineNum = curToken.getLineNum();

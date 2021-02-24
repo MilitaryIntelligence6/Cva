@@ -1,5 +1,7 @@
 package cn.misection.cvac.codegen.bst.instructor.write;
 
+import cn.misection.cvac.codegen.bst.instructor.Instructable;
+
 /**
  * @author Military Intelligence 6 root
  * @version 1.0.0
@@ -7,7 +9,7 @@ package cn.misection.cvac.codegen.bst.instructor.write;
  * @Description TODO
  * @CreateTime 2021年02月24日 22:07:00
  */
-public enum WriteMode
+public enum EnumWriteMode implements Instructable
 {
     /**
      * 空, ln, f;
@@ -21,8 +23,14 @@ public enum WriteMode
 
     private final String instruction;
 
-    WriteMode(String instruction)
+    EnumWriteMode(String instruction)
     {
         this.instruction = instruction;
+    }
+
+    @Override
+    public String toInst()
+    {
+        return instruction;
     }
 }

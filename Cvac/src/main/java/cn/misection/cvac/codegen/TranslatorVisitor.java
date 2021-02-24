@@ -29,6 +29,7 @@ import cn.misection.cvac.codegen.bst.btype.advance.TargetStringType;
 import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
 import cn.misection.cvac.codegen.bst.btype.reference.TargetClassType;
 import cn.misection.cvac.codegen.bst.instructor.*;
+import cn.misection.cvac.codegen.bst.instructor.write.EnumWriteMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -358,31 +359,30 @@ public final class TranslatorVisitor implements IVisitor
     @Override
     public void visit(CvaWriteStatement stm)
     {
-        byte mode = stm.getWriteMode();
         AbstractExpression expr = stm.getExpr();
         visit(expr);
         switch (expr.toEnum())
         {
             case CONST_INT:
             {
-                emit(new WriteInstructor(mode, EnumCvaType.INT));
+                emit(new WriteInstructor(stm.getWriteMode(), EnumTargetType.INT));
                 break;
             }
             case CONST_STRING:
             {
-                emit(new WriteInstructor(mode, EnumCvaType.STRING));
+                emit(new WriteInstructor(stm.getWriteMode(), EnumTargetType.STRING));
                 break;
             }
             case IDENTIFIER:
             {
                 EnumCvaType type = ((CvaIdentifierExpr) expr).getType().toEnum();
-                emit(new WriteInstructor(mode, type));
+                emit(new WriteInstructor(stm.getWriteMode(), type.toTarget()));
                 break;
             }
             case CALL:
             {
                 EnumCvaType type = ((CvaCallExpr) expr).getRetType().toEnum();
-                emit(new WriteInstructor(mode, type));
+                emit(new WriteInstructor(stm.getWriteMode(), type.toTarget()));
                 break;
             }
             default:
@@ -392,7 +392,7 @@ public final class TranslatorVisitor implements IVisitor
                 // 目前可能遇到的情况有 idexpr, callfuncexpr, numberintexpr;
                 // 注释掉这个可以应对可能的异常;
 //                emit(new WriteInt());
-                emit(new WriteInstructor(mode, EnumCvaType.INT));
+                emit(new WriteInstructor(stm.getWriteMode(), EnumTargetType.INT));
                 break;
             }
         }

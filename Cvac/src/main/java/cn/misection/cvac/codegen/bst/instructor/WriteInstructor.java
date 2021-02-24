@@ -1,6 +1,8 @@
 package cn.misection.cvac.codegen.bst.instructor;
 
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
+import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
+import cn.misection.cvac.codegen.bst.instructor.write.EnumWriteMode;
 
 /**
  * @author Military Intelligence 6 root
@@ -11,35 +13,40 @@ import cn.misection.cvac.ast.type.basic.EnumCvaType;
  */
 public final class WriteInstructor extends BaseInstructor
 {
-    private byte writeMode;
+    private EnumWriteMode writeMode;
 
     /**
      * expr的type, 尽量早确定, 不然判定很丑, 判定时确定传入也行;
      */
-    private EnumCvaType writeType;
+    private EnumTargetType writeType;
 
-    public WriteInstructor(byte writeMode, EnumCvaType writeType)
+    public WriteInstructor(EnumWriteMode writeMode, EnumTargetType writeType)
     {
         this.writeMode = writeMode;
         this.writeType = writeType;
     }
 
-    public byte getWriteMode()
+    public String requireInvoke()
+    {
+        return String.format("%s(%s)V", writeMode.toInst(), writeType.toInst());
+    }
+
+    public EnumWriteMode getWriteMode()
     {
         return writeMode;
     }
 
-    public void setWriteMode(byte writeMode)
+    public void setWriteMode(EnumWriteMode writeMode)
     {
         this.writeMode = writeMode;
     }
 
-    public EnumCvaType getWriteType()
+    public EnumTargetType getWriteType()
     {
         return writeType;
     }
 
-    public void setWriteType(EnumCvaType writeType)
+    public void setWriteType(EnumTargetType writeType)
     {
         this.writeType = writeType;
     }
