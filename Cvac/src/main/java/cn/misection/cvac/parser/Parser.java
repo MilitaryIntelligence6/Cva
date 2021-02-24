@@ -1218,7 +1218,7 @@ public final class Parser
             mainClassName = curToken.getLiteral();
             eatToken(EnumCvaToken.IDENTIFIER);
             eatToken(EnumCvaToken.OPEN_CURLY_BRACE);
-//            AbstractStatement statement = parseMainMethod();
+            // 原型建造;
             mainMethod = new CvaMainMethod.Builder(
                     parseMethod())
                     .build();

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by MI6 root 1/13.
+ * @author MI6 root
  */
 public final class MethodType
 {
