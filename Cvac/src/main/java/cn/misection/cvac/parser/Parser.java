@@ -805,10 +805,8 @@ public final class Parser
     }
 
     /**
-     * // Type -> int
-     * //  -> boolean
-     * //  -> id
-     *
+     * Type -> basic
+     * -> id
      * @return Type;
      */
     private ICvaType parseType()
@@ -882,7 +880,7 @@ public final class Parser
         }
         // 因为有advance所以不能直接return;
         advance();
-        if (curToken.toEnum() == EnumCvaToken.OPEN_BRACKETS)
+        while (curToken.toEnum() == EnumCvaToken.OPEN_BRACKETS)
         {
             advance();
             switch (curToken.toEnum())
@@ -890,14 +888,16 @@ public final class Parser
                 case CLOSE_BRACKETS:
                 {
                     advance();
-                    return new CvaArrayType(type);
+                    type = new CvaArrayType(type);
+                    continue;
                 }
                 case CONST_INT:
                 {
                     int size = Integer.parseInt(curToken.getLiteral());
                     advance();
                     eatToken(EnumCvaToken.CLOSE_BRACKETS);
-                    return new CvaArrayType(type, size);
+                    type =  new CvaArrayType(type, size);
+                    continue;
                 }
                 default:
                 {
@@ -905,6 +905,7 @@ public final class Parser
                     break;
                 }
             }
+            break;
         }
         return type;
     }

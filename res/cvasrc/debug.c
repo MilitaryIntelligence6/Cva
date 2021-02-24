@@ -6,66 +6,180 @@ call cva.native.io.*;
 call cva.std.console.*;
 /**
  * 原生string导入;
- *  由于是StringBuffer读的, 所以支持中文注释;
+ *  由于是java StringBuffer读的, 所以支持中文注释;
  */
 call cva.lang.type.String;
 
-
-
 class Increment
 {
-    string incre()
+    int incre()
     {
-        int i = 0;
-        println "while test";
-        while(i < 10)
+        int i;
+        i = 0;
+        while (10 > i)
         {
-            echo i;
-            echo "\t";
+            println i;
             i++;
         }
-        int j = 10;
-        while(j > 0)
+        println "i += 2";
+        i += 2;
+        println i;
+
+        println "i -= 2";
+        i -= 2;
+        println i;
+
+        println "i *= 2";
+        i *= 2;
+        println i;
+
+        println "i /= 2";
+        i /= 2;
+        println i;
+
+//        println "i ~= 2";
+//        i += 2;
+//        println i;
+
+        println "i &= 2";
+        i &= 8;
+        println i;
+
+        println "i |= 2";
+        i |= 2;
+        println i;
+
+        println "i ^= 2";
+        i ^= 2;
+        println i;
+
+        println "i >>= 2";
+        i >>= 2;
+        println i;
+
+        println "i <<= 2";
+        i <<= 2;
+        println i;
+
+        println "i >>>= 2";
+        i >>>= 2;
+        println i;
+
+        while(i < 15)
         {
-            echo j;
-            echo "  ";
-            j--;
+            i++;
         }
-        println "if test";
-        if (j < 5)
-        {
-            echo "  ";
-            echo j;
-        }
-        println "for test";
-        int k = 0;
-        for (k = 0; k < 10; ++k)
-        {
-            echo k;
-            echo "  ";
-        }
-//        string strg;
-//        strg = "hello, string";
-//        println strg;
-//        return k;
-        return "hahi";
+        println "i % 4";
+        i %= 4;
+        println i;
+        return i;
     }
 }
-
 
 int main(string[] args)
 {
     echo "hello, world!\n";
-//    new Increment().incre();
-
-//    Increment cla = new Increment();
-
     println new Increment().incre();
-//    int num = 888;
-//    println num;
-    echo "5 + 7 = "; println 5 + 7;
-    echo "5 - 7 = "; println 5 - 7;
-    echo "5 * 7 = "; println 5 * 7;
-    echo "15 / 4 = "; println 15 / 4;
+    echo "2 * 3 = ";
+    println 2 * 3;
+
+    echo "8 / 3 = ";
+    println 8 / 3;
+
+    echo "8 & 2 = ";
+    println 8 & 2;
+
+    echo "8 | 2 = ";
+    println 8 | 2;
+
+    echo "8 ^ 2 = ";
+    println 8 ^ 2;
+
+    echo "8 << 2 = ";
+    println 8 << 2;
+
+    echo "8 >> 2 = ";
+    println 8 >> 2;
+
+    echo "8 >>> 2 = ";
+    println 8 >>> 2;
+
+
     return 0;
 }
+
+
+//// This is the entry point of the program
+//
+//pkg cn.misection.cva.test;
+//
+//call cva.native.io.*;
+//call cva.std.console.*;
+///**
+// * 原生string导入;
+// */
+//call cva.lang.type.String;
+//
+///**
+// * block comm;
+// */
+//
+//
+//
+//class Test
+//{
+//    int Compute(int num)
+//    {
+//        int total;
+//        int i;
+//        if ( num < 1)
+//        {
+//            total = 1;
+//        }
+//        else if (num < 5)
+//        {
+//            total = num * (this.Compute(num-1));
+//            echo num;
+//            echo "  ";
+//        }
+//        else
+//        {
+//            total = num * (this.Compute(num-1));
+//        }
+//        if (num < 7)
+//        {
+//            echo 999;
+//            echo "\t";
+////            echo(999);
+//        }
+//        i = num;
+//        while (i < 5)
+//        {
+//            echo 888;
+//            echo "\t";
+////            echo("hello, string");
+////            echo(888);
+//            i = i + 1;
+//            i++;
+//        }
+//        println("hello, string");
+//        return total;
+//    }
+//}
+//
+//
+//int main(string[] args)
+//{
+////    println("hello, string");
+////    printf(1);
+//    println(new Test().Compute(10));   // just a print statement
+//    echo("this is cva main who can in a random place\n");
+//    echo "\nhello, echo\n\n";
+//
+//    println 1 + 2;
+//
+//    println("hello, main method");
+//    // return 0;
+////    echo("hello, string");
+//    return 0;
+//}
