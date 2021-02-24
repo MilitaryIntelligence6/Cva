@@ -95,95 +95,88 @@ public interface IVisitor
     default void visit(AbstractExpression expr)
     {
         // 用typeCode代替, 可以避免反射以及改名麻烦;
-        switch (expr.getClass().getSimpleName())
+        switch (expr.toEnum())
         {
-            case CvaExprClassName.CVA_AND_AND_EXPR:
+            case AND_AND:
             {
                 visit((CvaAndAndExpr) expr);
                 break;
             }
-            case CvaExprClassName.CVA_CALL_EXPR:
+            case CALL:
             {
                 visit((CvaCallExpr) expr);
                 break;
             }
-            case CvaExprClassName.CVA_CONST_FALSE_EXPR:
-            {
-                visit((CvaConstFalseExpr) expr);
-                break;
-            }
-            case CvaExprClassName.CVA_IDENTIFIER_EXPR:
+            case IDENTIFIER:
             {
                 visit((CvaIdentifierExpr) expr);
                 break;
             }
-            case CvaExprClassName.CVA_LESS_OR_MORE_THAN_EXPR:
+            case LESS_OR_MORE_THAN:
             {
                 visit((CvaLessOrMoreThanExpr) expr);
                 break;
             }
-            case CvaExprClassName.CVA_NEW_EXPR:
+            case NEW:
             {
                 visit((CvaNewExpr) expr);
                 break;
             }
-            case CvaExprClassName.CVA_NEGATE_EXPR:
+            case NEGATE:
             {
                 visit((CvaNegateExpr) expr);
                 break;
             }
-            case CvaExprClassName.CVA_CONST_INT_EXPR:
+            case CONST_INT:
             {
                 visit((CvaConstIntExpr) expr);
                 break;
             }
-            case CvaExprClassName.CVA_CONST_STRING_EXPR:
+            case CONST_STRING:
             {
                 visit((CvaConstStringExpr) expr);
                 break;
             }
-            case CvaExprClassName.CVA_THIS_EXPR:
+            case CONST_TRUE:
+            {
+                visit((CvaConstTrueExpr) expr);
+                break;
+            }
+            case CONST_FALSE:
+            {
+                visit((CvaConstFalseExpr) expr);
+                break;
+            }
+            case CONST_NULL:
+            {
+                // TODO;
+                break;
+            }
+            case THIS:
             {
                 visit((CvaThisExpr) expr);
                 break;
             }
-            case CvaExprClassName.CVA_CONST_TRUE_EXPR:
+            case BINARY_OPERAND_OP:
             {
-                visit((CvaConstTrueExpr) expr);
+                visit((CvaOperandOperatorExpr) expr);
+                break;
+            }
+            case INCREMENT:
+            case DECREMENT:
+            {
+                visit((CvaIncDecExpr) expr);
+                break;
+            }
+            case NULL_POINTER:
+            {
+                // 直接忽略, 转都不转;
                 break;
             }
             default:
             {
                 // 将所有的都用绑定的enum判定;
-                switch (expr.toEnum())
-                {
-                    case BINARY_OPERAND_OP:
-                    {
-                        visit((CvaOperandOperatorExpr) expr);
-                        break;
-                    }
-                    case INCREMENT:
-                    case DECREMENT:
-                    {
-                        visit((CvaIncDecExpr) expr);
-                        break;
-                    }
-                    case NULL_POINTER:
-                    {
-                        // 直接忽略, 转都不转;
-                        break;
-                    }
-                    case CONST_NULL:
-                    {
-                        // TODO;
-                        break;
-                    }
-                    default:
-                    {
-                        System.err.println("unknown expr");
-                        break;
-                    }
-                }
+                System.err.println("unknown expr");
             }
         }
     }

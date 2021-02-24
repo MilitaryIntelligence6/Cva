@@ -30,6 +30,6 @@ public final class CvaLessOrMoreThanExpr extends AbstractBinaryExpr
     @Override
     public EnumCvaExpr toEnum()
     {
-        return EnumCvaExpr.LESS_THAN;
+        return EnumCvaExpr.LESS_OR_MORE_THAN;
     }
 }

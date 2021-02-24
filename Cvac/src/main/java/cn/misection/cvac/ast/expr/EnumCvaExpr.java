@@ -78,7 +78,7 @@ public enum EnumCvaExpr
 
     UNSIGNED_RIGHT_SHIFT("ushr"),
 
-    LESS_THAN,
+    LESS_OR_MORE_THAN,
 
     MORE_THAN,
 
