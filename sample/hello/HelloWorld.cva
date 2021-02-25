@@ -9,5 +9,5 @@ call cva.lang.type.String;
 
 int main(string[] args)
 {
-    println("Hello, CvaWorld");
+    println "Hello, CvaWorld";
 }

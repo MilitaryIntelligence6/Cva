@@ -1,0 +1,79 @@
+// This is the entry point of the program
+
+pkg cn.misection.cva.test;
+
+call cva.native.io.*;
+call cva.std.console.*;
+/**
+ * 原生string导入;
+ *  由于是java StringBuffer读的, 所以支持中文注释;
+ */
+call cva.lang.type.String;
+
+class Calcer
+{
+    void calc()
+    {
+        int i = 10;
+
+        println "i += 2";
+        i += 2;
+        println i;
+
+        println "i -= 2";
+        i -= 2;
+        println i;
+
+        println "i *= 2";
+        i *= 2;
+        println i;
+
+        println "i /= 2";
+        i /= 2;
+        println i;
+
+//        println "i ~= 2";
+//        i += 2;
+//        println i;
+
+        println "i &= 2";
+        i &= 8;
+        println i;
+
+        println "i |= 2";
+        i |= 2;
+        println i;
+
+        println "i ^= 2";
+        i ^= 2;
+        println i;
+
+        println "i >>= 2";
+        i >>= 2;
+        println i;
+
+        println "i <<= 2";
+        i <<= 2;
+        println i;
+
+        println "i >>>= 2";
+        i >>>= 2;
+        println i;
+
+        while(i < 15)
+        {
+            i++;
+        }
+        println "i % 4";
+        i %= 4;
+        println i;
+    }
+}
+
+int main(string[] args)
+{
+    echo "hello, Calc!\n";
+    new Calcer().calc();
+
+    return 0;
+}

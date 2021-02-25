@@ -53,7 +53,6 @@ public final class ClassMap extends HashMap<String, ClassBinding>
             {
                 return type;
             }
-
             bind = this.get(bind.getParent());
             type = bind.getFields().get(literal);
         }
