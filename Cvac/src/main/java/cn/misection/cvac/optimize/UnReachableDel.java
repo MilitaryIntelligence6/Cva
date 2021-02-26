@@ -179,7 +179,7 @@ public final class UnReachableDel
         m.getStatementList().forEach(stm ->
         {
             this.visit(stm);
-            if (this.curStm != null)
+            if (curStm != null)
             {
                 if (this.curStm instanceof CvaBlockStatement)
                 {
