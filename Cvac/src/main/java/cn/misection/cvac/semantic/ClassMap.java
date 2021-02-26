@@ -46,7 +46,7 @@ public final class ClassMap extends HashMap<String, ClassBinding>
     public ICvaType getFieldType(String className, String literal)
     {
         ClassBinding bind = this.get(className);
-        ICvaType type = bind.getFields().get(literal);
+        ICvaType type = bind.getFieldMap().get(literal);
         while (type == null)
         {
             if (bind.getParent() == null)
@@ -54,7 +54,7 @@ public final class ClassMap extends HashMap<String, ClassBinding>
                 return type;
             }
             bind = this.get(bind.getParent());
-            type = bind.getFields().get(literal);
+            type = bind.getFieldMap().get(literal);
         }
         return type;
     }
@@ -62,7 +62,7 @@ public final class ClassMap extends HashMap<String, ClassBinding>
     public MethodType getMethodType(String className, String literal)
     {
         ClassBinding bind = this.get(className);
-        MethodType type = bind.getMethods().get(literal);
+        MethodType type = bind.getMethodMap().get(literal);
         while (type == null)
         {
             if (bind.getParent() == null)
@@ -70,7 +70,7 @@ public final class ClassMap extends HashMap<String, ClassBinding>
                 return type;
             }
             bind = this.get(bind.getParent());
-            type = bind.getMethods().get(literal);
+            type = bind.getMethodMap().get(literal);
         }
         return type;
     }

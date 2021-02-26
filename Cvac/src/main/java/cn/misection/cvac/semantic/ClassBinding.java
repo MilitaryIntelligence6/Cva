@@ -1,7 +1,5 @@
 package cn.misection.cvac.semantic;
 
-//import cn.misection.cvac.ast.FrontAst;
-
 import cn.misection.cvac.ast.type.ICvaType;
 
 import java.util.HashMap;
@@ -13,48 +11,48 @@ import java.util.Map;
 public final class ClassBinding
 {
     private String parent;
-    private Map<String, ICvaType> fields;
-    private Map<String, MethodType> methods;
+    private Map<String, ICvaType> fieldMap;
+    private Map<String, MethodType> methodMap;
 
     public ClassBinding(String parent)
     {
         this.setParent(parent);
-        this.setFields(new HashMap<>());
-        this.setMethods(new HashMap<>());
+        this.setFieldMap(new HashMap<>());
+        this.setMethodMap(new HashMap<>());
     }
 
     public ClassBinding(String parent,
-                        Map<String, ICvaType> fields,
-                        Map<String, MethodType> methods)
+                        Map<String, ICvaType> fieldMap,
+                        Map<String, MethodType> methodMap)
     {
-        this.setParent(parent);
-        this.setFields(fields);
-        this.setMethods(methods);
+        this.parent = parent;
+        this.fieldMap = fieldMap;
+        this.methodMap = methodMap;
     }
 
     public void putField(String literal, ICvaType type)
     {
-        if (getFields().get(literal) != null)
+        if (fieldMap.containsKey(literal))
         {
             System.out.printf("duplicated class field: %s%n", literal);
             System.exit(1);
         }
         else
         {
-            getFields().put(literal, type);
+            fieldMap.put(literal, type);
         }
     }
 
     public void putMethod(String literal, MethodType type)
     {
-        if (getMethods().get(literal) != null)
+        if (methodMap.containsKey(literal))
         {
             System.out.printf("duplicated class method: %s%n", literal);
             System.exit(1);
         }
         else
         {
-            getMethods().put(literal, type);
+            methodMap.put(literal, type);
         }
     }
 
@@ -71,23 +69,23 @@ public final class ClassBinding
         this.parent = parent;
     }
 
-    public Map<String, ICvaType> getFields()
+    public Map<String, ICvaType> getFieldMap()
     {
-        return fields;
+        return fieldMap;
     }
 
-    public void setFields(Map<String, ICvaType> fields)
+    public void setFieldMap(Map<String, ICvaType> fieldMap)
     {
-        this.fields = fields;
+        this.fieldMap = fieldMap;
     }
 
-    public Map<String, MethodType> getMethods()
+    public Map<String, MethodType> getMethodMap()
     {
-        return methods;
+        return methodMap;
     }
 
-    public void setMethods(Map<String, MethodType> methods)
+    public void setMethodMap(Map<String, MethodType> methodMap)
     {
-        this.methods = methods;
+        this.methodMap = methodMap;
     }
 }
