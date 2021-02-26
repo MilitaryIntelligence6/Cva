@@ -253,7 +253,7 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaNewExpr expr)
     {
-        if (classMap.getClassBinding(expr.getNewClassName()) != null)
+        if (classMap.containsKey(expr.getNewClassName()))
         {
             this.type = new CvaClassType(expr.getNewClassName());
         }
