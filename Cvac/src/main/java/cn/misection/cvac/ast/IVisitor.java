@@ -244,27 +244,21 @@ public interface IVisitor
                 visit((CvaIncreStatement) abstStm);
                 break;
             }
+            case NULL_POINTER:
+            {
+                // 直接忽略, 转都不用转;
+                break;
+            }
+            case EXPR_STATEMENT:
+            {
+                // decl statement 不需要用, 其只是辅助数据结构, 用完就扔;
+                visit((CvaExprStatement) abstStm);
+                break;
+            }
             default:
             {
-                switch (abstStm.toEnum())
-                {
-                    case NULL_POINTER:
-                    {
-                        // 直接忽略, 转都不用转;
-                        break;
-                    }
-                    case EXPR_STATEMENT:
-                    {
-                        // decl statement 不需要用, 其只是辅助数据结构, 用完就扔;
-                        visit((CvaExprStatement) abstStm);
-                        break;
-                    }
-                    default:
-                    {
-                        System.err.println("unknown statement");
-                        break;
-                    }
-                }
+                System.err.println("unknown statement");
+                break;
             }
         }
     }

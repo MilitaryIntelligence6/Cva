@@ -5,9 +5,14 @@ import cn.misection.cvac.ast.clas.AbstractCvaClass;
 import cn.misection.cvac.ast.clas.CvaClass;
 import cn.misection.cvac.ast.decl.CvaDeclaration;
 import cn.misection.cvac.ast.entry.CvaEntryClass;
-import cn.misection.cvac.ast.expr.nonterminal.binary.*;
+import cn.misection.cvac.ast.expr.nonterminal.binary.CvaAndAndExpr;
+import cn.misection.cvac.ast.expr.nonterminal.binary.CvaLessOrMoreThanExpr;
+import cn.misection.cvac.ast.expr.nonterminal.binary.CvaOperandOperatorExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaCallExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaIncDecExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaNegateExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaNewExpr;
 import cn.misection.cvac.ast.expr.terminator.*;
-import cn.misection.cvac.ast.expr.nonterminal.unary.*;
 import cn.misection.cvac.ast.method.CvaMainMethod;
 import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
@@ -198,7 +203,7 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaIdentifierExpr expr)
     {
-        ICvaType varType = this.methodVarMap.get(expr.literal());
+        ICvaType varType = methodVarMap.get(expr.literal());
         boolean fieldFlag = varType == null;
         String className = curClassName;
         while (varType == null && className != null)
@@ -319,7 +324,7 @@ public final class SemanticVisitor implements IVisitor
     }
 
     private void handleOperandOp(String op,
-            CvaOperandOperatorExpr expr)
+                                 CvaOperandOperatorExpr expr)
     {
         visit(expr.getLeft());
         ICvaType leftType = this.type;
@@ -380,12 +385,8 @@ public final class SemanticVisitor implements IVisitor
             errorLog(stm.getCondition().getLineNum(),
                     "the condition's type should be a boolean.");
         }
-
         visit(stm.getThenStatement());
-        if (stm.getElseStatement() != null)
-        {
-            visit(stm.getElseStatement());
-        }
+        visit(stm.getElseStatement());
     }
 
     @Override
