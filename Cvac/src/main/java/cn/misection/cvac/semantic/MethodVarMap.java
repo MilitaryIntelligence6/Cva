@@ -47,7 +47,7 @@ public final class MethodVarMap
         for (AbstractDeclaration decl : declList)
         {
             // FIXME 不知道有无隐患!;
-            if (this.get(decl.literal()) != null)
+            if (this.containsKey(decl.literal()))
             {
                 System.err.printf("duplicated parameter: %s at line %d%n",
                         decl.literal(), decl.getLineNum());

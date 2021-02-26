@@ -4,16 +4,21 @@ import cn.misection.cvac.ast.IVisitor;
 import cn.misection.cvac.ast.clas.CvaClass;
 import cn.misection.cvac.ast.decl.CvaDeclaration;
 import cn.misection.cvac.ast.entry.CvaEntryClass;
-import cn.misection.cvac.ast.expr.nonterminal.binary.*;
+import cn.misection.cvac.ast.expr.nonterminal.binary.CvaAndAndExpr;
+import cn.misection.cvac.ast.expr.nonterminal.binary.CvaLessOrMoreThanExpr;
+import cn.misection.cvac.ast.expr.nonterminal.binary.CvaOperandOperatorExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaCallExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaIncDecExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaNegateExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaNewExpr;
 import cn.misection.cvac.ast.expr.terminator.*;
-import cn.misection.cvac.ast.expr.nonterminal.unary.*;
 import cn.misection.cvac.ast.method.CvaMainMethod;
 import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
+import cn.misection.cvac.ast.type.advance.CvaStringType;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
-import cn.misection.cvac.ast.type.advance.CvaStringType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,16 +35,24 @@ public final class UnUsedVarDecl
     public boolean givesWarning;
 
     @Override
-    public void visit(EnumCvaType basicType) {}
+    public void visit(EnumCvaType basicType)
+    {
+    }
 
     @Override
-    public void visit(CvaStringType type) {}
+    public void visit(CvaStringType type)
+    {
+    }
 
     @Override
-    public void visit(CvaClassType type) {}
+    public void visit(CvaClassType type)
+    {
+    }
 
     @Override
-    public void visit(CvaDeclaration decl) {}
+    public void visit(CvaDeclaration decl)
+    {
+    }
 
     @Override
     public void visit(CvaAndAndExpr expr)
@@ -56,7 +69,9 @@ public final class UnUsedVarDecl
     }
 
     @Override
-    public void visit(CvaConstFalseExpr expr) {}
+    public void visit(CvaConstFalseExpr expr)
+    {
+    }
 
     @Override
     public void visit(CvaIdentifierExpr expr)
@@ -79,7 +94,9 @@ public final class UnUsedVarDecl
     }
 
     @Override
-    public void visit(CvaNewExpr expr) {}
+    public void visit(CvaNewExpr expr)
+    {
+    }
 
     @Override
     public void visit(CvaNegateExpr expr)
@@ -88,7 +105,9 @@ public final class UnUsedVarDecl
     }
 
     @Override
-    public void visit(CvaConstIntExpr expr) {}
+    public void visit(CvaConstIntExpr expr)
+    {
+    }
 
     @Override
     public void visit(CvaConstStringExpr expr)
@@ -97,10 +116,14 @@ public final class UnUsedVarDecl
     }
 
     @Override
-    public void visit(CvaThisExpr expr) {}
+    public void visit(CvaThisExpr expr)
+    {
+    }
 
     @Override
-    public void visit(CvaConstTrueExpr expr) {}
+    public void visit(CvaConstTrueExpr expr)
+    {
+    }
 
     @Override
     public void visit(CvaOperandOperatorExpr expr)
@@ -133,10 +156,7 @@ public final class UnUsedVarDecl
     {
         visit(stm.getCondition());
         visit(stm.getThenStatement());
-        if (stm.getElseStatement() != null)
-        {
-            visit(stm.getElseStatement());
-        }
+        visit(stm.getElseStatement());
     }
 
     @Override

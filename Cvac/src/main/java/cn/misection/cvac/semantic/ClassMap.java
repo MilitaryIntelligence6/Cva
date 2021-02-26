@@ -17,7 +17,7 @@ public final class ClassMap extends HashMap<String, ClassBinding>
 
     public void putClassBinding(String className, ClassBinding bind)
     {
-        if (this.get(className) != null)
+        if (this.containsKey(className))
         {
             System.out.printf("duplicated class: %s%n", className);
             System.exit(1);
