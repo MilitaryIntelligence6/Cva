@@ -29,18 +29,25 @@
 
 # How to use
 
-#### 您可以下载release 的发行版, cva目前制作了windows exe installer与jar发行版, 目前为试发行, 还是存在着不少的bug.
+#### 您可以 goto release 下载发行版
+- cva目前制作了windows exe installer与jar发行版, 目前为试发行, 还是存在着不少的bug.
+- 由于时间原因, 目前没有做命令行参数的支持, 这个是todo项目之一.
+
 ##### jar版本
-- jar版本速度更快
+- jar版本速度更快, 
 ```shell script
 java -jar cvac.jar fileName
 ```
 - 会编译当前目录下的指定的文件
-- 由于时间原因, 目前没有做命令行参数的支持
+
+
+#### windows installer
+- 使用 windows 安装包, 您能将
 
 ---
 # TODO
 - 由于时间原因, 还没有测试每个分支.
+- 命令行参数.
 - 兼容C的超级Cva.
 - CvaNIO原生库.
 - 实现Java的Pkg, 进行Pkg编译, 选取pkg替代Java的package关键字, call取代Java的import关键字.
