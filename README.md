@@ -19,7 +19,7 @@
 # Cva 是一个JVM语言
 ![](res/img/logo/Cva-128.png)
 
-#### [博客园教程地址](https://www.cnblogs.com/misection/p/14429145.html)
+> [博客园教程地址](https://www.cnblogs.com/misection/p/14429145.html)
 - 今天才整理好, 一会发布上去
 - 未来的目标是兼容C, 支持C编译到JVM虚拟机上
 
@@ -64,9 +64,82 @@ java -jar cvac.jar fileName
 
 # 语法
 
-# 项目结构
+#### 示例文件请见 ./sample/
 
-####
+#### 由于项目目前还没有achieve, 所以一些特性还不支持, 只给出了一些简单的sample;
+
+# 项目结构
+```text
+├─src
+│  ├─main
+│  │  ├─go
+│  │  │  └─golang
+│  │  │      ├─handler
+│  │  │      └─main
+│  │  ├─java
+│  │  │  ├─cn
+│  │  │  │  └─misection
+│  │  │  │      └─cvac
+│  │  │  │          ├─ast
+│  │  │  │          │  ├─clas
+│  │  │  │          │  ├─decl
+│  │  │  │          │  │  └─nullptr
+│  │  │  │          │  ├─entry
+│  │  │  │          │  ├─expr
+│  │  │  │          │  │  ├─nonterminal
+│  │  │  │          │  │  │  ├─binary
+│  │  │  │          │  │  │  ├─ternary
+│  │  │  │          │  │  │  └─unary
+│  │  │  │          │  │  ├─nullptr
+│  │  │  │          │  │  └─terminator
+│  │  │  │          │  ├─method
+│  │  │  │          │  ├─program
+│  │  │  │          │  ├─statement
+│  │  │  │          │  │  └─nullptr
+│  │  │  │          │  └─type
+│  │  │  │          │      ├─advance
+│  │  │  │          │      ├─basic
+│  │  │  │          │      └─reference
+│  │  │  │          ├─codegen
+│  │  │  │          │  └─bst
+│  │  │  │          │      ├─bclas
+│  │  │  │          │      ├─bdecl
+│  │  │  │          │      ├─bentry
+│  │  │  │          │      ├─bmethod
+│  │  │  │          │      ├─bprogram
+│  │  │  │          │      ├─btype
+│  │  │  │          │      │  ├─advance
+│  │  │  │          │      │  ├─basic
+│  │  │  │          │      │  └─reference
+│  │  │  │          │      └─instructor
+│  │  │  │          │          └─write
+│  │  │  │          ├─config
+│  │  │  │          ├─constant
+│  │  │  │          ├─io
+│  │  │  │          ├─lexer
+│  │  │  │          ├─optimize
+│  │  │  │          ├─parser
+│  │  │  │          ├─pkg
+│  │  │  │          └─semantic
+│  │  │  └─META-INF
+│  │  └─resources
+│  └─test
+│      └─java
+│          └─cn
+│              └─misection
+│                  └─cvac
+│                      ├─ast
+│                      ├─codegen
+│                      │  └─bst
+│                      │      └─instructor
+│                      ├─lexer
+│                      │  └─report
+│                      └─unit
+└─target
+
+
+```
+#### 
 
 
 ---
