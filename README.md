@@ -69,10 +69,17 @@ java -jar cvac.jar fileName
 #### 由于项目目前还没有achieve, 所以一些特性还不支持, 只给出了一些简单的sample;
 
 # 项目结构
+- go 的使用是本来打算用go很棒棒的标准库的flag作为命令行参数接收以及启动胶水. 
+后来go和Java进程间通信始终出现着意想不到的bug且性能较差, 遂作罢.   
+后来想用Csharp作为启动器, Csharp调用Java比较简单, 发现可以直接用ikvm打包..
+就直接用ikvmc编译了jar并用inno setup制作了发行版.
+- 项目中的C语言是cva源码, 因为C勉强有点代码提示, 所以目前Cva IDE 还没开发出来,
+不会拒绝非.cva后缀的文件.
+
 ```text
 ├─src
 │  ├─main
-│  │  ├─go
+│  │  ├─go // 暂时被这个小项目遗弃的go们.
 │  │  │  └─golang
 │  │  │      ├─handler
 │  │  │      └─main
@@ -80,13 +87,13 @@ java -jar cvac.jar fileName
 │  │  │  ├─cn
 │  │  │  │  └─misection
 │  │  │  │      └─cvac
-│  │  │  │          ├─ast
-│  │  │  │          │  ├─clas
-│  │  │  │          │  ├─decl
-│  │  │  │          │  │  └─nullptr
-│  │  │  │          │  ├─entry
-│  │  │  │          │  ├─expr
-│  │  │  │          │  │  ├─nonterminal
+│  │  │  │          ├─ast // 前端抽象语法树.
+│  │  │  │          │  ├─clas // Cva类.
+│  │  │  │          │  ├─decl // Cva 声明.
+│  │  │  │          │  │  └─nullptr // 所有nullptr package都是空对象模式的空对象. 下同.
+│  │  │  │          │  ├─entry // Cva 主类, Cva程序的入口.
+│  │  │  │          │  ├─expr // Cva 表达式.
+│  │  │  │          │  │  ├─nonterminal // 
 │  │  │  │          │  │  │  ├─binary
 │  │  │  │          │  │  │  ├─ternary
 │  │  │  │          │  │  │  └─unary
@@ -136,7 +143,7 @@ java -jar cvac.jar fileName
 │                      │  └─report
 │                      └─unit
 └─target
-
+    // ... 编译后的 .class 文件...
 
 ```
 #### 
