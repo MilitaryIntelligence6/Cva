@@ -93,22 +93,22 @@ java -jar cvac.jar fileName
 │  │  │  │          │  │  └─nullptr // 所有nullptr package都是空对象模式的空对象. 下同.
 │  │  │  │          │  ├─entry // Cva 主类, Cva程序的入口.
 │  │  │  │          │  ├─expr // Cva 表达式.
-│  │  │  │          │  │  ├─nonterminal // 
-│  │  │  │          │  │  │  ├─binary
-│  │  │  │          │  │  │  ├─ternary
-│  │  │  │          │  │  │  └─unary
-│  │  │  │          │  │  ├─nullptr
-│  │  │  │          │  │  └─terminator
-│  │  │  │          │  ├─method
-│  │  │  │          │  ├─program
-│  │  │  │          │  ├─statement
-│  │  │  │          │  │  └─nullptr
-│  │  │  │          │  └─type
-│  │  │  │          │      ├─advance
-│  │  │  │          │      ├─basic
-│  │  │  │          │      └─reference
+│  │  │  │          │  │  ├─nonterminal // 非终结符.
+│  │  │  │          │  │  │  ├─binary // 二元表达式.
+│  │  │  │          │  │  │  ├─ternary // 三元表达式.
+│  │  │  │          │  │  │  └─unary // 一元表达式.
+│  │  │  │          │  │  ├─nullptr // 空对象.
+│  │  │  │          │  │  └─terminator // 终结符.
+│  │  │  │          │  ├─method // Cva 方法.
+│  │  │  │          │  ├─program // Cva 语法树根节点.
+│  │  │  │          │  ├─statement // Cva声明.
+│  │  │  │          │  │  └─nullptr 
+│  │  │  │          │  └─type // Cva类型.
+│  │  │  │          │      ├─advance // 进阶类型, String, array && 指针, 目前只实现了string.
+│  │  │  │          │      ├─basic // 基础类型, Java基本类型.
+│  │  │  │          │      └─reference // 引用类型, 其实string和array也是.
 │  │  │  │          ├─codegen
-│  │  │  │          │  └─bst
+│  │  │  │          │  └─bst // backend syntax tree 编译器后端抽象语法树.
 │  │  │  │          │      ├─bclas
 │  │  │  │          │      ├─bdecl
 │  │  │  │          │      ├─bentry
@@ -120,17 +120,17 @@ java -jar cvac.jar fileName
 │  │  │  │          │      │  └─reference
 │  │  │  │          │      └─instructor
 │  │  │  │          │          └─write
-│  │  │  │          ├─config
-│  │  │  │          ├─constant
-│  │  │  │          ├─io
-│  │  │  │          ├─lexer
-│  │  │  │          ├─optimize
-│  │  │  │          ├─parser
-│  │  │  │          ├─pkg
-│  │  │  │          └─semantic
-│  │  │  └─META-INF
+│  │  │  │          ├─config // 主要是条件编译的宏常量等.
+│  │  │  │          ├─constant // 常数池, TODO 将所有常数池以及package-info的常量用枚举重构.
+│  │  │  │          ├─io // 文件流读写.
+│  │  │  │          ├─lexer // 词法分析.
+│  │  │  │          ├─optimize // 编译优化.
+│  │  │  │          ├─parser // 语法分析.
+│  │  │  │          ├─pkg // Cva包管理.
+│  │  │  │          └─semantic // 语义分析.
+│  │  │  └─META-INF // 打包jar入口.
 │  │  └─resources
-│  └─test
+│  └─test // 单元测试.
 │      └─java
 │          └─cn
 │              └─misection
