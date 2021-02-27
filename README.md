@@ -17,6 +17,7 @@
 
 ---
 # Cva 是一个JVM语言
+![](res/img/logo/Cva-128.png)
 
 #### [博客园教程地址](https://www.cnblogs.com/misection/p/14429145.html)
 - 今天才整理好, 一会发布上去
@@ -25,10 +26,11 @@
 #### 目前要准备春招实习, 所以项目暂停更新一段时间;
 - 由于时间原因, 目前没有做系统的测试;
 
-+ 目前是 Java 的子集，支持简单的面向对象
-+ 词法和语法前端手写;
-+ 面向 JVM 生成字节码
++ 目前文法基本属于Java子集, 支持简单的面向对象
++ 词法和语法前端手写.
++ 面向目标平台 JVM 生成字节码.
 + 已实现的编译优化：简易的常量折叠、不可达代码删除，基于到达定义分析的常量/拷贝传播，基于活性分析的死代码删除优化
+- 由于目前还不稳定, 所以
 
 # How to use
 
@@ -41,11 +43,13 @@
 ```shell script
 java -jar cvac.jar fileName
 ```
-- 会编译当前目录下的指定的文件
+- 会将文件编译当前目录下的指定的文件
 
 
 #### windows installer
-- 使用 windows 安装包, 您能将
+![安装包用 inno setup打包](res/img/cvac/installer.png)
+- 使用 windows 安装包, 需要.NET framework3.5的支持;
+ 其他方案如exe4j存在目前难以解决的路径问题.
 
 ---
 # TODO
