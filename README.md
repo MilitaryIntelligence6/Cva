@@ -1,4 +1,9 @@
 # Cva
+![](https://img.shields.io/badge/language-Java-yellow.svg)
+![](https://img.shields.io/badge/category-compilerLearning-blue.svg)
+[![](https://img.shields.io/badge/blog-@misection-red.svg)](https://www.cnblogs.com/misection/)
+![](http://progressed.io/bar/91?title=done)
+
 ```text
    █████████  █████   █████   █████████  
   ███░░░░░███░░███   ░░███   ███░░░░░███ 
@@ -14,6 +19,7 @@
 ### Cva 是一个JVM语言, 未来的目标是兼容C, 支持C编译到JVM虚拟机上;
 
 #### 目前要准备春招实习, 所以项目暂停更新一段时间;
+- 由于时间原因, 目前没有做系统的测试;
 
 + 目前是 Java 的子集，支持简单的面向对象
 + 词法和语法前端手写;
