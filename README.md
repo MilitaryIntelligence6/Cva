@@ -38,15 +38,15 @@
 - cva目前制作了windows exe installer与jar发行版, 目前为试发行, 还是存在着不少的bug.
 - 由于时间原因, 目前没有做命令行参数的支持, 这个是todo项目之一.
 
-##### jar版本
-- jar版本速度更快, 
+##### release-jar
+- jar版本速度更快, 同时意味着您可以跨平台使用之.
 ```shell script
 java -jar cvac.jar fileName
 ```
 - 会将文件编译当前目录下的指定的文件
 
 
-#### windows installer
+#### release-windows installer
 ![安装包用 inno setup打包](res/img/cvac/installer.png)
 - 使用 windows 安装包, 需要.NET framework3.5的支持;
  其他方案如exe4j存在目前难以解决的路径问题.
