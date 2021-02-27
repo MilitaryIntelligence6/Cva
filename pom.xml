@@ -15,7 +15,6 @@
         <module>utils</module>
     </modules>
 
-
     <build>
         <plugins>
             <plugin>
