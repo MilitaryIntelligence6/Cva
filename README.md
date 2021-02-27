@@ -28,7 +28,7 @@
 
 ---
 ### TODO
-- Cva生态的兼容C的超级Cva;
+- 兼容C的超级Cva;
 - CvaNIO原生库;
 - 实现Java的Pkg, 进行Pkg编译, 选取pkg替代Java的package关键字, call取代Java的import关键字;
 - CvaDK, 实现HashMap
