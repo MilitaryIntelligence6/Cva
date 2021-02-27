@@ -43,9 +43,8 @@
 ```shell script
 java -jar cvac.jar fileName
 ```
-
 - 会将文件编译当前目录下的指定的文件
-
+![](res/img/cvac/cmd.png)
 
 #### release-windows installer
 ![安装包用 inno setup打包](res/img/cvac/installer.png)
@@ -53,6 +52,11 @@ java -jar cvac.jar fileName
  其他方案如exe4j存在目前难以解决的路径问题.
 - 同时, 在使用cvac的同时建议您指定CvaDK的安装路径/bin为环境变量, 方便在命令行随时使用, 或者到bin目录下去编译cva文件.
 > PS: 目前 CvaDK使用的是Microsoft的IKVM, 希望以后能开发出CvaVM整套工具.
+
+#### 您也可以clone or 下载源码, 自行编译, 作者的编译环境是
+> JDK  1.8 以上
+: 由于大量使用了Java8的函数式特性, 所以请您务必使用JDK8以上版本.
+
 ---
 # TODO
 - 由于时间原因, 还没有测试每个分支.
