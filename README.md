@@ -43,6 +43,7 @@
 ```shell script
 java -jar cvac.jar fileName
 ```
+
 - 会将文件编译当前目录下的指定的文件
 
 
@@ -50,7 +51,8 @@ java -jar cvac.jar fileName
 ![安装包用 inno setup打包](res/img/cvac/installer.png)
 - 使用 windows 安装包, 需要.NET framework3.5的支持;
  其他方案如exe4j存在目前难以解决的路径问题.
-
+- 同时, 在使用cvac的同时建议您指定CvaDK的安装路径/bin为环境变量, 方便在命令行随时使用, 或者到bin目录下去编译cva文件.
+> PS: 目前 CvaDK使用的是Microsoft的IKVM, 希望以后能开发出CvaVM整套工具.
 ---
 # TODO
 - 由于时间原因, 还没有测试每个分支.
