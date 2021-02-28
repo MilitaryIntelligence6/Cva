@@ -1,7 +1,7 @@
 package cn.misection.cvac.lexer;
 
 /**
- * Created by MI6 root 1/6.
+ * @author MI6 root
  */
 public final class CvaToken
 {
@@ -11,14 +11,14 @@ public final class CvaToken
     private final EnumCvaToken enumToken;
 
     /**
-     * extra lexeme of the token
+     * extra literal of the token
      */
     private String literal;
 
     /**
      * the line number of the token
      */
-    private int lineNum;
+    private final int lineNum;
 
 
     public CvaToken(EnumCvaToken enumToken, int lineNum)

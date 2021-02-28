@@ -13,6 +13,7 @@
         <module>SharpCvac</module>
         <module>Cvac</module>
         <module>utils</module>
+        <module>CvaIDE</module>
     </modules>
 
     <build>

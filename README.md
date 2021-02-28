@@ -16,10 +16,11 @@
 ```
 
 ---
-# Cva 是一个JVM语言, 未来希望兼容C, 达到C-to-JVM
+### Cva 是一个JVM语言, 未来希望兼容C, 达到C-to-JVM的效果
 ![](res/img/logo/Cva-128.png)
 
 > [博客园教程地址](https://www.cnblogs.com/misection/p/14429145.html)
+- **如果项目对您有帮助, 请点一点star, 谢谢!**
 - 今天才整理好, 一会发布上去
 - 未来的目标是兼容C, 支持C编译到JVM虚拟机上
 

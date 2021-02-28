@@ -21,27 +21,38 @@ public enum EnumCvaToken
      */
     STAR,
 
+    /**
+     * /
+     */
     DIV,
 
     /**
-     * 加的求余;
+     * 求余;
      */
     REM,
 
+    /**
+     * &
+     */
     BIT_AND,
 
+    /**
+     * |
+     */
     BIT_OR,
 
+    /**
+     * ^
+     */
     BIT_XOR,
 
-
     /**
-     * 新加的求反;
+     * 位求反;
      */
     BIT_NEGATE,
 
     /**
-     * 加了左右;
+     * 左右移位, 无符号移位
      */
     LEFT_SHIFT,
 
@@ -118,7 +129,7 @@ public enum EnumCvaToken
 
     /**
      * <
-     * 多元符号, 不能初始化;
+     * 前缀字符, 不能初始化;
      */
     LESS_THAN,
 
