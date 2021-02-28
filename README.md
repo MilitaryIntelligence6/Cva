@@ -144,7 +144,7 @@ java -jar cvac.jar fileName
 │                      │  └─report
 │                      └─unit
 └─target
-    // ... 编译后的 .class 文件...
+    // ... .class 文件...
 
 ```
 #### 
