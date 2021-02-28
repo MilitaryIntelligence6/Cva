@@ -63,6 +63,8 @@ java -jar cvac.jar fileName
 
 # Cva语法
 
+- Cva的语法目前与Java类似, 但是允许将main方法放在类外部, 其他
+
 #### 示例文件请见 ./sample/
 
 #### 由于项目目前还没有achieve, 所以一些特性还不支持, 只给出了一些简单的sample;
