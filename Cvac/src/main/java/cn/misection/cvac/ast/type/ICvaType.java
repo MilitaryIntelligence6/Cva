@@ -1,6 +1,6 @@
 package cn.misection.cvac.ast.type;
 
-import cn.misection.cvac.ast.ASTree;
+import cn.misection.cvac.ast.IASTreeNode;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
 
 /**
@@ -10,7 +10,7 @@ import cn.misection.cvac.ast.type.basic.EnumCvaType;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:57:00
  */
-public interface ICvaType extends ASTree
+public interface ICvaType extends IASTreeNode
 {
     /**
      * 转string;

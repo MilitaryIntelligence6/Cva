@@ -9,7 +9,7 @@ Token 7 is Token {OPEN_CURLY_BRACE literal: null : at line 5}
 Token 8 is Token {WRITE literal: null : at line 6}
 Token 9 is Token {OPEN_PAREN literal: null : at line 6}
 Token 10 is Token {NEW literal: null : at line 6}
-Token 11 is Token {IDENTIFIER literal: Test : at line 6}
+Token 11 is Token {IDENTIFIER literal: FibCalcer : at line 6}
 Token 12 is Token {OPEN_PAREN literal: null : at line 6}
 Token 13 is Token {CLOSE_PAREN literal: null : at line 6}
 Token 14 is Token {DOT literal: null : at line 6}
@@ -22,7 +22,7 @@ Token 20 is Token {SEMI literal: null : at line 6}
 Token 21 is Token {CLOSE_CURLY_BRACE literal: null : at line 7}
 Token 22 is Token {CLOSE_CURLY_BRACE literal: null : at line 8}
 Token 23 is Token {CLASS literal: null : at line 10}
-Token 24 is Token {IDENTIFIER literal: Test : at line 10}
+Token 24 is Token {IDENTIFIER literal: FibCalcer : at line 10}
 Token 25 is Token {OPEN_CURLY_BRACE literal: null : at line 11}
 Token 26 is Token {INT literal: null : at line 12}
 Token 27 is Token {IDENTIFIER literal: Compute : at line 12}

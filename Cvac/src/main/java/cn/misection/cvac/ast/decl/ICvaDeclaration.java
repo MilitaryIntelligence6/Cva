@@ -1,7 +1,6 @@
 package cn.misection.cvac.ast.decl;
 
-import cn.misection.cvac.ast.ASTree;
-import cn.misection.cvac.ast.type.AbstractType;
+import cn.misection.cvac.ast.IASTreeNode;
 import cn.misection.cvac.ast.type.ICvaType;
 
 /**
@@ -11,7 +10,7 @@ import cn.misection.cvac.ast.type.ICvaType;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:58:00
  */
-public interface ICvaDeclaration extends ASTree
+public interface ICvaDeclaration extends IASTreeNode
 {
     /**
      * 字面量;

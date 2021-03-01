@@ -79,6 +79,7 @@ class Increment
 
         while(i < 15)
         {
+            println "多条语句";
             i++;
         }
         println "i % 4";

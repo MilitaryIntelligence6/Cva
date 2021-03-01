@@ -42,7 +42,7 @@ public final class Lexer
 
     private CvaToken lex()
     {
-        char ch = this.stream.poll();
+        char ch = stream.poll();
         // skip all kinds of blanks
         ch = handleWhiteSpace(ch);
         switch (ch)

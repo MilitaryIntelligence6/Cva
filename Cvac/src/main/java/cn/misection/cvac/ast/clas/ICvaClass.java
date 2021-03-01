@@ -1,6 +1,6 @@
 package cn.misection.cvac.ast.clas;
 
-import cn.misection.cvac.ast.ASTree;
+import cn.misection.cvac.ast.IASTreeNode;
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.method.AbstractMethod;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:01:00
  */
-public interface ICvaClass extends ASTree
+public interface ICvaClass extends IASTreeNode
 {
     /**
      * 类名;

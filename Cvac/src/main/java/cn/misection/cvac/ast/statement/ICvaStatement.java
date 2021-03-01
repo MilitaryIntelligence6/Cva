@@ -1,6 +1,6 @@
 package cn.misection.cvac.ast.statement;
 
-import cn.misection.cvac.ast.ASTree;
+import cn.misection.cvac.ast.IASTreeNode;
 
 /**
  * @author Military Intelligence 6 root
@@ -10,7 +10,7 @@ import cn.misection.cvac.ast.ASTree;
  * @CreateTime 2021年02月14日 18:02:00
  */
 @FunctionalInterface
-public interface ICvaStatement extends ASTree
+public interface ICvaStatement extends IASTreeNode
 {
     /**
      * 拿到enum;

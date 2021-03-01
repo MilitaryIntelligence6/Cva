@@ -10,7 +10,7 @@ Token 7 is Token_Lbrace : at line 5
 Token 8 is Token_Print : at line 6
 Token 9 is Token_Lparen : at line 6
 Token 10 is Token_New : at line 6
-Token 11 is Token_ID : Test : at line 6
+Token 11 is Token_ID : FibCalcer : at line 6
 Token 12 is Token_Lparen : at line 6
 Token 13 is Token_Rparen : at line 6
 Token 14 is Token_Dot : at line 6
@@ -23,7 +23,7 @@ Token 20 is Token_Semi : at line 6
 Token 21 is Token_Rbrace : at line 7
 Token 22 is Token_Rbrace : at line 8
 Token 23 is Token_Class : at line 10
-Token 24 is Token_ID : Test : at line 10
+Token 24 is Token_ID : FibCalcer : at line 10
 Token 25 is Token_Lbrace : at line 11
 Token 26 is Token_Int : at line 12
 Token 27 is Token_ID : Compute : at line 12
