@@ -1234,21 +1234,30 @@ public final class Parser
         }
 
         List<AbstractDeclaration> argList = mainMethod.getArgumentList();
-        if (argList.size() == 1)
+        switch (argList.size())
         {
-            ICvaType argType = argList.get(0).type();
-            // && 是短路的;
-            if (argType.toEnum() != EnumCvaType.ARRAY ||
-                    ((CvaArrayType) argType).getInnerType().toEnum() != EnumCvaType.STRING)
+            case 0:
             {
-                errorLog("only accexpt main func's arg string[]",
-                        String.valueOf(argList));
+                break;
             }
-        }
-        else
-        {
-            errorLog("main func's arg decl length should be 1 means string[]",
-                    String.valueOf(argList));
+            case 1:
+            {
+                ICvaType argType = argList.get(0).type();
+                // && 是短路的;
+                if (argType.toEnum() != EnumCvaType.ARRAY ||
+                        ((CvaArrayType) argType).getInnerType().toEnum() != EnumCvaType.STRING)
+                {
+                    errorLog("only accexpt main func's arg string[] or empty",
+                            String.valueOf(argList));
+                }
+                break;
+            }
+            default:
+            {
+                errorLog("main func's arg decl length should be 1 means string[]",
+                        String.valueOf(argList));
+                break;
+            }
         }
 
         return new CvaEntryClass.Builder()
