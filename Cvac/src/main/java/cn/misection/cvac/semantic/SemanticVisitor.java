@@ -203,27 +203,27 @@ public final class SemanticVisitor implements IVisitor
     @Override
     public void visit(CvaIdentifierExpr expr)
     {
-        ICvaType varType = methodVarMap.get(expr.literal());
+        ICvaType varType = methodVarMap.get(expr.name());
         boolean fieldFlag = varType == null;
         String className = curClassName;
         while (varType == null && className != null)
         {
-            varType = classMap.getFieldType(className, expr.literal());
+            varType = classMap.getFieldType(className, expr.name());
             className = classMap.getClassBinding(className).getParent();
         }
 
-        if (curMethodLocalSet.contains(expr.literal()))
+        if (curMethodLocalSet.contains(expr.name()))
         {
             errorLog(expr.getLineNum(),
                     String.format("you should assign \"%s\" a value before use it.",
-                            expr.literal()));
+                            expr.name()));
         }
 
         if (varType == null)
         {
             errorLog(expr.getLineNum(),
                     String.format("you should declare \"%s\" before use it.",
-                            expr.literal()));
+                            expr.name()));
             // 不可达;
             expr.setType(EnumCvaType.UNKNOWN);
             this.type = expr.getType();
@@ -358,14 +358,14 @@ public final class SemanticVisitor implements IVisitor
         visit(stm.getExpr());
         stm.setType(this.type);
         // 移除了不必要的检查;
-        curMethodLocalSet.remove(stm.getLiteral());
-        CvaIdentifierExpr cvaIdentifierExpr = new CvaIdentifierExpr(stm.getLineNum(), stm.getLiteral());
+        curMethodLocalSet.remove(stm.getVarName());
+        CvaIdentifierExpr cvaIdentifierExpr = new CvaIdentifierExpr(stm.getLineNum(), stm.getVarName());
         visit(cvaIdentifierExpr);
         ICvaType idType = this.type;
         if (isNotMatch(idType, stm.getType()))
         {
             errorLog(stm.getLineNum(), String.format("the type of \"%s\" is %s, but the type of expression is %s. Assign failed.",
-                    stm.getLiteral(), idType.toString(), stm.getType().toString()));
+                    stm.getVarName(), idType.toString(), stm.getType().toString()));
         }
 
     }
@@ -440,7 +440,7 @@ public final class SemanticVisitor implements IVisitor
         );
         this.curMethodLocalSet = new HashSet<>();
         cvaMethod.getLocalVarList().forEach(local ->
-                this.curMethodLocalSet.add(local.literal()));
+                this.curMethodLocalSet.add(local.name()));
         cvaMethod.getStatementList().forEach(this::visit);
         visit(cvaMethod.getRetExpr());
         // if (!this.type.toString().equals(m.retType.toString()))
@@ -465,7 +465,7 @@ public final class SemanticVisitor implements IVisitor
         );
         this.curMethodLocalSet = new HashSet<>();
         mainMethod.getLocalVarList().forEach(local ->
-                this.curMethodLocalSet.add((local.literal())));
+                this.curMethodLocalSet.add((local.name())));
         mainMethod.getStatementList().forEach(this::visit);
         if (mainMethod.getRetType() != EnumCvaType.VOID)
         {
@@ -506,7 +506,7 @@ public final class SemanticVisitor implements IVisitor
             classMap.putClassBinding(cla.name(), new ClassBinding(cla.parent()));
 
             cla.getFieldList().forEach(field -> classMap.putFieldToClass(cla.name(),
-                    field.literal(),
+                    field.name(),
                     field.type())
             );
 

@@ -29,7 +29,6 @@ import cn.misection.cvac.codegen.bst.btype.advance.TargetStringType;
 import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
 import cn.misection.cvac.codegen.bst.btype.reference.TargetClassType;
 import cn.misection.cvac.codegen.bst.instructor.*;
-import cn.misection.cvac.codegen.bst.instructor.write.EnumWriteMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -117,12 +116,12 @@ public final class TranslatorVisitor implements IVisitor
     {
         visit(decl.type());
         targetDecl = new TargetDeclaration(
-                decl.literal(),
+                decl.name(),
                 this.targetType);
         // if it is field;
         if (indexMap != null)
         {
-            indexMap.put(decl.literal(), index++);
+            indexMap.put(decl.name(), index++);
         }
     }
 
@@ -179,18 +178,18 @@ public final class TranslatorVisitor implements IVisitor
             ICvaType type = expr.getType();
             if (type instanceof CvaClassType)
             {
-                emit(new GetField(String.format("%s/%s", this.className, expr.literal()),
+                emit(new GetField(String.format("%s/%s", this.className, expr.name()),
                         String.format("L%s;", ((CvaClassType) type).getName())));
             }
             else
             {
-                emit(new GetField(String.format("%s/%s", this.className, expr.literal()),
+                emit(new GetField(String.format("%s/%s", this.className, expr.name()),
                         "I"));
             }
         }
         else
         {
-            int index = this.indexMap.get(expr.literal());
+            int index = this.indexMap.get(expr.name());
             switch (expr.getType().toEnum())
             {
                 // 后面其他类型也一样;
@@ -283,7 +282,7 @@ public final class TranslatorVisitor implements IVisitor
     {
         // 这一行一定不能要, 但不知为啥;
 //        visit(expr.getIdentifier());
-        emit(new IInc(indexMap.get(expr.literal()),
+        emit(new IInc(indexMap.get(expr.name()),
                 expr.getDirection()));
     }
 
@@ -297,7 +296,7 @@ public final class TranslatorVisitor implements IVisitor
     {
         try
         {
-            int index = this.indexMap.get(stm.getLiteral());
+            int index = this.indexMap.get(stm.getVarName());
             visit(stm.getExpr());
             // todo 用枚举;
             if (stm.getType() instanceof AbstractReferenceType)
@@ -316,7 +315,7 @@ public final class TranslatorVisitor implements IVisitor
             if (stm.getType() instanceof CvaClassType)
             {
                 emit(new PutField(String.format("%s/%s", this.className,
-                        stm.getLiteral()),
+                        stm.getVarName()),
                         String.format("L%s;",
                                 ((CvaClassType) stm.getType()).getName())));
             }
@@ -324,7 +323,7 @@ public final class TranslatorVisitor implements IVisitor
             {
                 emit(new PutField(String.format("%s/%s",
                         this.className,
-                        stm.getLiteral()),
+                        stm.getVarName()),
                         "I"));
             }
         }

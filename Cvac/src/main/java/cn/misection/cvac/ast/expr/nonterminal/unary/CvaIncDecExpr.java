@@ -3,7 +3,6 @@ package cn.misection.cvac.ast.expr.nonterminal.unary;
 import cn.misection.cvac.ast.expr.AbstractExpression;
 import cn.misection.cvac.ast.expr.EnumCvaExpr;
 import cn.misection.cvac.ast.expr.terminator.CvaIdentifierExpr;
-import cn.misection.cvac.ast.type.ICvaType;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
 import cn.misection.cvac.constant.EnumIncDirection;
 
@@ -30,9 +29,13 @@ public final class CvaIncDecExpr extends AbstractExpression
         this.direction = direction;
     }
 
-    public String literal()
+    /**
+     * 被自增者的变量名;
+     * @return 名;
+     */
+    public String name()
     {
-        return identifier.literal();
+        return identifier.name();
     }
 
     public CvaIdentifierExpr getIdentifier()

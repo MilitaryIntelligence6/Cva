@@ -1,7 +1,6 @@
 package cn.misection.cvac.semantic;
 
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
-import cn.misection.cvac.ast.type.AbstractType;
 import cn.misection.cvac.ast.type.ICvaType;
 
 import java.util.HashMap;
@@ -47,15 +46,15 @@ public final class MethodVarMap
         for (AbstractDeclaration decl : declList)
         {
             // FIXME 不知道有无隐患!;
-            if (this.containsKey(decl.literal()))
+            if (this.containsKey(decl.name()))
             {
                 System.err.printf("duplicated parameter: %s at line %d%n",
-                        decl.literal(), decl.getLineNum());
+                        decl.name(), decl.getLineNum());
                 System.exit(1);
             }
             else
             {
-                this.put(decl.literal(), decl.type());
+                this.put(decl.name(), decl.type());
             }
         }
     }

@@ -13,7 +13,7 @@ import cn.misection.cvac.ast.type.basic.EnumCvaType;
  */
 public final class CvaIdentifierExpr extends AbstractTerminator
 {
-    private String literal;
+    private String idName;
 
     private ICvaType type;
 
@@ -22,19 +22,19 @@ public final class CvaIdentifierExpr extends AbstractTerminator
      */
     private boolean fieldFlag;
 
-    public CvaIdentifierExpr(int lineNum, String literal)
+    public CvaIdentifierExpr(int lineNum, String idName)
     {
         super(lineNum);
-        this.literal = literal;
+        this.idName = idName;
     }
 
     public CvaIdentifierExpr(int lineNum,
-                             String literal,
+                             String idName,
                              ICvaType type,
                              boolean fieldFlag)
     {
         super(lineNum);
-        this.literal = literal;
+        this.idName = idName;
         this.type = type;
         this.fieldFlag = fieldFlag;
     }
@@ -51,9 +51,9 @@ public final class CvaIdentifierExpr extends AbstractTerminator
         return EnumCvaExpr.IDENTIFIER;
     }
 
-    public String literal()
+    public String name()
     {
-        return literal;
+        return idName;
     }
 
     public ICvaType getType()
@@ -66,9 +66,9 @@ public final class CvaIdentifierExpr extends AbstractTerminator
         return fieldFlag;
     }
 
-    public void setLiteral(String literal)
+    public void setIdName(String idName)
     {
-        this.literal = literal;
+        this.idName = idName;
     }
 
     public void setType(ICvaType type)

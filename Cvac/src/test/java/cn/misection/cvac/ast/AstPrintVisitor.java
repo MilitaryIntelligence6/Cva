@@ -1,12 +1,12 @@
 //package cn.misection.cvac.ast;
 //
 //
-//import cn.misection.cvac.ast.type.CvaBoolean;
+//import cn.misection.cvac.ast.type.basic.EnumCvaType;
 //
 ///**
 // * Created by MI6 root 1/12.
 // */
-//public class AstPrintVisitor implements Visitor
+//public class AstPrintVisitor implements IVisitor
 //{
 //    private int indentLevel = 4;
 //

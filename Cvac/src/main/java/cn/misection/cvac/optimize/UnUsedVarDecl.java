@@ -76,13 +76,13 @@ public final class UnUsedVarDecl
     @Override
     public void visit(CvaIdentifierExpr expr)
     {
-        if (this.unUsedLocals.containsKey(expr.literal()))
+        if (this.unUsedLocals.containsKey(expr.name()))
         {
-            this.unUsedLocals.remove(expr.literal());
+            this.unUsedLocals.remove(expr.name());
         }
         else
         {
-            this.unUsedArgs.remove(expr.literal());
+            this.unUsedArgs.remove(expr.name());
         }
     }
 
@@ -141,7 +141,7 @@ public final class UnUsedVarDecl
     @Override
     public void visit(CvaAssignStatement stm)
     {
-        visit(new CvaIdentifierExpr(stm.getLineNum(), stm.getLiteral()));
+        visit(new CvaIdentifierExpr(stm.getLineNum(), stm.getVarName()));
         visit(stm.getExpr());
     }
 
@@ -192,14 +192,14 @@ public final class UnUsedVarDecl
         m.getLocalVarList().forEach(local ->
         {
             CvaDeclaration l = (CvaDeclaration) local;
-            this.unUsedLocals.put(l.literal(), l);
+            this.unUsedLocals.put(l.name(), l);
         });
 
         this.unUsedArgs = new HashMap<>();
         m.getArgumentList().forEach(formal ->
         {
             CvaDeclaration f = (CvaDeclaration) formal;
-            this.unUsedArgs.put(f.literal(), f);
+            this.unUsedArgs.put(f.name(), f);
         });
 
         m.getStatementList().forEach(this::visit);

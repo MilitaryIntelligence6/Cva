@@ -69,9 +69,9 @@ public final class DeadCodeDel
     @Override
     public void visit(CvaIdentifierExpr expr)
     {
-        if (this.localVars.contains(expr.literal()))
+        if (this.localVars.contains(expr.name()))
         {
-            this.localLiveness.add(expr.literal());
+            this.localLiveness.add(expr.name());
         }
     }
 
@@ -137,10 +137,10 @@ public final class DeadCodeDel
     @Override
     public void visit(CvaAssignStatement stm)
     {
-        if (this.localLiveness.contains(stm.getLiteral())
-                || this.curFields.contains(stm.getLiteral()))
+        if (this.localLiveness.contains(stm.getVarName())
+                || this.curFields.contains(stm.getVarName()))
         {
-            this.localLiveness.remove(stm.getLiteral());
+            this.localLiveness.remove(stm.getVarName());
             visit(stm.getExpr());
             this.shouldDel = false;
             return;
@@ -236,10 +236,10 @@ public final class DeadCodeDel
     {
         this.localVars = new HashSet<>();
         m.getArgumentList().forEach(f ->
-                localVars.add((f.literal())));
+                localVars.add((f.name())));
 
         m.getLocalVarList().forEach(l ->
-                localVars.add((l.literal())));
+                localVars.add((l.name())));
 
         localLiveness = new HashSet<>();
 
@@ -266,7 +266,7 @@ public final class DeadCodeDel
     {
         this.curFields = new HashSet<>();
         c.getFieldList().forEach(f ->
-                this.curFields.add((f.literal())));
+                this.curFields.add((f.name())));
 
         c.getMethodList().forEach(this::visit);
     }

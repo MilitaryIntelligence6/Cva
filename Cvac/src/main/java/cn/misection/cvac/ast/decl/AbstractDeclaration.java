@@ -14,16 +14,16 @@ public abstract class AbstractDeclaration implements ICvaDeclaration, CvaNullabl
 {
     protected int lineNum;
 
-    protected String literal;
+    protected String varName;
 
     protected ICvaType type;
 
     public AbstractDeclaration(int lineNum,
-                               String literal,
+                               String varName,
                                ICvaType type)
     {
         this.lineNum = lineNum;
-        this.literal = literal;
+        this.varName = varName;
         this.type = type;
     }
 
@@ -39,9 +39,9 @@ public abstract class AbstractDeclaration implements ICvaDeclaration, CvaNullabl
     }
 
     @Override
-    public String literal()
+    public String name()
     {
-        return literal;
+        return varName;
     }
 
     @Override

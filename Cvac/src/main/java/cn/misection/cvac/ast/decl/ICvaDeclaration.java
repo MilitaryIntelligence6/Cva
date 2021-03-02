@@ -16,7 +16,7 @@ public interface ICvaDeclaration extends IASTreeNode
      * 字面量;
      * @return 字面量;
      */
-    String literal();
+    String name();
 
     /**
      * 类型;

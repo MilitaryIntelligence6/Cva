@@ -14,7 +14,7 @@ import java.util.List;
  */
 public final class TargetClass extends BaseClass
 {
-    private String literal;
+    private String className;
 
     private String parent;
 
@@ -22,22 +22,22 @@ public final class TargetClass extends BaseClass
 
     private List<TargetMethod> methodList;
 
-    public TargetClass(String literal, String parent, List<TargetDeclaration> fieldList, List<TargetMethod> methodList)
+    public TargetClass(String className, String parent, List<TargetDeclaration> fieldList, List<TargetMethod> methodList)
     {
-        this.literal = literal;
+        this.className = className;
         this.parent = parent;
         this.fieldList = fieldList;
         this.methodList = methodList;
     }
 
-    public String getLiteral()
+    public String getClassName()
     {
-        return literal;
+        return className;
     }
 
-    public void setLiteral(String literal)
+    public void setClassName(String className)
     {
-        this.literal = literal;
+        this.className = className;
     }
 
     public String getParent()

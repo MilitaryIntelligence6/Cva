@@ -2,7 +2,6 @@ package cn.misection.cvac.ast.statement;
 
 import cn.misection.cvac.ast.expr.AbstractExpression;
 import cn.misection.cvac.ast.type.ICvaType;
-import cn.misection.cvac.ast.type.ICvaType;
 
 /**
  * @author Military Intelligence 6 root
@@ -13,16 +12,19 @@ import cn.misection.cvac.ast.type.ICvaType;
  */
 public final class CvaAssignStatement extends AbstractStatement
 {
-    private String literal;
+    /**
+     * 被赋值变量名, 一般在表达式左边;
+     */
+    private String varName;
 
     private AbstractExpression expr;
 
     private ICvaType type;
 
-    public CvaAssignStatement(int lineNum, String literal, AbstractExpression expr)
+    public CvaAssignStatement(int lineNum, String varName, AbstractExpression expr)
     {
         super(lineNum);
-        this.literal = literal;
+        this.varName = varName;
         this.expr = expr;
         init();
     }
@@ -38,9 +40,9 @@ public final class CvaAssignStatement extends AbstractStatement
         return EnumCvaStatement.ASSIGN;
     }
 
-    public String getLiteral()
+    public String getVarName()
     {
-        return literal;
+        return varName;
     }
 
     public AbstractExpression getExpr()
@@ -53,9 +55,9 @@ public final class CvaAssignStatement extends AbstractStatement
         return type;
     }
 
-    public void setLiteral(String literal)
+    public void setVarName(String varName)
     {
-        this.literal = literal;
+        this.varName = varName;
     }
 
     public void setExpr(AbstractExpression expr)

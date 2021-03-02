@@ -36,7 +36,7 @@ public final class CvaNullDecl extends AbstractDeclaration
     }
 
     @Override
-    public String literal()
+    public String name()
     {
         return "nullDecl";
     }

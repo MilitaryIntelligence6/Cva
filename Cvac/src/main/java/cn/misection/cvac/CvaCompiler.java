@@ -83,7 +83,7 @@ public final class CvaCompiler
 
         for (TargetClass cla : translator.getTargetProgram().getClassList())
         {
-            String filePath = String.format("%s.il", cla.getLiteral());
+            String filePath = String.format("%s.il", cla.getClassName());
             jasmin.Main.main(new String[] {filePath});
         }
         System.out.println("\nwell down!\n");

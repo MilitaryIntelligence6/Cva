@@ -236,8 +236,8 @@ public final class IntermLangGenerator implements IBackendVisitor
     @Override
     public void visit(TargetClass targetClass)
     {
-        initWriter(String.format("%s.il", targetClass.getLiteral()));
-        writef(".class public %s\n", targetClass.getLiteral());
+        initWriter(String.format("%s.il", targetClass.getClassName()));
+        writef(".class public %s\n", targetClass.getClassName());
         if (targetClass.getParent() == null)
         {
             writeln(".super java/lang/Object");

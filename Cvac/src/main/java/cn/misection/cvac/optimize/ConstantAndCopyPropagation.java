@@ -46,7 +46,7 @@ public final class ConstantAndCopyPropagation
                 && ((CvaConstIntExpr) fir).getValue() == ((CvaConstIntExpr) sec).getValue())
                 || (fir instanceof CvaIdentifierExpr
                 && sec instanceof CvaIdentifierExpr
-                && ((CvaIdentifierExpr) fir).literal().equals(((CvaIdentifierExpr) sec).literal()));
+                && ((CvaIdentifierExpr) fir).name().equals(((CvaIdentifierExpr) sec).name()));
 
     }
 
@@ -119,11 +119,11 @@ public final class ConstantAndCopyPropagation
     @Override
     public void visit(CvaIdentifierExpr expr)
     {
-        if (this.conorcopy.containsKey(expr.literal()))
+        if (this.conorcopy.containsKey(expr.name()))
         {
             this.isOptimizing = true;
             this.canChange = true;
-            this.curExpr = this.conorcopy.get(expr.literal());
+            this.curExpr = this.conorcopy.get(expr.name());
         }
         else
         {
@@ -231,13 +231,13 @@ public final class ConstantAndCopyPropagation
     {
         if (this.inWhile)
         {
-            this.conorcopy.remove(stm.getLiteral());
+            this.conorcopy.remove(stm.getVarName());
             return;
         }
 
         if (stm.getExpr() instanceof CvaIdentifierExpr || stm.getExpr() instanceof CvaConstIntExpr)
         {
-            this.conorcopy.put(stm.getLiteral(), stm.getExpr());
+            this.conorcopy.put(stm.getVarName(), stm.getExpr());
         }
         else
         {

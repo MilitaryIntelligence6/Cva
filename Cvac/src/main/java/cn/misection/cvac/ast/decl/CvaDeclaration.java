@@ -12,9 +12,9 @@ import cn.misection.cvac.ast.type.ICvaType;
 public final class CvaDeclaration extends AbstractDeclaration
 {
     public CvaDeclaration(int lineNum,
-                          String literal,
+                          String varName,
                           ICvaType type)
     {
-        super(lineNum, literal, type);
+        super(lineNum, varName, type);
     }
 }
