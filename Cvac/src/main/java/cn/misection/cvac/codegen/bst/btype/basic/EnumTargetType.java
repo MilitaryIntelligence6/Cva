@@ -48,18 +48,18 @@ public enum EnumTargetType
     /**
      * instance domain;
      */
-    private final String literal;
+    private final String typeName;
 
     private String instruction;
 
-    EnumTargetType(String literal)
+    EnumTargetType(String typeName)
     {
-        this.literal = literal;
+        this.typeName = typeName;
     }
 
-    EnumTargetType(String literal, String instruction)
+    EnumTargetType(String typeName, String instruction)
     {
-        this.literal = literal;
+        this.typeName = typeName;
         this.instruction = instruction;
     }
 
@@ -72,7 +72,7 @@ public enum EnumTargetType
     @Override
     public String toString()
     {
-        return literal;
+        return typeName;
     }
 
     @Override
@@ -81,9 +81,9 @@ public enum EnumTargetType
         return instruction;
     }
 
-    public String getLiteral()
+    public String getTypeName()
     {
-        return literal;
+        return typeName;
     }
     /*
      * end instance domain;

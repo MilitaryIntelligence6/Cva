@@ -99,7 +99,7 @@ public final class IntermLangGenerator implements IBackendVisitor
     @Override
     public void visit(BaseReferenceType type)
     {
-        writef("L%s;", type.literal());
+        writef("L%s;", type.typeName());
     }
 
     @Override
@@ -249,7 +249,7 @@ public final class IntermLangGenerator implements IBackendVisitor
 
         targetClass.getFieldList().forEach(f ->
         {
-            writef(".field public %s ", f.getLiteral());
+            writef(".field public %s ", f.getVarName());
             visit(f.getType());
             writeln();
         });

@@ -45,7 +45,7 @@ public class TargetArrayType extends BaseAdvanceType
     }
 
     @Override
-    public String literal()
+    public String fullName()
     {
         // FIXME;
         return null;

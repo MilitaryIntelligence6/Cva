@@ -12,7 +12,7 @@ import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
 public class TargetPointer extends BaseUnsafe
 {
     @Override
-    public String literal()
+    public String fullName()
     {
         // FIXME;
         return null;

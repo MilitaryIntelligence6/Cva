@@ -17,5 +17,5 @@ public abstract class BaseAdvanceType
      * 获得写入文本;
      * @return literal;
      */
-    public abstract String literal();
+    public abstract String fullName();
 }

@@ -12,7 +12,7 @@ import cn.misection.cvac.ast.type.basic.EnumCvaType;
  */
 public final class CvaArrayType extends AbstractAdvanceType
 {
-    public static final String TYPE_LITERAL = "@array";
+    public static final String TYPE_NAME = "@array";
 
     private ICvaType innerType;
 

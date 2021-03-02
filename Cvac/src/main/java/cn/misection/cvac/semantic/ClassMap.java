@@ -47,6 +47,7 @@ public final class ClassMap extends HashMap<String, ClassBinding>
     {
         ClassBinding bind = this.get(className);
         ICvaType type = bind.getFieldMap().get(literal);
+        // FIXME 不要反悔 null 把 == null 改成containsKey();
         while (type == null)
         {
             if (bind.getParent() == null)

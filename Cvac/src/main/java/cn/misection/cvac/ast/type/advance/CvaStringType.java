@@ -11,7 +11,7 @@ import cn.misection.cvac.ast.type.basic.EnumCvaType;
  */
 public final class CvaStringType extends AbstractAdvanceType
 {
-    public static final String TYPE_LITERAL = "@string";
+    public static final String TYPE_NAME = "@string";
 
     private static final EnumCvaType ENUM_TYPE = EnumCvaType.STRING;
 
@@ -26,6 +26,6 @@ public final class CvaStringType extends AbstractAdvanceType
     @Override
     public String toString()
     {
-        return TYPE_LITERAL;
+        return TYPE_NAME;
     }
 }

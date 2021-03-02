@@ -11,19 +11,19 @@ import cn.misection.cvac.codegen.bst.btype.ITargetType;
  */
 public final class TargetDeclaration extends BaseDeclaration
 {
-    private String literal;
+    private final String varName;
 
     private ITargetType type;
 
-    public TargetDeclaration(String literal, ITargetType type)
+    public TargetDeclaration(String varName, ITargetType type)
     {
-        this.literal = literal;
+        this.varName = varName;
         this.type = type;
     }
 
-    public String getLiteral()
+    public String getVarName()
     {
-        return literal;
+        return varName;
     }
 
     public ITargetType getType()

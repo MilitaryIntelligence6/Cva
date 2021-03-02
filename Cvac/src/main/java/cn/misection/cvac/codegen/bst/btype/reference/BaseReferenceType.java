@@ -11,5 +11,5 @@ import cn.misection.cvac.codegen.bst.btype.BaseType;
  */
 public abstract class BaseReferenceType extends BaseType
 {
-    public abstract String literal();
+    public abstract String typeName();
 }

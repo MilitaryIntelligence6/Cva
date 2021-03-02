@@ -11,21 +11,22 @@ import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
  */
 public final class TargetClassType extends BaseReferenceType
 {
-    public static final String TYPE_LITERAL = "@class";
+    public static final String TYPE_NAME = "@class";
 
-    private String literal;
+    private final String className;
 
-    public TargetClassType(String literal)
+    public TargetClassType(String className)
     {
-        this.literal = literal;
+        this.className = className;
     }
 
-    // FIXME
-    // 后端这样行不行;
+    /**
+     * FIXME 后端这样行不行;
+     */
     @Override
     public String toString()
     {
-        return String.format("@class:%s", literal);
+        return String.format("@class:%s", className);
     }
 
     @Override
@@ -35,8 +36,8 @@ public final class TargetClassType extends BaseReferenceType
     }
 
     @Override
-    public String literal()
+    public String typeName()
     {
-        return literal;
+        return className;
     }
 }

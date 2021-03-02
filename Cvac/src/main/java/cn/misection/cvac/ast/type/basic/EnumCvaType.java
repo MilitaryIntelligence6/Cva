@@ -54,28 +54,28 @@ public enum EnumCvaType implements ICvaType
     /**
      * instance domain;
      */
-    private final String literal;
+    private final String typeName;
 
     private EnumTargetType targetType;
 
     private EnumOperandType operandType;
 
-    EnumCvaType(String literal)
+    EnumCvaType(String typeName)
     {
-        this.literal = literal;
+        this.typeName = typeName;
     }
 
-    EnumCvaType(String literal, EnumTargetType targetType)
+    EnumCvaType(String typeName, EnumTargetType targetType)
     {
-        this.literal = literal;
+        this.typeName = typeName;
         this.targetType = targetType;
     }
 
-    EnumCvaType(String literal,
+    EnumCvaType(String typeName,
                 EnumTargetType targetType,
                 EnumOperandType operandType)
     {
-        this.literal = literal;
+        this.typeName = typeName;
         this.targetType = targetType;
         this.operandType = operandType;
     }
@@ -90,15 +90,15 @@ public enum EnumCvaType implements ICvaType
         return operandType;
     }
 
-    public String getLiteral()
+    public String getTypeName()
     {
-        return literal;
+        return typeName;
     }
 
     @Override
     public String toString()
     {
-        return literal;
+        return typeName;
     }
 
     @Override

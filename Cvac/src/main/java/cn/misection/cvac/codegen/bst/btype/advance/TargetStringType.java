@@ -11,28 +11,28 @@ import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
  */
 public final class TargetStringType extends BaseAdvanceType
 {
-    public static final String TYPE_LITERAL = "@string";
+    public static final String TYPE_NAME = "@string";
 
-    public static final String FULL_LITERAL = "java/lang/String";
+    public static final String FULL_TYPE_NAME = "java/lang/String";
 
     public TargetStringType() {}
 
     @Override
-    public String literal()
+    public String fullName()
     {
-        return FULL_LITERAL;
+        return FULL_TYPE_NAME;
     }
 
     @Override
     public String toInst()
     {
-        return FULL_LITERAL;
+        return FULL_TYPE_NAME;
     }
 
     @Override
     public String toString()
     {
-        return TYPE_LITERAL;
+        return TYPE_NAME;
     }
 
     @Override

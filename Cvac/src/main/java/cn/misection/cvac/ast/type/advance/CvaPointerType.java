@@ -11,7 +11,7 @@ import cn.misection.cvac.ast.type.basic.EnumCvaType;
  */
 public final class CvaPointerType extends AbstractUnsafe
 {
-    public static final String TYPE_LITERAL = "@pointer";
+    public static final String TYPE_NAME = "@pointer";
 
     private static final EnumCvaType ENUM_TYPE = EnumCvaType.POINTER;
 
@@ -26,6 +26,6 @@ public final class CvaPointerType extends AbstractUnsafe
     @Override
     public String toString()
     {
-        return TYPE_LITERAL;
+        return TYPE_NAME;
     }
 }
