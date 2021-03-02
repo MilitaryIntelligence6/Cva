@@ -24,8 +24,6 @@ public enum EnumCvaStatement
 
     WRITE,
 
-    INCREMENT,
-
     EXPR_STATEMENT,
 
     /**

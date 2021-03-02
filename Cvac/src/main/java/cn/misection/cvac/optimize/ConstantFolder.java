@@ -351,12 +351,6 @@ public final class ConstantFolder
     }
 
     @Override
-    public void visit(CvaIncreStatement stm)
-    {
-        // TODO;
-    }
-
-    @Override
     public void visit(CvaExprStatement stm)
     {
         visit(stm.getExpr());

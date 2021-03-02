@@ -416,13 +416,6 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaIncreStatement stm)
-    {
-        emit(new IInc(indexMap.get(stm.getLiteral()),
-                stm.getDirection()));
-    }
-
-    @Override
     public void visit(CvaExprStatement stm)
     {
         visit(stm.getExpr());

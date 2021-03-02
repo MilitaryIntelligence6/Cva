@@ -308,11 +308,6 @@ public final class ConstantAndCopyPropagation
         this.visit(stm.getBody());
     }
 
-    @Override
-    public void visit(CvaIncreStatement stm)
-    {
-        // TODO;
-    }
 
     @Override
     public void visit(CvaExprStatement stm)

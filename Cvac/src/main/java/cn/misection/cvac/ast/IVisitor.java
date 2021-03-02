@@ -239,11 +239,6 @@ public interface IVisitor
                 visit((CvaWhileForStatement) abstStm);
                 break;
             }
-            case INCREMENT:
-            {
-                visit((CvaIncreStatement) abstStm);
-                break;
-            }
             case NULL_POINTER:
             {
                 // 直接忽略, 转都不用转;
@@ -272,8 +267,6 @@ public interface IVisitor
     void visit(CvaWriteStatement stm);
 
     void visit(CvaWhileForStatement stm);
-
-    void visit(CvaIncreStatement stm);
 
     void visit(CvaExprStatement stm);
 

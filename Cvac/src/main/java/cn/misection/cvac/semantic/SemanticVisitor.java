@@ -418,12 +418,6 @@ public final class SemanticVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaIncreStatement stm)
-    {
-        // TODO 好像没啥事做;
-    }
-
-    @Override
     public void visit(CvaExprStatement stm)
     {
         visit(stm.getExpr());
