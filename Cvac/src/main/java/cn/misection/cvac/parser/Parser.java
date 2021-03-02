@@ -1547,6 +1547,10 @@ public final class Parser
                 .build();
     }
 
+    /**
+     * 处理Id;
+     * @return stm;
+     */
     private AbstractStatement handleIdentifier()
     {
         String idLiteral = curToken.getLiteral();
