@@ -33,16 +33,6 @@ public enum EnumInstructor implements IInstructor, Instructable
 
     I_STORE,
 
-    I_ADD("iadd"),
-
-    I_SUB("isub"),
-
-    I_MUL("imul"),
-
-    I_DIV("idiv"),
-
-    I_REM("irem"),
-
     LABEL_J,
 
     /**
