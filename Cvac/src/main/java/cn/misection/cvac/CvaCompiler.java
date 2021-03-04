@@ -76,11 +76,12 @@ public final class CvaCompiler
 
         System.out.println("start gene .class file\n");
 
-        // 现在是从il读到文件中而不是先创建il, il步骤在前, 需要设定一个全局;
+        // 先生成main方法;
         String ilPath = String.format("%s.il", translator.getTargetProgram().getEntryClass().getName());
         // ascii instructions to binary file
         jasmin.Main.main(new String[] {ilPath});
 
+        // 生成其他方法;
         for (TargetClass cla : translator.getTargetProgram().getClassList())
         {
             String filePath = String.format("%s.il", cla.getClassName());

@@ -10,95 +10,123 @@ call cva.std.console.*;
  */
 call cva.lang.type.String;
 
-int main()
+class Recursor
 {
-    int i = 0;
-    i++;
-    println i;
-    echo "hello, cva\n";
+    int compute(int num)
+    {
+        int total;
+        if ( num < 1)
+        {
+            total = 1;
+        }
+        else
+        {
+            total = num * (this.compute(num - 1));
+        }
+        return total;
+    }
+}
 
-    new Increment().incre();
-
+/**
+ * This is the entry point of the program
+ */
+int main(string[] args)
+{
+    // fib(10);
+    echo "fib(10) is ";
+    println new Recursor().compute(10);
     return 0;
 }
 
-//class Rec
+//int main()
 //{
-//    int fib(int n)
-//    {
-//        // 暂时没有实现解析句中return;
-//        if (i < 1)
-//        {
+//    int i = 0;
+//    i++;
+//    println i;
+//    echo "hello, cva\n";
 //
-//        }
-//    }
+//    new Increment().incre();
+//
+//    return 0;
 //}
-
-class Increment
-{
-    int incre()
-    {
-        int i;
-        i = 0;
-        while (10 > i)
-        {
-            println i;
-            i++;
-        }
-        println "i += 2";
-        i += 2;
-        println i;
-
-        println "i -= 2";
-        i -= 2;
-        println i;
-
-        println "i *= 2";
-        i *= 2;
-        println i;
-
-        println "i /= 2";
-        i /= 2;
-        println i;
-
-//        println "i ~= 2";
+//
+////class Rec
+////{
+////    int fib(int n)
+////    {
+////        // 暂时没有实现解析句中return;
+////        if (i < 1)
+////        {
+////
+////        }
+////    }
+////}
+//
+//class Increment
+//{
+//    int incre()
+//    {
+//        int i;
+//        i = 0;
+//        while (10 > i)
+//        {
+//            println i;
+//            i++;
+//        }
+//        println "i += 2";
 //        i += 2;
 //        println i;
-
-        println "i &= 2";
-        i &= 8;
-        println i;
-
-        println "i |= 2";
-        i |= 2;
-        println i;
-
-        println "i ^= 2";
-        i ^= 2;
-        println i;
-
-        println "i >>= 2";
-        i >>= 2;
-        println i;
-
-        println "i <<= 2";
-        i <<= 2;
-        println i;
-
-        println "i >>>= 2";
-        i >>>= 2;
-        println i;
-
-        while(i < 15)
-        {
-            i++;
-        }
-        println "i % 4";
-        i %= 4;
-        println i;
-        return i;
-    }
-}
+//
+//        println "i -= 2";
+//        i -= 2;
+//        println i;
+//
+//        println "i *= 2";
+//        i *= 2;
+//        println i;
+//
+//        println "i /= 2";
+//        i /= 2;
+//        println i;
+//
+////        println "i ~= 2";
+////        i += 2;
+////        println i;
+//
+//        println "i &= 2";
+//        i &= 8;
+//        println i;
+//
+//        println "i |= 2";
+//        i |= 2;
+//        println i;
+//
+//        println "i ^= 2";
+//        i ^= 2;
+//        println i;
+//
+//        println "i >>= 2";
+//        i >>= 2;
+//        println i;
+//
+//        println "i <<= 2";
+//        i <<= 2;
+//        println i;
+//
+//        println "i >>>= 2";
+//        i >>>= 2;
+//        println i;
+//
+//        while(i < 15)
+//        {
+//            i++;
+//        }
+//        println "i % 4";
+//        i %= 4;
+//        println i;
+//        return i;
+//    }
+//}
 
 //int main(string[] args)
 //{

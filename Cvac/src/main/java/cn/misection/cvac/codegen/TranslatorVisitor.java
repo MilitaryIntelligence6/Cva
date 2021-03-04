@@ -43,17 +43,27 @@ import java.util.Map;
  */
 public final class TranslatorVisitor implements IVisitor
 {
+    /**
+     * 当前访问到的类名;
+     */
     private String className;
+
     private int index;
 
     private Map<String, Integer> indexMap;
 
     private ITargetType targetType;
+
     private TargetDeclaration targetDecl;
+
     private List<IInstructor> linearInstrList;
+
     private TargetMethod targetMethod;
+
     private TargetClass targetClass;
+
     private TargetEntryClass targetEntryClass;
+
     private TargetProgram targetProgram;
 
     public TranslatorVisitor()
