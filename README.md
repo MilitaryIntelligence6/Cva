@@ -161,6 +161,9 @@ java -jar cvac.jar fileName
 - CvaDK, 实现HashMap
 - CvaVM Cva虚拟机
 - CvaIDE 
+- printf
+- array
+- todo目录下有点乱, 主要是个人整理思绪时用
 
 - 把所ast type加后缀type不然要混淆  
 
