@@ -169,6 +169,21 @@ java -jar cvac.jar fileName
 
 ---
 # TODO
+- ~~i++~~
+- ~~位操作;~~
+- ~~给所有expr上一个type接口, 返回表达式类型, 让写操作好打印;~~
+- ~~前端解析语法糖 +=, -=;~~
+- ~~位操作~~;
+- ~~for loop;~~
+- ~~做支持int num = 1;的定义!!;~~
++ ~~方法内 交互使用decl与statement~~;
++ ~~目前是必须先声明再用~~;
+- ~~++ 应该从statement变成装饰者expr;~~
+- ~~type改成枚举;~~  
+- ~~原子操作加入new;~~
+- ~~去掉所有的add, sub;~~
+- ~~完成decl statement;~~
+ 
 - 由于时间原因, 还没有测试每个分支
 - 命令行参数
 - 兼容C99的超级Cva
@@ -177,9 +192,24 @@ java -jar cvac.jar fileName
 - CvaDK, 实现HashMap
 - CvaVM Cva虚拟机
 - CvaIDE 
-- printf
-- array
-- todo目录下有点乱, 主要是个人整理思绪时用
+- printf 需要创建Object数组传入;
+- array anewarray;
+- 还是有不优雅的instanceof或者getclass, 最好用一个map或者枚举switch;
+- instru 改成枚举;
+- 区分++i与i++;
+- main内定义局部变量, 会给main中变量错误编号(给变量多+1), 把args编号了但没用;
+- 编译优化对新的特性提供支持;
+- 优化, 数值小于指定值的都换成iconst, 霍夫曼树 Byte.MAX_VALUE bipush;
+  sipush;
+- 直接在ldc压命令中改, 改成iconst_1, bipush, sipush;
+- 实现 == <= >=
+- !运算目前有问题;
+- parser 中*/逻辑顺序应该在一起放在一起, 位操作也应该放在一起; 
+- 下一步, 做支持ClassName cla = new ClassName();, 
+现在在其他类中new ClassName() 反而在类内部创建一个className属性, 这有问题; 
+- 目前声明string会报错, 后面修复; 
+- 句中return, 即return不必非在句末;
+- 目前 创建目录会在根目录下创建classes和i目录, 看下哪里路径出了问题; 
 
-- 把所ast type加后缀type不然要混淆  
+
 
