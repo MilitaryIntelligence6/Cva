@@ -16,6 +16,9 @@ int main()
     i++;
     println i;
     echo "hello, cva\n";
+
+    new Increment().incre();
+
     return 0;
 }
 
@@ -31,72 +34,71 @@ int main()
 //    }
 //}
 
-//class Increment
-//{
-//    int incre()
-//    {
-//        int i;
-//        i = 0;
-//        while (10 > i)
-//        {
-//            println i;
-//            i++;
-//        }
-//        println "i += 2";
+class Increment
+{
+    int incre()
+    {
+        int i;
+        i = 0;
+        while (10 > i)
+        {
+            println i;
+            i++;
+        }
+        println "i += 2";
+        i += 2;
+        println i;
+
+        println "i -= 2";
+        i -= 2;
+        println i;
+
+        println "i *= 2";
+        i *= 2;
+        println i;
+
+        println "i /= 2";
+        i /= 2;
+        println i;
+
+//        println "i ~= 2";
 //        i += 2;
 //        println i;
-//
-//        println "i -= 2";
-//        i -= 2;
-//        println i;
-//
-//        println "i *= 2";
-//        i *= 2;
-//        println i;
-//
-//        println "i /= 2";
-//        i /= 2;
-//        println i;
-//
-////        println "i ~= 2";
-////        i += 2;
-////        println i;
-//
-//        println "i &= 2";
-//        i &= 8;
-//        println i;
-//
-//        println "i |= 2";
-//        i |= 2;
-//        println i;
-//
-//        println "i ^= 2";
-//        i ^= 2;
-//        println i;
-//
-//        println "i >>= 2";
-//        i >>= 2;
-//        println i;
-//
-//        println "i <<= 2";
-//        i <<= 2;
-//        println i;
-//
-//        println "i >>>= 2";
-//        i >>>= 2;
-//        println i;
-//
-//        while(i < 15)
-//        {
-//            println "多条语句";
-//            i++;
-//        }
-//        println "i % 4";
-//        i %= 4;
-//        println i;
-//        return i;
-//    }
-//}
+
+        println "i &= 2";
+        i &= 8;
+        println i;
+
+        println "i |= 2";
+        i |= 2;
+        println i;
+
+        println "i ^= 2";
+        i ^= 2;
+        println i;
+
+        println "i >>= 2";
+        i >>= 2;
+        println i;
+
+        println "i <<= 2";
+        i <<= 2;
+        println i;
+
+        println "i >>>= 2";
+        i >>>= 2;
+        println i;
+
+        while(i < 15)
+        {
+            i++;
+        }
+        println "i % 4";
+        i %= 4;
+        println i;
+        return i;
+    }
+}
 
 //int main(string[] args)
 //{

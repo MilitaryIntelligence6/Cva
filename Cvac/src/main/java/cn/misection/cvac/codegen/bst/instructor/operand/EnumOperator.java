@@ -1,4 +1,7 @@
-package cn.misection.cvac.codegen.bst.instructor;
+package cn.misection.cvac.codegen.bst.instructor.operand;
+
+import cn.misection.cvac.codegen.bst.instructor.IInstructor;
+import cn.misection.cvac.codegen.bst.instructor.Instructable;
 
 /**
  * @author Military Intelligence 6 root

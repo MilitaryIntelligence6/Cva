@@ -3,8 +3,8 @@ package cn.misection.cvac.ast.expr.nonterminal.binary;
 import cn.misection.cvac.ast.expr.AbstractExpression;
 import cn.misection.cvac.ast.expr.EnumCvaExpr;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
-import cn.misection.cvac.codegen.bst.instructor.EnumOperandType;
-import cn.misection.cvac.codegen.bst.instructor.EnumOperator;
+import cn.misection.cvac.codegen.bst.instructor.operand.EnumOperandType;
+import cn.misection.cvac.codegen.bst.instructor.operand.EnumOperator;
 import cn.misection.cvac.codegen.bst.instructor.Instructable;
 
 /**

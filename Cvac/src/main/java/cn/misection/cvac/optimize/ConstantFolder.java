@@ -14,8 +14,8 @@ import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
 import cn.misection.cvac.ast.type.advance.CvaStringType;
-import cn.misection.cvac.codegen.bst.instructor.EnumOperandType;
-import cn.misection.cvac.codegen.bst.instructor.EnumOperator;
+import cn.misection.cvac.codegen.bst.instructor.operand.EnumOperandType;
+import cn.misection.cvac.codegen.bst.instructor.operand.EnumOperator;
 
 import java.util.ArrayList;
 import java.util.List;

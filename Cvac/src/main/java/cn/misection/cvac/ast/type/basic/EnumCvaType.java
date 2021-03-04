@@ -2,7 +2,7 @@ package cn.misection.cvac.ast.type.basic;
 
 import cn.misection.cvac.ast.type.ICvaType;
 import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
-import cn.misection.cvac.codegen.bst.instructor.EnumOperandType;
+import cn.misection.cvac.codegen.bst.instructor.operand.EnumOperandType;
 
 /**
  * @author Military Intelligence 6 root
