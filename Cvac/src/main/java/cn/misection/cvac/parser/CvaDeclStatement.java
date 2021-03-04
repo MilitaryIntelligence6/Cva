@@ -1,10 +1,10 @@
 package cn.misection.cvac.parser;
 
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
-import cn.misection.cvac.ast.decl.nullptr.CvaNullDecl;
+import cn.misection.cvac.ast.decl.nullobj.CvaNullDecl;
 import cn.misection.cvac.ast.statement.AbstractStatement;
 import cn.misection.cvac.ast.statement.EnumCvaStatement;
-import cn.misection.cvac.ast.statement.nullptr.CvaNullStatement;
+import cn.misection.cvac.ast.statement.nullobj.CvaNullStatement;
 
 /**
  * @author Military Intelligence 6 root

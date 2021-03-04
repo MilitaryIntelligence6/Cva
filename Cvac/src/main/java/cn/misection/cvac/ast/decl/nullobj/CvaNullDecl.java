@@ -1,4 +1,4 @@
-package cn.misection.cvac.ast.decl.nullptr;
+package cn.misection.cvac.ast.decl.nullobj;
 
 import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.type.ICvaType;

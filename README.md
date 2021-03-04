@@ -92,19 +92,19 @@ java -jar cvac.jar fileName
 │  │  │  │          ├─ast // 前端抽象语法树
 │  │  │  │          │  ├─clas // Cva类
 │  │  │  │          │  ├─decl // Cva 声明
-│  │  │  │          │  │  └─nullptr // 所有nullptr package都是空对象模式的空对象 下同
+│  │  │  │          │  │  └─nullobj // 所有nullobj package都是空对象模式的空对象 下同
 │  │  │  │          │  ├─entry // Cva 主类, Cva程序的入口
 │  │  │  │          │  ├─expr // Cva 表达式
 │  │  │  │          │  │  ├─nonterminal // 非终结符
 │  │  │  │          │  │  │  ├─binary // 二元表达式
 │  │  │  │          │  │  │  ├─ternary // 三元表达式
 │  │  │  │          │  │  │  └─unary // 一元表达式
-│  │  │  │          │  │  ├─nullptr // 空对象
+│  │  │  │          │  │  ├─nullobj // 空对象
 │  │  │  │          │  │  └─terminator // 终结符
 │  │  │  │          │  ├─method // Cva 方法
 │  │  │  │          │  ├─program // Cva 语法树根节点
 │  │  │  │          │  ├─statement // Cva声明
-│  │  │  │          │  │  └─nullptr 
+│  │  │  │          │  │  └─nullobj 
 │  │  │  │          │  └─type // Cva类型
 │  │  │  │          │      ├─advance // 进阶类型, String, array && 指针, 目前只实现了string
 │  │  │  │          │      ├─basic // 基础类型, Java基本类型

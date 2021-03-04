@@ -1,4 +1,4 @@
-package cn.misection.cvac.ast.statement.nullptr;
+package cn.misection.cvac.ast.statement.nullobj;
 
 import cn.misection.cvac.ast.statement.AbstractStatement;
 import cn.misection.cvac.ast.statement.EnumCvaStatement;

@@ -1,8 +1,8 @@
 package cn.misection.cvac.ast.statement;
 
 import cn.misection.cvac.ast.expr.AbstractExpression;
-import cn.misection.cvac.ast.expr.nullptr.CvaNullExpr;
-import cn.misection.cvac.ast.statement.nullptr.CvaNullStatement;
+import cn.misection.cvac.ast.expr.nullobj.CvaNullExpr;
+import cn.misection.cvac.ast.statement.nullobj.CvaNullStatement;
 
 /**
  * @author Military Intelligence 6 root

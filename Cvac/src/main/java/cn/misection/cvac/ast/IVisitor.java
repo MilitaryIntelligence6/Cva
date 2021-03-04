@@ -3,7 +3,7 @@ package cn.misection.cvac.ast;
 import cn.misection.cvac.ast.clas.AbstractCvaClass;
 import cn.misection.cvac.ast.clas.CvaClass;
 import cn.misection.cvac.ast.decl.*;
-import cn.misection.cvac.ast.decl.nullptr.CvaNullDecl;
+import cn.misection.cvac.ast.decl.nullobj.CvaNullDecl;
 import cn.misection.cvac.ast.entry.*;
 import cn.misection.cvac.ast.expr.*;
 import cn.misection.cvac.ast.expr.nonterminal.binary.*;

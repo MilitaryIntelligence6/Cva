@@ -10,7 +10,7 @@ import cn.misection.cvac.ast.expr.nonterminal.unary.*;
 import cn.misection.cvac.ast.method.*;
 import cn.misection.cvac.ast.program.*;
 import cn.misection.cvac.ast.statement.*;
-import cn.misection.cvac.ast.statement.nullptr.CvaNullStatement;
+import cn.misection.cvac.ast.statement.nullobj.CvaNullStatement;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
 import cn.misection.cvac.ast.type.advance.CvaStringType;
