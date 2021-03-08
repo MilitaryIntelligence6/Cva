@@ -215,6 +215,6 @@ public final class CvaCompiler
             System.exit(1);
         }
         // 不可达;
-        return null;
+        throw new RuntimeException("unknown exception");
     }
 }

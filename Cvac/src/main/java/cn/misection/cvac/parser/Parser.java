@@ -1340,7 +1340,8 @@ public final class Parser
         }
         errorLog("a main method",
                 "null, deny to compile this file!");
-        return null;
+        // 不可达;
+        throw new RuntimeException("unknown exception");
     }
 
     private void parsePackage()
