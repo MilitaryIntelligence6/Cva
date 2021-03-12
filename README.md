@@ -126,7 +126,7 @@ java -jar cvac.jar fileName
 │  │  │  │          │      ├─basic // 基础类型, Java基本类型
 │  │  │  │          │      └─reference // 引用类型, 其实string和array也是
 │  │  │  │          ├─codegen
-│  │  │  │          │  └─bst // backend syntax tree 编译器后端抽象语法树
+│  │  │  │          │  └─bst // backend syntax tree 目标平台(JVM)抽象语法树
 │  │  │  │          │      ├─bclas
 │  │  │  │          │      ├─bdecl
 │  │  │  │          │      ├─bentry

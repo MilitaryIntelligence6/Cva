@@ -10,9 +10,12 @@ package cn.misection.utils.converter;
 final class TailCommentConv
 {
     private static final String src =
-            "public Kind kind; // the kind of the token\n" +
-                    "    public String lexeme; // extra lexeme of the token\n" +
-                    "    public int lineNum; // the line number of the token"
+            "    private ViewPager adPager;  // 广告\n" +
+                    "    private View adBannerLay;  // 广告条容器\n" +
+                    "    private AdBannerAdapter adBannerAdapter;  // 适配器\n" +
+                    "    public static final int MSG_AD_SLID = 002;  // 广告自动滑动\n" +
+                    "    private ViewPagerIndicator vpi;  // 小圆点\n" +
+                    "    private MHandler handler;  // 事件捕获"
             ;
 
     private static String conv(String src)
