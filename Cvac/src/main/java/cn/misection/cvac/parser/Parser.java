@@ -1444,7 +1444,7 @@ public final class Parser
                 }
                 case SEMI:
                 {
-                    eatToken(EnumCvaToken.SEMI);
+                    advance();
                     break;
                 }
                 default:
@@ -1570,47 +1570,47 @@ public final class Parser
             // 语法糖;
             case ADD_ASSIGN:
             {
-                return parseSyntacticSugar(idLiteral, EnumOperator.ADD);
+                return desugarParse(idLiteral, EnumOperator.ADD);
             }
             case SUB_ASSIGN:
             {
-                return parseSyntacticSugar(idLiteral,  EnumOperator.SUB);
+                return desugarParse(idLiteral,  EnumOperator.SUB);
             }
             case MULTIPLY_ASSIGN:
             {
-                return parseSyntacticSugar(idLiteral, EnumOperator.MUL);
+                return desugarParse(idLiteral, EnumOperator.MUL);
             }
             case DIV_ASSIGN:
             {
-                return parseSyntacticSugar(idLiteral, EnumOperator.DIV);
+                return desugarParse(idLiteral, EnumOperator.DIV);
             }
             case REM_ASSIGN:
             {
-                return parseSyntacticSugar(idLiteral, EnumOperator.REM);
+                return desugarParse(idLiteral, EnumOperator.REM);
             }
             case BIT_AND_ASSIGN:
             {
-                return parseSyntacticSugar(idLiteral,  EnumOperator.BIT_AND);
+                return desugarParse(idLiteral,  EnumOperator.BIT_AND);
             }
             case BIT_OR_ASSIGN:
             {
-                return parseSyntacticSugar(idLiteral, EnumOperator.BIT_OR);
+                return desugarParse(idLiteral, EnumOperator.BIT_OR);
             }
             case BIT_XOR_ASSIGN:
             {
-                return parseSyntacticSugar(idLiteral, EnumOperator.BIT_XOR);
+                return desugarParse(idLiteral, EnumOperator.BIT_XOR);
             }
             case LEFT_SHIFT_ASSIGN:
             {
-                return parseSyntacticSugar(idLiteral, EnumOperator.LEFT_SHIFT);
+                return desugarParse(idLiteral, EnumOperator.LEFT_SHIFT);
             }
             case RIGHT_SHIFT_ASSIGN:
             {
-                return parseSyntacticSugar(idLiteral, EnumOperator.RIGHT_SHIFT);
+                return desugarParse(idLiteral, EnumOperator.RIGHT_SHIFT);
             }
             case UNSIGNED_RIGHT_SHIFT_ASSIGN:
             {
-                return parseSyntacticSugar(idLiteral, EnumOperator.UNSIGNED_RIGHT_SHIFT);
+                return desugarParse(idLiteral, EnumOperator.UNSIGNED_RIGHT_SHIFT);
             }
             case INCREMENT:
             {
@@ -1647,8 +1647,8 @@ public final class Parser
      * @param operator    op;
      * @return re;
      */
-    private CvaAssignStatement parseSyntacticSugar(String idLiteral,
-                                                   EnumOperator operator)
+    private CvaAssignStatement desugarParse(String idLiteral,
+                                            EnumOperator operator)
     {
         int lineNum = curToken.getLineNum();
         advance();
