@@ -942,9 +942,8 @@ public final class Parser
     }
 
     /**
-     * // VarDecls -> VarDecl VarDecls
-     * //  ->
-     *
+     * VarDecls -> VarDecl VarDecls
+     * ->
      * @return VarDeclList;
      */
     private List<AbstractDeclaration> parseVarDeclList()
