@@ -16,6 +16,9 @@ public class TargetArrayType extends BaseAdvanceType
 
     public static final String TYPE_LITERAL = "@array";
 
+    /**
+     * TODO 桥接模式;
+     */
     public static final String NEW_I_ARRAY = "newiarray";
 
     public static final String NEW_A_ARRAY = "newaarray";
