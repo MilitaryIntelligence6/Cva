@@ -134,7 +134,7 @@ public final class Parser
         }
         else
         {
-            errorLog(String.valueOf(kind),
+            errorLogAndDenyCompile(String.valueOf(kind),
                     curToken.toEnum());
         }
     }
@@ -143,26 +143,26 @@ public final class Parser
     {
         if (curToken.toEnum() != EnumCvaToken.EOF)
         {
-            errorLog("end of file",
+            errorLogAndDenyCompile("end of file",
                     curToken);
         }
     }
 
-    private void errorLog()
+    private void errorLogAndDenyCompile()
     {
         System.err.printf("Syntax error at line %s compilation aborting...\n%n",
                 curToken != null ? curToken.getLineNum() : "unknown");
         System.exit(1);
     }
 
-    private void errorLog(String expected, CvaToken got)
+    private void errorLogAndDenyCompile(String expected, CvaToken got)
     {
         System.err.printf("Line %d: Expects: %s, but got: %s which literal is %s%n",
                 curToken.getLineNum(), expected, got.toEnum(), got.getLiteral());
         System.exit(1);
     }
 
-    private void errorLog(String expected, EnumCvaToken got)
+    private void errorLogAndDenyCompile(String expected, EnumCvaToken got)
     {
         System.err.printf("Line %d: Expects: %s, but got: %s%n",
                 curToken.getLineNum(), expected, got);
@@ -170,7 +170,7 @@ public final class Parser
     }
 
 
-    private void errorLog(String expected, String got)
+    private void errorLogAndDenyCompile(String expected, String got)
     {
         System.err.printf("Line %d: Expects: %s, but got: %s%n",
                 curToken.getLineNum(), expected, got);
@@ -291,7 +291,7 @@ public final class Parser
                 }
                 else
                 {
-                    errorLog("identifier after ++", curToken);
+                    errorLogAndDenyCompile("identifier after ++", curToken);
                 }
             }
             case DECREMENT:
@@ -307,7 +307,7 @@ public final class Parser
                 }
                 else
                 {
-                    errorLog("identifier after --", curToken);
+                    errorLogAndDenyCompile("identifier after --", curToken);
                 }
             }
             case NEW:
@@ -321,36 +321,12 @@ public final class Parser
             }
             default:
             {
-                errorLog();
-                return null;
+                errorLogAndDenyCompile();
+                break;
             }
         }
+        throw new RuntimeException("unknown exception");
     }
-
-    /*
-     * TODO;
-     */
-//    private AbstractExpression parseBitNegateExpr()
-//    {
-//        // FIXME, 这里不要先给终结符!!有问题的是;
-//        AbstractExpression expr = parseAtomExpr();
-//        while (curToken.toEnum() == EnumCvaToken.DOT)
-//        {
-//            advance();
-//            CvaToken token = curToken;
-//            eatToken(EnumCvaToken.IDENTIFIER);
-//            eatToken(EnumCvaToken.OPEN_PAREN);
-//            expr = new CvaCallExpr(
-//                    token.getLineNum(),
-//                    token.getLiteral(),
-//                    expr,
-//                    parseExprList()
-//            );
-//            eatToken(EnumCvaToken.CLOSE_PAREN);
-//        }
-//        return expr;
-//    }
-
 
     /**
      * NegateExpr -> AtomExpr
@@ -761,11 +737,11 @@ public final class Parser
             }
             default:
             {
-                errorLog();
-                // 不可达, 做成抛错;
-                return null;
+                errorLogAndDenyCompile();
+                break;
             }
         }
+        throw new RuntimeException("unknown exception");
     }
 
     /**
@@ -873,7 +849,7 @@ public final class Parser
             }
             default:
             {
-                errorLog("type",
+                errorLogAndDenyCompile("type",
                         curToken);
                 // 不需要break打断虚拟机了已经;
             }
@@ -901,7 +877,7 @@ public final class Parser
                 }
                 default:
                 {
-                    errorLog("] or int array size whith ]", curToken);
+                    errorLogAndDenyCompile("] or int array size whith ]", curToken);
                     break;
                 }
             }
@@ -926,7 +902,7 @@ public final class Parser
             {
                 this.reset();
                 varDeclFlag = false;
-                return null;
+                return CvaNullDecl.getInstance();
             }
             case IDENTIFIER:
             {
@@ -952,17 +928,18 @@ public final class Parser
                     }
                     default:
                     {
-                        errorLog();
-                        return null;
+                        errorLogAndDenyCompile();
+                        break;
                     }
                 }
             }
             default:
             {
-                errorLog();
-                return null;
+                errorLogAndDenyCompile();
+                break;
             }
         }
+        throw new RuntimeException("unknown exception");
     }
 
     /**
@@ -1053,7 +1030,6 @@ public final class Parser
                     {
                         // 2连 identifier, 说明是定义;
                         CvaDeclStatement stm = parseDeclStatement();
-                        // 不可能为空;
                         localVarDeclList.add(stm.getDecl());
                         statementList.add(stm.getAssign());
                     }
@@ -1075,7 +1051,6 @@ public final class Parser
                     {
                         // 吃掉type, cur是id, 下一个看是分号还是assign;
                         CvaDeclStatement stm = parseDeclStatement();
-                        // 不可能为空;
                         localVarDeclList.add(stm.getDecl());
                         statementList.add(stm.getAssign());
                         continue;
@@ -1247,14 +1222,14 @@ public final class Parser
                 if (argType.toEnum() != EnumCvaType.ARRAY ||
                         ((CvaArrayType) argType).getInnerType().toEnum() != EnumCvaType.STRING)
                 {
-                    errorLog("only accexpt main func's arg string[] or empty",
+                    errorLogAndDenyCompile("only accexpt main func's arg string[] or empty",
                             String.valueOf(argList));
                 }
                 break;
             }
             default:
             {
-                errorLog("main func's arg decl length should be 1 means string[]",
+                errorLogAndDenyCompile("main func's arg decl length should be 1 means string[]",
                         String.valueOf(argList));
                 break;
             }
@@ -1302,7 +1277,7 @@ public final class Parser
                     }
                     else
                     {
-                        errorLog("EOF or class def or main func def" +
+                        errorLogAndDenyCompile("EOF or class def or main func def" +
                                         "(cva only supported main func out the class) ",
                                 curTokenEnum);
                     }
@@ -1338,7 +1313,7 @@ public final class Parser
                 }
             }
         }
-        errorLog("a main method",
+        errorLogAndDenyCompile("a main method",
                 "null, deny to compile this file!");
         // 不可达;
         throw new RuntimeException("unknown exception");
@@ -1359,7 +1334,7 @@ public final class Parser
                     {
                         if (memKind != EnumCvaToken.IDENTIFIER)
                         {
-                            errorLog();
+                            errorLogAndDenyCompile();
                         }
                         memKind = EnumCvaToken.DOT;
                         eatToken(EnumCvaToken.DOT);
@@ -1369,7 +1344,7 @@ public final class Parser
                     {
                         if (memKind != EnumCvaToken.DOT)
                         {
-                            errorLog();
+                            errorLogAndDenyCompile();
                         }
                         memKind = EnumCvaToken.IDENTIFIER;
                         eatToken(EnumCvaToken.IDENTIFIER);
@@ -1382,7 +1357,7 @@ public final class Parser
                     }
                     default:
                     {
-                        errorLog("pkg name or dot or star",
+                        errorLogAndDenyCompile("pkg name or dot or star",
                                 curToken);
                         break;
                     }
@@ -1416,7 +1391,7 @@ public final class Parser
                 {
                     if (memKind != EnumCvaToken.IDENTIFIER)
                     {
-                        errorLog();
+                        errorLogAndDenyCompile();
                     }
                     memKind = EnumCvaToken.DOT;
                     advance();
@@ -1426,7 +1401,7 @@ public final class Parser
                 {
                     if (memKind != EnumCvaToken.DOT)
                     {
-                        errorLog();
+                        errorLogAndDenyCompile();
                     }
                     memKind = EnumCvaToken.IDENTIFIER;
                     advance();
@@ -1436,7 +1411,7 @@ public final class Parser
                 {
                     if (memKind != EnumCvaToken.DOT)
                     {
-                        errorLog();
+                        errorLogAndDenyCompile();
                     }
                     advance();
                     eatToken(EnumCvaToken.SEMI);
@@ -1449,7 +1424,7 @@ public final class Parser
                 }
                 default:
                 {
-                    errorLog("pkg name or dot or star",
+                    errorLogAndDenyCompile("pkg name or dot or star",
                             curToken);
                     break;
                 }
@@ -1634,11 +1609,11 @@ public final class Parser
             }
             default:
             {
-                errorLog("assign or increment or decrement", curTokenEnum);
+                errorLogAndDenyCompile("assign or increment or decrement", curTokenEnum);
                 break;
             }
         }
-        return null;
+        throw new RuntimeException("unknown exception");
     }
 
     /**
@@ -1737,9 +1712,11 @@ public final class Parser
             }
             default:
             {
-                errorLog("semi or assign", lexer.nextToken());
-                return null;
+                errorLogAndDenyCompile("semi or assign", lexer.nextToken());
+                // 不可达;
+                break;
             }
         }
+        throw new RuntimeException("unknown exception");
     }
 }
