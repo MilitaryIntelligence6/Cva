@@ -1051,13 +1051,12 @@ public final class Parser
                         CvaDeclStatement stm = parseDeclStatement();
                         localVarDeclList.add(stm.getDecl());
                         statementList.add(stm.getAssign());
-                        continue;
                     }
                     else
                     {
                         statementList.add(parseStatement());
-                        continue;
                     }
+                    continue;
                 }
             }
             break;
