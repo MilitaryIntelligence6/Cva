@@ -887,8 +887,7 @@ public final class Parser
     }
 
     /**
-     * // VarDecl -> Type id;
-     *
+     * VarDecl -> Type identifier;
      * @return VarDecl;
      */
     private AbstractDeclaration parseVarDecl()
