@@ -13,7 +13,7 @@ import cn.misection.cvac.ast.type.basic.EnumCvaType;
  */
 public final class CvaNullExpr extends AbstractExpression
 {
-    private static volatile CvaNullExpr instance = null;
+    private volatile static CvaNullExpr instance = null;
 
     private CvaNullExpr() {}
 

@@ -12,7 +12,7 @@ import cn.misection.cvac.ast.statement.EnumCvaStatement;
  */
 public final class CvaNullStatement extends AbstractStatement
 {
-    private static volatile CvaNullStatement instance = null;
+    private volatile static CvaNullStatement instance = null;
 
     public static CvaNullStatement getInstance()
     {
