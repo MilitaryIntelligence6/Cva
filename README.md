@@ -190,7 +190,8 @@ java -jar cvac.jar fileName
 - ~~完成decl statement;~~
  
 - 由于时间原因, 还没有测试每个分支
-- 命令行参数
+- 做好 terminal app 的命令行参数
+- 把所有的不声明类型的 lambda 添加类型声明信息
 - 兼容C99的超级Cva
 - CvaNIO原生库
 - 实现Java的Pkg, 进行Pkg编译, 选取pkg替代Java的package关键字, call取代Java的import关键字
