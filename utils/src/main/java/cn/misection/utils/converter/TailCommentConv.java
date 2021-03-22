@@ -10,12 +10,14 @@ package cn.misection.utils.converter;
 final class TailCommentConv
 {
     private static final String src =
-            "    private ViewPager adPager;  // 广告\n" +
-                    "    private View adBannerLay;  // 广告条容器\n" +
-                    "    private AdBannerAdapter adBannerAdapter;  // 适配器\n" +
-                    "    public static final int MSG_AD_SLID = 002;  // 广告自动滑动\n" +
-                    "    private ViewPagerIndicator vpi;  // 小圆点\n" +
-                    "    private MHandler handler;  // 事件捕获"
+            "    private String srcAddress; //源地址\n" +
+                    "    private String destAddress; //目标地址\n" +
+                    "    private int srcPort; //源端口\n" +
+                    "    private int destPort; //目标端口\n" +
+                    "    private byte[] header; //头部字节数组\n" +
+                    "    private byte[] payload; //数据字节数组\n" +
+                    "    private PacketType packetType; //包类型\n" +
+                    "    private LocalDateTime timestamp; //时间戳"
             ;
 
     private static String conv(String src)
@@ -25,7 +27,7 @@ final class TailCommentConv
         for (String s : split)
         {
             String[] sSplit = s.split("//");
-            builder.append(String.format("/**\n *%s\n */\n%s\n\n", sSplit[1], sSplit[0].trim()));
+            builder.append(String.format("/**\n * %s\n */\n%s\n\n", sSplit[1], sSplit[0].trim()));
         }
         return String.valueOf(builder);
     }
