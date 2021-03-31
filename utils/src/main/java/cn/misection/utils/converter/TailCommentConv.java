@@ -10,16 +10,13 @@ package cn.misection.utils.converter;
 final class TailCommentConv
 {
     private static final String src =
-            "    private String srcAddress; //源地址\n" +
-                    "    private String destAddress; //目标地址\n" +
-                    "    private int srcPort; //源端口\n" +
-                    "    private int destPort; //目标端口\n" +
-                    "    private byte[] header; //头部字节数组\n" +
-                    "    private byte[] payload; //数据字节数组\n" +
-                    "    private PacketType packetType; //包类型\n" +
-                    "    private LocalDateTime timestamp; //时间戳"
-            ;
 
+           "    private Folder current;//当前文件夹\n" +
+                   "    private List<Folder> folders;//该文件夹内所有文件夹（嵌套的，以便于依次加载）\n" +
+                   "    private List<Node> files;//该文件夹内所有文件"
+
+
+            ;
     private static String conv(String src)
     {
         String[] split = src.split("\n");

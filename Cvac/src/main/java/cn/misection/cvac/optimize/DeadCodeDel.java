@@ -25,12 +25,35 @@ import java.util.Set;
 public final class DeadCodeDel
         implements IVisitor, Optimizable
 {
-    private Set<String> curFields;  // the fields of current class
-    private Set<String> localVars;  // the local variables and formals in current method
-    private Set<String> localLiveness;  // the living id in current statement
-    // private boolean isAssign;   // current id is in the left of assign(true), or is being evaluated(false)
-    private boolean containsCall;   // current statement contains method call?
-    private boolean shouldDel;  // should delete current statement?
+    /**
+     *  the fields of current class
+     */
+    private Set<String> curFields;
+
+    /**
+     *  the local variables and formals in current method
+     */
+    private Set<String> localVars;
+
+    /**
+     *  the living id in current statement
+     */
+    private Set<String> localLiveness;
+
+    /**
+     * current id is in the left of assign(true), or is being evaluated(false);
+     */
+    // private boolean isAssign;
+
+    /**
+     * current statement contains method call?;
+     */
+    private boolean containsCall;
+
+    /**
+     * should delete current statement?;
+     */
+    private boolean shouldDel;
     private boolean isOptimizing;
 
     @Override

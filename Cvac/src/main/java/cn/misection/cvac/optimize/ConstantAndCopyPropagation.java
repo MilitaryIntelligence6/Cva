@@ -27,14 +27,14 @@ public final class ConstantAndCopyPropagation
         implements IVisitor, Optimizable
 {
     /**
-     * // constant or copy in current method;
+     * constant or copy in current method;
      */
     private Map<String, AbstractExpression> conorcopy;
     private AbstractExpression curExpr;
     private boolean canChange;
 
     /**
-     * // if in while body, the left of assign should be delete from conorcopy
+     * if in while body, the left of assign should be delete from conorcopy
      */
     private boolean inWhile;
     private boolean isOptimizing;
