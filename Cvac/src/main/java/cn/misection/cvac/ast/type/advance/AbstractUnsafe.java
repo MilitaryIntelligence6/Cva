@@ -7,6 +7,5 @@ package cn.misection.cvac.ast.type.advance;
  * @Description TODO
  * @CreateTime 2021年02月16日 16:15:00
  */
-public abstract class AbstractUnsafe extends AbstractAdvanceType
-{
+public abstract class AbstractUnsafe extends AbstractAdvanceType {
 }

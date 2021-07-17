@@ -9,6 +9,5 @@ import cn.misection.cvac.ast.type.AbstractType;
  * @Description TODO
  * @CreateTime 2021年02月20日 15:15:00
  */
-public abstract class AbstractAdvanceType extends AbstractType
-{
+public abstract class AbstractAdvanceType extends AbstractType {
 }

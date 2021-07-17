@@ -9,11 +9,9 @@ import cn.misection.cvac.ast.CvaNullable;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:52:00
  */
-public abstract class AbstractType implements ICvaType, CvaNullable
-{
+public abstract class AbstractType implements ICvaType, CvaNullable {
     @Override
-    public boolean isNull()
-    {
+    public boolean isNull() {
         return false;
     }
 }

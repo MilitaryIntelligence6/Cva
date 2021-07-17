@@ -10,16 +10,14 @@ import cn.misection.cvac.codegen.bst.instructor.write.EnumWriteMode;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:43:00
  */
-public final class CvaWriteStatement extends AbstractStatement
-{
+public final class CvaWriteStatement extends AbstractStatement {
     private AbstractExpression expr;
 
     private EnumWriteMode writeMode;
 
     public CvaWriteStatement(int lineNum,
                              AbstractExpression expr,
-                             EnumWriteMode writeMode)
-    {
+                             EnumWriteMode writeMode) {
         super(lineNum);
         this.expr = expr;
         this.writeMode = writeMode;
@@ -30,31 +28,24 @@ public final class CvaWriteStatement extends AbstractStatement
      * expr 的type;
      */
 //    private AbstractType writeType;
-
-
     @Override
-    public EnumCvaStatement toEnum()
-    {
+    public EnumCvaStatement toEnum() {
         return EnumCvaStatement.WRITE;
     }
 
-    public AbstractExpression getExpr()
-    {
+    public AbstractExpression getExpr() {
         return expr;
     }
 
-    public void setExpr(AbstractExpression expr)
-    {
+    public void setExpr(AbstractExpression expr) {
         this.expr = expr;
     }
 
-    public EnumWriteMode getWriteMode()
-    {
+    public EnumWriteMode getWriteMode() {
         return writeMode;
     }
 
-    public void setWriteMode(EnumWriteMode writeMode)
-    {
+    public void setWriteMode(EnumWriteMode writeMode) {
         this.writeMode = writeMode;
     }
 }

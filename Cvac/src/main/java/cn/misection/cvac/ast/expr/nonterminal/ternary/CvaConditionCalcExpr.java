@@ -10,23 +10,19 @@ import cn.misection.cvac.ast.type.basic.EnumCvaType;
  * @Description TODO
  * @CreateTime 2021年02月20日 20:17:00
  */
-public class CvaConditionCalcExpr extends AbstractTernaryExpr
-{
-    protected CvaConditionCalcExpr(int lineNum)
-    {
+public class CvaConditionCalcExpr extends AbstractTernaryExpr {
+    protected CvaConditionCalcExpr(int lineNum) {
         super(lineNum);
     }
 
     @Override
-    public EnumCvaType resType()
-    {
+    public EnumCvaType resType() {
         // FIXME;
         return null;
     }
 
     @Override
-    public EnumCvaExpr toEnum()
-    {
+    public EnumCvaExpr toEnum() {
         return EnumCvaExpr.CONDITION_CALC;
     }
 }

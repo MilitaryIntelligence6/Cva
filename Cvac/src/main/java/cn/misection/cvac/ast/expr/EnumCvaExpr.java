@@ -7,8 +7,7 @@ package cn.misection.cvac.ast.expr;
  * @Description TODO
  * @CreateTime 2021年02月20日 20:09:00
  */
-public enum EnumCvaExpr
-{
+public enum EnumCvaExpr {
     /**
      * 单目;
      */
@@ -102,26 +101,23 @@ public enum EnumCvaExpr
 
     private byte hashKey;
 
-    EnumCvaExpr() {}
+    EnumCvaExpr() {
+    }
 
-    EnumCvaExpr(String string)
-    {
+    EnumCvaExpr(String string) {
         this.string = string;
     }
 
-    public static boolean isUnary(EnumCvaExpr expr)
-    {
+    public static boolean isUnary(EnumCvaExpr expr) {
         return expr.ordinal() <= THIS.ordinal();
     }
 
-    public static boolean isBinary(EnumCvaExpr expr)
-    {
+    public static boolean isBinary(EnumCvaExpr expr) {
         return expr.ordinal() >= ADD.ordinal()
                 && expr.ordinal() <= OR_OR.ordinal();
     }
 
-    public static boolean isTernary(EnumCvaExpr expr)
-    {
+    public static boolean isTernary(EnumCvaExpr expr) {
         return expr == CONDITION_CALC;
     }
 }

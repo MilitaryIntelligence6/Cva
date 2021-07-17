@@ -14,16 +14,14 @@ import cn.misection.cvac.constant.EnumIncDirection;
  * 同时也可以其继承identifier自己, 就可以包装自己; 但这样逻辑很复杂, 会导致类关系混乱;
  * @CreateTime 2021年02月21日 12:44:00
  */
-public final class CvaIncDecExpr extends AbstractExpression
-{
+public final class CvaIncDecExpr extends AbstractExpression {
     private final CvaIdentifierExpr identifier;
 
     private final EnumIncDirection direction;
 
     public CvaIncDecExpr(int lineNum,
                          CvaIdentifierExpr identifier,
-                         EnumIncDirection direction)
-    {
+                         EnumIncDirection direction) {
         super(lineNum);
         this.identifier = identifier;
         this.direction = direction;
@@ -31,32 +29,28 @@ public final class CvaIncDecExpr extends AbstractExpression
 
     /**
      * 被自增者的变量名;
+     *
      * @return 名;
      */
-    public String name()
-    {
+    public String name() {
         return identifier.name();
     }
 
-    public CvaIdentifierExpr getIdentifier()
-    {
+    public CvaIdentifierExpr getIdentifier() {
         return identifier;
     }
 
-    public EnumIncDirection getDirection()
-    {
+    public EnumIncDirection getDirection() {
         return direction;
     }
 
     @Override
-    public EnumCvaType resType()
-    {
+    public EnumCvaType resType() {
         return EnumCvaType.INT;
     }
 
     @Override
-    public EnumCvaExpr toEnum()
-    {
+    public EnumCvaExpr toEnum() {
         return EnumCvaExpr.INCREMENT;
     }
 }

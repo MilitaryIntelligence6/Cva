@@ -7,6 +7,5 @@ package cn.misection.cvac.ast.statement;
  * @Description TODO
  * @CreateTime 2021年02月22日 21:01:00
  */
-public class CvaSwitchStatement
-{
+public class CvaSwitchStatement {
 }

@@ -10,15 +10,14 @@ import cn.misection.cvac.ast.type.basic.EnumCvaType;
  * @CreateTime 2021年02月20日 21:30:00
  */
 @FunctionalInterface
-public interface BitOperable extends ICvaExpression
-{
+public interface BitOperable extends ICvaExpression {
     /**
      * 位操作只能是int;
+     *
      * @return int;
      */
     @Override
-    default EnumCvaType resType()
-    {
+    default EnumCvaType resType() {
         return EnumCvaType.INT;
     }
 }

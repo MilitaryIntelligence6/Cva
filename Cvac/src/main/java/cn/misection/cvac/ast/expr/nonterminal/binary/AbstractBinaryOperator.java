@@ -10,17 +10,16 @@ import cn.misection.cvac.codegen.bst.instructor.EnumInstructor;
  * @Description TODO
  * @CreateTime 2021年02月21日 22:13:00
  */
-public abstract class AbstractBinaryOperator extends AbstractBinaryExpr
-{
+public abstract class AbstractBinaryOperator extends AbstractBinaryExpr {
     public AbstractBinaryOperator(int lineNum,
                                   AbstractExpression left,
-                                  AbstractExpression right)
-    {
+                                  AbstractExpression right) {
         super(lineNum, left, right);
     }
 
     /**
      * 协助后端翻译者的运算符, 格式是统一的;
+     *
      * @return 最后一条指令;
      */
     public abstract EnumInstructor targetInstruction();

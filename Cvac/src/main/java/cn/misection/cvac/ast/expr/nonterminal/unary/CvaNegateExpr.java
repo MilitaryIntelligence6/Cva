@@ -11,35 +11,29 @@ import cn.misection.cvac.ast.type.basic.EnumCvaType;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:27:00
  */
-public final class CvaNegateExpr extends AbstractUnaryExpr
-{
+public final class CvaNegateExpr extends AbstractUnaryExpr {
     private AbstractExpression expr;
 
-    public CvaNegateExpr(int lineNum, AbstractExpression expr)
-    {
+    public CvaNegateExpr(int lineNum, AbstractExpression expr) {
         super(lineNum);
         this.expr = expr;
     }
 
     @Override
-    public EnumCvaType resType()
-    {
+    public EnumCvaType resType() {
         return expr.resType();
     }
 
     @Override
-    public EnumCvaExpr toEnum()
-    {
+    public EnumCvaExpr toEnum() {
         return EnumCvaExpr.NEGATE;
     }
 
-    public AbstractExpression getExpr()
-    {
+    public AbstractExpression getExpr() {
         return expr;
     }
 
-    public void setExpr(AbstractExpression expr)
-    {
+    public void setExpr(AbstractExpression expr) {
         this.expr = expr;
     }
 }

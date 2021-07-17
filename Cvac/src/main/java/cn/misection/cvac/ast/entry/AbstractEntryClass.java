@@ -14,17 +14,14 @@ import cn.misection.cvac.ast.statement.AbstractStatement;
  * 所以Cva的main class是一个阉割的class;
  * @TODO main方法要传入命令行参数!
  * @TODO main方法要支持多条statement;
- *
  * @CreateTime 2021年02月14日 17:54:00
  */
-public abstract class AbstractEntryClass extends AbstractCvaClass
-{
+public abstract class AbstractEntryClass extends AbstractCvaClass {
     protected String name;
 
     protected AbstractMethod mainMethod;
 
-    public AbstractEntryClass()
-    {
+    public AbstractEntryClass() {
         super();
     }
 
@@ -35,36 +32,31 @@ public abstract class AbstractEntryClass extends AbstractCvaClass
     private AbstractStatement statement = null;
 
     /**
-     * @deprecated
-     * @param name name;
+     * @param name      name;
      * @param statement stm;
+     * @deprecated
      */
     public AbstractEntryClass(String name,
-                              AbstractStatement statement)
-    {
+                              AbstractStatement statement) {
         this.name = name;
         this.statement = statement;
     }
 
     @Override
-    public String name()
-    {
+    public String name() {
         return name;
     }
 
 
-    public AbstractMethod getMainMethod()
-    {
+    public AbstractMethod getMainMethod() {
         return mainMethod;
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public void setStatement(AbstractStatement statement)
-    {
+    public void setStatement(AbstractStatement statement) {
         this.statement = statement;
     }
 }

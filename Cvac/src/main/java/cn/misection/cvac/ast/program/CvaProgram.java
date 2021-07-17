@@ -12,11 +12,9 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:14:00
  */
-public final class CvaProgram extends AbstractProgram
-{
+public final class CvaProgram extends AbstractProgram {
     public CvaProgram(AbstractEntryClass entryClass,
-                      List<AbstractCvaClass> classList)
-    {
+                      List<AbstractCvaClass> classList) {
         super(entryClass, classList);
     }
 }

@@ -11,24 +11,20 @@ import cn.misection.cvac.ast.type.basic.EnumCvaType;
  * @Description TODO
  * @CreateTime 2021年02月20日 20:31:00
  */
-public class CvaOrOrExpr extends AbstractBinaryExpr
-{
+public class CvaOrOrExpr extends AbstractBinaryExpr {
     public CvaOrOrExpr(int lineNum,
                        AbstractExpression left,
-                       AbstractExpression right)
-    {
+                       AbstractExpression right) {
         super(lineNum, left, right);
     }
 
     @Override
-    public EnumCvaType resType()
-    {
+    public EnumCvaType resType() {
         return EnumCvaType.BOOLEAN;
     }
 
     @Override
-    public EnumCvaExpr toEnum()
-    {
+    public EnumCvaExpr toEnum() {
         return EnumCvaExpr.OR_OR;
     }
 }

@@ -5,7 +5,6 @@ import cn.misection.cvac.ast.expr.AbstractExpression;
 import cn.misection.cvac.ast.statement.AbstractStatement;
 import cn.misection.cvac.ast.type.ICvaType;
 import cn.misection.cvac.constant.EnumLexerCommon;
-import cn.misection.cvac.lexer.EnumCvaToken;
 
 import java.util.List;
 
@@ -16,10 +15,8 @@ import java.util.List;
  * @Description 建造者模式构建复杂但参数其实固定的main方法;
  * @CreateTime 2021年02月19日 15:59:00
  */
-public final class CvaMainMethod extends AbstractMethod
-{
-    private CvaMainMethod(Builder builder)
-    {
+public final class CvaMainMethod extends AbstractMethod {
+    private CvaMainMethod(Builder builder) {
         super();
         this.name = builder.name;
         this.retType = builder.retType;
@@ -31,43 +28,36 @@ public final class CvaMainMethod extends AbstractMethod
     }
 
     @Override
-    public String name()
-    {
+    public String name() {
         return name;
     }
 
     @Override
-    public ICvaType getRetType()
-    {
+    public ICvaType getRetType() {
         return retType;
     }
 
     @Override
-    public AbstractExpression getRetExpr()
-    {
+    public AbstractExpression getRetExpr() {
         return retExpr;
     }
 
     @Override
-    public List<AbstractDeclaration> getArgumentList()
-    {
+    public List<AbstractDeclaration> getArgumentList() {
         return argumentList;
     }
 
     @Override
-    public List<AbstractDeclaration> getLocalVarList()
-    {
+    public List<AbstractDeclaration> getLocalVarList() {
         return localVarList;
     }
 
     @Override
-    public List<AbstractStatement> getStatementList()
-    {
+    public List<AbstractStatement> getStatementList() {
         return statementList;
     }
 
-    public static class Builder
-    {
+    public static class Builder {
         private final String name = EnumLexerCommon.MAIN_METHOD_NAME.string();
 
         private ICvaType retType;
@@ -83,14 +73,15 @@ public final class CvaMainMethod extends AbstractMethod
 
         private List<AbstractStatement> statementList;
 
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * 类似原型模式的builder;
+         *
          * @param prototype 创建原型;
          */
-        public Builder(AbstractMethod prototype)
-        {
+        public Builder(AbstractMethod prototype) {
             this.retType = prototype.retType;
             this.retExpr = prototype.retExpr;
             this.argumentList = prototype.argumentList;
@@ -98,37 +89,31 @@ public final class CvaMainMethod extends AbstractMethod
             this.statementList = prototype.statementList;
         }
 
-        public CvaMainMethod build()
-        {
+        public CvaMainMethod build() {
             return new CvaMainMethod(this);
         }
 
-        public Builder putRetType(ICvaType retType)
-        {
+        public Builder putRetType(ICvaType retType) {
             this.retType = retType;
             return this;
         }
 
-        public Builder putRetExpr(AbstractExpression retExpr)
-        {
+        public Builder putRetExpr(AbstractExpression retExpr) {
             this.retExpr = retExpr;
             return this;
         }
 
-        public Builder putMainArgList(List<AbstractDeclaration> argumentList)
-        {
+        public Builder putMainArgList(List<AbstractDeclaration> argumentList) {
             this.argumentList = argumentList;
             return this;
         }
 
-        public Builder putLocalVarList(List<AbstractDeclaration> localVarList)
-        {
+        public Builder putLocalVarList(List<AbstractDeclaration> localVarList) {
             this.localVarList = localVarList;
             return this;
         }
 
-        public Builder putStatementList(List<AbstractStatement> statementList)
-        {
+        public Builder putStatementList(List<AbstractStatement> statementList) {
             this.statementList = statementList;
             return this;
         }

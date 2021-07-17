@@ -9,10 +9,8 @@ import cn.misection.cvac.ast.expr.AbstractExpression;
  * @Description TODO
  * @CreateTime 2021年02月20日 20:06:00
  */
-public abstract class AbstractUnaryExpr extends AbstractExpression
-{
-    protected AbstractUnaryExpr(int lineNum)
-    {
+public abstract class AbstractUnaryExpr extends AbstractExpression {
+    protected AbstractUnaryExpr(int lineNum) {
         super(lineNum);
     }
 }

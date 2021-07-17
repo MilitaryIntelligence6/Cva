@@ -14,8 +14,7 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:56:00
  */
-public final class CvaCallExpr extends AbstractExpression
-{
+public final class CvaCallExpr extends AbstractExpression {
     private String funcName;
 
     private AbstractExpression expr;
@@ -40,8 +39,7 @@ public final class CvaCallExpr extends AbstractExpression
     public CvaCallExpr(int lineNum,
                        String funcName,
                        AbstractExpression expr,
-                       List<AbstractExpression> args)
-    {
+                       List<AbstractExpression> args) {
         super(lineNum);
         this.funcName = funcName;
         this.expr = expr;
@@ -49,80 +47,65 @@ public final class CvaCallExpr extends AbstractExpression
         init();
     }
 
-    private void init()
-    {
+    private void init() {
         this.type = null;
     }
 
     @Override
-    public EnumCvaType resType()
-    {
+    public EnumCvaType resType() {
         return retType.toEnum();
     }
 
     @Override
-    public EnumCvaExpr toEnum()
-    {
+    public EnumCvaExpr toEnum() {
         return EnumCvaExpr.CALL;
     }
 
-    public String getFuncName()
-    {
+    public String getFuncName() {
         return funcName;
     }
 
-    public AbstractExpression getExpr()
-    {
+    public AbstractExpression getExpr() {
         return expr;
     }
 
-    public List<AbstractExpression> getArgs()
-    {
+    public List<AbstractExpression> getArgs() {
         return args;
     }
 
-    public String getType()
-    {
+    public String getType() {
         return type;
     }
 
-    public List<ICvaType> getArgTypeList()
-    {
+    public List<ICvaType> getArgTypeList() {
         return argTypeList;
     }
 
-    public ICvaType getRetType()
-    {
+    public ICvaType getRetType() {
         return retType;
     }
 
-    public void setFuncName(String funcName)
-    {
+    public void setFuncName(String funcName) {
         this.funcName = funcName;
     }
 
-    public void setExpr(AbstractExpression expr)
-    {
+    public void setExpr(AbstractExpression expr) {
         this.expr = expr;
     }
 
-    public void setArgs(List<AbstractExpression> args)
-    {
+    public void setArgs(List<AbstractExpression> args) {
         this.args = args;
     }
 
-    public void setType(String type)
-    {
+    public void setType(String type) {
         this.type = type;
     }
 
-    public void setArgTypeList(List<ICvaType> argTypeList)
-    {
+    public void setArgTypeList(List<ICvaType> argTypeList) {
         this.argTypeList = argTypeList;
     }
 
-    public void setRetType(ICvaType retType)
-    {
+    public void setRetType(ICvaType retType) {
         this.retType = retType;
     }
 }

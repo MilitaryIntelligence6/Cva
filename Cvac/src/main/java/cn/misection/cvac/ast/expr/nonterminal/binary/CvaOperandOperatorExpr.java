@@ -3,9 +3,9 @@ package cn.misection.cvac.ast.expr.nonterminal.binary;
 import cn.misection.cvac.ast.expr.AbstractExpression;
 import cn.misection.cvac.ast.expr.EnumCvaExpr;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
+import cn.misection.cvac.codegen.bst.instructor.Instructable;
 import cn.misection.cvac.codegen.bst.instructor.operand.EnumOperandType;
 import cn.misection.cvac.codegen.bst.instructor.operand.EnumOperator;
-import cn.misection.cvac.codegen.bst.instructor.Instructable;
 
 /**
  * @author Military Intelligence 6 root
@@ -15,8 +15,7 @@ import cn.misection.cvac.codegen.bst.instructor.Instructable;
  * @CreateTime 2021年02月21日 22:53:00
  */
 public final class CvaOperandOperatorExpr
-        extends AbstractBinaryExpr implements Instructable
-{
+        extends AbstractBinaryExpr implements Instructable {
     private EnumCvaType resType;
 
     private EnumOperandType instType;
@@ -25,13 +24,11 @@ public final class CvaOperandOperatorExpr
 
     private CvaOperandOperatorExpr(int lineNum,
                                    AbstractExpression left,
-                                   AbstractExpression right)
-    {
+                                   AbstractExpression right) {
         super(lineNum, left, right);
     }
 
-    private CvaOperandOperatorExpr(Builder builder)
-    {
+    private CvaOperandOperatorExpr(Builder builder) {
         super();
         this.lineNum = builder.lineNum;
         this.left = builder.left;
@@ -41,35 +38,29 @@ public final class CvaOperandOperatorExpr
     }
 
     @Override
-    public EnumCvaType resType()
-    {
+    public EnumCvaType resType() {
         return this.left.resType();
     }
 
     @Override
-    public EnumCvaExpr toEnum()
-    {
+    public EnumCvaExpr toEnum() {
         return EnumCvaExpr.BINARY_OPERAND_OP;
     }
 
-    public EnumOperandType getInstType()
-    {
+    public EnumOperandType getInstType() {
         return instType;
     }
 
-    public EnumOperator getInstOp()
-    {
+    public EnumOperator getInstOp() {
         return instOp;
     }
 
     @Override
-    public String toInst()
-    {
+    public String toInst() {
         return String.format("%s%s", instType.toInst(), instOp.toInst());
     }
 
-    public static class Builder
-    {
+    public static class Builder {
         private int lineNum;
 
         private AbstractExpression left;
@@ -80,40 +71,35 @@ public final class CvaOperandOperatorExpr
 
         private EnumOperator instOp;
 
-        public Builder() {}
+        public Builder() {
+        }
 
-        public CvaOperandOperatorExpr build()
-        {
+        public CvaOperandOperatorExpr build() {
             return new CvaOperandOperatorExpr(this);
         }
 
-        public Builder putLineNum(int lineNum)
-        {
+        public Builder putLineNum(int lineNum) {
             this.lineNum = lineNum;
             return this;
         }
 
-        public Builder putLeft(AbstractExpression left)
-        {
+        public Builder putLeft(AbstractExpression left) {
             this.left = left;
             return this;
         }
 
-        public Builder putRight(AbstractExpression right)
-        {
+        public Builder putRight(AbstractExpression right) {
             this.right = right;
             return this;
         }
 
 
-        public Builder putInstType(EnumOperandType instType)
-        {
+        public Builder putInstType(EnumOperandType instType) {
             this.instType = instType;
             return this;
         }
 
-        public Builder putInstOp(EnumOperator instOp)
-        {
+        public Builder putInstOp(EnumOperator instOp) {
             this.instOp = instOp;
             return this;
         }

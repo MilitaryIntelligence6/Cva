@@ -15,40 +15,45 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:01:00
  */
-public interface ICvaMethod extends IASTreeNode
-{
+public interface ICvaMethod extends IASTreeNode {
     /**
      * getName;
+     *
      * @return name;
      */
     String name();
 
     /**
      * 返回值;
+     *
      * @return retType;
      */
     ICvaType getRetType();
 
     /**
      * 返回表达;
+     *
      * @return retExpr;
      */
     AbstractExpression getRetExpr();
 
     /**
      * 形参List;
+     *
      * @return argList;
      */
     List<AbstractDeclaration> getArgumentList();
 
     /**
      * 局部变量List;
+     *
      * @return localVar;
      */
     List<AbstractDeclaration> getLocalVarList();
 
     /**
      * 操作List;
+     *
      * @return stmList;
      */
     List<AbstractStatement> getStatementList();

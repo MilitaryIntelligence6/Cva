@@ -10,10 +10,10 @@ import cn.misection.cvac.ast.IASTreeNode;
  * @CreateTime 2021年02月14日 18:02:00
  */
 @FunctionalInterface
-public interface ICvaStatement extends IASTreeNode
-{
+public interface ICvaStatement extends IASTreeNode {
     /**
      * 拿到enum;
+     *
      * @return toEnum;
      */
     EnumCvaStatement toEnum();

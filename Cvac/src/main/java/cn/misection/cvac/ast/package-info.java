@@ -4,14 +4,13 @@
  * @version 1.0.0
  * @Description AST;
  * @TODO 用builder建造者来创建这些ast为妙;
- *  必须是纯常量, 所以只有绑定最好不修改, class.getSimple并非常量;
+ * 必须是纯常量, 所以只有绑定最好不修改, class.getSimple并非常量;
  * @CreateTime 2021年02月15日 21:50:00
  */
 package cn.misection.cvac.ast;
 
 
-final class CvaTypeClassName
-{
+final class CvaTypeClassName {
     /**
      * CvaBoolean;
      */
@@ -31,8 +30,7 @@ final class CvaTypeClassName
 }
 
 
-final class CvaStatementClassName
-{
+final class CvaStatementClassName {
     /**
      * CvaAssign
      */

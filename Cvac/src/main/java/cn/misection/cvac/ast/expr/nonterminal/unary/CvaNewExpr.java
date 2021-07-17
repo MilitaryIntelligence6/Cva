@@ -10,30 +10,25 @@ import cn.misection.cvac.ast.type.basic.EnumCvaType;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:24:00
  */
-public final class CvaNewExpr extends AbstractUnaryExpr
-{
+public final class CvaNewExpr extends AbstractUnaryExpr {
     private String newClassName;
 
-    public CvaNewExpr(int lineNum, String newClassName)
-    {
+    public CvaNewExpr(int lineNum, String newClassName) {
         super(lineNum);
         this.newClassName = newClassName;
     }
 
     @Override
-    public EnumCvaType resType()
-    {
+    public EnumCvaType resType() {
         return EnumCvaType.CLASS;
     }
 
     @Override
-    public EnumCvaExpr toEnum()
-    {
+    public EnumCvaExpr toEnum() {
         return EnumCvaExpr.NEW;
     }
 
-    public String getNewClassName()
-    {
+    public String getNewClassName() {
         return newClassName;
     }
 }

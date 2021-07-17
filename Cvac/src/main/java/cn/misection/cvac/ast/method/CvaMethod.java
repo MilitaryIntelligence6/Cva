@@ -4,7 +4,6 @@ import cn.misection.cvac.ast.decl.AbstractDeclaration;
 import cn.misection.cvac.ast.expr.AbstractExpression;
 import cn.misection.cvac.ast.statement.AbstractStatement;
 import cn.misection.cvac.ast.type.ICvaType;
-import cn.misection.cvac.lexer.EnumCvaToken;
 
 import java.util.List;
 
@@ -15,15 +14,13 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 20:02:00
  */
-public final class CvaMethod extends AbstractMethod
-{
+public final class CvaMethod extends AbstractMethod {
     private CvaMethod(String name,
-                     ICvaType retType,
-                     AbstractExpression retExpr,
-                     List<AbstractDeclaration> argumentList,
-                     List<AbstractDeclaration> localVarList,
-                     List<AbstractStatement> statementList)
-    {
+                      ICvaType retType,
+                      AbstractExpression retExpr,
+                      List<AbstractDeclaration> argumentList,
+                      List<AbstractDeclaration> localVarList,
+                      List<AbstractStatement> statementList) {
         super(name,
                 retType,
                 retExpr,
@@ -32,8 +29,7 @@ public final class CvaMethod extends AbstractMethod
                 statementList);
     }
 
-    public CvaMethod(Builder builder)
-    {
+    public CvaMethod(Builder builder) {
         this.name = builder.name;
         this.retType = builder.retType;
         this.retExpr = builder.retExpr;
@@ -42,8 +38,7 @@ public final class CvaMethod extends AbstractMethod
         this.statementList = builder.statementList;
     }
 
-    public static class Builder
-    {
+    public static class Builder {
         private String name;
 
         private ICvaType retType;
@@ -59,45 +54,39 @@ public final class CvaMethod extends AbstractMethod
 
         private List<AbstractStatement> statementList;
 
-        public Builder() {}
+        public Builder() {
+        }
 
-        public CvaMethod build()
-        {
+        public CvaMethod build() {
             return new CvaMethod(this);
         }
 
-        public Builder putName(String name)
-        {
+        public Builder putName(String name) {
             this.name = name;
             return this;
         }
 
-        public Builder putRetType(ICvaType retType)
-        {
+        public Builder putRetType(ICvaType retType) {
             this.retType = retType;
             return this;
         }
 
-        public Builder putRetExpr(AbstractExpression retExpr)
-        {
+        public Builder putRetExpr(AbstractExpression retExpr) {
             this.retExpr = retExpr;
             return this;
         }
 
-        public Builder putArgList(List<AbstractDeclaration> argumentList)
-        {
+        public Builder putArgList(List<AbstractDeclaration> argumentList) {
             this.argumentList = argumentList;
             return this;
         }
 
-        public Builder putLocalVarList(List<AbstractDeclaration> localVarList)
-        {
+        public Builder putLocalVarList(List<AbstractDeclaration> localVarList) {
             this.localVarList = localVarList;
             return this;
         }
 
-        public Builder putStatementList(List<AbstractStatement> statementList)
-        {
+        public Builder putStatementList(List<AbstractStatement> statementList) {
             this.statementList = statementList;
             return this;
         }

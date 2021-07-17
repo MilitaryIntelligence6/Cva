@@ -2,66 +2,67 @@ package cn.misection.cvac.ast;
 
 import cn.misection.cvac.ast.clas.AbstractCvaClass;
 import cn.misection.cvac.ast.clas.CvaClass;
-import cn.misection.cvac.ast.decl.*;
+import cn.misection.cvac.ast.decl.AbstractDeclaration;
+import cn.misection.cvac.ast.decl.CvaDeclaration;
 import cn.misection.cvac.ast.decl.nullobj.CvaNullDecl;
-import cn.misection.cvac.ast.entry.*;
-import cn.misection.cvac.ast.expr.*;
-import cn.misection.cvac.ast.expr.nonterminal.binary.*;
+import cn.misection.cvac.ast.entry.AbstractEntryClass;
+import cn.misection.cvac.ast.entry.CvaEntryClass;
+import cn.misection.cvac.ast.expr.AbstractExpression;
+import cn.misection.cvac.ast.expr.nonterminal.binary.CvaAndAndExpr;
+import cn.misection.cvac.ast.expr.nonterminal.binary.CvaLessOrMoreThanExpr;
+import cn.misection.cvac.ast.expr.nonterminal.binary.CvaOperandOperatorExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaCallExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaIncDecExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaNegateExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaNewExpr;
 import cn.misection.cvac.ast.expr.terminator.*;
-import cn.misection.cvac.ast.expr.nonterminal.unary.*;
-import cn.misection.cvac.ast.method.*;
+import cn.misection.cvac.ast.method.AbstractMethod;
+import cn.misection.cvac.ast.method.CvaMainMethod;
+import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.AbstractProgram;
 import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
-import cn.misection.cvac.ast.type.*;
+import cn.misection.cvac.ast.type.AbstractType;
+import cn.misection.cvac.ast.type.ICvaType;
+import cn.misection.cvac.ast.type.advance.CvaStringType;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
-import cn.misection.cvac.ast.type.advance.CvaStringType;
 
 /**
  * Created by MI6 root 1/7.
  */
-public interface IVisitor
-{
+public interface IVisitor {
     /**
      * type
+     *
      * @param type t;
      */
-    default void visit(ICvaType type)
-    {
+    default void visit(ICvaType type) {
         // 不是枚举;
-        if (type instanceof AbstractType)
-        {
-            switch ((type.toEnum()))
-            {
-                case STRING:
-                {
+        if (type instanceof AbstractType) {
+            switch ((type.toEnum())) {
+                case STRING: {
                     visit((CvaStringType) type);
                     break;
                 }
-                case POINTER:
-                {
+                case POINTER: {
                     // TODO;
                     break;
                 }
-                case ARRAY:
-                {
+                case ARRAY: {
                     // TODO;
                     break;
                 }
-                case CLASS:
-                {
+                case CLASS: {
                     visit((CvaClassType) type);
                 }
-                default:
-                {
+                default: {
                     break;
                 }
             }
         }
         // 基本枚举类型;
-        else
-        {
+        else {
             visit((EnumCvaType) type);
         }
     }
@@ -75,12 +76,11 @@ public interface IVisitor
 
     /**
      * decl
+     *
      * @param abstDecl decl;
      */
-    default void visit(AbstractDeclaration abstDecl)
-    {
-        if (!(abstDecl instanceof CvaNullDecl))
-        {
+    default void visit(AbstractDeclaration abstDecl) {
+        if (!(abstDecl instanceof CvaNullDecl)) {
             visit(((CvaDeclaration) abstDecl));
         }
     }
@@ -89,91 +89,74 @@ public interface IVisitor
 
     /**
      * 做成map之后, 可以精简代码分散, 但是这里要用反射, 算了;
+     *
      * @param expr e;
      */
-    default void visit(AbstractExpression expr)
-    {
+    default void visit(AbstractExpression expr) {
         // 用typeCode代替, 可以避免反射以及改名麻烦;
-        switch (expr.toEnum())
-        {
-            case AND_AND:
-            {
+        switch (expr.toEnum()) {
+            case AND_AND: {
                 visit((CvaAndAndExpr) expr);
                 break;
             }
-            case CALL:
-            {
+            case CALL: {
                 visit((CvaCallExpr) expr);
                 break;
             }
-            case IDENTIFIER:
-            {
+            case IDENTIFIER: {
                 visit((CvaIdentifierExpr) expr);
                 break;
             }
-            case LESS_OR_MORE_THAN:
-            {
+            case LESS_OR_MORE_THAN: {
                 visit((CvaLessOrMoreThanExpr) expr);
                 break;
             }
-            case NEW:
-            {
+            case NEW: {
                 visit((CvaNewExpr) expr);
                 break;
             }
-            case NEGATE:
-            {
+            case NEGATE: {
                 visit((CvaNegateExpr) expr);
                 break;
             }
-            case CONST_INT:
-            {
+            case CONST_INT: {
                 visit((CvaConstIntExpr) expr);
                 break;
             }
-            case CONST_STRING:
-            {
+            case CONST_STRING: {
                 visit((CvaConstStringExpr) expr);
                 break;
             }
-            case CONST_TRUE:
-            {
+            case CONST_TRUE: {
                 visit((CvaConstTrueExpr) expr);
                 break;
             }
-            case CONST_FALSE:
-            {
+            case CONST_FALSE: {
                 visit((CvaConstFalseExpr) expr);
                 break;
             }
-            case CONST_NULL:
-            {
+            case CONST_NULL: {
                 // TODO;
                 break;
             }
-            case THIS:
-            {
+            case THIS: {
                 visit((CvaThisExpr) expr);
                 break;
             }
-            case BINARY_OPERAND_OP:
-            {
+            case BINARY_OPERAND_OP: {
                 visit((CvaOperandOperatorExpr) expr);
                 break;
             }
             case INCREMENT:
-            case DECREMENT:
-            {
+            case DECREMENT: {
                 visit((CvaIncDecExpr) expr);
                 break;
             }
-            case NULL_POINTER:
-            {
+            case NULL_POINTER: {
                 // 直接忽略, 转都不转;
                 break;
             }
-            default:
-            {
+            default: {
                 // 将所有的都用绑定的enum判定;
                 System.err.println("unknown expr");
             }
@@ -208,50 +191,41 @@ public interface IVisitor
 
     /**
      * stm;
+     *
      * @param abstStm stm;
      */
-    default void visit(AbstractStatement abstStm)
-    {
-        switch (abstStm.toEnum())
-        {
-            case ASSIGN:
-            {
+    default void visit(AbstractStatement abstStm) {
+        switch (abstStm.toEnum()) {
+            case ASSIGN: {
                 visit((CvaAssignStatement) abstStm);
                 break;
             }
-            case BLOCK:
-            {
+            case BLOCK: {
                 visit((CvaBlockStatement) abstStm);
                 break;
             }
-            case IF:
-            {
+            case IF: {
                 visit((CvaIfStatement) abstStm);
                 break;
             }
-            case WRITE:
-            {
+            case WRITE: {
                 visit((CvaWriteStatement) abstStm);
                 break;
             }
-            case WHILE_FOR:
-            {
+            case WHILE_FOR: {
                 visit((CvaWhileForStatement) abstStm);
                 break;
             }
-            case NULL_POINTER:
-            {
+            case NULL_POINTER: {
                 // 直接忽略, 转都不用转;
                 break;
             }
-            case EXPR_STATEMENT:
-            {
+            case EXPR_STATEMENT: {
                 // decl statement 不需要用, 其只是辅助数据结构, 用完就扔;
                 visit((CvaExprStatement) abstStm);
                 break;
             }
-            default:
-            {
+            default: {
                 System.err.println("unknown statement");
                 break;
             }
@@ -273,8 +247,7 @@ public interface IVisitor
     /**
      * Method
      */
-    default void visit(AbstractMethod abstMethod)
-    {
+    default void visit(AbstractMethod abstMethod) {
         visit(((CvaMethod) abstMethod));
     }
 
@@ -282,17 +255,16 @@ public interface IVisitor
 
     /**
      * class;
+     *
      * @param abstClass class;
      */
-    default void visit(AbstractCvaClass abstClass)
-    {
+    default void visit(AbstractCvaClass abstClass) {
         visit(((CvaClass) abstClass));
     }
 
     void visit(CvaClass cvaClass);
 
-    default void visit(AbstractEntryClass entryClass)
-    {
+    default void visit(AbstractEntryClass entryClass) {
         visit(((CvaEntryClass) entryClass));
     }
 
@@ -301,8 +273,7 @@ public interface IVisitor
     void visit(CvaMainMethod entryMethod);
 
     // Program
-    default void visit(AbstractProgram program)
-    {
+    default void visit(AbstractProgram program) {
         visit(((CvaProgram) program));
     }
 

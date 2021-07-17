@@ -9,23 +9,19 @@ import cn.misection.cvac.ast.CvaNullable;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:54:00
  */
-public abstract class AbstractStatement implements ICvaStatement, CvaNullable
-{
+public abstract class AbstractStatement implements ICvaStatement, CvaNullable {
     protected int lineNum;
 
-    protected AbstractStatement(int lineNum)
-    {
+    protected AbstractStatement(int lineNum) {
         this.lineNum = lineNum;
     }
 
-    public int getLineNum()
-    {
+    public int getLineNum() {
         return lineNum;
     }
 
     @Override
-    public boolean isNull()
-    {
+    public boolean isNull() {
         return false;
     }
 }

@@ -9,33 +9,28 @@ import cn.misection.cvac.ast.type.basic.EnumCvaType;
  * @Description TODO
  * @CreateTime 2021年02月14日 19:45:00
  */
-public final class CvaClassType extends AbstractReferenceType
-{
+public final class CvaClassType extends AbstractReferenceType {
     public static final String TYPE_LITERAL = "@class";
 
     private static final EnumCvaType ENUM_TYPE = EnumCvaType.CLASS;
 
     private final String name;
 
-    public CvaClassType(String name)
-    {
+    public CvaClassType(String name) {
         this.name = name;
     }
 
     @Override
-    public EnumCvaType toEnum()
-    {
+    public EnumCvaType toEnum() {
         return ENUM_TYPE;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format("@class:%s", name);
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 }

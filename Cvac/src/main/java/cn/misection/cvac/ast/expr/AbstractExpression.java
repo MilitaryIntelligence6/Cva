@@ -9,30 +9,26 @@ import cn.misection.cvac.ast.CvaNullable;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:53:00
  */
-public abstract class AbstractExpression implements ICvaExpression, CvaNullable
-{
+public abstract class AbstractExpression implements ICvaExpression, CvaNullable {
     protected int lineNum;
 
-    protected AbstractExpression() {}
+    protected AbstractExpression() {
+    }
 
-    protected AbstractExpression(int lineNum)
-    {
+    protected AbstractExpression(int lineNum) {
         this.lineNum = lineNum;
     }
 
-    public int getLineNum()
-    {
+    public int getLineNum() {
         return lineNum;
     }
 
-    public void setLineNum(int lineNum)
-    {
+    public void setLineNum(int lineNum) {
         this.lineNum = lineNum;
     }
 
     @Override
-    public boolean isNull()
-    {
+    public boolean isNull() {
         return false;
     }
 }

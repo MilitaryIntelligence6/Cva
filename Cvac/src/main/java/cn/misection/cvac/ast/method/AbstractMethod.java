@@ -14,8 +14,7 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:54:00
  */
-public abstract class AbstractMethod implements ICvaMethod
-{
+public abstract class AbstractMethod implements ICvaMethod {
     protected String name;
 
     protected ICvaType retType;
@@ -28,18 +27,16 @@ public abstract class AbstractMethod implements ICvaMethod
 
     protected List<AbstractStatement> statementList;
 
-    protected AbstractMethod()
-    {
+    protected AbstractMethod() {
 
     }
 
     public AbstractMethod(String name,
-                     ICvaType retType,
-                     AbstractExpression retExpr,
-                     List<AbstractDeclaration> argumentList,
-                     List<AbstractDeclaration> localVarList,
-                     List<AbstractStatement> statementList)
-    {
+                          ICvaType retType,
+                          AbstractExpression retExpr,
+                          List<AbstractDeclaration> argumentList,
+                          List<AbstractDeclaration> localVarList,
+                          List<AbstractStatement> statementList) {
         this.name = name;
         this.retType = retType;
         this.retExpr = retExpr;
@@ -49,68 +46,56 @@ public abstract class AbstractMethod implements ICvaMethod
     }
 
     @Override
-    public String name()
-    {
+    public String name() {
         return name;
     }
 
     @Override
-    public ICvaType getRetType()
-    {
+    public ICvaType getRetType() {
         return retType;
     }
 
     @Override
-    public AbstractExpression getRetExpr()
-    {
+    public AbstractExpression getRetExpr() {
         return retExpr;
     }
 
     @Override
-    public List<AbstractDeclaration> getArgumentList()
-    {
+    public List<AbstractDeclaration> getArgumentList() {
         return argumentList;
     }
 
     @Override
-    public List<AbstractDeclaration> getLocalVarList()
-    {
+    public List<AbstractDeclaration> getLocalVarList() {
         return localVarList;
     }
 
     @Override
-    public List<AbstractStatement> getStatementList()
-    {
+    public List<AbstractStatement> getStatementList() {
         return statementList;
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public void setRetType(ICvaType retType)
-    {
+    public void setRetType(ICvaType retType) {
         this.retType = retType;
     }
 
-    public void setRetExpr(AbstractExpression retExpr)
-    {
+    public void setRetExpr(AbstractExpression retExpr) {
         this.retExpr = retExpr;
     }
 
-    public void setArgumentList(List<AbstractDeclaration> argumentList)
-    {
+    public void setArgumentList(List<AbstractDeclaration> argumentList) {
         this.argumentList = argumentList;
     }
 
-    public void setLocalVarList(List<AbstractDeclaration> localVarList)
-    {
+    public void setLocalVarList(List<AbstractDeclaration> localVarList) {
         this.localVarList = localVarList;
     }
 
-    public void setStatementList(List<AbstractStatement> statementList)
-    {
+    public void setStatementList(List<AbstractStatement> statementList) {
         this.statementList = statementList;
     }
 

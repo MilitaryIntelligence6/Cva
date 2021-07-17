@@ -11,8 +11,7 @@ import cn.misection.cvac.ast.statement.nullobj.CvaNullStatement;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:47:00
  */
-public final class CvaWhileForStatement extends AbstractStatement
-{
+public final class CvaWhileForStatement extends AbstractStatement {
     private AbstractStatement forInit;
 
     private AbstractExpression condition;
@@ -23,16 +22,14 @@ public final class CvaWhileForStatement extends AbstractStatement
 
     public CvaWhileForStatement(int lineNum,
                                 AbstractExpression condition,
-                                AbstractStatement body)
-    {
+                                AbstractStatement body) {
         super(lineNum);
         this.condition = condition;
         this.body = body;
         initWhile();
     }
 
-    public CvaWhileForStatement(Builder builder)
-    {
+    public CvaWhileForStatement(Builder builder) {
         super(builder.lineNum);
         this.forInit = builder.forInit;
         this.condition = builder.condition;
@@ -40,50 +37,41 @@ public final class CvaWhileForStatement extends AbstractStatement
         this.afterBody = builder.afterBody;
     }
 
-    private void initWhile()
-    {
+    private void initWhile() {
         this.forInit = CvaNullStatement.getInstance();
         this.afterBody = CvaNullExpr.getInstance();
     }
 
     @Override
-    public EnumCvaStatement toEnum()
-    {
+    public EnumCvaStatement toEnum() {
         return EnumCvaStatement.WHILE_FOR;
     }
 
-    public AbstractStatement getForInit()
-    {
+    public AbstractStatement getForInit() {
         return forInit;
     }
 
-    public AbstractExpression getCondition()
-    {
+    public AbstractExpression getCondition() {
         return condition;
     }
 
-    public AbstractStatement getBody()
-    {
+    public AbstractStatement getBody() {
         return body;
     }
 
-    public AbstractExpression getAfterBody()
-    {
+    public AbstractExpression getAfterBody() {
         return afterBody;
     }
 
-    public void setCondition(AbstractExpression condition)
-    {
+    public void setCondition(AbstractExpression condition) {
         this.condition = condition;
     }
 
-    public void setBody(AbstractStatement body)
-    {
+    public void setBody(AbstractStatement body) {
         this.body = body;
     }
 
-    public static class Builder
-    {
+    public static class Builder {
         private int lineNum;
 
         /**
@@ -97,39 +85,34 @@ public final class CvaWhileForStatement extends AbstractStatement
 
         private AbstractExpression afterBody = CvaNullExpr.getInstance();
 
-        public Builder() {}
+        public Builder() {
+        }
 
-        public CvaWhileForStatement build()
-        {
+        public CvaWhileForStatement build() {
             return new CvaWhileForStatement(this);
         }
 
-        public Builder putLineNum(int lineNum)
-        {
+        public Builder putLineNum(int lineNum) {
             this.lineNum = lineNum;
             return this;
         }
 
-        public Builder putForInit(AbstractStatement forInit)
-        {
+        public Builder putForInit(AbstractStatement forInit) {
             this.forInit = forInit;
             return this;
         }
 
-        public Builder putCondition(AbstractExpression condition)
-        {
+        public Builder putCondition(AbstractExpression condition) {
             this.condition = condition;
             return this;
         }
 
-        public Builder putBody(AbstractStatement body)
-        {
+        public Builder putBody(AbstractStatement body) {
             this.body = body;
             return this;
         }
 
-        public Builder putAfterBody(AbstractExpression afterBody)
-        {
+        public Builder putAfterBody(AbstractExpression afterBody) {
             this.afterBody = afterBody;
             return this;
         }

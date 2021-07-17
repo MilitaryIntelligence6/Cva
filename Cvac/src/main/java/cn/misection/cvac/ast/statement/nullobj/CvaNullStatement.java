@@ -10,18 +10,13 @@ import cn.misection.cvac.ast.statement.EnumCvaStatement;
  * @Description TODO
  * @CreateTime 2021年02月23日 13:52:00
  */
-public final class CvaNullStatement extends AbstractStatement
-{
+public final class CvaNullStatement extends AbstractStatement {
     private volatile static CvaNullStatement instance = null;
 
-    public static CvaNullStatement getInstance()
-    {
-        if (instance == null)
-        {
-            synchronized (CvaNullStatement.class)
-            {
-                if (instance == null)
-                {
+    public static CvaNullStatement getInstance() {
+        if (instance == null) {
+            synchronized (CvaNullStatement.class) {
+                if (instance == null) {
                     instance = new CvaNullStatement();
                 }
             }
@@ -29,21 +24,18 @@ public final class CvaNullStatement extends AbstractStatement
         return instance;
     }
 
-    private CvaNullStatement()
-    {
+    private CvaNullStatement() {
         // 只有第一行, 第0行视为-1, 当然其实虚拟机中iconst_m1就是-1;
         super(0);
     }
 
     @Override
-    public boolean isNull()
-    {
+    public boolean isNull() {
         return true;
     }
 
     @Override
-    public EnumCvaStatement toEnum()
-    {
+    public EnumCvaStatement toEnum() {
         return EnumCvaStatement.NULL_POINTER;
     }
 }

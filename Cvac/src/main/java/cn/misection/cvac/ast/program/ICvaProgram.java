@@ -9,6 +9,5 @@ import cn.misection.cvac.ast.IASTreeNode;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:01:00
  */
-public interface ICvaProgram extends IASTreeNode
-{
+public interface ICvaProgram extends IASTreeNode {
 }

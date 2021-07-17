@@ -12,25 +12,21 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:56:00
  */
-public abstract class AbstractProgram implements ICvaProgram
-{
+public abstract class AbstractProgram implements ICvaProgram {
     protected AbstractEntryClass entryClass;
 
     protected List<AbstractCvaClass> classList;
 
-    protected AbstractProgram(AbstractEntryClass entryClass, List<AbstractCvaClass> classList)
-    {
+    protected AbstractProgram(AbstractEntryClass entryClass, List<AbstractCvaClass> classList) {
         this.entryClass = entryClass;
         this.classList = classList;
     }
 
-    public AbstractEntryClass getEntryClass()
-    {
+    public AbstractEntryClass getEntryClass() {
         return entryClass;
     }
 
-    public List<AbstractCvaClass> getClassList()
-    {
+    public List<AbstractCvaClass> getClassList() {
         return classList;
     }
 }

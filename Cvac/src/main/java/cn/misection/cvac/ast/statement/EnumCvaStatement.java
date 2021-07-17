@@ -7,8 +7,7 @@ package cn.misection.cvac.ast.statement;
  * @Description TODO
  * @CreateTime 2021年02月21日 10:11:00
  */
-public enum EnumCvaStatement
-{
+public enum EnumCvaStatement {
     /**
      * statement;
      */
