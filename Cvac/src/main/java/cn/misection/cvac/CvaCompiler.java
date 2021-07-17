@@ -14,13 +14,14 @@ import cn.misection.cvac.optimize.Optimizer;
 import cn.misection.cvac.parser.Parser;
 import cn.misection.cvac.semantic.SemanticVisitor;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Created by MI6 root 1/4.
  */
-public final class CvaCompiler
-{
+public final class CvaCompiler {
     private static final String OPTIMIZE = "-o";
 
     private static final String OPTIMIZE_0 = "-o0";
@@ -41,16 +42,13 @@ public final class CvaCompiler
      * 用户选择;
      */
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         logBanner();
         String fName = null;
-        if (Macro.RELEASE_WINDOWS)
-        {
+        if (Macro.RELEASE_WINDOWS) {
             fName = release(args);
         }
-        if (Macro.DEBUG)
-        {
+        if (Macro.DEBUG) {
             fName = DebugMacro.DEBUG_FILE;
         }
         IBufferedQueue fStream = readStream(fName);
@@ -58,10 +56,8 @@ public final class CvaCompiler
         geneCode(program);
     }
 
-    private static void geneCode(AbstractProgram program)
-    {
-        if (Macro.DEBUG_OPTIMIZE_FLAG)
-        {
+    private static void geneCode(AbstractProgram program) {
+        if (Macro.DEBUG_OPTIMIZE_FLAG) {
             optimize(program);
         }
         System.out.println("start intermediate code gene");
@@ -79,19 +75,17 @@ public final class CvaCompiler
         // 先生成main方法;
         String ilPath = String.format("%s.il", translator.getTargetProgram().getEntryClass().getName());
         // ascii instructions to binary file
-        jasmin.Main.main(new String[] {ilPath});
+        jasmin.Main.main(new String[]{ilPath});
 
         // 生成其他方法;
-        for (TargetClass cla : translator.getTargetProgram().getClassList())
-        {
+        for (TargetClass cla : translator.getTargetProgram().getClassList()) {
             String filePath = String.format("%s.il", cla.getClassName());
-            jasmin.Main.main(new String[] {filePath});
+            jasmin.Main.main(new String[]{filePath});
         }
         System.out.println("\nwell down!\n");
     }
 
-    private static AbstractProgram grammarAnalysis(IBufferedQueue fStream)
-    {
+    private static AbstractProgram grammarAnalysis(IBufferedQueue fStream) {
         System.out.println("\nstart grammar analysis");
         Parser parser = new Parser(fStream);
         AbstractProgram program = parser.parse();
@@ -100,30 +94,25 @@ public final class CvaCompiler
         return program;
     }
 
-    private static void optimize(AbstractProgram program)
-    {
+    private static void optimize(AbstractProgram program) {
         System.out.println("start optimize");
         Optimizer optimizer = new Optimizer();
         optimizer.optimize(program);
         System.out.println("finish optimize\n");
     }
 
-    private static void doCheck(AbstractProgram program)
-    {
+    private static void doCheck(AbstractProgram program) {
         SemanticVisitor checker = new SemanticVisitor();
         checker.visit(program);
         // if the program is correct, we generate code for it
-        if (!checker.isOkay())
-        {
+        if (!checker.isOkay()) {
             System.err.println("ERROE: check failed");
             System.exit(1);
         }
     }
 
-    private static String release(String[] args)
-    {
-        if (args.length == 0)
-        {
+    private static String release(String[] args) {
+        if (args.length == 0) {
             System.out.printf("\nHello, welcome to  Cva compiler! \n" +
                     "Please input the file name which you want to compile\n" +
                     "Cvac version %s\n", VersionMacro.VERSION);
@@ -132,85 +121,61 @@ public final class CvaCompiler
         return args[0];
     }
 
-    private static boolean makeDirs(String dirPath)
-    {
+    private static boolean makeDirs(String dirPath) {
         File dir = new File(dirPath);
-        if (dir.exists())
-        {
-            if (dir.isFile())
-            {
+        if (dir.exists()) {
+            if (dir.isFile()) {
                 System.err.println("ERROR: 当前路径下存在同名文件, 请清除后再编译!");
                 System.exit(1);
             }
             return true;
-        }
-        else
-        {
+        } else {
             return dir.mkdirs();
         }
     }
 
-    private static void doMakeDirs()
-    {
-        if (!makeDirs(DebugMacro.DEBUG_CLASS_DIR))
-        {
+    private static void doMakeDirs() {
+        if (!makeDirs(DebugMacro.DEBUG_CLASS_DIR)) {
             System.err.printf("mkdir %s failed!\n", DebugMacro.DEBUG_CLASS_DIR);
         }
-        if (!makeDirs(DebugMacro.DEBUG_IL_DIR))
-        {
+        if (!makeDirs(DebugMacro.DEBUG_IL_DIR)) {
             System.err.printf("mkdir %s failed\n", DebugMacro.DEBUG_IL_DIR);
         }
     }
 
-    private static void mkFile(String filePath)
-    {
+    private static void mkFile(String filePath) {
         File ilFile = new File(filePath);
-        if (!ilFile.exists())
-        {
-            try
-            {
-                if (!ilFile.createNewFile())
-                {
+        if (!ilFile.exists()) {
+            try {
+                if (!ilFile.createNewFile()) {
                     System.err.printf("创建文件%s失败!\n", ilFile);
                 }
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private static void logBanner()
-    {
-        if (Macro.DEBUG || Macro.RELEASE_LINUX)
-        {
+    private static void logBanner() {
+        if (Macro.DEBUG || Macro.RELEASE_LINUX) {
             System.out.println(UserInterfaceCommon.BANNER);
         }
-        if (Macro.RELEASE_WINDOWS)
-        {
+        if (Macro.RELEASE_WINDOWS) {
             String BANNER_GBK = null;
-            try
-            {
+            try {
                 BANNER_GBK = new String(UserInterfaceCommon.BANNER.getBytes(),
                         "GBK");
-            }
-            catch (UnsupportedEncodingException e)
-            {
+            } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
             System.out.println(BANNER_GBK);
         }
     }
 
-    private static IBufferedQueue readStream(String fName)
-    {
-        try
-        {
+    private static IBufferedQueue readStream(String fName) {
+        try {
             return new BufferedHandler(fName);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             System.err.printf("Cannot find the file: %s%n", fName);
             System.exit(1);
         }

@@ -3,8 +3,7 @@ package cn.misection.cvac.lexer;
 /**
  * @author MI6 root
  */
-public final class CvaToken
-{
+public final class CvaToken {
     /**
      * the kind of the token
      */
@@ -21,40 +20,34 @@ public final class CvaToken
     private final int lineNum;
 
 
-    public CvaToken(EnumCvaToken enumToken, int lineNum)
-    {
+    public CvaToken(EnumCvaToken enumToken, int lineNum) {
         this.enumToken = enumToken;
         this.lineNum = lineNum;
     }
 
-    public CvaToken(EnumCvaToken enumToken, int lineNum, String literal)
-    {
+    public CvaToken(EnumCvaToken enumToken, int lineNum, String literal) {
         this.enumToken = enumToken;
         this.lineNum = lineNum;
         this.literal = literal;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format("Token {%s literal: %s : at line %d}",
                 this.enumToken.toString(),
                 literal == null ? "null" : this.literal,
                 this.lineNum);
     }
 
-    public EnumCvaToken toEnum()
-    {
+    public EnumCvaToken toEnum() {
         return enumToken;
     }
 
-    public String getLiteral()
-    {
+    public String getLiteral() {
         return literal;
     }
 
-    public int getLineNum()
-    {
+    public int getLineNum() {
         return lineNum;
     }
 }

@@ -7,8 +7,7 @@ package cn.misection.cvac.constant;
  * @Description TODO
  * @CreateTime 2021年02月16日 20:32:00
  */
-public final class LexerCommon
-{
+public final class LexerCommon {
     /**
      * lexer 和buffer中文件末尾;
      */
@@ -16,5 +15,6 @@ public final class LexerCommon
 
     public static final char NEW_LINE = '\n';
 
-    private LexerCommon() {}
+    private LexerCommon() {
+    }
 }

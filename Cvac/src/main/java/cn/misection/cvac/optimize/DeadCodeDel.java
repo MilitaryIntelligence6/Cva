@@ -1,20 +1,25 @@
 package cn.misection.cvac.optimize;
 
 import cn.misection.cvac.ast.IVisitor;
-import cn.misection.cvac.ast.clas.*;
-import cn.misection.cvac.ast.decl.*;
-import cn.misection.cvac.ast.entry.*;
-import cn.misection.cvac.ast.expr.nonterminal.binary.*;
+import cn.misection.cvac.ast.clas.CvaClass;
+import cn.misection.cvac.ast.decl.CvaDeclaration;
+import cn.misection.cvac.ast.entry.CvaEntryClass;
+import cn.misection.cvac.ast.expr.nonterminal.binary.CvaAndAndExpr;
+import cn.misection.cvac.ast.expr.nonterminal.binary.CvaLessOrMoreThanExpr;
+import cn.misection.cvac.ast.expr.nonterminal.binary.CvaOperandOperatorExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaCallExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaIncDecExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaNegateExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaNewExpr;
 import cn.misection.cvac.ast.expr.terminator.*;
-import cn.misection.cvac.ast.expr.nonterminal.unary.*;
-import cn.misection.cvac.ast.method.*;
-import cn.misection.cvac.ast.program.*;
+import cn.misection.cvac.ast.method.CvaMainMethod;
+import cn.misection.cvac.ast.method.CvaMethod;
+import cn.misection.cvac.ast.program.CvaProgram;
 import cn.misection.cvac.ast.statement.*;
 import cn.misection.cvac.ast.statement.nullobj.CvaNullStatement;
+import cn.misection.cvac.ast.type.advance.CvaStringType;
 import cn.misection.cvac.ast.type.basic.EnumCvaType;
 import cn.misection.cvac.ast.type.reference.CvaClassType;
-import cn.misection.cvac.ast.type.advance.CvaStringType;
-
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,20 +28,19 @@ import java.util.Set;
  * Created by MI6 root 1/27.
  */
 public final class DeadCodeDel
-        implements IVisitor, Optimizable
-{
+        implements IVisitor, Optimizable {
     /**
-     *  the fields of current class
+     * the fields of current class
      */
     private Set<String> curFields;
 
     /**
-     *  the local variables and formals in current method
+     * the local variables and formals in current method
      */
     private Set<String> localVars;
 
     /**
-     *  the living id in current statement
+     * the living id in current statement
      */
     private Set<String> localLiveness;
 
@@ -57,112 +61,103 @@ public final class DeadCodeDel
     private boolean isOptimizing;
 
     @Override
-    public void visit(EnumCvaType basicType) {}
+    public void visit(EnumCvaType basicType) {
+    }
 
     @Override
-    public void visit(CvaStringType type) {}
+    public void visit(CvaStringType type) {
+    }
 
     @Override
-    public void visit(CvaClassType type) {}
+    public void visit(CvaClassType type) {
+    }
 
     @Override
-    public void visit(CvaDeclaration decl) {}
+    public void visit(CvaDeclaration decl) {
+    }
 
 
     @Override
-    public void visit(CvaAndAndExpr expr)
-    {
+    public void visit(CvaAndAndExpr expr) {
         visit(expr.getLeft());
         visit(expr.getRight());
     }
 
     @Override
-    public void visit(CvaCallExpr expr)
-    {
+    public void visit(CvaCallExpr expr) {
         visit(expr.getExpr());
         expr.getArgs().forEach(this::visit);
         this.containsCall = true;
     }
 
     @Override
-    public void visit(CvaConstFalseExpr expr)
-    {
+    public void visit(CvaConstFalseExpr expr) {
     }
 
     @Override
-    public void visit(CvaIdentifierExpr expr)
-    {
-        if (this.localVars.contains(expr.name()))
-        {
+    public void visit(CvaIdentifierExpr expr) {
+        if (this.localVars.contains(expr.name())) {
             this.localLiveness.add(expr.name());
         }
     }
 
     @Override
-    public void visit(CvaLessOrMoreThanExpr expr)
-    {
+    public void visit(CvaLessOrMoreThanExpr expr) {
         visit(expr.getLeft());
         visit(expr.getRight());
     }
 
     @Override
-    public void visit(CvaNewExpr expr)
-    {
+    public void visit(CvaNewExpr expr) {
     }
 
     @Override
-    public void visit(CvaNegateExpr expr)
-    {
+    public void visit(CvaNegateExpr expr) {
         visit(expr.getExpr());
     }
 
     @Override
-    public void visit(CvaConstIntExpr expr) {}
+    public void visit(CvaConstIntExpr expr) {
+    }
 
     @Override
-    public void visit(CvaConstStringExpr expr)
-    {
+    public void visit(CvaConstStringExpr expr) {
         // FIXME
     }
 
     @Override
-    public void visit(CvaThisExpr expr) {}
+    public void visit(CvaThisExpr expr) {
+    }
 
     @Override
-    public void visit(CvaConstTrueExpr expr) {}
+    public void visit(CvaConstTrueExpr expr) {
+    }
 
     @Override
-    public void visit(CvaOperandOperatorExpr expr)
-    {
-        switch (expr.toEnum())
-        {
+    public void visit(CvaOperandOperatorExpr expr) {
+        switch (expr.toEnum()) {
             case ADD:
             case SUB:
-            case MUL:
-            {
+            case MUL: {
                 visit(expr.getLeft());
                 visit(expr.getRight());
                 break;
             }
-            default:
-            {
+            default: {
                 break;
             }
         }
     }
 
     @Override
-    public void visit(CvaIncDecExpr expr)
-    {
+    public void visit(CvaIncDecExpr expr) {
         // TODO;
     }
 
     @Override
-    public void visit(CvaAssignStatement stm)
-    {
+    public void visit(CvaAssignStatement stm) {
         if (this.localLiveness.contains(stm.getVarName())
-                || this.curFields.contains(stm.getVarName()))
-        {
+                || this.curFields.contains(stm.getVarName())) {
             this.localLiveness.remove(stm.getVarName());
             visit(stm.getExpr());
             this.shouldDel = false;
@@ -171,20 +166,16 @@ public final class DeadCodeDel
 
         this.containsCall = false;
         visit(stm.getExpr());
-        if (this.containsCall)
-        {
+        if (this.containsCall) {
             this.shouldDel = false;
         }
     }
 
     @Override
-    public void visit(CvaBlockStatement stm)
-    {
-        for (int i = stm.getStatementList().size() - 1; i >= 0; i--)
-        {
+    public void visit(CvaBlockStatement stm) {
+        for (int i = stm.getStatementList().size() - 1; i >= 0; i--) {
             visit(stm.getStatementList().get(i));
-            if (this.shouldDel)
-            {
+            if (this.shouldDel) {
                 this.isOptimizing = true;
                 stm.getStatementList().remove(i);
             }
@@ -193,27 +184,23 @@ public final class DeadCodeDel
     }
 
     @Override
-    public void visit(CvaIfStatement stm)
-    {
+    public void visit(CvaIfStatement stm) {
         Set<String> temOriginal = new HashSet<>(localLiveness);
         visit(stm.getThenStatement());
-        if (this.shouldDel)
-        {
+        if (this.shouldDel) {
             stm.setThenStatement(null);
         }
         Set<String> tehLeftLiveness = this.localLiveness;
 
         this.localLiveness = temOriginal;
         visit(stm.getElseStatement());
-        if (this.shouldDel)
-        {
+        if (this.shouldDel) {
             stm.setElseStatement(CvaNullStatement.getInstance());
         }
         this.localLiveness.addAll(tehLeftLiveness);
 
         this.shouldDel = stm.getThenStatement() == null;
-        if (this.shouldDel)
-        {
+        if (this.shouldDel) {
             this.localLiveness = temOriginal;
             return;
         }
@@ -221,15 +208,13 @@ public final class DeadCodeDel
     }
 
     @Override
-    public void visit(CvaWriteStatement stm)
-    {
+    public void visit(CvaWriteStatement stm) {
         visit(stm.getExpr());
         this.shouldDel = false;
     }
 
     @Override
-    public void visit(CvaWhileForStatement stm)
-    {
+    public void visit(CvaWhileForStatement stm) {
         Set<String> temOriginal = new HashSet<>(localLiveness);
         visit(stm.getBody());
         if (this.shouldDel) // this statement will be deleted totally
@@ -242,15 +227,13 @@ public final class DeadCodeDel
     }
 
     @Override
-    public void visit(CvaExprStatement stm)
-    {
+    public void visit(CvaExprStatement stm) {
         visit(stm.getExpr());
     }
 
 
     @Override
-    public void visit(CvaMethod m)
-    {
+    public void visit(CvaMethod m) {
         this.localVars = new HashSet<>();
         m.getArgumentList().forEach(f ->
                 localVars.add((f.name())));
@@ -261,11 +244,9 @@ public final class DeadCodeDel
         localLiveness = new HashSet<>();
 
         visit(m.getRetExpr());
-        for (int i = m.getStatementList().size() - 1; i >= 0; i--)
-        {
+        for (int i = m.getStatementList().size() - 1; i >= 0; i--) {
             visit(m.getStatementList().get(i));
-            if (this.shouldDel)
-            {
+            if (this.shouldDel) {
                 this.isOptimizing = true;
                 m.getStatementList().remove(i);
             }
@@ -273,14 +254,12 @@ public final class DeadCodeDel
     }
 
     @Override
-    public void visit(CvaMainMethod entryMethod)
-    {
+    public void visit(CvaMainMethod entryMethod) {
         // FIXME;
     }
 
     @Override
-    public void visit(CvaClass c)
-    {
+    public void visit(CvaClass c) {
         this.curFields = new HashSet<>();
         c.getFieldList().forEach(f ->
                 this.curFields.add((f.name())));
@@ -289,20 +268,17 @@ public final class DeadCodeDel
     }
 
     @Override
-    public void visit(CvaEntryClass entryClass)
-    {
+    public void visit(CvaEntryClass entryClass) {
     }
 
     @Override
-    public void visit(CvaProgram program)
-    {
+    public void visit(CvaProgram program) {
         this.isOptimizing = false;
         program.getClassList().forEach(this::visit);
     }
 
     @Override
-    public boolean isOptimizing()
-    {
+    public boolean isOptimizing() {
         return this.isOptimizing;
     }
 }

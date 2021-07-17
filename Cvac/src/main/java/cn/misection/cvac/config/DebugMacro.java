@@ -7,8 +7,7 @@ package cn.misection.cvac.config;
  * @Description TODO
  * @CreateTime 2021年02月17日 15:45:00
  */
-public final class DebugMacro
-{
+public final class DebugMacro {
     public static final String DEBUG_FILE = "res/cvasrc/debug.c";
 
     public static final String DEBUG_IL_DIR = "debug/il";
@@ -16,5 +15,6 @@ public final class DebugMacro
     public static final String DEBUG_CLASS_DIR = "debug/classes";
 
 
-    private DebugMacro() {}
+    private DebugMacro() {
+    }
 }

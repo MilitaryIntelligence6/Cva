@@ -5,10 +5,8 @@ import cn.misection.cvac.ast.program.AbstractProgram;
 /**
  * Created by MI6 root 1/31.
  */
-public final class Optimizer
-{
-    public void optimize(AbstractProgram cvaProgram)
-    {
+public final class Optimizer {
+    public void optimize(AbstractProgram cvaProgram) {
         UnUsedVarDecl varDeler = new UnUsedVarDecl();
         varDeler.givesWarning = true;
         ConstantFolder folder = new ConstantFolder();
@@ -17,8 +15,7 @@ public final class Optimizer
         ConstantAndCopyPropagation proper = new ConstantAndCopyPropagation();
 
         boolean flag;
-        do
-        {
+        do {
             varDeler.visit(cvaProgram);
             varDeler.givesWarning = false;
             folder.visit(cvaProgram);

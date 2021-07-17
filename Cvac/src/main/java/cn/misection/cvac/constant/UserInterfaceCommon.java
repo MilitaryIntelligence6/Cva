@@ -7,8 +7,7 @@ package cn.misection.cvac.constant;
  * @Description TODO
  * @CreateTime 2021年02月15日 22:48:00
  */
-public final class UserInterfaceCommon
-{
+public final class UserInterfaceCommon {
     /**
      * arrow;
      */
@@ -68,7 +67,7 @@ public final class UserInterfaceCommon
 
     /**
      * 3d;
-//     */
+     //     */
 //    "   ██████  ██      ██     ██
 //            ██░░░░██░██     ░██    ████
 //            ██    ░░ ░██     ░██   ██░░██
@@ -188,8 +187,7 @@ public final class UserInterfaceCommon
                     "    _\\//\\\\\\_______________\\//\\\\\\/\\\\\\_____\\/\\\\\\/////////\\\\\\_\n" +
                     "    __\\///\\\\\\______________\\//\\\\\\\\\\______\\/\\\\\\_______\\/\\\\\\_\n" +
                     "    ____\\////\\\\\\\\\\\\\\\\\\______\\//\\\\\\_______\\/\\\\\\_______\\/\\\\\\_\n" +
-                    "    _______\\/////////________\\///________\\///________\\///__"
-            ;
+                    "    _______\\/////////________\\///________\\///________\\///__";
 
 //    public static final String BANNER =
 //            "   ██████  ██      ██     ██    \n" +
@@ -202,5 +200,6 @@ public final class UserInterfaceCommon
 //                    "  ░░░░░░      ░░     ░░      ░░ \n" +
 //                    "\n";
 
-    private UserInterfaceCommon() {}
+    private UserInterfaceCommon() {
+    }
 }

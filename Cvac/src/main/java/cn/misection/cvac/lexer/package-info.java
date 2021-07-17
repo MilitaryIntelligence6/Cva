@@ -10,13 +10,13 @@ package cn.misection.cvac.lexer;
 /**
  * 前端常量类;
  */
-final class LexerPackageConst
-{
+final class LexerPackageConst {
     public static final char SPACE = ' ';
 
     /**
      * '\0'
      * '\u0000'
      */
-    private LexerPackageConst() {}
+    private LexerPackageConst() {
+    }
 }

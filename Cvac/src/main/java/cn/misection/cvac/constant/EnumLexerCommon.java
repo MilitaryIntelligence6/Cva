@@ -7,8 +7,7 @@ package cn.misection.cvac.constant;
  * @Description TODO
  * @CreateTime 2021年02月23日 00:12:00
  */
-public enum EnumLexerCommon
-{
+public enum EnumLexerCommon {
     /**
      * lexer常量;
      */
@@ -18,30 +17,25 @@ public enum EnumLexerCommon
 
     MAIN_CLASS_NAME("Application"),
 
-    MAIN_METHOD_NAME("main");
-    ;
+    MAIN_METHOD_NAME("main");;
 
     private char chLiteral;
 
     private String stringLiteral;
 
-    EnumLexerCommon(char chLiteral)
-    {
+    EnumLexerCommon(char chLiteral) {
         this.chLiteral = chLiteral;
     }
 
-    EnumLexerCommon(String stringLiteral)
-    {
+    EnumLexerCommon(String stringLiteral) {
         this.stringLiteral = stringLiteral;
     }
 
-    public char chr()
-    {
+    public char chr() {
         return chLiteral;
     }
 
-    public String string()
-    {
+    public String string() {
         return stringLiteral;
     }
 }

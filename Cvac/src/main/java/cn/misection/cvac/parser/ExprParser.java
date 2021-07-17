@@ -8,7 +8,6 @@ package cn.misection.cvac.parser;
  * @CreateTime 2021年03月13日 14:52:00
  */
 @FunctionalInterface
-public interface ExprParser
-{
+public interface ExprParser {
     void parse();
 }

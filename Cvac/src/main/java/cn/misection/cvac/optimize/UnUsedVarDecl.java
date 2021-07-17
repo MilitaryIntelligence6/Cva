@@ -27,161 +27,133 @@ import java.util.Map;
  * @author MI6 root
  */
 public final class UnUsedVarDecl
-        implements IVisitor, Optimizable
-{
+        implements IVisitor, Optimizable {
     private Map<String, CvaDeclaration> unUsedLocals;
     private Map<String, CvaDeclaration> unUsedArgs;
     private boolean isOptimizing;
     public boolean givesWarning;
 
     @Override
-    public void visit(EnumCvaType basicType)
-    {
+    public void visit(EnumCvaType basicType) {
     }
 
     @Override
-    public void visit(CvaStringType type)
-    {
+    public void visit(CvaStringType type) {
     }
 
     @Override
-    public void visit(CvaClassType type)
-    {
+    public void visit(CvaClassType type) {
     }
 
     @Override
-    public void visit(CvaDeclaration decl)
-    {
+    public void visit(CvaDeclaration decl) {
     }
 
     @Override
-    public void visit(CvaAndAndExpr expr)
-    {
+    public void visit(CvaAndAndExpr expr) {
         visit(expr.getLeft());
         visit(expr.getRight());
     }
 
     @Override
-    public void visit(CvaCallExpr expr)
-    {
+    public void visit(CvaCallExpr expr) {
         visit(expr.getExpr());
         expr.getArgs().forEach(this::visit);
     }
 
     @Override
-    public void visit(CvaConstFalseExpr expr)
-    {
+    public void visit(CvaConstFalseExpr expr) {
     }
 
     @Override
-    public void visit(CvaIdentifierExpr expr)
-    {
-        if (this.unUsedLocals.containsKey(expr.name()))
-        {
+    public void visit(CvaIdentifierExpr expr) {
+        if (this.unUsedLocals.containsKey(expr.name())) {
             this.unUsedLocals.remove(expr.name());
-        }
-        else
-        {
+        } else {
             this.unUsedArgs.remove(expr.name());
         }
     }
 
     @Override
-    public void visit(CvaLessOrMoreThanExpr expr)
-    {
+    public void visit(CvaLessOrMoreThanExpr expr) {
         visit(expr.getLeft());
         visit(expr.getRight());
     }
 
     @Override
-    public void visit(CvaNewExpr expr)
-    {
+    public void visit(CvaNewExpr expr) {
     }
 
     @Override
-    public void visit(CvaNegateExpr expr)
-    {
+    public void visit(CvaNegateExpr expr) {
         visit(expr.getExpr());
     }
 
     @Override
-    public void visit(CvaConstIntExpr expr)
-    {
+    public void visit(CvaConstIntExpr expr) {
     }
 
     @Override
-    public void visit(CvaConstStringExpr expr)
-    {
+    public void visit(CvaConstStringExpr expr) {
         // FIXME
     }
 
     @Override
-    public void visit(CvaThisExpr expr)
-    {
+    public void visit(CvaThisExpr expr) {
     }
 
     @Override
-    public void visit(CvaConstTrueExpr expr)
-    {
+    public void visit(CvaConstTrueExpr expr) {
     }
 
     @Override
-    public void visit(CvaOperandOperatorExpr expr)
-    {
+    public void visit(CvaOperandOperatorExpr expr) {
         visit(expr.getLeft());
         visit(expr.getRight());
     }
 
     @Override
-    public void visit(CvaIncDecExpr expr)
-    {
+    public void visit(CvaIncDecExpr expr) {
         // TODO;
     }
 
     @Override
-    public void visit(CvaAssignStatement stm)
-    {
+    public void visit(CvaAssignStatement stm) {
         visit(new CvaIdentifierExpr(stm.getLineNum(), stm.getVarName()));
         visit(stm.getExpr());
     }
 
     @Override
-    public void visit(CvaBlockStatement stm)
-    {
+    public void visit(CvaBlockStatement stm) {
         stm.getStatementList().forEach(this::visit);
     }
 
     @Override
-    public void visit(CvaIfStatement stm)
-    {
+    public void visit(CvaIfStatement stm) {
         visit(stm.getCondition());
         visit(stm.getThenStatement());
         visit(stm.getElseStatement());
     }
 
     @Override
-    public void visit(CvaWriteStatement stm)
-    {
+    public void visit(CvaWriteStatement stm) {
         visit(stm.getExpr());
     }
 
     @Override
-    public void visit(CvaWhileForStatement stm)
-    {
+    public void visit(CvaWhileForStatement stm) {
         visit(stm.getCondition());
         visit(stm.getBody());
     }
 
     @Override
-    public void visit(CvaExprStatement stm)
-    {
+    public void visit(CvaExprStatement stm) {
         visit(stm.getExpr());
     }
 
 
     @Override
-    public void visit(CvaMethod m)
-    {
+    public void visit(CvaMethod m) {
         this.unUsedLocals = new HashMap<>();
         m.getLocalVarList().forEach(local ->
         {
@@ -203,8 +175,7 @@ public final class UnUsedVarDecl
                 || this.unUsedLocals.size() > 0;
         this.unUsedArgs.forEach((uak, uao) ->
         {
-            if (givesWarning)
-            {
+            if (givesWarning) {
                 System.out.printf("Warning: at Line %d:  the argument \"%s\" of" +
                                 " method \"%s\" you have never used.%n",
                         uao.getLineNum(), uak, m.name());
@@ -213,8 +184,7 @@ public final class UnUsedVarDecl
 
         this.unUsedLocals.forEach((ulk, ulo) ->
         {
-            if (givesWarning)
-            {
+            if (givesWarning) {
                 System.out.printf("Warning: at Line %d:  the local variable " +
                                 "\"%s\" you have never used. Now we delete it.%n",
                         ulo.getLineNum(), ulk);
@@ -224,32 +194,27 @@ public final class UnUsedVarDecl
     }
 
     @Override
-    public void visit(CvaMainMethod entryMethod)
-    {
+    public void visit(CvaMainMethod entryMethod) {
         // FIXME;
     }
 
     @Override
-    public void visit(CvaClass c)
-    {
+    public void visit(CvaClass c) {
         c.getMethodList().forEach(this::visit);
     }
 
     @Override
-    public void visit(CvaEntryClass entryClass)
-    {
+    public void visit(CvaEntryClass entryClass) {
     }
 
     @Override
-    public void visit(CvaProgram program)
-    {
+    public void visit(CvaProgram program) {
         this.isOptimizing = false;
         program.getClassList().forEach(this::visit);
     }
 
     @Override
-    public boolean isOptimizing()
-    {
+    public boolean isOptimizing() {
         return this.isOptimizing;
     }
 }

@@ -43,8 +43,7 @@ import java.util.*;
  * @author MI6 root
  * @TODO 把所有带判断的eatToken改成advance;
  */
-public final class Parser
-{
+public final class Parser {
     private final Lexer lexer;
 
     private CvaToken curToken;
@@ -61,49 +60,39 @@ public final class Parser
     private final Queue<CvaToken> markedTokenQueue;
 
 
-    public Parser(IBufferedQueue queueStream)
-    {
+    public Parser(IBufferedQueue queueStream) {
         lexer = new Lexer(queueStream);
         curToken = lexer.nextToken();
         markingFlag = false;
         markedTokenQueue = new LinkedList<>();
     }
 
-    public CvaProgram parse()
-    {
+    public CvaProgram parse() {
         return parseProgram();
     }
 
     /**
      * utility methods;
      */
-    private void advance()
-    {
-        if (markingFlag)
-        {
+    private void advance() {
+        if (markingFlag) {
             curToken = lexer.nextToken();
             markedTokenQueue.offer(curToken);
-        }
-        else if (!markedTokenQueue.isEmpty())
-        {
+        } else if (!markedTokenQueue.isEmpty()) {
             curToken = markedTokenQueue.poll();
-        }
-        else
-        {
+        } else {
             curToken = lexer.nextToken();
         }
     }
 
-    private char peekCh()
-    {
+    private char peekCh() {
         return lexer.peekCh();
     }
 
     /**
      * start recording the tokens;
      */
-    private void mark()
-    {
+    private void mark() {
         markingFlag = true;
         markedTokenQueue.offer(curToken);
     }
@@ -111,8 +100,7 @@ public final class Parser
     /**
      * stop recording the tokens and clear recorded
      */
-    private void deMark()
-    {
+    private void deMark() {
         markingFlag = false;
         markedTokenQueue.clear();
     }
@@ -120,58 +108,47 @@ public final class Parser
     /**
      * reset current token and stop recording
      */
-    private void reset()
-    {
+    private void reset() {
         markingFlag = false;
         advance();
     }
 
-    private void eatToken(EnumCvaToken kind)
-    {
-        if (kind == curToken.toEnum())
-        {
+    private void eatToken(EnumCvaToken kind) {
+        if (kind == curToken.toEnum()) {
             advance();
-        }
-        else
-        {
+        } else {
             errorLogAndDenyCompile(String.valueOf(kind),
                     curToken.toEnum());
         }
     }
 
-    private void eatEof()
-    {
-        if (curToken.toEnum() != EnumCvaToken.EOF)
-        {
+    private void eatEof() {
+        if (curToken.toEnum() != EnumCvaToken.EOF) {
             errorLogAndDenyCompile("end of file",
                     curToken);
         }
     }
 
-    private void errorLogAndDenyCompile()
-    {
+    private void errorLogAndDenyCompile() {
         System.err.printf("Syntax error at line %s compilation aborting...\n%n",
                 curToken != null ? curToken.getLineNum() : "unknown");
         System.exit(1);
     }
 
-    private void errorLogAndDenyCompile(String expected, CvaToken got)
-    {
+    private void errorLogAndDenyCompile(String expected, CvaToken got) {
         System.err.printf("Line %d: Expects: %s, but got: %s which literal is %s%n",
                 curToken.getLineNum(), expected, got.toEnum(), got.getLiteral());
         System.exit(1);
     }
 
-    private void errorLogAndDenyCompile(String expected, EnumCvaToken got)
-    {
+    private void errorLogAndDenyCompile(String expected, EnumCvaToken got) {
         System.err.printf("Line %d: Expects: %s, but got: %s%n",
                 curToken.getLineNum(), expected, got);
         System.exit(1);
     }
 
 
-    private void errorLogAndDenyCompile(String expected, String got)
-    {
+    private void errorLogAndDenyCompile(String expected, String got) {
         System.err.printf("Line %d: Expects: %s, but got: %s%n",
                 curToken.getLineNum(), expected, got);
         System.exit(1);
@@ -185,18 +162,15 @@ public final class Parser
      *
      * @return Exprlist;
      */
-    private List<AbstractExpression> parseExprList()
-    {
+    private List<AbstractExpression> parseExprList() {
         List<AbstractExpression> expList = new ArrayList<>();
-        if (curToken.toEnum() == EnumCvaToken.CLOSE_PAREN)
-        {
+        if (curToken.toEnum() == EnumCvaToken.CLOSE_PAREN) {
             return expList;
         }
         AbstractExpression tem = parseLinkedExpr();
         tem.setLineNum(curToken.getLineNum());
         expList.add(tem);
-        while (curToken.toEnum() == EnumCvaToken.COMMA)
-        {
+        while (curToken.toEnum() == EnumCvaToken.COMMA) {
             advance();
             tem = parseLinkedExpr();
             tem.setLineNum(curToken.getLineNum());
@@ -217,12 +191,9 @@ public final class Parser
      *
      * @return atom expr;
      */
-    private AbstractExpression parseAtomExpr()
-    {
-        switch (curToken.toEnum())
-        {
-            case OPEN_PAREN:
-            {
+    private AbstractExpression parseAtomExpr() {
+        switch (curToken.toEnum()) {
+            case OPEN_PAREN: {
                 advance();
                 AbstractExpression expr = parseLinkedExpr();
                 expr.setLineNum(curToken.getLineNum());
@@ -230,88 +201,71 @@ public final class Parser
                 eatToken(EnumCvaToken.CLOSE_PAREN);
                 return expr;
             }
-            case CONST_INT:
-            {
-                AbstractExpression expr = new CvaConstIntExpr(curToken.getLineNum(), Integer.parseInt(curToken.getLiteral()));
+            case CONST_INT: {
+                AbstractExpression expr = new CvaConstIntExpr(curToken.getLineNum(),
+                        Integer.parseInt(curToken.getLiteral()));
                 advance();
                 return expr;
             }
-            case STRING:
-            {
+            case STRING: {
                 AbstractExpression expr = new CvaConstStringExpr(curToken.getLineNum(), curToken.getLiteral());
                 advance();
                 return expr;
             }
-            case TRUE:
-            {
+            case TRUE: {
                 AbstractExpression expr = new CvaConstTrueExpr(curToken.getLineNum());
                 advance();
                 return expr;
             }
-            case FALSE:
-            {
+            case FALSE: {
                 AbstractExpression expr = new CvaConstFalseExpr(curToken.getLineNum());
                 advance();
                 return expr;
             }
-            case THIS:
-            {
+            case THIS: {
                 AbstractExpression expr = new CvaThisExpr(curToken.getLineNum());
                 advance();
                 return expr;
             }
-            case IDENTIFIER:
-            {
+            case IDENTIFIER: {
                 AbstractExpression expr = new CvaIdentifierExpr(
                         curToken.getLineNum(), curToken.getLiteral());
                 advance();
-                switch (curToken.toEnum())
-                {
+                switch (curToken.toEnum()) {
                     case INCREMENT:
-                    case DECREMENT:
-                    {
+                    case DECREMENT: {
                         return handleIncDecExpr(expr);
                     }
-                    default:
-                    {
+                    default: {
                         return expr;
                     }
                 }
             }
-            case INCREMENT:
-            {
+            case INCREMENT: {
                 advance();
-                if (curToken.toEnum() == EnumCvaToken.IDENTIFIER)
-                {
+                if (curToken.toEnum() == EnumCvaToken.IDENTIFIER) {
                     CvaIdentifierExpr expr = new CvaIdentifierExpr(
                             curToken.getLineNum(), curToken.getLiteral());
                     advance();
                     return new CvaIncDecExpr(
                             curToken.getLineNum(), expr, EnumIncDirection.INCREMENT);
-                }
-                else
-                {
+                } else {
                     errorLogAndDenyCompile("identifier after ++", curToken);
                 }
             }
-            case DECREMENT:
-            {
+            case DECREMENT: {
                 advance();
-                if (curToken.toEnum() == EnumCvaToken.IDENTIFIER)
-                {
+                if (curToken.toEnum() == EnumCvaToken.IDENTIFIER) {
                     CvaIdentifierExpr expr = new CvaIdentifierExpr(
                             curToken.getLineNum(), curToken.getLiteral());
                     advance();
                     return new CvaIncDecExpr(
                             curToken.getLineNum(), expr, EnumIncDirection.DECREMENT);
-                }
-                else
-                {
+                } else {
                     errorLogAndDenyCompile("identifier after --", curToken);
                 }
             }
-            case NEW:
-            {
+            case NEW: {
                 advance();
                 AbstractExpression expr = new CvaNewExpr(curToken.getLineNum(), curToken.getLiteral());
                 advance();
@@ -319,8 +273,7 @@ public final class Parser
                 eatToken(EnumCvaToken.CLOSE_PAREN);
                 return expr;
             }
-            default:
-            {
+            default: {
                 errorLogAndDenyCompile();
                 break;
             }
@@ -334,12 +287,10 @@ public final class Parser
      *
      * @return negateExpr
      */
-    private AbstractExpression parseCallExpr()
-    {
+    private AbstractExpression parseCallExpr() {
         // FIXME, 这里不要先给终结符!!有问题的是;
         AbstractExpression expr = parseAtomExpr();
-        while (curToken.toEnum() == EnumCvaToken.DOT)
-        {
+        while (curToken.toEnum() == EnumCvaToken.DOT) {
             advance();
             CvaToken token = curToken;
             eatToken(EnumCvaToken.IDENTIFIER);
@@ -355,11 +306,9 @@ public final class Parser
         return expr;
     }
 
-    private AbstractExpression parseNegateExpr()
-    {
+    private AbstractExpression parseNegateExpr() {
         int i = 0;
-        while (curToken.toEnum() == EnumCvaToken.NEGATE)
-        {
+        while (curToken.toEnum() == EnumCvaToken.NEGATE) {
             advance();
             i++;
         }
@@ -373,12 +322,10 @@ public final class Parser
      * @return p;
      * @TODO 给几个枚举做反查map, 可以直接查;
      */
-    private AbstractExpression parseUnsignedRightShiftExpr()
-    {
+    private AbstractExpression parseUnsignedRightShiftExpr() {
         AbstractExpression tem = parseNegateExpr();
         AbstractExpression expr = tem;
-        while (curToken.toEnum() == EnumCvaToken.UNSIGNED_RIGHT_SHIFT)
-        {
+        while (curToken.toEnum() == EnumCvaToken.UNSIGNED_RIGHT_SHIFT) {
             advance();
             tem = parseNegateExpr();
             expr = new CvaOperandOperatorExpr.Builder()
@@ -392,12 +339,10 @@ public final class Parser
         return expr;
     }
 
-    private AbstractExpression parseRightShiftExpr()
-    {
+    private AbstractExpression parseRightShiftExpr() {
         AbstractExpression tem = parseUnsignedRightShiftExpr();
         AbstractExpression expr = tem;
-        while (curToken.toEnum() == EnumCvaToken.RIGHT_SHIFT)
-        {
+        while (curToken.toEnum() == EnumCvaToken.RIGHT_SHIFT) {
             advance();
             tem = parseUnsignedRightShiftExpr();
             expr = new CvaOperandOperatorExpr.Builder()
@@ -411,12 +356,10 @@ public final class Parser
         return expr;
     }
 
-    private AbstractExpression parseLeftShiftExpr()
-    {
+    private AbstractExpression parseLeftShiftExpr() {
         AbstractExpression tem = parseRightShiftExpr();
         AbstractExpression expr = tem;
-        while (curToken.toEnum() == EnumCvaToken.LEFT_SHIFT)
-        {
+        while (curToken.toEnum() == EnumCvaToken.LEFT_SHIFT) {
             advance();
             tem = parseRightShiftExpr();
             expr = new CvaOperandOperatorExpr.Builder()
@@ -430,12 +373,10 @@ public final class Parser
         return expr;
     }
 
-    private AbstractExpression parseBitXOrExpr()
-    {
+    private AbstractExpression parseBitXOrExpr() {
         AbstractExpression tem = parseLeftShiftExpr();
         AbstractExpression expr = tem;
-        while (curToken.toEnum() == EnumCvaToken.BIT_XOR)
-        {
+        while (curToken.toEnum() == EnumCvaToken.BIT_XOR) {
             advance();
             tem = parseLeftShiftExpr();
             expr = new CvaOperandOperatorExpr.Builder()
@@ -449,12 +390,10 @@ public final class Parser
         return expr;
     }
 
-    private AbstractExpression parseBitOrExpr()
-    {
+    private AbstractExpression parseBitOrExpr() {
         AbstractExpression tem = parseBitXOrExpr();
         AbstractExpression expr = tem;
-        while (curToken.toEnum() == EnumCvaToken.BIT_OR)
-        {
+        while (curToken.toEnum() == EnumCvaToken.BIT_OR) {
             advance();
             tem = parseBitXOrExpr();
             expr = new CvaOperandOperatorExpr.Builder()
@@ -469,12 +408,10 @@ public final class Parser
     }
 
 
-    private AbstractExpression parseBitAndExpr()
-    {
+    private AbstractExpression parseBitAndExpr() {
         AbstractExpression tem = parseBitOrExpr();
         AbstractExpression expr = tem;
-        while (curToken.toEnum() == EnumCvaToken.BIT_AND)
-        {
+        while (curToken.toEnum() == EnumCvaToken.BIT_AND) {
             advance();
             tem = parseBitOrExpr();
             expr = new CvaOperandOperatorExpr.Builder()
@@ -489,12 +426,10 @@ public final class Parser
     }
 
 
-    private AbstractExpression parseRemExpr()
-    {
+    private AbstractExpression parseRemExpr() {
         AbstractExpression tem = parseBitAndExpr();
         AbstractExpression expr = tem;
-        while (curToken.toEnum() == EnumCvaToken.REM)
-        {
+        while (curToken.toEnum() == EnumCvaToken.REM) {
             advance();
             tem = parseBitAndExpr();
             expr = new CvaOperandOperatorExpr.Builder()
@@ -515,12 +450,10 @@ public final class Parser
      *
      * @return MulExpr
      */
-    private AbstractExpression parseDivExpr()
-    {
+    private AbstractExpression parseDivExpr() {
         AbstractExpression tem = parseRemExpr();
         AbstractExpression expr = tem;
-        while (curToken.toEnum() == EnumCvaToken.DIV)
-        {
+        while (curToken.toEnum() == EnumCvaToken.DIV) {
             advance();
             tem = parseRemExpr();
             expr = new CvaOperandOperatorExpr.Builder()
@@ -540,12 +473,10 @@ public final class Parser
      *
      * @return AddSubExpr
      */
-    private AbstractExpression parseMulExpr()
-    {
+    private AbstractExpression parseMulExpr() {
         AbstractExpression tem = parseDivExpr();
         AbstractExpression expr = tem;
-        while (curToken.toEnum() == EnumCvaToken.STAR)
-        {
+        while (curToken.toEnum() == EnumCvaToken.STAR) {
             advance();
             tem = parseDivExpr();
             expr = new CvaOperandOperatorExpr.Builder()
@@ -566,17 +497,14 @@ public final class Parser
      *
      * @return LessThanExpr
      */
-    private AbstractExpression parseAddSubExpr()
-    {
+    private AbstractExpression parseAddSubExpr() {
         AbstractExpression expr = parseMulExpr();
         while (curToken.toEnum() == EnumCvaToken.ADD
-                || curToken.toEnum() == EnumCvaToken.SUB)
-        {
+                || curToken.toEnum() == EnumCvaToken.SUB) {
             boolean addFlag = curToken.toEnum() == EnumCvaToken.ADD;
             advance();
             AbstractExpression tem = parseMulExpr();
-            if (addFlag)
-            {
+            if (addFlag) {
 //                expr = new CvaAddExpr(expr.getLineNum(), expr, tem);
                 expr = new CvaOperandOperatorExpr.Builder()
                         .putLineNum(curToken.getLineNum())
@@ -587,8 +515,7 @@ public final class Parser
                         .build();
             }
             // 减法;
-            else
-            {
+            else {
                 expr = new CvaOperandOperatorExpr.Builder()
                         .putLineNum(curToken.getLineNum())
                         .putInstOp(EnumOperator.SUB)
@@ -607,40 +534,32 @@ public final class Parser
      *
      * @return AndAndExpr;
      */
-    private AbstractExpression parseLessOrMoreThanExpr()
-    {
+    private AbstractExpression parseLessOrMoreThanExpr() {
         AbstractExpression expr = parseAddSubExpr();
-        while (true)
-        {
-            switch (curToken.toEnum())
-            {
-                case LESS_THAN:
-                {
+        while (true) {
+            switch (curToken.toEnum()) {
+                case LESS_THAN: {
                     advance();
                     AbstractExpression tem = parseAddSubExpr();
                     expr = new CvaLessOrMoreThanExpr(expr.getLineNum(), expr, tem);
                     continue;
                 }
-                case MORE_THAN:
-                {
+                case MORE_THAN: {
                     // more than 倒一下即可;
                     advance();
                     AbstractExpression tem = parseAddSubExpr();
                     expr = new CvaLessOrMoreThanExpr(expr.getLineNum(), tem, expr);
                     continue;
                 }
-                case MORE_OR_EQUALS:
-                {
+                case MORE_OR_EQUALS: {
                     // >=;
                     break;
                 }
-                case LESS_OR_EQUALS:
-                {
+                case LESS_OR_EQUALS: {
                     // <=
                     break;
                 }
-                default:
-                {
+                default: {
                     break;
                 }
             }
@@ -649,11 +568,9 @@ public final class Parser
         return expr;
     }
 
-    private AbstractExpression parseAndAndExpr()
-    {
+    private AbstractExpression parseAndAndExpr() {
         AbstractExpression expr = parseLessOrMoreThanExpr();
-        while (curToken.toEnum() == EnumCvaToken.AND_AND)
-        {
+        while (curToken.toEnum() == EnumCvaToken.AND_AND) {
             advance();
             AbstractExpression tem = parseLessOrMoreThanExpr();
             expr = new CvaAndAndExpr(expr.getLineNum(), expr, tem);
@@ -667,8 +584,7 @@ public final class Parser
      *
      * @return Single Expr
      */
-    private AbstractExpression parseLinkedExpr()
-    {
+    private AbstractExpression parseLinkedExpr() {
         // start;
         return parseAndAndExpr();
     }
@@ -683,60 +599,47 @@ public final class Parser
      *
      * @return single Statement;
      */
-    private AbstractStatement parseStatement()
-    {
-        switch (curToken.toEnum())
-        {
-            case OPEN_CURLY_BRACE:
-            {
+    private AbstractStatement parseStatement() {
+        switch (curToken.toEnum()) {
+            case OPEN_CURLY_BRACE: {
                 return handleOpenCurly();
             }
-            case IF_STATEMENT:
-            {
+            case IF_STATEMENT: {
                 return handleIf();
             }
-            case WHILE_STATEMENT:
-            {
+            case WHILE_STATEMENT: {
                 return handleWhile();
             }
-            case FOR_STATEMENT:
-            {
+            case FOR_STATEMENT: {
                 return handleFor();
             }
-            case WRITE:
-            {
+            case WRITE: {
                 return handleWriteOp(EnumWriteMode.PRINT);
             }
-            case WRITE_LINE:
-            {
+            case WRITE_LINE: {
                 return handleWriteOp(EnumWriteMode.PRINT_LINE);
             }
-            case WRITE_FORMAT:
-            {
+            case WRITE_FORMAT: {
                 return handleWriteOp(EnumWriteMode.PRINT_FORMAT);
             }
-            case IDENTIFIER:
-            {
+            case IDENTIFIER: {
                 return handleIdentifier();
             }
             case INCREMENT:
             case DECREMENT:
-            case NEW:
-            {
+            case NEW: {
                 // 有副作用, 小心顺序;
                 AbstractStatement statement = new CvaExprStatement(
                         curToken.getLineNum(), parseLinkedExpr());
                 eatToken(EnumCvaToken.SEMI);
                 return statement;
             }
-            case SEMI:
-            {
+            case SEMI: {
                 // 有时候要注释掉这个来看会不会漏检查分号;
                 eatToken(EnumCvaToken.SEMI);
                 return CvaNullStatement.getInstance();
             }
-            default:
-            {
+            default: {
                 errorLogAndDenyCompile();
                 break;
             }
@@ -750,13 +653,10 @@ public final class Parser
      *
      * @return StatementList;
      */
-    private List<AbstractStatement> parseStatementList()
-    {
+    private List<AbstractStatement> parseStatementList() {
         List<AbstractStatement> statementList = new ArrayList<>();
-        while (true)
-        {
-            switch (curToken.toEnum())
-            {
+        while (true) {
+            switch (curToken.toEnum()) {
                 case OPEN_CURLY_BRACE:
                 case IF_STATEMENT:
                 case WHILE_STATEMENT:
@@ -764,13 +664,11 @@ public final class Parser
                 case WRITE:
                     // TODO 不优雅, 想办法改;
                 case WRITE_LINE:
-                case WRITE_FORMAT:
-                {
+                case WRITE_FORMAT: {
                     statementList.add(parseStatement());
                     continue;
                 }
-                default:
-                {
+                default: {
                     break;
                 }
             }
@@ -783,72 +681,59 @@ public final class Parser
     /**
      * Type -> basic
      * -> id
+     *
      * @return Type;
      */
-    private ICvaType parseType()
-    {
+    private ICvaType parseType() {
         ICvaType type = null;
         // 放map只能反射, 不放了还是;
-        switch (curToken.toEnum())
-        {
-            case VOID:
-            {
+        switch (curToken.toEnum()) {
+            case VOID: {
                 type = EnumCvaType.VOID;
                 break;
             }
-            case BYTE:
-            {
+            case BYTE: {
                 type = EnumCvaType.BYTE;
                 break;
             }
-            case CHAR:
-            {
+            case CHAR: {
                 type = EnumCvaType.CHAR;
                 break;
             }
-            case SHORT:
-            {
+            case SHORT: {
                 type = EnumCvaType.SHORT;
                 break;
             }
-            case INT:
-            {
+            case INT: {
                 type = EnumCvaType.INT;
                 break;
             }
-            case LONG:
-            {
+            case LONG: {
                 type = EnumCvaType.LONG;
                 break;
             }
-            case FLOAT:
-            {
+            case FLOAT: {
                 type = EnumCvaType.FLOAT;
                 break;
             }
-            case DOUBLE:
-            {
+            case DOUBLE: {
                 type = EnumCvaType.DOUBLE;
                 break;
             }
-            case BOOLEAN:
-            {
+            case BOOLEAN: {
                 type = EnumCvaType.BOOLEAN;
                 break;
             }
-            case STRING:
-            {
+            case STRING: {
                 type = new CvaStringType();
                 break;
             }
-            case IDENTIFIER:
-            {
+            case IDENTIFIER: {
                 // 应该是type;
                 type = new CvaClassType(curToken.getLiteral());
                 break;
             }
-            default:
-            {
+            default: {
                 errorLogAndDenyCompile("type",
                         curToken);
                 // 不需要break打断虚拟机了已经;
@@ -856,27 +741,22 @@ public final class Parser
         }
         // 因为有advance所以不能直接return;
         advance();
-        while (curToken.toEnum() == EnumCvaToken.OPEN_BRACKETS)
-        {
+        while (curToken.toEnum() == EnumCvaToken.OPEN_BRACKETS) {
             advance();
-            switch (curToken.toEnum())
-            {
-                case CLOSE_BRACKETS:
-                {
+            switch (curToken.toEnum()) {
+                case CLOSE_BRACKETS: {
                     advance();
                     type = new CvaArrayType(type);
                     continue;
                 }
-                case CONST_INT:
-                {
+                case CONST_INT: {
                     int size = Integer.parseInt(curToken.getLiteral());
                     advance();
                     eatToken(EnumCvaToken.CLOSE_BRACKETS);
-                    type =  new CvaArrayType(type, size);
+                    type = new CvaArrayType(type, size);
                     continue;
                 }
-                default:
-                {
+                default: {
                     errorLogAndDenyCompile("] or int array size whith ]", curToken);
                     break;
                 }
@@ -888,29 +768,24 @@ public final class Parser
 
     /**
      * VarDecl -> Type identifier;
+     *
      * @return VarDecl;
      */
-    private AbstractDeclaration parseVarDecl()
-    {
+    private AbstractDeclaration parseVarDecl() {
         mark();
         ICvaType type = parseType();
         // maybe a assign statement in method;
-        switch (curToken.toEnum())
-        {
-            case ASSIGN:
-            {
+        switch (curToken.toEnum()) {
+            case ASSIGN: {
                 this.reset();
                 varDeclFlag = false;
                 return CvaNullDecl.getInstance();
             }
-            case IDENTIFIER:
-            {
+            case IDENTIFIER: {
                 String literal = curToken.getLiteral();
                 advance();
-                switch (curToken.toEnum())
-                {
-                    case SEMI:
-                    {
+                switch (curToken.toEnum()) {
+                    case SEMI: {
                         this.deMark();
                         varDeclFlag = true;
                         AbstractDeclaration decl = new CvaDeclaration(
@@ -919,21 +794,18 @@ public final class Parser
                         return decl;
                     }
                     // maybe a method in class;
-                    case OPEN_PAREN:
-                    {
+                    case OPEN_PAREN: {
                         varDeclFlag = false;
                         this.reset();
                         return CvaNullDecl.getInstance();
                     }
-                    default:
-                    {
+                    default: {
                         errorLogAndDenyCompile();
                         break;
                     }
                 }
             }
-            default:
-            {
+            default: {
                 errorLogAndDenyCompile();
                 break;
             }
@@ -944,19 +816,17 @@ public final class Parser
     /**
      * VarDecls -> VarDecl VarDecls
      * ->
+     *
      * @return VarDeclList;
      */
-    private List<AbstractDeclaration> parseVarDeclList()
-    {
+    private List<AbstractDeclaration> parseVarDeclList() {
         List<AbstractDeclaration> declList = new ArrayList<>();
         varDeclFlag = true;
         while (EnumCvaToken.isType(curToken.toEnum())
-                || curToken.toEnum() == EnumCvaToken.IDENTIFIER)
-        {
+                || curToken.toEnum() == EnumCvaToken.IDENTIFIER) {
             AbstractDeclaration decl = parseVarDecl();
             declList.add(decl);
-            if (!varDeclFlag)
-            {
+            if (!varDeclFlag) {
                 break;
             }
         }
@@ -970,19 +840,16 @@ public final class Parser
      *
      * @return FormalList;
      */
-    private List<AbstractDeclaration> parseFormalList()
-    {
+    private List<AbstractDeclaration> parseFormalList() {
         List<AbstractDeclaration> declList = new ArrayList<>();
-        if (EnumCvaToken.isType(curToken.toEnum()))
-        {
+        if (EnumCvaToken.isType(curToken.toEnum())) {
             // 这里非常坑. 必须要先parser;
             // parse的副作用是推一个token, 所以给new decl传参的时候先后顺序换了会导致意想不到的bug;
             // 保存上一个token的type, 拿取下一个token的literal;
             ICvaType type = parseType();
             declList.add(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), type));
             eatToken(EnumCvaToken.IDENTIFIER);
-            while (curToken.toEnum() == EnumCvaToken.COMMA)
-            {
+            while (curToken.toEnum() == EnumCvaToken.COMMA) {
                 advance();
                 ICvaType argType = parseType();
                 declList.add(new CvaDeclaration(curToken.getLineNum(), curToken.getLiteral(), argType));
@@ -998,8 +865,7 @@ public final class Parser
      *
      * @return Method;
      */
-    private AbstractMethod parseMethod()
-    {
+    private AbstractMethod parseMethod() {
         // 第一个是返回值;
         ICvaType retType = parseType();
         // 解析函数名;
@@ -1016,44 +882,33 @@ public final class Parser
         List<AbstractDeclaration> localVarDeclList = new ArrayList<>();
         List<AbstractStatement> statementList = new ArrayList<>();
 
-        while (true)
-        {
+        while (true) {
             EnumCvaToken memTokenEnum = curToken.toEnum();
-            switch (memTokenEnum)
-            {
-                case IDENTIFIER:
-                {
+            switch (memTokenEnum) {
+                case IDENTIFIER: {
                     char pCh = peekCh();
-                    if (Character.isAlphabetic(pCh) || pCh == '_' || pCh == '$')
-                    {
+                    if (Character.isAlphabetic(pCh) || pCh == '_' || pCh == '$') {
                         // 2连 identifier, 说明是定义;
                         CvaDeclStatement stm = parseDeclStatement();
                         localVarDeclList.add(stm.getDecl());
                         statementList.add(stm.getAssign());
-                    }
-                    else
-                    {
+                    } else {
                         // 说明是普通statement;
                         statementList.add(parseStatement());
                     }
                     continue;
                 }
                 case CLOSE_CURLY_BRACE:
-                case RETURN:
-                {
+                case RETURN: {
                     break;
                 }
-                default:
-                {
-                    if (EnumCvaToken.isType(memTokenEnum))
-                    {
+                default: {
+                    if (EnumCvaToken.isType(memTokenEnum)) {
                         // 吃掉type, cur是id, 下一个看是分号还是assign;
                         CvaDeclStatement stm = parseDeclStatement();
                         localVarDeclList.add(stm.getDecl());
                         statementList.add(stm.getAssign());
-                    }
-                    else
-                    {
+                    } else {
                         statementList.add(parseStatement());
                     }
                     continue;
@@ -1063,17 +918,13 @@ public final class Parser
         }
         // FIXME 隐患;
         AbstractExpression retExpr;
-        if (retType.toEnum() == EnumCvaType.VOID)
-        {
+        if (retType.toEnum() == EnumCvaType.VOID) {
             retExpr = new CvaConstNullExpr(curToken.getLineNum());
-            if (curToken.toEnum() == EnumCvaToken.RETURN)
-            {
+            if (curToken.toEnum() == EnumCvaToken.RETURN) {
                 eatToken(EnumCvaToken.RETURN);
                 eatToken(EnumCvaToken.SEMI);
             }
-        }
-        else
-        {
+        } else {
             eatToken(EnumCvaToken.RETURN);
             retExpr = parseLinkedExpr();
             eatToken(EnumCvaToken.SEMI);
@@ -1091,16 +942,14 @@ public final class Parser
     }
 
     private AbstractDeclaration handleMethodVarDecl(
-            String literal, ICvaType declType)
-    {
+            String literal, ICvaType declType) {
         eatToken(EnumCvaToken.IDENTIFIER);
         return new CvaDeclaration(
                 curToken.getLineNum(), literal, declType);
     }
 
     private AbstractStatement handleMethodAssign(
-            String idLiteral)
-    {
+            String idLiteral) {
         AbstractExpression expr = parseLinkedExpr();
         return new CvaAssignStatement(
                 curToken.getLineNum(), idLiteral, expr);
@@ -1112,13 +961,11 @@ public final class Parser
      *
      * @return MethodDeclList;
      */
-    private List<AbstractMethod> parseMethodDeclList()
-    {
+    private List<AbstractMethod> parseMethodDeclList() {
         List<AbstractMethod> methodList = new ArrayList<>();
 
         while (EnumCvaToken.isType(curToken.toEnum())
-                || curToken.toEnum() == EnumCvaToken.IDENTIFIER)
-        {
+                || curToken.toEnum() == EnumCvaToken.IDENTIFIER) {
             methodList.add(parseMethod());
         }
         return methodList;
@@ -1130,14 +977,12 @@ public final class Parser
      *
      * @return single ClassDecl;
      */
-    private AbstractCvaClass parseClassDecl()
-    {
+    private AbstractCvaClass parseClassDecl() {
         eatToken(EnumCvaToken.CLASS_DECL);
         String literal = curToken.getLiteral();
         eatToken(EnumCvaToken.IDENTIFIER);
         String superClass = null;
-        if (curToken.toEnum() == EnumCvaToken.EXTENDS)
-        {
+        if (curToken.toEnum() == EnumCvaToken.EXTENDS) {
             advance();
             superClass = curToken.getLiteral();
             eatToken(EnumCvaToken.IDENTIFIER);
@@ -1159,11 +1004,9 @@ public final class Parser
      *
      * @return ClassDeclList;
      */
-    private List<AbstractCvaClass> parseClassDeclList()
-    {
+    private List<AbstractCvaClass> parseClassDeclList() {
         List<AbstractCvaClass> classList = new ArrayList<>();
-        while (curToken.toEnum() == EnumCvaToken.CLASS_DECL)
-        {
+        while (curToken.toEnum() == EnumCvaToken.CLASS_DECL) {
             classList.add(parseClassDecl());
         }
         return classList;
@@ -1180,12 +1023,10 @@ public final class Parser
      *
      * @return EntryClass;
      */
-    private CvaEntryClass parseEntryClass()
-    {
+    private CvaEntryClass parseEntryClass() {
         String mainClassName;
         AbstractMethod mainMethod;
-        if (curToken.toEnum() == EnumCvaToken.CLASS_DECL)
-        {
+        if (curToken.toEnum() == EnumCvaToken.CLASS_DECL) {
             eatToken(EnumCvaToken.CLASS_DECL);
             mainClassName = curToken.getLiteral();
             eatToken(EnumCvaToken.IDENTIFIER);
@@ -1196,9 +1037,7 @@ public final class Parser
                     .build();
 
             eatToken(EnumCvaToken.CLOSE_CURLY_BRACE);
-        }
-        else
-        {
+        } else {
             mainClassName = EnumLexerCommon.MAIN_CLASS_NAME.string();
             mainMethod = new CvaMainMethod.Builder(
                     parseMethod())
@@ -1206,26 +1045,21 @@ public final class Parser
         }
 
         List<AbstractDeclaration> argList = mainMethod.getArgumentList();
-        switch (argList.size())
-        {
-            case 0:
-            {
+        switch (argList.size()) {
+            case 0: {
                 break;
             }
-            case 1:
-            {
+            case 1: {
                 ICvaType argType = argList.get(0).type();
                 // && 是短路的;
                 if (argType.toEnum() != EnumCvaType.ARRAY ||
-                        ((CvaArrayType) argType).getInnerType().toEnum() != EnumCvaType.STRING)
-                {
+                        ((CvaArrayType) argType).getInnerType().toEnum() != EnumCvaType.STRING) {
                     errorLogAndDenyCompile("only accexpt main func's arg string[] or empty",
                             String.valueOf(argList));
                 }
                 break;
             }
-            default:
-            {
+            default: {
                 errorLogAndDenyCompile("main func's arg decl length should be 1 means string[]",
                         String.valueOf(argList));
                 break;
@@ -1243,37 +1077,28 @@ public final class Parser
      *
      * @return Program tree;
      */
-    private CvaProgram parseProgram()
-    {
+    private CvaProgram parseProgram() {
         parsePackage();
         parseCallStatement();
         // 直接解析;
         AbstractEntryClass entryClass = null;
         List<AbstractCvaClass> classList = new ArrayList<>();
-        while (true)
-        {
+        while (true) {
             EnumCvaToken curTokenEnum = curToken.toEnum();
-            switch (curTokenEnum)
-            {
-                case CLASS_DECL:
-                {
+            switch (curTokenEnum) {
+                case CLASS_DECL: {
                     classList.addAll(parseClassDeclList());
                     continue;
                 }
-                case EOF:
-                {
+                case EOF: {
                     break;
                 }
-                default:
-                {
-                    if (EnumCvaToken.isType(curTokenEnum))
-                    {
+                default: {
+                    if (EnumCvaToken.isType(curTokenEnum)) {
                         entryClass = parseEntryClass();
                         hasEntry = true;
                         continue;
-                    }
-                    else
-                    {
+                    } else {
                         errorLogAndDenyCompile("EOF or class def or main func def" +
                                         "(cva only supported main func out the class) ",
                                 curTokenEnum);
@@ -1284,8 +1109,7 @@ public final class Parser
             }
             break;
         }
-        if (!hasEntry)
-        {
+        if (!hasEntry) {
             entryClass = (AbstractEntryClass) searchMain(classList);
         }
         eatEof();
@@ -1293,16 +1117,12 @@ public final class Parser
         return new CvaProgram(entryClass, classList);
     }
 
-    private AbstractCvaClass searchMain(List<AbstractCvaClass> classList)
-    {
-        for (AbstractCvaClass absClass : classList)
-        {
-            for (AbstractMethod absMethod : absClass.getMethodList())
-            {
+    private AbstractCvaClass searchMain(List<AbstractCvaClass> classList) {
+        for (AbstractCvaClass absClass : classList) {
+            for (AbstractMethod absMethod : absClass.getMethodList()) {
                 // null 安全的equals;
                 if (Objects.equals(absMethod.name(),
-                        EnumLexerCommon.MAIN_METHOD_NAME.string()))
-                {
+                        EnumLexerCommon.MAIN_METHOD_NAME.string())) {
                     // return 打断多重循环, 如果重复定义main, 只执行第一个;
                     // 没有测试过行不行;
                     classList.remove(absClass);
@@ -1316,44 +1136,34 @@ public final class Parser
         throw new RuntimeException("unknown exception");
     }
 
-    private void parsePackage()
-    {
-        if (curToken.toEnum() == EnumCvaToken.PACKAGE_DECL)
-        {
+    private void parsePackage() {
+        if (curToken.toEnum() == EnumCvaToken.PACKAGE_DECL) {
             eatToken(EnumCvaToken.PACKAGE_DECL);
             EnumCvaToken memKind = curToken.toEnum();
             eatToken(EnumCvaToken.IDENTIFIER);
-            while (true)
-            {
-                switch (curToken.toEnum())
-                {
-                    case DOT:
-                    {
-                        if (memKind != EnumCvaToken.IDENTIFIER)
-                        {
+            while (true) {
+                switch (curToken.toEnum()) {
+                    case DOT: {
+                        if (memKind != EnumCvaToken.IDENTIFIER) {
                             errorLogAndDenyCompile();
                         }
                         memKind = EnumCvaToken.DOT;
                         eatToken(EnumCvaToken.DOT);
                         continue;
                     }
-                    case IDENTIFIER:
-                    {
-                        if (memKind != EnumCvaToken.DOT)
-                        {
+                    case IDENTIFIER: {
+                        if (memKind != EnumCvaToken.DOT) {
                             errorLogAndDenyCompile();
                         }
                         memKind = EnumCvaToken.IDENTIFIER;
                         eatToken(EnumCvaToken.IDENTIFIER);
                         continue;
                     }
-                    case SEMI:
-                    {
+                    case SEMI: {
                         eatToken(EnumCvaToken.SEMI);
                         break;
                     }
-                    default:
-                    {
+                    default: {
                         errorLogAndDenyCompile("pkg name or dot or star",
                                 curToken);
                         break;
@@ -1364,63 +1174,50 @@ public final class Parser
         }
     }
 
-    private void parseCallStatement()
-    {
+    private void parseCallStatement() {
         // call 是多条, 所以在这里用;
-        while (curToken.toEnum() == EnumCvaToken.CALL)
-        {
+        while (curToken.toEnum() == EnumCvaToken.CALL) {
             parseCallSentence();
         }
     }
 
-    private void parseCallSentence()
-    {
+    private void parseCallSentence() {
         eatToken(EnumCvaToken.CALL);
         // 规定至少一个pkg., 因为本包内不需要call;
         // 第一个必为 id;
         EnumCvaToken memKind = curToken.toEnum();
         eatToken(EnumCvaToken.IDENTIFIER);
-        while (true)
-        {
-            switch (curToken.toEnum())
-            {
-                case DOT:
-                {
-                    if (memKind != EnumCvaToken.IDENTIFIER)
-                    {
+        while (true) {
+            switch (curToken.toEnum()) {
+                case DOT: {
+                    if (memKind != EnumCvaToken.IDENTIFIER) {
                         errorLogAndDenyCompile();
                     }
                     memKind = EnumCvaToken.DOT;
                     advance();
                     continue;
                 }
-                case IDENTIFIER:
-                {
-                    if (memKind != EnumCvaToken.DOT)
-                    {
+                case IDENTIFIER: {
+                    if (memKind != EnumCvaToken.DOT) {
                         errorLogAndDenyCompile();
                     }
                     memKind = EnumCvaToken.IDENTIFIER;
                     advance();
                     continue;
                 }
-                case STAR:
-                {
-                    if (memKind != EnumCvaToken.DOT)
-                    {
+                case STAR: {
+                    if (memKind != EnumCvaToken.DOT) {
                         errorLogAndDenyCompile();
                     }
                     advance();
                     eatToken(EnumCvaToken.SEMI);
                     break;
                 }
-                case SEMI:
-                {
+                case SEMI: {
                     advance();
                     break;
                 }
-                default:
-                {
+                default: {
                     errorLogAndDenyCompile("pkg name or dot or star",
                             curToken);
                     break;
@@ -1430,25 +1227,21 @@ public final class Parser
         }
     }
 
-    private AbstractStatement handleWriteOp(EnumWriteMode writeMode)
-    {
+    private AbstractStatement handleWriteOp(EnumWriteMode writeMode) {
         // 目前 echo expr 实现还稍麻烦, 后面再想法;
         int lineNum = curToken.getLineNum();
         // 一定是write;
         advance();
         // TODO 解析不带括号的echo;
         EnumCvaToken curTokenEnum = curToken.toEnum();
-        if (curTokenEnum == EnumCvaToken.OPEN_PAREN)
-        {
+        if (curTokenEnum == EnumCvaToken.OPEN_PAREN) {
             // (;
             advance();
             AbstractExpression expr = parseLinkedExpr();
             eatToken(EnumCvaToken.CLOSE_PAREN);
             eatToken(EnumCvaToken.SEMI);
             return new CvaWriteStatement(lineNum, expr, writeMode);
-        }
-        else
-        {
+        } else {
             AbstractExpression expr = parseLinkedExpr();
             eatToken(EnumCvaToken.SEMI);
             return new CvaWriteStatement(lineNum, expr, writeMode);
@@ -1459,8 +1252,7 @@ public final class Parser
      * @return 处理if;
      * @TODO 嵌套判定有无else之类;
      */
-    private AbstractStatement handleIf()
-    {
+    private AbstractStatement handleIf() {
         int lineNum = curToken.getLineNum();
         advance();
         eatToken(EnumCvaToken.OPEN_PAREN);
@@ -1475,18 +1267,15 @@ public final class Parser
                 elseStm);
     }
 
-    private AbstractStatement handleElse()
-    {
-        if (curToken.toEnum() == EnumCvaToken.ELSE_STATEMENT)
-        {
+    private AbstractStatement handleElse() {
+        if (curToken.toEnum() == EnumCvaToken.ELSE_STATEMENT) {
             advance();
             return parseStatement();
         }
         return CvaNullStatement.getInstance();
     }
 
-    private AbstractStatement handleWhile()
-    {
+    private AbstractStatement handleWhile() {
         int lineNum = curToken.getLineNum();
         advance();
         eatToken(EnumCvaToken.OPEN_PAREN);
@@ -1500,8 +1289,7 @@ public final class Parser
      * @return statement;
      * @TODO for 中实现本地变量;
      */
-    private AbstractStatement handleFor()
-    {
+    private AbstractStatement handleFor() {
         int lineNum = curToken.getLineNum();
         advance();
         eatToken(EnumCvaToken.OPEN_PAREN);
@@ -1522,70 +1310,56 @@ public final class Parser
 
     /**
      * 处理Id;
+     *
      * @return stm;
      */
-    private AbstractStatement handleIdentifier()
-    {
+    private AbstractStatement handleIdentifier() {
         String idLiteral = curToken.getLiteral();
         int lineNum = curToken.getLineNum();
         advance();
         EnumCvaToken curTokenEnum = curToken.toEnum();
-        switch (curTokenEnum)
-        {
-            case ASSIGN:
-            {
+        switch (curTokenEnum) {
+            case ASSIGN: {
                 advance();
                 AbstractExpression expr = parseLinkedExpr();
                 eatToken(EnumCvaToken.SEMI);
                 return new CvaAssignStatement(lineNum, idLiteral, expr);
             }
             // 语法糖;
-            case ADD_ASSIGN:
-            {
+            case ADD_ASSIGN: {
                 return desugarParse(idLiteral, EnumOperator.ADD);
             }
-            case SUB_ASSIGN:
-            {
-                return desugarParse(idLiteral,  EnumOperator.SUB);
+            case SUB_ASSIGN: {
+                return desugarParse(idLiteral, EnumOperator.SUB);
             }
-            case MULTIPLY_ASSIGN:
-            {
+            case MULTIPLY_ASSIGN: {
                 return desugarParse(idLiteral, EnumOperator.MUL);
             }
-            case DIV_ASSIGN:
-            {
+            case DIV_ASSIGN: {
                 return desugarParse(idLiteral, EnumOperator.DIV);
             }
-            case REM_ASSIGN:
-            {
+            case REM_ASSIGN: {
                 return desugarParse(idLiteral, EnumOperator.REM);
             }
-            case BIT_AND_ASSIGN:
-            {
-                return desugarParse(idLiteral,  EnumOperator.BIT_AND);
+            case BIT_AND_ASSIGN: {
+                return desugarParse(idLiteral, EnumOperator.BIT_AND);
             }
-            case BIT_OR_ASSIGN:
-            {
+            case BIT_OR_ASSIGN: {
                 return desugarParse(idLiteral, EnumOperator.BIT_OR);
             }
-            case BIT_XOR_ASSIGN:
-            {
+            case BIT_XOR_ASSIGN: {
                 return desugarParse(idLiteral, EnumOperator.BIT_XOR);
             }
-            case LEFT_SHIFT_ASSIGN:
-            {
+            case LEFT_SHIFT_ASSIGN: {
                 return desugarParse(idLiteral, EnumOperator.LEFT_SHIFT);
             }
-            case RIGHT_SHIFT_ASSIGN:
-            {
+            case RIGHT_SHIFT_ASSIGN: {
                 return desugarParse(idLiteral, EnumOperator.RIGHT_SHIFT);
             }
-            case UNSIGNED_RIGHT_SHIFT_ASSIGN:
-            {
+            case UNSIGNED_RIGHT_SHIFT_ASSIGN: {
                 return desugarParse(idLiteral, EnumOperator.UNSIGNED_RIGHT_SHIFT);
             }
-            case INCREMENT:
-            {
+            case INCREMENT: {
                 CvaIdentifierExpr idExpr = new CvaIdentifierExpr(
                         lineNum, idLiteral);
                 advance();
@@ -1594,8 +1368,7 @@ public final class Parser
                         lineNum, new CvaIncDecExpr(
                         lineNum, idExpr, EnumIncDirection.INCREMENT));
             }
-            case DECREMENT:
-            {
+            case DECREMENT: {
                 CvaIdentifierExpr idExpr = new CvaIdentifierExpr(
                         lineNum, idLiteral);
                 advance();
@@ -1604,8 +1377,7 @@ public final class Parser
                         lineNum, new CvaIncDecExpr(
                         lineNum, idExpr, EnumIncDirection.DECREMENT));
             }
-            default:
-            {
+            default: {
                 errorLogAndDenyCompile("assign or increment or decrement", curTokenEnum);
                 break;
             }
@@ -1615,13 +1387,13 @@ public final class Parser
 
     /**
      * 相当于工厂;
-     * @param idLiteral   id;
-     * @param operator    op;
+     *
+     * @param idLiteral id;
+     * @param operator  op;
      * @return re;
      */
     private CvaAssignStatement desugarParse(String idLiteral,
-                                            EnumOperator operator)
-    {
+                                            EnumOperator operator) {
         int lineNum = curToken.getLineNum();
         advance();
         AbstractExpression right = parseLinkedExpr();
@@ -1638,8 +1410,7 @@ public final class Parser
         return new CvaAssignStatement(lineNum, idLiteral, addAssignExpr);
     }
 
-    private AbstractStatement handleOpenCurly()
-    {
+    private AbstractStatement handleOpenCurly() {
         advance();
         int lineNum = curToken.getLineNum();
         AbstractStatement statement = new CvaBlockStatement(lineNum, parseStatementList());
@@ -1647,31 +1418,25 @@ public final class Parser
         return statement;
     }
 
-    private AbstractExpression handleIncDecExpr(AbstractExpression expr)
-    {
-        if (expr instanceof CvaIdentifierExpr)
-        {
+    private AbstractExpression handleIncDecExpr(AbstractExpression expr) {
+        if (expr instanceof CvaIdentifierExpr) {
             CvaIdentifierExpr idExpr = (CvaIdentifierExpr) expr;
-            switch (curToken.toEnum())
-            {
-                case INCREMENT:
-                {
+            switch (curToken.toEnum()) {
+                case INCREMENT: {
                     advance();
                     return new CvaIncDecExpr(
                             curToken.getLineNum(),
                             idExpr,
                             EnumIncDirection.INCREMENT);
                 }
-                case DECREMENT:
-                {
+                case DECREMENT: {
                     advance();
                     return new CvaIncDecExpr(
                             curToken.getLineNum(),
                             idExpr,
                             EnumIncDirection.DECREMENT);
                 }
-                default:
-                {
+                default: {
                     break;
                 }
             }
@@ -1679,13 +1444,10 @@ public final class Parser
         return expr;
     }
 
-    private CvaDeclStatement parseDeclStatement()
-    {
+    private CvaDeclStatement parseDeclStatement() {
         ICvaType declType = parseType();
-        switch (peekCh())
-        {
-            case ';':
-            {
+        switch (peekCh()) {
+            case ';': {
                 String idLiteral = curToken.getLiteral();
                 AbstractDeclaration decl = handleMethodVarDecl(idLiteral, declType);
                 eatToken(EnumCvaToken.SEMI);
@@ -1694,8 +1456,7 @@ public final class Parser
                         .putDecl(decl)
                         .build();
             }
-            case '=':
-            {
+            case '=': {
                 String idLiteral = curToken.getLiteral();
                 AbstractDeclaration decl = handleMethodVarDecl(idLiteral, declType);
                 eatToken(EnumCvaToken.ASSIGN);
@@ -1707,8 +1468,7 @@ public final class Parser
                         .putAssign(statement)
                         .build();
             }
-            default:
-            {
+            default: {
                 errorLogAndDenyCompile("semi or assign", lexer.nextToken());
                 // 不可达;
                 break;

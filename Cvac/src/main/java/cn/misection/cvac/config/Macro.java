@@ -7,8 +7,7 @@ package cn.misection.cvac.config;
  * @Description 版本发行, 用于条件编译;
  * @CreateTime 2021年02月13日 23:37:00
  */
-public final class Macro
-{
+public final class Macro {
     public static final boolean RELEASE_WINDOWS = false;
 
     public static final boolean RELEASE_LINUX = false;
@@ -17,5 +16,6 @@ public final class Macro
 
     public static final boolean DEBUG_OPTIMIZE_FLAG = false;
 
-    public Macro() {}
+    public Macro() {
+    }
 }
