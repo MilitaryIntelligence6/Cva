@@ -1,8 +1,8 @@
 package cn.misection.cvac.codegen.bst.bmethod;
 
 import cn.misection.cvac.codegen.bst.bdecl.TargetDeclaration;
-import cn.misection.cvac.codegen.bst.instructor.IInstructor;
 import cn.misection.cvac.codegen.bst.btype.ITargetType;
+import cn.misection.cvac.codegen.bst.instructor.IInstructor;
 
 import java.util.List;
 
@@ -13,8 +13,7 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 20:02:00
  */
-public final class TargetMethod extends BaseMethod
-{
+public final class TargetMethod extends BaseMethod {
     private String name;
 
     private ITargetType retType;
@@ -42,14 +41,15 @@ public final class TargetMethod extends BaseMethod
 
     /**
      * 顺序很多, 注意!;
-     * @param name name;
-     * @param retType rett;
-     * @param className classN;
-     * @param formalList f
-     * @param localList l
+     *
+     * @param name          name;
+     * @param retType       rett;
+     * @param className     classN;
+     * @param formalList    f
+     * @param localList     l
      * @param statementList s;
-     * @param retExpr re;
-     * @param index i;
+     * @param retExpr       re;
+     * @param index         i;
      */
     public TargetMethod(
             String name,
@@ -60,8 +60,7 @@ public final class TargetMethod extends BaseMethod
             List<IInstructor> statementList,
             int retExpr,
             int index
-    )
-    {
+    ) {
         this.name = name;
         this.retType = retType;
         this.className = className;
@@ -72,84 +71,68 @@ public final class TargetMethod extends BaseMethod
         this.index = index;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public ITargetType getRetType()
-    {
+    public ITargetType getRetType() {
         return retType;
     }
 
 
-    public List<IInstructor> getStatementList()
-    {
+    public List<IInstructor> getStatementList() {
         return statementList;
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public void setRetType(ITargetType retType)
-    {
+    public void setRetType(ITargetType retType) {
         this.retType = retType;
     }
 
-    public void setStatementList(List<IInstructor> statementList)
-    {
+    public void setStatementList(List<IInstructor> statementList) {
         this.statementList = statementList;
     }
 
-    public String getClassName()
-    {
+    public String getClassName() {
         return className;
     }
 
-    public void setClassName(String className)
-    {
+    public void setClassName(String className) {
         this.className = className;
     }
 
-    public List<TargetDeclaration> getFormalList()
-    {
+    public List<TargetDeclaration> getFormalList() {
         return formalList;
     }
 
-    public void setFormalList(List<TargetDeclaration> formalList)
-    {
+    public void setFormalList(List<TargetDeclaration> formalList) {
         this.formalList = formalList;
     }
 
-    public List<TargetDeclaration> getLocalList()
-    {
+    public List<TargetDeclaration> getLocalList() {
         return localList;
     }
 
-    public void setLocalList(List<TargetDeclaration> localList)
-    {
+    public void setLocalList(List<TargetDeclaration> localList) {
         this.localList = localList;
     }
 
-    public int getIndex()
-    {
+    public int getIndex() {
         return index;
     }
 
-    public void setIndex(int index)
-    {
+    public void setIndex(int index) {
         this.index = index;
     }
 
-    public int getRetExpr()
-    {
+    public int getRetExpr() {
         return retExpr;
     }
 
-    public void setRetExpr(int retExpr)
-    {
+    public void setRetExpr(int retExpr) {
         this.retExpr = retExpr;
     }
 }

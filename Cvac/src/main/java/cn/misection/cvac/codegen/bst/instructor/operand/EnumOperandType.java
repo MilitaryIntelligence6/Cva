@@ -10,8 +10,7 @@ import cn.misection.cvac.codegen.bst.instructor.Instructable;
  * @Description 桥接模式底层操作数;
  * @CreateTime 2021年02月21日 22:23:00
  */
-public enum EnumOperandType implements IInstructor, Instructable
-{
+public enum EnumOperandType implements IInstructor, Instructable {
     /**
      * 底层操作数类型;
      */
@@ -36,15 +35,13 @@ public enum EnumOperandType implements IInstructor, Instructable
 
     private final String typeInst;
 
-    EnumOperandType(String typeInst)
-    {
+    EnumOperandType(String typeInst) {
         this.typeInst = typeInst;
     }
 
 
     @Override
-    public String toInst()
-    {
+    public String toInst() {
         return typeInst;
     }
 }

@@ -10,8 +10,7 @@ import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
  * @Description TODO
  * @CreateTime 2021年02月20日 22:29:00
  */
-public class TargetArrayType extends BaseAdvanceType
-{
+public class TargetArrayType extends BaseAdvanceType {
     private BaseType innerType;
 
     public static final String TYPE_LITERAL = "@array";
@@ -23,33 +22,28 @@ public class TargetArrayType extends BaseAdvanceType
 
     public static final String NEW_A_ARRAY = "newaarray";
 
-    public TargetArrayType(BaseType innerType)
-    {
+    public TargetArrayType(BaseType innerType) {
         this.innerType = innerType;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return TYPE_LITERAL;
     }
 
     @Override
-    public EnumTargetType toEnum()
-    {
+    public EnumTargetType toEnum() {
         return EnumTargetType.ARRAY;
     }
 
     @Override
-    public String toInst()
-    {
+    public String toInst() {
         // FIXME 条件判断;
         return null;
     }
 
     @Override
-    public String fullName()
-    {
+    public String fullName() {
         // FIXME;
         return null;
     }

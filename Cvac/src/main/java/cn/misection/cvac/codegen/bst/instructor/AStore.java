@@ -7,22 +7,18 @@ package cn.misection.cvac.codegen.bst.instructor;
  * @Description TODO
  * @CreateTime 2021年02月16日 00:47:00
  */
-public final class AStore extends BaseInstructor
-{
+public final class AStore extends BaseInstructor {
     private int index;
 
-    public AStore(int index)
-    {
+    public AStore(int index) {
         this.index = index;
     }
 
-    public int getIndex()
-    {
+    public int getIndex() {
         return index;
     }
 
-    public void setIndex(int index)
-    {
+    public void setIndex(int index) {
         this.index = index;
     }
 }

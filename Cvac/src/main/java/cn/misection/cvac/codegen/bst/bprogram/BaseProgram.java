@@ -12,35 +12,29 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:56:00
  */
-public abstract class BaseProgram implements IProgram
-{
+public abstract class BaseProgram implements IProgram {
     protected TargetEntryClass entryClass;
 
     protected List<TargetClass> classList;
 
-    protected BaseProgram(TargetEntryClass entryClass, List<TargetClass> classList)
-    {
+    protected BaseProgram(TargetEntryClass entryClass, List<TargetClass> classList) {
         this.entryClass = entryClass;
         this.classList = classList;
     }
 
-    public TargetEntryClass getEntryClass()
-    {
+    public TargetEntryClass getEntryClass() {
         return entryClass;
     }
 
-    public void setEntryClass(TargetEntryClass entryClass)
-    {
+    public void setEntryClass(TargetEntryClass entryClass) {
         this.entryClass = entryClass;
     }
 
-    public List<TargetClass> getClassList()
-    {
+    public List<TargetClass> getClassList() {
         return classList;
     }
 
-    public void setClassList(List<TargetClass> classList)
-    {
+    public void setClassList(List<TargetClass> classList) {
         this.classList = classList;
     }
 }

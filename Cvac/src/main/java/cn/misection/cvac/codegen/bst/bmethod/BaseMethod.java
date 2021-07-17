@@ -7,6 +7,5 @@ package cn.misection.cvac.codegen.bst.bmethod;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:54:00
  */
-public abstract class BaseMethod implements IMethod
-{
+public abstract class BaseMethod implements IMethod {
 }

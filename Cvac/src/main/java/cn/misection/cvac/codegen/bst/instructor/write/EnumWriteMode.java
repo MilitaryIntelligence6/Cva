@@ -9,8 +9,7 @@ import cn.misection.cvac.codegen.bst.instructor.Instructable;
  * @Description TODO
  * @CreateTime 2021年02月24日 22:07:00
  */
-public enum EnumWriteMode implements Instructable
-{
+public enum EnumWriteMode implements Instructable {
     /**
      * 空, ln, f;
      */
@@ -23,14 +22,12 @@ public enum EnumWriteMode implements Instructable
 
     private final String instruction;
 
-    EnumWriteMode(String instruction)
-    {
+    EnumWriteMode(String instruction) {
         this.instruction = instruction;
     }
 
     @Override
-    public String toInst()
-    {
+    public String toInst() {
         return instruction;
     }
 }

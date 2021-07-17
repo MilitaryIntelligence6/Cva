@@ -1,6 +1,5 @@
 package cn.misection.cvac.codegen.bst.instructor;
 
-import cn.misection.cvac.ast.type.basic.EnumCvaType;
 import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
 import cn.misection.cvac.codegen.bst.instructor.write.EnumWriteMode;
 
@@ -11,8 +10,7 @@ import cn.misection.cvac.codegen.bst.instructor.write.EnumWriteMode;
  * @Description TODO
  * @CreateTime 2021年02月16日 01:00:00
  */
-public final class WriteInstructor extends BaseInstructor
-{
+public final class WriteInstructor extends BaseInstructor {
     private EnumWriteMode writeMode;
 
     /**
@@ -20,34 +18,28 @@ public final class WriteInstructor extends BaseInstructor
      */
     private EnumTargetType writeType;
 
-    public WriteInstructor(EnumWriteMode writeMode, EnumTargetType writeType)
-    {
+    public WriteInstructor(EnumWriteMode writeMode, EnumTargetType writeType) {
         this.writeMode = writeMode;
         this.writeType = writeType;
     }
 
-    public String requireInvoke()
-    {
+    public String requireInvoke() {
         return String.format("%s(%s)V", writeMode.toInst(), writeType.toInst());
     }
 
-    public EnumWriteMode getWriteMode()
-    {
+    public EnumWriteMode getWriteMode() {
         return writeMode;
     }
 
-    public void setWriteMode(EnumWriteMode writeMode)
-    {
+    public void setWriteMode(EnumWriteMode writeMode) {
         this.writeMode = writeMode;
     }
 
-    public EnumTargetType getWriteType()
-    {
+    public EnumTargetType getWriteType() {
         return writeType;
     }
 
-    public void setWriteType(EnumTargetType writeType)
-    {
+    public void setWriteType(EnumTargetType writeType) {
         this.writeType = writeType;
     }
 }

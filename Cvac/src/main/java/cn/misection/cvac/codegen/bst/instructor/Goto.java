@@ -9,22 +9,18 @@ import cn.misection.cvac.codegen.bst.Label;
  * @Description TODO
  * @CreateTime 2021年02月16日 00:48:00
  */
-public final class Goto extends BaseInstructor
-{
+public final class Goto extends BaseInstructor {
     private Label label;
 
-    public Goto(Label label)
-    {
+    public Goto(Label label) {
         this.label = label;
     }
 
-    public Label getLabel()
-    {
+    public Label getLabel() {
         return label;
     }
 
-    public void setLabel(Label label)
-    {
+    public void setLabel(Label label) {
         this.label = label;
     }
 }

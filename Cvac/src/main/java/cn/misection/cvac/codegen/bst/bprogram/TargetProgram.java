@@ -12,10 +12,8 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:14:00
  */
-public final class TargetProgram extends BaseProgram
-{
-    public TargetProgram(TargetEntryClass entry, List<TargetClass> classList)
-    {
+public final class TargetProgram extends BaseProgram {
+    public TargetProgram(TargetEntryClass entry, List<TargetClass> classList) {
         super(entry, classList);
     }
 }

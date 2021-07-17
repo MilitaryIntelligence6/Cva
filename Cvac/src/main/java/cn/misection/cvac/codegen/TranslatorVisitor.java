@@ -5,9 +5,14 @@ import cn.misection.cvac.ast.clas.CvaClass;
 import cn.misection.cvac.ast.decl.CvaDeclaration;
 import cn.misection.cvac.ast.entry.CvaEntryClass;
 import cn.misection.cvac.ast.expr.AbstractExpression;
-import cn.misection.cvac.ast.expr.nonterminal.binary.*;
+import cn.misection.cvac.ast.expr.nonterminal.binary.CvaAndAndExpr;
+import cn.misection.cvac.ast.expr.nonterminal.binary.CvaLessOrMoreThanExpr;
+import cn.misection.cvac.ast.expr.nonterminal.binary.CvaOperandOperatorExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaCallExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaIncDecExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaNegateExpr;
+import cn.misection.cvac.ast.expr.nonterminal.unary.CvaNewExpr;
 import cn.misection.cvac.ast.expr.terminator.*;
-import cn.misection.cvac.ast.expr.nonterminal.unary.*;
 import cn.misection.cvac.ast.method.CvaMainMethod;
 import cn.misection.cvac.ast.method.CvaMethod;
 import cn.misection.cvac.ast.program.CvaProgram;
@@ -41,8 +46,7 @@ import java.util.Map;
  * @author MI6 root;
  * @Description 将编译器前端翻译给后端;
  */
-public final class TranslatorVisitor implements IVisitor
-{
+public final class TranslatorVisitor implements IVisitor {
     /**
      * 当前访问到的类名;
      */
@@ -66,8 +70,7 @@ public final class TranslatorVisitor implements IVisitor
 
     private TargetProgram targetProgram;
 
-    public TranslatorVisitor()
-    {
+    public TranslatorVisitor() {
         this.className = null;
         this.indexMap = null;
         this.targetType = null;
@@ -79,38 +82,31 @@ public final class TranslatorVisitor implements IVisitor
         this.targetProgram = null;
     }
 
-    private void emit(IInstructor instruction)
-    {
+    private void emit(IInstructor instruction) {
         linearInstrList.add(instruction);
     }
 
 
     @Override
-    public void visit(CvaClassType type)
-    {
+    public void visit(CvaClassType type) {
         targetType = new TargetClassType(type.getName());
     }
 
     @Override
-    public void visit(EnumCvaType basicType)
-    {
+    public void visit(EnumCvaType basicType) {
         // TODO 这种都改成枚举中的map, 自动匹配;
-        switch (basicType)
-        {
-            case VOID:
-            {
+        switch (basicType) {
+            case VOID: {
                 targetType = EnumTargetType.VOID;
                 break;
             }
             case INT:
-            case BOOLEAN:
-            {
+            case BOOLEAN: {
                 // FIXME 后端取消;
                 targetType = EnumTargetType.INT;
                 break;
             }
-            default:
-            {
+            default: {
                 // FIXME 处理错误;
                 break;
             }
@@ -118,28 +114,24 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaStringType type)
-    {
+    public void visit(CvaStringType type) {
         targetType = new TargetStringType();
     }
 
     @Override
-    public void visit(CvaDeclaration decl)
-    {
+    public void visit(CvaDeclaration decl) {
         visit(decl.type());
         targetDecl = new TargetDeclaration(
                 decl.name(),
                 this.targetType);
         // if it is field;
-        if (indexMap != null)
-        {
+        if (indexMap != null) {
             indexMap.put(decl.name(), index++);
         }
     }
 
     @Override
-    public void visit(CvaAndAndExpr expr)
-    {
+    public void visit(CvaAndAndExpr expr) {
         Label f = new Label();
         Label r = new Label();
         visit(expr.getLeft());
@@ -156,8 +148,7 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaCallExpr expr)
-    {
+    public void visit(CvaCallExpr expr) {
         visit(expr.getExpr());
         expr.getArgs().forEach(this::visit);
         visit(expr.getRetType());
@@ -176,42 +167,31 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaConstFalseExpr expr)
-    {
+    public void visit(CvaConstFalseExpr expr) {
         emit(new Ldc<>(0));
     }
 
     @Override
-    public void visit(CvaIdentifierExpr expr)
-    {
-        if (expr.isField())
-        {
+    public void visit(CvaIdentifierExpr expr) {
+        if (expr.isField()) {
             emit(new ALoad(0));
             ICvaType type = expr.getType();
-            if (type instanceof CvaClassType)
-            {
+            if (type instanceof CvaClassType) {
                 emit(new GetField(String.format("%s/%s", this.className, expr.name()),
                         String.format("L%s;", ((CvaClassType) type).getName())));
-            }
-            else
-            {
+            } else {
                 emit(new GetField(String.format("%s/%s", this.className, expr.name()),
                         "I"));
             }
-        }
-        else
-        {
+        } else {
             int index = this.indexMap.get(expr.name());
-            switch (expr.getType().toEnum())
-            {
+            switch (expr.getType().toEnum()) {
                 // 后面其他类型也一样;
-                case INT:
-                {
+                case INT: {
                     emit(new ILoad(index));
                     break;
                 }
-                default:
-                {
+                default: {
                     emit(new ALoad(index));
                     break;
                 }
@@ -220,8 +200,7 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaLessOrMoreThanExpr expr)
-    {
+    public void visit(CvaLessOrMoreThanExpr expr) {
         Label t = new Label();
         Label r = new Label();
         visit(expr.getLeft());
@@ -235,14 +214,12 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaNewExpr expr)
-    {
+    public void visit(CvaNewExpr expr) {
         emit(new New(expr.getNewClassName()));
     }
 
     @Override
-    public void visit(CvaNegateExpr expr)
-    {
+    public void visit(CvaNegateExpr expr) {
         Label f = new Label();
         Label r = new Label();
         visit(expr.getExpr());
@@ -256,33 +233,28 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaConstIntExpr expr)
-    {
+    public void visit(CvaConstIntExpr expr) {
         emit(new Ldc<>(expr.getValue()));
     }
 
     @Override
-    public void visit(CvaConstStringExpr expr)
-    {
+    public void visit(CvaConstStringExpr expr) {
         // FIXME;
         emit(new Ldc<>(String.format("\"%s\"", expr.getLiteral())));
     }
 
     @Override
-    public void visit(CvaThisExpr expr)
-    {
+    public void visit(CvaThisExpr expr) {
         emit(new ALoad(0));
     }
 
     @Override
-    public void visit(CvaConstTrueExpr expr)
-    {
+    public void visit(CvaConstTrueExpr expr) {
         emit(new Ldc<>(1));
     }
 
     @Override
-    public void visit(CvaOperandOperatorExpr expr)
-    {
+    public void visit(CvaOperandOperatorExpr expr) {
         visit(expr.getLeft());
         visit(expr.getRight());
         emit(expr.getInstType());
@@ -290,8 +262,7 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaIncDecExpr expr)
-    {
+    public void visit(CvaIncDecExpr expr) {
         // 这一行一定不能要, 但不知为啥;
 //        visit(expr.getIdentifier());
         emit(new IInc(indexMap.get(expr.name()),
@@ -304,35 +275,25 @@ public final class TranslatorVisitor implements IVisitor
      * 添加string应该只需要ref type就行;
      */
     @Override
-    public void visit(CvaAssignStatement stm)
-    {
-        try
-        {
+    public void visit(CvaAssignStatement stm) {
+        try {
             int index = this.indexMap.get(stm.getVarName());
             visit(stm.getExpr());
             // todo 用枚举;
-            if (stm.getType() instanceof AbstractReferenceType)
-            {
+            if (stm.getType() instanceof AbstractReferenceType) {
                 emit(new AStore(index));
-            }
-            else
-            {
+            } else {
                 emit(new IStore(index));
             }
-        }
-        catch (NullPointerException e)
-        {
+        } catch (NullPointerException e) {
             emit(new ALoad(0));
             visit(stm.getExpr());
-            if (stm.getType() instanceof CvaClassType)
-            {
+            if (stm.getType() instanceof CvaClassType) {
                 emit(new PutField(String.format("%s/%s", this.className,
                         stm.getVarName()),
                         String.format("L%s;",
                                 ((CvaClassType) stm.getType()).getName())));
-            }
-            else
-            {
+            } else {
                 emit(new PutField(String.format("%s/%s",
                         this.className,
                         stm.getVarName()),
@@ -342,14 +303,12 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaBlockStatement stm)
-    {
+    public void visit(CvaBlockStatement stm) {
         stm.getStatementList().forEach(this::visit);
     }
 
     @Override
-    public void visit(CvaIfStatement stm)
-    {
+    public void visit(CvaIfStatement stm) {
         Label l = new Label();
         Label r = new Label();
         visit(stm.getCondition());
@@ -368,36 +327,29 @@ public final class TranslatorVisitor implements IVisitor
      * @deprecated 目前大而化之只是权宜之计;
      */
     @Override
-    public void visit(CvaWriteStatement stm)
-    {
+    public void visit(CvaWriteStatement stm) {
         AbstractExpression expr = stm.getExpr();
         visit(expr);
-        switch (expr.toEnum())
-        {
-            case CONST_INT:
-            {
+        switch (expr.toEnum()) {
+            case CONST_INT: {
                 emit(new WriteInstructor(stm.getWriteMode(), EnumTargetType.INT));
                 break;
             }
-            case CONST_STRING:
-            {
+            case CONST_STRING: {
                 emit(new WriteInstructor(stm.getWriteMode(), EnumTargetType.STRING));
                 break;
             }
-            case IDENTIFIER:
-            {
+            case IDENTIFIER: {
                 EnumCvaType type = ((CvaIdentifierExpr) expr).getType().toEnum();
                 emit(new WriteInstructor(stm.getWriteMode(), type.toTarget()));
                 break;
             }
-            case CALL:
-            {
+            case CALL: {
                 EnumCvaType type = ((CvaCallExpr) expr).getRetType().toEnum();
                 emit(new WriteInstructor(stm.getWriteMode(), type.toTarget()));
                 break;
             }
-            default:
-            {
+            default: {
                 // FIXME, 断点打在这里debuge可以保证就是遗漏的情况;
                 // 因为检查过, 所以其实可以放心弄, 但是这里有一个情况没打印;
                 // 目前可能遇到的情况有 idexpr, callfuncexpr, numberintexpr;
@@ -410,8 +362,7 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaWhileForStatement stm)
-    {
+    public void visit(CvaWhileForStatement stm) {
         visit(stm.getForInit());
         // 条件体;
         Label cond = new Label();
@@ -428,15 +379,13 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaExprStatement stm)
-    {
+    public void visit(CvaExprStatement stm) {
         visit(stm.getExpr());
     }
 
 
     @Override
-    public void visit(CvaMethod cvaMethod)
-    {
+    public void visit(CvaMethod cvaMethod) {
         index = 1;
         indexMap = new HashMap<>();
         visit(cvaMethod.getRetType());
@@ -460,48 +409,37 @@ public final class TranslatorVisitor implements IVisitor
 
         visit(cvaMethod.getRetExpr());
 
-        switch (cvaMethod.getRetType().toEnum())
-        {
-            case VOID:
-            {
+        switch (cvaMethod.getRetType().toEnum()) {
+            case VOID: {
                 emit(EnumOperandType.VOID);
                 emit(EnumOperator.RETURN);
                 break;
             }
-            case BYTE:
-            {
+            case BYTE: {
                 // TODO;
                 break;
             }
-            case CHAR:
-            {
+            case CHAR: {
                 break;
             }
-            case SHORT:
-            {
+            case SHORT: {
                 break;
             }
-            case INT:
-            {
+            case INT: {
                 emit(EnumInstructor.I_RETURN);
                 break;
             }
-            case LONG:
-            {
+            case LONG: {
                 break;
             }
-            case FLOAT:
-            {
+            case FLOAT: {
                 break;
             }
-            case DOUBLE:
-            {
+            case DOUBLE: {
                 break;
             }
-            default:
-            {
-                if (cvaMethod.getRetType() instanceof AbstractType)
-                {
+            default: {
+                if (cvaMethod.getRetType() instanceof AbstractType) {
                     emit(EnumInstructor.A_RETURN);
                     break;
                 }
@@ -522,8 +460,7 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaMainMethod mainMethod)
-    {
+    public void visit(CvaMainMethod mainMethod) {
         this.index = 1;
         this.indexMap = new HashMap<>();
         visit(mainMethod.getRetType());
@@ -557,8 +494,7 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaClass cvaClass)
-    {
+    public void visit(CvaClass cvaClass) {
         setClassName(cvaClass.name());
         List<TargetDeclaration> fieldList = new ArrayList<>();
         cvaClass.getFieldList().forEach(f ->
@@ -581,8 +517,7 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaEntryClass entryClass)
-    {
+    public void visit(CvaEntryClass entryClass) {
         visit((CvaMainMethod) entryClass.getMainMethod());
         targetEntryClass = new TargetEntryClass(
                 entryClass.name(),
@@ -592,8 +527,7 @@ public final class TranslatorVisitor implements IVisitor
     }
 
     @Override
-    public void visit(CvaProgram program)
-    {
+    public void visit(CvaProgram program) {
         visit(program.getEntryClass());
         List<TargetClass> classList = new ArrayList<>();
         program.getClassList().forEach(c ->
@@ -606,83 +540,67 @@ public final class TranslatorVisitor implements IVisitor
                 classList);
     }
 
-    public String getClassName()
-    {
+    public String getClassName() {
         return className;
     }
 
-    public void setClassName(String className)
-    {
+    public void setClassName(String className) {
         this.className = className;
     }
 
-    public ITargetType getTargetType()
-    {
+    public ITargetType getTargetType() {
         return targetType;
     }
 
-    public void setTargetType(ITargetType targetType)
-    {
+    public void setTargetType(ITargetType targetType) {
         this.targetType = targetType;
     }
 
-    public TargetDeclaration getTargetDecl()
-    {
+    public TargetDeclaration getTargetDecl() {
         return targetDecl;
     }
 
-    public void setTargetDecl(TargetDeclaration targetDecl)
-    {
+    public void setTargetDecl(TargetDeclaration targetDecl) {
         this.targetDecl = targetDecl;
     }
 
-    public List<IInstructor> getLinearInstrList()
-    {
+    public List<IInstructor> getLinearInstrList() {
         return linearInstrList;
     }
 
-    public void setLinearInstrList(List<IInstructor> linearInstrList)
-    {
+    public void setLinearInstrList(List<IInstructor> linearInstrList) {
         this.linearInstrList = linearInstrList;
     }
 
-    public TargetMethod getTargetMethod()
-    {
+    public TargetMethod getTargetMethod() {
         return targetMethod;
     }
 
-    public void setTargetMethod(TargetMethod targetMethod)
-    {
+    public void setTargetMethod(TargetMethod targetMethod) {
         this.targetMethod = targetMethod;
     }
 
-    public TargetClass getTargetClass()
-    {
+    public TargetClass getTargetClass() {
         return targetClass;
     }
 
-    public void setTargetClass(TargetClass targetClass)
-    {
+    public void setTargetClass(TargetClass targetClass) {
         this.targetClass = targetClass;
     }
 
-    public TargetEntryClass getTargetEntryClass()
-    {
+    public TargetEntryClass getTargetEntryClass() {
         return targetEntryClass;
     }
 
-    public void setTargetEntryClass(TargetEntryClass targetEntryClass)
-    {
+    public void setTargetEntryClass(TargetEntryClass targetEntryClass) {
         this.targetEntryClass = targetEntryClass;
     }
 
-    public TargetProgram getTargetProgram()
-    {
+    public TargetProgram getTargetProgram() {
         return targetProgram;
     }
 
-    public void setTargetProgram(TargetProgram targetProgram)
-    {
+    public void setTargetProgram(TargetProgram targetProgram) {
         this.targetProgram = targetProgram;
     }
 }

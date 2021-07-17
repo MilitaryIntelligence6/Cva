@@ -11,10 +11,10 @@ import cn.misection.cvac.codegen.bst.instructor.Instructable;
  * @CreateTime 2021年02月20日 22:30:00
  */
 public abstract class BaseAdvanceType
-        extends BaseType implements Instructable
-{
+        extends BaseType implements Instructable {
     /**
      * 获得写入文本;
+     *
      * @return literal;
      */
     public abstract String fullName();

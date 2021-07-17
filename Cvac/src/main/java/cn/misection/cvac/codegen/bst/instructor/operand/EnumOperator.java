@@ -10,8 +10,7 @@ import cn.misection.cvac.codegen.bst.instructor.Instructable;
  * @Description 桥接模式底层操作符;
  * @CreateTime 2021年02月21日 22:24:00
  */
-public enum EnumOperator implements IInstructor, Instructable
-{
+public enum EnumOperator implements IInstructor, Instructable {
     /**
      * 底层操作符;
      */
@@ -51,17 +50,15 @@ public enum EnumOperator implements IInstructor, Instructable
 
     RETURN("return"),
     ;
-    
+
     private final String opInst;
 
-    EnumOperator(String opInst)
-    {
+    EnumOperator(String opInst) {
         this.opInst = opInst;
     }
 
     @Override
-    public String toInst()
-    {
+    public String toInst() {
         return opInst;
     }
 }

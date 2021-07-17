@@ -8,8 +8,7 @@
 package cn.misection.cvac.codegen;
 
 
-final class StackConst
-{
+final class StackConst {
     /**
      * 最大栈深度;
      */
@@ -18,5 +17,6 @@ final class StackConst
     /**
      * 禁止构造;
      */
-    private StackConst() {}
+    private StackConst() {
+    }
 }

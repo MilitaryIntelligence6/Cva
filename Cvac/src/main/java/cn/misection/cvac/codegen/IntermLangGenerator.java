@@ -8,8 +8,8 @@ import cn.misection.cvac.codegen.bst.bmethod.TargetMethod;
 import cn.misection.cvac.codegen.bst.bprogram.TargetProgram;
 import cn.misection.cvac.codegen.bst.btype.advance.BaseAdvanceType;
 import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
-import cn.misection.cvac.codegen.bst.instructor.*;
 import cn.misection.cvac.codegen.bst.btype.reference.BaseReferenceType;
+import cn.misection.cvac.codegen.bst.instructor.*;
 import cn.misection.cvac.codegen.bst.instructor.operand.EnumOperandType;
 import cn.misection.cvac.codegen.bst.instructor.operand.EnumOperator;
 import cn.misection.cvac.constant.IntermLangCommon;
@@ -17,47 +17,39 @@ import cn.misection.cvac.constant.IntermLangCommon;
 import java.io.*;
 
 /**
- *
  * @author MI6 root;
- * @date 
+ * @date
  */
 @SuppressWarnings("rawtypes")
-public final class IntermLangGenerator implements IBackendVisitor
-{
+public final class IntermLangGenerator implements IBackendVisitor {
     private BufferedWriter writer;
 
     private final StringBuffer buffer = new StringBuffer();
 
-    private void write(String s)
-    {
+    private void write(String s) {
         buffer.append(s);
     }
 
     /**
      * write tab space;
      */
-    private void writeTabSpace()
-    {
+    private void writeTabSpace() {
         buffer.append(IntermLangCommon.TAB_SPACE);
     }
 
-    private void writeln(String s)
-    {
+    private void writeln(String s) {
         buffer.append(s).append(IntermLangCommon.NEW_LINE_CH);
     }
 
-    private void writeln()
-    {
+    private void writeln() {
         buffer.append(IntermLangCommon.NEW_LINE_CH);
     }
 
-    private void writef(String format, Object... args)
-    {
+    private void writef(String format, Object... args) {
         write(String.format(format, args));
     }
 
-    private void iwrite(String s)
-    {
+    private void iwrite(String s) {
         writeTabSpace();
         write(s);
     }
@@ -65,108 +57,92 @@ public final class IntermLangGenerator implements IBackendVisitor
     /**
      * iwrite 是write instruction 的意思;
      * 避免和writefln混淆;
+     *
      * @param s s;
      */
-    private void iwriteLine(String s)
-    {
+    private void iwriteLine(String s) {
         writeTabSpace();
         write(s);
         writeln();
     }
-    
-    private void iwritef(String format, Object... args)
-    {
+
+    private void iwritef(String format, Object... args) {
         writeTabSpace();
         write(String.format(format, args));
     }
 
-    private void iwritefln(String format, Object... args)
-    {
+    private void iwritefln(String format, Object... args) {
         iwritef(format, args);
         writeln();
     }
 
     @Override
-    public void visit(EnumTargetType type)
-    {
+    public void visit(EnumTargetType type) {
         write(type.toInst());
     }
 
     @Override
-    public void visit(BaseAdvanceType type)
-    {
+    public void visit(BaseAdvanceType type) {
         writef("L%s;", type.toInst());
     }
 
     @Override
-    public void visit(BaseReferenceType type)
-    {
+    public void visit(BaseReferenceType type) {
         writef("L%s;", type.typeName());
     }
 
     @Override
-    public void visit(TargetDeclaration decl)
-    {
+    public void visit(TargetDeclaration decl) {
         writeln(";Error: you are accessing the dec single instance.");
     }
 
     @Override
-    public void visit(EnumInstructor instructor)
-    {
+    public void visit(EnumInstructor instructor) {
         iwriteLine(instructor.toInst());
     }
 
     @Override
-    public void visit(EnumOperandType instructor)
-    {
+    public void visit(EnumOperandType instructor) {
         iwrite(instructor.toInst());
     }
 
     @Override
-    public void visit(EnumOperator instructor)
-    {
+    public void visit(EnumOperator instructor) {
         writeln(instructor.toInst());
     }
 
     @Override
-    public void visit(ALoad instructor)
-    {
+    public void visit(ALoad instructor) {
         iwritefln("aload %d", instructor.getIndex());
     }
 
     @Override
-    public void visit(AStore instructor)
-    {
+    public void visit(AStore instructor) {
         iwritefln("astore %d", instructor.getIndex());
     }
 
     @Override
-    public void visit(Goto instructor)
-    {
+    public void visit(Goto instructor) {
         iwritefln("goto %s", instructor.getLabel().toString());
     }
 
     @Override
-    public void visit(GetField instructor)
-    {
+    public void visit(GetField instructor) {
         iwritefln("getfield %s %s", instructor.getFieldSpec(), instructor.getDescriptor());
     }
 
     @Override
-    public void visit(IfICmpLt instructor)
-    {
+    public void visit(IfICmpLt instructor) {
         iwritefln("if_icmplt %s", instructor.getLabel().toString());
     }
 
     @Override
-    public void visit(ILoad instructor)
-    {
+    public void visit(ILoad instructor) {
         iwritefln("iload %d", instructor.getIndex());
     }
 
     @Override
-    public void visit(InvokeVirtual instructor)
-    {
+    public void visit(InvokeVirtual instructor) {
         iwritef("invokevirtual %s/%s(", instructor.getFirstFieldType(), instructor.getFuncName());
         instructor.getArgTypeList().forEach(this::visit);
         write(")");
@@ -175,54 +151,46 @@ public final class IntermLangGenerator implements IBackendVisitor
     }
 
     @Override
-    public void visit(IStore instructor)
-    {
+    public void visit(IStore instructor) {
         iwritefln("istore %d", instructor.getIndex());
     }
 
     @Override
-    public void visit(LabelJ instructor)
-    {
+    public void visit(LabelJ instructor) {
         writef("%s:\n", instructor.getLabel().toString());
     }
 
     @Override
-    public void visit(Ldc instructor)
-    {
+    public void visit(Ldc instructor) {
         iwritefln("ldc %s", instructor.value());
     }
 
     @Override
-    public void visit(New instructor)
-    {
+    public void visit(New instructor) {
         iwritefln("new %s", instructor.getNewClassName());
         iwriteLine("dup");
         iwritefln("invokespecial %s/<init>()V", instructor.getNewClassName());
     }
 
     @Override
-    public void visit(WriteInstructor instructor)
-    {
+    public void visit(WriteInstructor instructor) {
         iwriteLine("getstatic java/lang/System/out Ljava/io/PrintStream;");
         iwriteLine("swap");
         iwritefln("invokevirtual java/io/PrintStream/%s", instructor.requireInvoke());
     }
 
     @Override
-    public void visit(PutField instructor)
-    {
+    public void visit(PutField instructor) {
         iwritefln("putfield %s %s", instructor.getFieldSpec(), instructor.getDescriptor());
     }
 
     @Override
-    public void visit(IInc instructor)
-    {
+    public void visit(IInc instructor) {
         iwriteLine(instructor.toInst());
     }
 
     @Override
-    public void visit(TargetMethod targetMethod)
-    {
+    public void visit(TargetMethod targetMethod) {
         writef(".method public %s(", targetMethod.getName());
         targetMethod.getFormalList().forEach(f -> visit(f.getType()));
         write(")");
@@ -236,16 +204,12 @@ public final class IntermLangGenerator implements IBackendVisitor
     }
 
     @Override
-    public void visit(TargetClass targetClass)
-    {
+    public void visit(TargetClass targetClass) {
         initWriter(String.format("%s.il", targetClass.getClassName()));
         writef(".class public %s\n", targetClass.getClassName());
-        if (targetClass.getParent() == null)
-        {
+        if (targetClass.getParent() == null) {
             writeln(".super java/lang/Object");
-        }
-        else
-        {
+        } else {
             writef(".super %s\n", targetClass.getParent());
         }
 
@@ -258,12 +222,9 @@ public final class IntermLangGenerator implements IBackendVisitor
 
         writeln(".method public <init>()V");
         iwriteLine("aload 0");
-        if (targetClass.getParent() == null)
-        {
+        if (targetClass.getParent() == null) {
             iwriteLine("invokespecial java/lang/Object/<init>()V");
-        }
-        else
-        {
+        } else {
             iwritefln("invokespecial %s/<init>()V", targetClass.getParent());
         }
         iwriteLine("return");
@@ -274,8 +235,7 @@ public final class IntermLangGenerator implements IBackendVisitor
     }
 
     @Override
-    public void visit(TargetEntryClass entryClass)
-    {
+    public void visit(TargetEntryClass entryClass) {
         initWriter(String.format("%s.il", entryClass.getName()));
 
         writef(".class public %s\n", entryClass.getName());
@@ -291,46 +251,36 @@ public final class IntermLangGenerator implements IBackendVisitor
     }
 
     @Override
-    public void visit(TargetProgram targetProgram)
-    {
-         visit(targetProgram.getEntryClass());
+    public void visit(TargetProgram targetProgram) {
+        visit(targetProgram.getEntryClass());
         targetProgram.getClassList().forEach(this::visit);
     }
 
 
-    private void initWriter(String path)
-    {
-        try
-        {
+    private void initWriter(String path) {
+        try {
             // FIXME 路劲;
             writer = new BufferedWriter(new OutputStreamWriter(
                     new FileOutputStream(path)));
-        }
-        catch (FileNotFoundException e)
-        {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.exit(1);
         }
         writeln("; This intermediate language file is generated by the compiler");
     }
 
-    private void saveAndReinit()
-    {
-        try
-        {
+    private void saveAndReinit() {
+        try {
             writer.write(String.valueOf(buffer));
             clearBuffer();
             writer.close();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
     }
 
-    private void clearBuffer()
-    {
+    private void clearBuffer() {
         buffer.delete(0, buffer.length());
     }
 }

@@ -7,6 +7,5 @@ package cn.misection.cvac.codegen.bst;
  * @Description TODO
  * @CreateTime 2021年02月14日 18:00:00
  */
-public interface IBackendSyntaxTree
-{
+public interface IBackendSyntaxTree {
 }

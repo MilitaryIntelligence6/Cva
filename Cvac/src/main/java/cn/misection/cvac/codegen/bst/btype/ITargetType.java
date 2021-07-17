@@ -10,10 +10,10 @@ import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:57:00
  */
-public interface ITargetType extends IBackendSyntaxTree
-{
+public interface ITargetType extends IBackendSyntaxTree {
     /**
      * 拿string值;
+     *
      * @return string;
      */
     @Override
@@ -21,6 +21,7 @@ public interface ITargetType extends IBackendSyntaxTree
 
     /**
      * 拿enum值;
+     *
      * @return enum;
      */
     EnumTargetType toEnum();

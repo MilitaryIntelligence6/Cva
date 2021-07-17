@@ -7,6 +7,5 @@ package cn.misection.cvac.codegen.bst.bdecl;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:53:00
  */
-public abstract class BaseDeclaration implements IDeclaration
-{
+public abstract class BaseDeclaration implements IDeclaration {
 }

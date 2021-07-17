@@ -7,10 +7,10 @@ package cn.misection.cvac.codegen.bst.instructor;
  * @Description TODO
  * @CreateTime 2021年02月20日 23:57:00
  */
-public enum EnumInstructor implements IInstructor, Instructable
-{
+public enum EnumInstructor implements IInstructor, Instructable {
     /**
      * JVM指令集;
+     *
      * @TODO 重构成桥接模式;
      */
     A_LOAD,
@@ -59,16 +59,15 @@ public enum EnumInstructor implements IInstructor, Instructable
 
     private String instruction;
 
-    EnumInstructor() {}
+    EnumInstructor() {
+    }
 
-    EnumInstructor(String instruction)
-    {
+    EnumInstructor(String instruction) {
         this.instruction = instruction;
     }
 
     @Override
-    public String toInst()
-    {
+    public String toInst() {
         return instruction;
     }
 }

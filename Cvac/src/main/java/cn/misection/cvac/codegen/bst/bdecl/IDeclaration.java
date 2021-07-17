@@ -9,6 +9,5 @@ import cn.misection.cvac.codegen.bst.IBackendSyntaxTree;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:58:00
  */
-public interface IDeclaration extends IBackendSyntaxTree
-{
+public interface IDeclaration extends IBackendSyntaxTree {
 }

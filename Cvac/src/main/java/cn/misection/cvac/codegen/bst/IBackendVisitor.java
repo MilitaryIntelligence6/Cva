@@ -8,8 +8,8 @@ import cn.misection.cvac.codegen.bst.bprogram.TargetProgram;
 import cn.misection.cvac.codegen.bst.btype.ITargetType;
 import cn.misection.cvac.codegen.bst.btype.advance.BaseAdvanceType;
 import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
-import cn.misection.cvac.codegen.bst.instructor.*;
 import cn.misection.cvac.codegen.bst.btype.reference.BaseReferenceType;
+import cn.misection.cvac.codegen.bst.instructor.*;
 import cn.misection.cvac.codegen.bst.instructor.operand.EnumOperandType;
 import cn.misection.cvac.codegen.bst.instructor.operand.EnumOperator;
 
@@ -17,25 +17,19 @@ import cn.misection.cvac.codegen.bst.instructor.operand.EnumOperator;
  * Created by MI6 root 1/17.
  */
 @SuppressWarnings("rawtypes")
-public interface IBackendVisitor
-{
+public interface IBackendVisitor {
     /**
      * typel
+     *
      * @param type t;
      */
-    default void visit(ITargetType type)
-    {
+    default void visit(ITargetType type) {
         EnumTargetType typeEnum = type.toEnum();
-        if (EnumTargetType.isBasicType(typeEnum))
-        {
+        if (EnumTargetType.isBasicType(typeEnum)) {
             visit((EnumTargetType) type);
-        }
-        else if (EnumTargetType.isAdvanceType(typeEnum))
-        {
+        } else if (EnumTargetType.isAdvanceType(typeEnum)) {
             visit((BaseAdvanceType) type);
-        }
-        else
-        {
+        } else {
             visit((BaseReferenceType) type);
         }
     }
@@ -48,113 +42,92 @@ public interface IBackendVisitor
 
     /**
      * declrartion;
+     *
      * @param decl declaration;
      */
     void visit(TargetDeclaration decl);
 
     /**
      * statements
+     *
      * @param instructor linear inst;
      */
-    default void visit(IInstructor instructor)
-    {
-        switch (instructor.getClass().getSimpleName())
-        {
+    default void visit(IInstructor instructor) {
+        switch (instructor.getClass().getSimpleName()) {
             case Operator.ARETURN:
             case Operator.IADD:
             case Operator.IMUL:
             case Operator.IRETURN:
             case Operator.ISUB:
-            case "EnumInstructor":
-            {
+            case "EnumInstructor": {
                 visit((EnumInstructor) instructor);
                 break;
             }
-            case Operator.ALOAD:
-            {
+            case Operator.ALOAD: {
                 visit((ALoad) instructor);
                 break;
             }
-            case Operator.ASTORE:
-            {
+            case Operator.ASTORE: {
                 visit((AStore) instructor);
                 break;
             }
-            case Operator.GOTO:
-            {
+            case Operator.GOTO: {
                 visit((Goto) instructor);
                 break;
             }
-            case Operator.GET_FIELD:
-            {
+            case Operator.GET_FIELD: {
                 visit((GetField) instructor);
                 break;
             }
-            case Operator.IF_ICMP_LT:
-            {
+            case Operator.IF_ICMP_LT: {
                 visit((IfICmpLt) instructor);
                 break;
             }
-            case Operator.ILOAD:
-            {
+            case Operator.ILOAD: {
                 visit((ILoad) instructor);
                 break;
             }
-            case Operator.INVOKE_VIRTUAL:
-            {
+            case Operator.INVOKE_VIRTUAL: {
                 visit((InvokeVirtual) instructor);
                 break;
             }
-            case Operator.ISTORE:
-            {
+            case Operator.ISTORE: {
                 visit((IStore) instructor);
                 break;
             }
-            case Operator.LABEL_J:
-            {
+            case Operator.LABEL_J: {
                 visit((LabelJ) instructor);
                 break;
             }
-            case Operator.LDC:
-            {
+            case Operator.LDC: {
                 visit((Ldc) instructor);
                 break;
             }
-            case Operator.NEW:
-            {
+            case Operator.NEW: {
                 visit((New) instructor);
                 break;
             }
-            case Operator.WRITE_INSTRUCTOR:
-            {
+            case Operator.WRITE_INSTRUCTOR: {
                 visit((WriteInstructor) instructor);
                 break;
             }
-            case Operator.PUT_FIELD:
-            {
+            case Operator.PUT_FIELD: {
                 visit((PutField) instructor);
                 break;
             }
-            case "IInc":
-            {
+            case "IInc": {
                 visit((IInc) instructor);
                 break;
             }
-            default:
-            {
+            default: {
                 // 后面改进, 用enum指示判定;
-                if (instructor instanceof EnumOperandType)
-                {
+                if (instructor instanceof EnumOperandType) {
                     visit((EnumOperandType) instructor);
                     break;
-                }
-                else if (instructor instanceof EnumOperator)
-                {
+                } else if (instructor instanceof EnumOperator) {
                     visit((EnumOperator) instructor);
                     break;
-                }
-                else
-                {
+                } else {
                     System.err.println("unknown operator");
                     break;
                 }

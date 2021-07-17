@@ -9,7 +9,6 @@ import cn.misection.cvac.codegen.bst.btype.BaseType;
  * @Description TODO
  * @CreateTime 2021年02月18日 17:25:00
  */
-public abstract class BaseReferenceType extends BaseType
-{
+public abstract class BaseReferenceType extends BaseType {
     public abstract String typeName();
 }

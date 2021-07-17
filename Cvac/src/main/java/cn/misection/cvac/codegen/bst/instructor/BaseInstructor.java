@@ -7,6 +7,5 @@ package cn.misection.cvac.codegen.bst.instructor;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:54:00
  */
-public abstract class BaseInstructor implements IInstructor
-{
+public abstract class BaseInstructor implements IInstructor {
 }

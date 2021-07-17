@@ -9,24 +9,20 @@ import cn.misection.cvac.codegen.bst.btype.basic.EnumTargetType;
  * @Description TODO
  * @CreateTime 2021年02月20日 22:44:00
  */
-public class TargetPointer extends BaseUnsafe
-{
+public class TargetPointer extends BaseUnsafe {
     @Override
-    public String fullName()
-    {
+    public String fullName() {
         // FIXME;
         return null;
     }
 
     @Override
-    public EnumTargetType toEnum()
-    {
+    public EnumTargetType toEnum() {
         return EnumTargetType.POINTER;
     }
 
     @Override
-    public String toInst()
-    {
+    public String toInst() {
         // FIXME;
         return null;
     }

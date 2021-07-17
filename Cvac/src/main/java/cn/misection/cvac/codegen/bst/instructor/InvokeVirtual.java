@@ -11,8 +11,7 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月16日 00:53:00
  */
-public final class InvokeVirtual extends BaseInstructor
-{
+public final class InvokeVirtual extends BaseInstructor {
     /**
      * @FIXME
      */
@@ -29,52 +28,43 @@ public final class InvokeVirtual extends BaseInstructor
 
     public InvokeVirtual(String funcName,
                          String firstFieldType,
-                         List<ITargetType> argTypeList, 
-                         ITargetType retType)
-    {
+                         List<ITargetType> argTypeList,
+                         ITargetType retType) {
         this.funcName = funcName;
         this.firstFieldType = firstFieldType;
         this.argTypeList = argTypeList;
         this.retType = retType;
     }
 
-    public String getFuncName()
-    {
+    public String getFuncName() {
         return funcName;
     }
 
-    public void setFuncName(String funcName)
-    {
+    public void setFuncName(String funcName) {
         this.funcName = funcName;
     }
 
-    public String getFirstFieldType()
-    {
+    public String getFirstFieldType() {
         return firstFieldType;
     }
 
-    public void setFirstFieldType(String firstFieldType)
-    {
+    public void setFirstFieldType(String firstFieldType) {
         this.firstFieldType = firstFieldType;
     }
 
-    public List<ITargetType> getArgTypeList()
-    {
+    public List<ITargetType> getArgTypeList() {
         return argTypeList;
     }
 
-    public void setArgTypeList(List<ITargetType> argTypeList)
-    {
+    public void setArgTypeList(List<ITargetType> argTypeList) {
         this.argTypeList = argTypeList;
     }
 
-    public ITargetType getRetType()
-    {
+    public ITargetType getRetType() {
         return retType;
     }
 
-    public void setRetType(ITargetType retType)
-    {
+    public void setRetType(ITargetType retType) {
         this.retType = retType;
     }
 }
