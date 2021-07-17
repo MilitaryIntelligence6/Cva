@@ -8,10 +8,10 @@ package cn.misection.cvac.ast;
  * @CreateTime 2021年02月23日 13:30:00
  */
 @FunctionalInterface
-public interface CvaNullable
-{
+public interface CvaNullable {
     /**
      * 是否空;
+     *
      * @return 空;
      */
     boolean isNull();

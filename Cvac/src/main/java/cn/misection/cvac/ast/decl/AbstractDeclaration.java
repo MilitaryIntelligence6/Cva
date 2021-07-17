@@ -10,8 +10,7 @@ import cn.misection.cvac.ast.type.ICvaType;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:53:00
  */
-public abstract class AbstractDeclaration implements ICvaDeclaration, CvaNullable
-{
+public abstract class AbstractDeclaration implements ICvaDeclaration, CvaNullable {
     protected int lineNum;
 
     protected String varName;
@@ -20,33 +19,28 @@ public abstract class AbstractDeclaration implements ICvaDeclaration, CvaNullabl
 
     public AbstractDeclaration(int lineNum,
                                String varName,
-                               ICvaType type)
-    {
+                               ICvaType type) {
         this.lineNum = lineNum;
         this.varName = varName;
         this.type = type;
     }
 
-    public int getLineNum()
-    {
+    public int getLineNum() {
         return lineNum;
     }
 
     @Override
-    public boolean isNull()
-    {
+    public boolean isNull() {
         return false;
     }
 
     @Override
-    public String name()
-    {
+    public String name() {
         return varName;
     }
 
     @Override
-    public ICvaType type()
-    {
+    public ICvaType type() {
         return type;
     }
 }

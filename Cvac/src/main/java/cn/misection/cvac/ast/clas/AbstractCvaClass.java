@@ -12,8 +12,7 @@ import java.util.List;
  * @Description TODO
  * @CreateTime 2021年02月14日 17:54:00
  */
-public abstract class AbstractCvaClass implements ICvaClass
-{
+public abstract class AbstractCvaClass implements ICvaClass {
     protected final String name;
 
     protected final String parent;
@@ -22,8 +21,7 @@ public abstract class AbstractCvaClass implements ICvaClass
 
     protected final List<AbstractMethod> methodList;
 
-    protected AbstractCvaClass()
-    {
+    protected AbstractCvaClass() {
         this.name = null;
         this.parent = null;
         this.fieldList = null;
@@ -33,8 +31,7 @@ public abstract class AbstractCvaClass implements ICvaClass
     public AbstractCvaClass(String name,
                             String parent,
                             List<AbstractDeclaration> fieldList,
-                            List<AbstractMethod> methodList)
-    {
+                            List<AbstractMethod> methodList) {
         this.name = name;
         this.parent = parent;
         this.fieldList = fieldList;
@@ -42,26 +39,22 @@ public abstract class AbstractCvaClass implements ICvaClass
     }
 
     @Override
-    public String name()
-    {
+    public String name() {
         return name;
     }
 
     @Override
-    public String parent()
-    {
+    public String parent() {
         return parent;
     }
 
     @Override
-    public List<AbstractDeclaration> getFieldList()
-    {
+    public List<AbstractDeclaration> getFieldList() {
         return fieldList;
     }
 
     @Override
-    public List<AbstractMethod> getMethodList()
-    {
+    public List<AbstractMethod> getMethodList() {
         return methodList;
     }
 }

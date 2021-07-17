@@ -11,23 +11,17 @@ import cn.misection.cvac.ast.type.basic.EnumCvaType;
  * @Description TODO 枚举实现单例
  * @CreateTime 2021年02月23日 14:48:00
  */
-public final class CvaNullDecl extends AbstractDeclaration
-{
+public final class CvaNullDecl extends AbstractDeclaration {
     private volatile static CvaNullDecl instance = null;
 
-    private CvaNullDecl()
-    {
+    private CvaNullDecl() {
         super(0, "nullDecl", EnumCvaType.NULL_POINTER);
     }
 
-    public static CvaNullDecl getInstance()
-    {
-        if (instance == null)
-        {
-            synchronized (CvaNullDecl.class)
-            {
-                if (instance == null)
-                {
+    public static CvaNullDecl getInstance() {
+        if (instance == null) {
+            synchronized (CvaNullDecl.class) {
+                if (instance == null) {
                     instance = new CvaNullDecl();
                 }
             }
@@ -36,14 +30,12 @@ public final class CvaNullDecl extends AbstractDeclaration
     }
 
     @Override
-    public String name()
-    {
+    public String name() {
         return "nullDecl";
     }
 
     @Override
-    public ICvaType type()
-    {
+    public ICvaType type() {
         return EnumCvaType.NULL_POINTER;
     }
 }
