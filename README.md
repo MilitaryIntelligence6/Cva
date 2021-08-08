@@ -28,7 +28,8 @@
 目前代码风格是当时比较喜欢的比较对称的Csharp大括号换行风格, 但是目前主流还是比较紧凑的不换行风格, 
 您可以自己重新使用一键整理修改之!
 
-## [博客园教程地址](https://www.cnblogs.com/misection/p/14429145.html)
+## [博客园阵亡, 知乎专栏链接](https://www.zhihu.com/column/c_1350940230007017473)
+## [博客园教程链接](https://www.cnblogs.com/misection/p/14429145.html)
 ## 文章目录
 
 ### [00.一个JVM语言的诞生](https://www.cnblogs.com/misection/p/14429145.html)

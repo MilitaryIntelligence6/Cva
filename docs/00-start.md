@@ -7,6 +7,7 @@
 语言组织也会比较随意, 毕竟时间有限, 没办法太过雕琢琢磨
 
 ## [源码github仓库, 如果这个系列对您有帮助, 希望获得您的一个star!](https://github.com/MilitaryIntelligence6/Cva)
+### [由于博客园审核慢, 指向新地址供大家使用, 从0实现一个JVM语言系列 - 知乎专栏](https://www.zhihu.com/column/c_1350940230007017473)
 
 ```text
 致亲爱的读者:
@@ -114,10 +115,8 @@ Program
    | ClassDeclList
 
 EntryClass
-   -> class Entry(默认为Application) 
-    { 
-        retType main() 
-        { 
+   -> class Entry(默认为Application)  { 
+        retType main()  { 
             StatementList 
         }
     }
@@ -127,12 +126,10 @@ ClassDeclList
    | ClassDecl ClassDeclList
 
 ClassDecl
-   -> class Identifier 
-    { 
+   -> class Identifier  { 
         VarDeclList MethodDeclList 
     }
-   | class Identifier : Identifier 
-    { 
+   | class Identifier : Identifier  { 
         VarDeclList MethodDeclList 
     }
 
@@ -238,13 +235,11 @@ LineComment -> // the total line is comment
 ---
 
 ```java
-class Entry
-{
+class Entry {
     /**
      * This is the entry point of the program;
      */
-    int main(string[] args)
-    {
+    int main(string[] args) {
         echo "Hello, CvaWorld\n";
         // 打印整形 statement
         println(new FibCalcer().compute(10));
@@ -252,18 +247,14 @@ class Entry
     }
 }
 
-class FibCalcer
-{
-    int compute(int num)
-    {
+class FibCalcer {
+    int compute(int num) {
         int total;
-        if ( num < 1)
-        {
+        if ( num < 1) {
             // 花括号是可以不要的, 但是我们的代码要遵守阿里巴巴Cva规范(滑稽);
             total = 1;
         }
-        else
-        {
+        else {
             total = num * (this.compute(num - 1));
         }
         // 目前不支持提前 return, 挺遗憾的;
@@ -273,8 +264,7 @@ class FibCalcer
 ```
 当然, main方法也有野的写法, 但目前Cva仅支持将main方法这么写
 ```java
-int main(string[] args)
-{
+int main(string[] args) {
     echo "Hello, CvaWorld\n";
     return 0;
 }

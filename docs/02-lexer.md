@@ -113,8 +113,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum EnumCvaToken
-{
+public enum EnumCvaToken {
     /**
      * +
      */
@@ -163,8 +162,7 @@ package cn.misection.cvac.lexer;
 /**
  * @author MI6 root
  */
-public final class CvaToken
-{
+public final class CvaToken {
     /**
      * the kind of the token
      */
@@ -181,40 +179,34 @@ public final class CvaToken
     private final int lineNum;
 
 
-    public CvaToken(EnumCvaToken enumToken, int lineNum)
-    {
+    public CvaToken(EnumCvaToken enumToken, int lineNum) {
         this.enumToken = enumToken;
         this.lineNum = lineNum;
     }
 
-    public CvaToken(EnumCvaToken enumToken, int lineNum, String literal)
-    {
+    public CvaToken(EnumCvaToken enumToken, int lineNum, String literal) {
         this.enumToken = enumToken;
         this.lineNum = lineNum;
         this.literal = literal;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format("Token {%s literal: %s : at line %d}",
                 this.enumToken.toString(),
                 literal == null ? "null" : this.literal,
                 this.lineNum);
     }
 
-    public EnumCvaToken toEnum()
-    {
+    public EnumCvaToken toEnum() {
         return enumToken;
     }
 
-    public String getLiteral()
-    {
+    public String getLiteral() {
         return literal;
     }
 
-    public int getLineNum()
-    {
+    public int getLineNum() {
         return lineNum;
     }
 }
@@ -233,13 +225,11 @@ public final class CvaToken
 当然, 这一切还要借助io包内的文件流将文件读入成StringBuffer(姑且把它当做buffer吧)
 
 ```java
-private CvaToken lex()
-{
+private CvaToken lex() {
     char ch = stream.poll();
     // skip all kinds of blanks
     ch = handleWhiteSpace(ch);
-    switch (ch)
-    {
+    switch (ch) {
         case LexerCommon.EOF:
             return new CvaToken(EnumCvaToken.EOF, lineNum);
         case '+':
@@ -295,25 +285,19 @@ private CvaToken lex()
  如, 遇到 `+` 号:
  
     ```java
-    private CvaToken handlePlus()
-    {
-        if (stream.hasNext())
-        {
-            switch (stream.peek())
-            {
-                case '+':
-                {
+    private CvaToken handlePlus() {
+        if (stream.hasNext()) {
+            switch (stream.peek()) {
+                case '+': {
                     // 截取两个;
                     stream.poll();
                     return new CvaToken(EnumCvaToken.INCREMENT, lineNum);
                 }
-                case '=':
-                {
+                case '=': {
                     stream.poll();
                     return new CvaToken(EnumCvaToken.ADD_ASSIGN, lineNum);
                 }
-                default:
-                {
+                default: {
                     break;
                 }
             }
@@ -325,23 +309,19 @@ private CvaToken lex()
     如果遇到的不是这些前缀字符, 我们会到进入default分支中, 执行handleNorPrefOrIdOrNum()方法
     
     ```java
-    private CvaToken handleNorPrefOrIdOrNum(char ch)
-    {
+    private CvaToken handleNorPrefOrIdOrNum(char ch) {
         // 先看c是否是非前缀字符, 这里是 int, 必须先转成char看在不在表中;
-        if (EnumCvaToken.containsKind(String.valueOf(ch)))
-        {
+        if (EnumCvaToken.containsKind(String.valueOf(ch))) {
             return new CvaToken(EnumCvaToken.selectReverse(String.valueOf(ch)), lineNum);
         }
         StringBuilder builder = new StringBuilder();
         builder.append(ch);
-        while (true)
-        {
+        while (true) {
             ch = stream.peek();
             // Cva命名容许_和$符号;
             if (ch != LexerCommon.EOF
                     && !Character.isWhitespace(ch)
-                    && !isSpecialCharacter(ch))
-            {
+                    && !isSpecialCharacter(ch)) {
                 builder.append(ch);
                 this.stream.poll();
                 continue;
@@ -350,26 +330,20 @@ private CvaToken lex()
         }
         String literal = builder.toString();
         // 关键字;
-        if (EnumCvaToken.containsKind(literal))
-        {
+        if (EnumCvaToken.containsKind(literal)) {
             return new CvaToken(EnumCvaToken.selectReverse(literal), lineNum);
         }
-        else
-        {
-            if (isNumber(literal))
-            {
+        else {
+            if (isNumber(literal)) {
                 // FIXME 自动机;
-                if (isInt(literal))
-                {
+                if (isInt(literal)) {
                     return new CvaToken(EnumCvaToken.CONST_INT, lineNum, builder.toString());
                 }
             }
-            else if (isIdentifier(literal))
-            {
+            else if (isIdentifier(literal)) {
                 return new CvaToken(EnumCvaToken.IDENTIFIER, lineNum, builder.toString());
             }
-            else
-            {
+            else {
                 errorLog("identifier or number which can only include alphabet, number or _, $",
                         "an illegal identifier with illegal char");
             }
@@ -384,19 +358,15 @@ private CvaToken lex()
     ```java
     private static final Map<String, EnumCvaToken> lookup = new HashMap<>();
     
-    static
-    {
-        for (EnumCvaToken kind : EnumSet.allOf(EnumCvaToken.class))
-        {
-            if (kind.kindLiteral != null)
-            {
+    static {
+        for (EnumCvaToken kind : EnumSet.allOf(EnumCvaToken.class)) {
+            if (kind.kindLiteral != null) {
                 lookup.put(kind.kindLiteral, kind);
             }
         }
     }
     
-    public static boolean containsKind(String literal)
-    {
+    public static boolean containsKind(String literal) {
         return lookup.containsKey(literal);
     }
     ```
@@ -430,23 +400,7 @@ println 2 * 3; // 目前暂时不支持 printf;
 ```
  词法分析后的Token流是
 
-```text
-{Token {WRITE literal: null : at line 93}}
-{Token {STRING literal: hello, world! : at line 93}}
-{Token {SEMI literal: null : at line 93}}
-{Token {WRITE_LINE literal: null : at line 94}}
-{Token {NEW literal: null : at line 94}}
-{Token {IDENTIFIER literal: Increment : at line 94}}
-{Token {OPEN_PAREN literal: null : at line 94}}
-{Token {CLOSE_PAREN literal: null : at line 94}}
-{Token {DOT literal: null : at line 94}}
-{Token {IDENTIFIER literal: incre : at line 94}}
-{Token {OPEN_PAREN literal: null : at line 94}}
-{Token {CLOSE_PAREN literal: null : at line 94}}
-{Token {SEMI literal: null : at line 94}}
-{Token {WRITE literal: null : at line 95}}
-{Token {STRING literal: 2 * 3 =  : at line 95}}
-{Token {SEMI literal: null : at line 95}}
+```text {Token {WRITE literal: null : at line 93}} {Token {STRING literal: hello, world! : at line 93}} {Token {SEMI literal: null : at line 93}} {Token {WRITE_LINE literal: null : at line 94}} {Token {NEW literal: null : at line 94}} {Token {IDENTIFIER literal: Increment : at line 94}} {Token {OPEN_PAREN literal: null : at line 94}} {Token {CLOSE_PAREN literal: null : at line 94}} {Token {DOT literal: null : at line 94}} {Token {IDENTIFIER literal: incre : at line 94}} {Token {OPEN_PAREN literal: null : at line 94}} {Token {CLOSE_PAREN literal: null : at line 94}} {Token {SEMI literal: null : at line 94}} {Token {WRITE literal: null : at line 95}} {Token {STRING literal: 2 * 3 =  : at line 95}} {Token {SEMI literal: null : at line 95}}
 
 ```
 可以看到对于空白符和注释, 在词法分析阶段我们就进行了跳过, 源代码文件流就会转换成这样的Token流供语法分析器处理

@@ -209,10 +209,8 @@ anewarray(数组操作)
 /**
  * LongLS.java
  */
-class LongLS
-{
-    public static void main(String[] args)
-    {
+class LongLS {
+    public static void main(String[] args) {
         // 也可以放在方法中;
         // 一次多放几条, 能事半功倍查看原理
         long aLong = 1;
@@ -280,8 +278,7 @@ Constant pool:
   #11 = Utf8               LongLS.java
   #12 = NameAndType        #4:#5          // "<init>":()V
   #13 = Utf8               LongLS
-  #14 = Utf8               java/lang/Object
-{
+  #14 = Utf8               java/lang/Object {
   LongLS();
     descriptor: ()V
     flags:
@@ -335,8 +332,7 @@ import cn.misection.cvac.codegen.bst.instructor.Instructable;
  * @Description 桥接模式底层操作数;
  * @CreateTime 2021年02月21日 22:23:00
  */
-public enum EnumOperandType implements IInstructor, Instructable
-{
+public enum EnumOperandType implements IInstructor, Instructable {
     /**
      * 底层操作数类型;
      */
@@ -361,15 +357,13 @@ public enum EnumOperandType implements IInstructor, Instructable
 
     private final String typeInst;
 
-    EnumOperandType(String typeInst)
-    {
+    EnumOperandType(String typeInst) {
         this.typeInst = typeInst;
     }
 
 
     @Override
-    public String toInst()
-    {
+    public String toInst() {
         return typeInst;
     }
 }
@@ -390,8 +384,7 @@ import cn.misection.cvac.codegen.bst.instructor.Instructable;
  * @Description 桥接模式底层操作符;
  * @CreateTime 2021年02月21日 22:24:00
  */
-public enum EnumOperator implements IInstructor, Instructable
-{
+public enum EnumOperator implements IInstructor, Instructable {
     /**
      * 底层操作符;
      */
@@ -434,14 +427,12 @@ public enum EnumOperator implements IInstructor, Instructable
     
     private final String opInst;
 
-    EnumOperator(String opInst)
-    {
+    EnumOperator(String opInst) {
         this.opInst = opInst;
     }
 
     @Override
-    public String toInst()
-    {
+    public String toInst() {
         return opInst;
     }
 }
@@ -451,8 +442,7 @@ public enum EnumOperator implements IInstructor, Instructable
 他们都实现接口 Instructable, 表示能将该元素转换成JVM汇编指令
 ```java
 @FunctionalInterface
-public interface Instructable
-{
+public interface Instructable {
     /**
      * 获得该类型指令;
      * @return instruct;
@@ -484,17 +474,13 @@ write
 有了上文的"完善"的指令集(对于我们这个程序来说), 我们接下来的工作便是将树状的AST转换成线性的指令. 这里的转换主要关注的方法中的真正"干活"的代码, 就是方法体内部的工作代码. 下面通过一个例子展示具体工作. 
 
 ```java
-class Recursor
-{
-    int compute(int num)
-    {
+class Recursor {
+    int compute(int num) {
         int total;
-        if ( num < 1)
-        {
+        if ( num < 1) {
             total = 1;
         }
-        else
-        {
+        else {
             total = num * (this.compute(num - 1));
         }
         return total;
@@ -504,8 +490,7 @@ class Recursor
 /**
  * This is the entry point of the program
  */
-int main(string[] args)
-{
+int main(string[] args) {
     // fib(10);
     println new Recursor().compute(10);   
     return 0;

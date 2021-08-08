@@ -274,8 +274,7 @@ Cvac编译器采用的是递归下降分析算法(预测分析), 该算法的主
      -> class Id { VarDecList MethodDecList }
      | class Id : Id { VarDecList MethodDecList }
  */
-Class ParseClass()
-{
+Class ParseClass() {
     // 其他代码
     fieldList = parseFieldList();
     methodList = parseMethodList();
@@ -304,10 +303,8 @@ Class ParseClass()
        | println(Expr);
        | Id = Expr;
  */
-Statement parseStatement()
-{
-    switch(firstToken)
-    {
+Statement parseStatement() {
+    switch(firstToken) {
         // 写代码时尽量不要出现如下的魔数, 这里是为了演示
         // 实际上我们是把常量放入枚举中的
         case "{":
@@ -348,8 +345,7 @@ total = num * (this.compute(num-1));
 举例如下:
 
 ```java
-void doSomething(int )
-{
+void doSomething(int ) {
   // ...
 }
 ```
