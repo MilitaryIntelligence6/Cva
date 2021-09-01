@@ -29,7 +29,7 @@ public interface ICvaClass extends IASTreeNode {
     String parent();
 
     /**
-     * field;
+     * 字段列表;
      *
      * @return field;
      */
